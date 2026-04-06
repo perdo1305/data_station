@@ -1,0 +1,45 @@
+# ROS 2 parameter YAML for all LART dashboard nodes.
+# Load with: parameters=[config] in a launch Node() action.
+#
+# !! UPDATE rpm_can_id to match your car's CAN DBC !!
+
+can_bridge:
+  ros__parameters:
+    can_interface: can0          # can0 or can1 from the Waveshare HAT
+    rpm_can_id: 291              # 0x123 — UPDATE to your ECU's RPM message ID
+    rpm_start_byte: 0            # byte offset of RPM value inside the CAN frame
+    rpm_length_bytes: 2          # number of bytes (big-endian unsigned)
+    rpm_scale: 1.0               # raw_value * scale + offset = RPM
+    rpm_offset: 0.0
+
+input_handler:
+  ros__parameters:
+    button_a: 17
+    button_b: 27
+    encoder_a_clk: 22
+    encoder_a_dt: 23
+    encoder_b_clk: 24
+    encoder_b_dt: 25
+    debounce_ms: 50
+    sim_mode: false              # set true in sim launch to skip GPIO init
+
+led_controller:
+  ros__parameters:
+    led_count: 30
+    led_pin: 18                  # GPIO 18 (PWM0) — required for WS2812B
+    rpm_shift: 11500             # LEDs turn red at/above this RPM
+    rpm_max: 12000               # RPM at which all LEDs are lit
+
+mock_can:
+  ros__parameters:
+    rpm_can_id: 291              # must match can_bridge.rpm_can_id
+    rpm_idle: 1000.0
+    rpm_max: 12500.0
+    rpm_shift: 11500.0
+    sweep_period_s: 5.0
+    publish_hz: 100.0
+
+dashboard_ui:
+  ros__parameters:
+    rpm_shift: 11500
+    rpm_max: 12000

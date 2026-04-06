@@ -1,0 +1,13 @@
+builtin_interfaces/Time stamp
+float32 rpm
+float32 speed_kph
+float32 inv_temp_c
+float32 motor_temp_c
+float32 bps
+float32 kw_inst
+float32 kw_limit
+float32 soc_lv
+float32 soc_hv
+float32 lv_voltage
+bool r2d_ready
+bool can_active

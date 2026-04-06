@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd"
+            schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>input_handler</name>
+  <version>0.1.0</version>
+  <description>GPIO input handler for buttons and rotary encoders</description>
+  <maintainer email="lart@example.com">LART</maintainer>
+  <license>MIT</license>
+
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>lart_msgs</exec_depend>
+
+  <!-- python3-gpiod >= 2.0 installed via apt -->
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

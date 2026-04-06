@@ -1,0 +1,25 @@
+# LART Dashboard — Python dependencies
+#
+# Install (first time / after clone):
+#   pip install -r requirements.txt --break-system-packages
+#
+# Update already installed packages to latest versions allowed here:
+#   pip install --upgrade -r requirements.txt --break-system-packages
+#
+# Some packages are hardware-specific — see comments.
+
+# CAN bus interface (required on car; safe to install anywhere)
+python-can>=4.0
+
+# GPIO — buttons and rotary encoders (required on car)
+# On Raspberry Pi OS Bookworm: apt install python3-gpiod is preferred
+# On other systems / if apt package is unavailable:
+gpiod>=2.0
+
+# Addressable LED strip — NeoPixel RPM gauge (required on car, GPIO 18)
+# Requires Adafruit Blinka (CircuitPython HAL for RPi)
+adafruit-circuitpython-neopixel>=6.0
+adafruit-blinka>=8.0
+
+# Dashboard display (required on any machine running the UI)
+pygame>=2.5
