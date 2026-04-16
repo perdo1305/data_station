@@ -1,0 +1,27 @@
+{
+  "files": [
+    "actions.h",
+    "eez-flow.cpp",
+    "eez-flow.h",
+    "fonts.h",
+    "images.c",
+    "images.h",
+    "screens.c",
+    "screens.h",
+    "structs.h",
+    "styles.c",
+    "styles.h",
+    "ui.c",
+    "ui.h",
+    "ui_font_orbiter_bold_100.c",
+    "ui_font_orbitron_15.c",
+    "ui_font_orbitron_bold_15.c",
+    "ui_font_orbitron_bold_20.c",
+    "ui_font_orbitron_bold_25.c",
+    "ui_font_orbitron_bold_30.c",
+    "ui_font_orbitron_bold_40.c",
+    "ui_font_orbitron_bold_50.c",
+    "ui_image_lart_logo.c",
+    "vars.h"
+  ]
+}
