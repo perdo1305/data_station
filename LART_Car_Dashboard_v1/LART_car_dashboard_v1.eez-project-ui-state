@@ -1,11 +1,11 @@
 {
   "navigation": {
     "selectedUserPageObject": "[LART_car_dashboard_v1.eez-project]:/userPages/0",
-    "selectedGlobalVariableObject": "[LART_car_dashboard_v1.eez-project]:/variables/globalVariables/8",
+    "selectedGlobalVariableObject": "[LART_car_dashboard_v1.eez-project]:/variables/globalVariables/5",
     "selectedFontObject": "[LART_car_dashboard_v1.eez-project]:/fonts/7",
     "selectedBitmapObject": "[LART_car_dashboard_v1.eez-project]:/bitmaps/0",
     "subnavigationSelectedItems": {
-      "variables-tab/sub-navigation/selected-item": "Actions"
+      "variables-tab/sub-navigation/selected-item": "Global"
     }
   },
   "layoutModel": {
@@ -228,8 +228,7 @@
                   },
                   "icon": "svg:page"
                 }
-              ],
-              "active": true
+              ]
             },
             {
               "type": "row",
@@ -249,7 +248,8 @@
                       "enableClose": false,
                       "icon": "svg:properties"
                     }
-                  ]
+                  ],
+                  "active": true
                 },
                 {
                   "type": "tabset",
@@ -591,8 +591,7 @@
                       "enableClose": false,
                       "icon": "svg:log"
                     }
-                  ],
-                  "active": true
+                  ]
                 },
                 {
                   "type": "tabset",
@@ -611,7 +610,8 @@
                       "enableClose": false,
                       "icon": "svg:log"
                     }
-                  ]
+                  ],
+                  "active": true
                 }
               ]
             }
@@ -1142,8 +1142,8 @@
       },
       "transform": {
         "translate": {
-          "x": -547.2594734660028,
-          "y": -144.5594918265815
+          "x": -416.25947346600276,
+          "y": -127.5594918265815
         },
         "scale": 0.8
       },
@@ -1165,7 +1165,14 @@
       "selectionFront": {},
       "selectionBack": {
         "0": {
-          "1": {}
+          "1": {},
+          "2": {
+            "3": {
+              "0": {
+                "$selected": true
+              }
+            }
+          }
         }
       },
       "timeline": {

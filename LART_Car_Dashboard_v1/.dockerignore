@@ -1,0 +1,32 @@
+# Docker build files
+.docker-build-output/
+Dockerfile
+docker-compose.yml
+.dockerignore
+Makefile
+
+# Development
+*.pyc
+__pycache__/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ROS
+log/

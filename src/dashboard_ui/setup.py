@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'dashboard_ui = dashboard_ui.ui_node:main',
+            'speed_listener_node = dashboard_ui.speed_listener:main',
         ],
     },
 )

@@ -152,7 +152,7 @@
       {
         "objID": "469b523e-1925-409c-d508-923138cac9e4",
         "name": "speed",
-        "type": "integer",
+        "type": "float",
         "defaultValue": "0",
         "persistent": false,
         "native": false
@@ -1108,7 +1108,7 @@
                       "type": "LVGLLabelWidget",
                       "left": -47,
                       "top": 6,
-                      "width": 205,
+                      "width": 396,
                       "height": 106,
                       "customInputs": [],
                       "customOutputs": [],
@@ -1151,7 +1151,7 @@
                       "textType": "expression",
                       "longMode": "WRAP",
                       "recolor": false,
-                      "previewValue": "120"
+                      "previewValue": ""
                     },
                     {
                       "objID": "ce664378-722f-4535-c04e-435dff407e07",

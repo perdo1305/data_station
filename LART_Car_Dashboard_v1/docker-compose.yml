@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # Publisher container - runs the speed publisher
+  publisher:
+    build:
+      context: ..
+      dockerfile: LART_Car_Dashboard_v1/Dockerfile
+    container_name: lart-dashboard-publisher
+    hostname: publisher
+    environment:
+      - ROS_DOMAIN_ID=0
+      - ROS_LOCALHOST_ONLY=0
+      - PYTHONUNBUFFERED=1
+    command: >
+      bash -c "
+        source /root/.bashrc &&
+        echo 'Starting Speed Publisher...' &&
+        ros2 run dashboard_ui dashboard_ui
+      "
+    networks:
+      - lart-ros2-network
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+  # Listener container - subscribes to speed topics
+  listener:
+    build:
+      context: ..
+      dockerfile: LART_Car_Dashboard_v1/Dockerfile
+    container_name: lart-dashboard-listener
+    hostname: listener
+    environment:
+      - ROS_DOMAIN_ID=0
+      - ROS_LOCALHOST_ONLY=0
+      - PYTHONUNBUFFERED=1
+    command: >
+      bash -c "
+        source /root/.bashrc &&
+        echo 'Starting Speed Listener...' &&
+        ros2 run dashboard_ui speed_listener_node
+      "
+    networks:
+      - lart-ros2-network
+    depends_on:
+      - publisher
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+networks:
+  lart-ros2-network:
+    driver: bridge
