@@ -1,7 +1,7 @@
 #ifndef EEZ_LVGL_UI_GUI_H
 #define EEZ_LVGL_UI_GUI_H
 
-#include <lvgl/lvgl.h>
+#include <lvgl.h>
 
 #include "eez-flow.h"
 
@@ -9,10 +9,11 @@
 extern "C" {
 #endif
 
-extern const uint8_t assets[6456];
+extern const uint8_t assets[6632];
 
 void ui_init();
 void ui_tick();
+void ui_set_speed(float speed_kph);
 
 #ifdef __cplusplus
 }

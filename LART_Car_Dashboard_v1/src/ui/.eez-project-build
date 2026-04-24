@@ -1,11 +1,15 @@
 {
   "files": [
+    "CMakeLists.txt",
     "actions.h",
     "eez-flow.cpp",
     "eez-flow.h",
     "fonts.h",
     "images.c",
     "images.h",
+    "package.xml",
+    "ros2subscriber.cpp",
+    "ros2subscriber.h",
     "screens.c",
     "screens.h",
     "structs.h",

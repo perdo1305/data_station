@@ -30,6 +30,9 @@ RUN apt-get update && \
     apt-get install -y \
     ros-jazzy-desktop \
     python3-colcon-common-extensions \
+    ros-jazzy-rcl \
+    ros-jazzy-std-msgs \
+    ros-jazzy-rosidl-runtime-c \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies

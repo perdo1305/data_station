@@ -13,13 +13,24 @@ from __future__ import annotations
 
 import argparse
 import math
+import sys
 import time
 
-import rclpy
-from rclpy.node import Node
-from std_msgs.msg import Float32
-
-from lart_msgs.msg import DashboardState
+try:
+    import rclpy
+    from rclpy.node import Node
+    from std_msgs.msg import Float32
+    from lart_msgs.msg import DashboardState
+except ModuleNotFoundError as exc:
+    raise SystemExit(
+        'Missing ROS 2 Python module: '
+        f'{exc.name}.\n'
+        'This script must run in a sourced ROS 2 workspace.\n\n'
+        'Example:\n'
+        '  source /opt/ros/jazzy/setup.bash\n'
+        '  source install/setup.bash\n'
+        '  python3 LART_Car_Dashboard_v1/speed.py 40\n'
+    ) from exc
 
 
 _SPEED_TO_RPM = 1.0 / 0.02454

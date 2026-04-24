@@ -16,7 +16,7 @@
       "displayBorderRadius": 0,
       "colorFormat": "BGR",
       "resourceFiles": [],
-      "hiddenWidgetLines": "dimmed",
+      "hiddenWidgetLines": "hidden",
       "dimmedLinesOpacity": "20",
       "embedBitmaps": true,
       "embedFonts": true,
@@ -54,7 +54,7 @@
         {
           "objID": "bb7654c8-a526-401d-fac5-a872b17156c1",
           "fileName": "structs.h",
-          "template": "#ifndef EEZ_LVGL_UI_STRUCTS_H\n#define EEZ_LVGL_UI_STRUCTS_H\n\n//${eez-studio EEZ_FOR_LVGL_CHECK}\n\n#if defined(EEZ_FOR_LVGL)\n\n#include <eez/flow/flow.h>\n#include <stdint.h>\n#include <stdbool.h>\n\n#include \"vars.h\"\n\nusing namespace eez;\n\n//${eez-studio FLOW_STRUCTS}\n\n//${eez-studio FLOW_STRUCT_VALUES}\n\n#endif\n\n#endif /*EEZ_LVGL_UI_STRUCTS_H*/\n"
+          "template": "#ifndef EEZ_LVGL_UI_STRUCTS_H\n#define EEZ_LVGL_UI_STRUCTS_H\n\n//${eez-studio EEZ_FOR_LVGL_CHECK}\n\n#if defined(EEZ_FOR_LVGL)\n\n#include <eez/flow/flow.h>\n#include <stdint.h>\n#include <stdbool.h>\n\n#include \"vars.h\"\n\nusing namespace eez;\n\n//${eez-studio FLOW_STRUCTS}\n\n//${eez-studio FLOW_STRUCT_VALUES}\n\ntypedef struct {\n    const char *topic;\n    const char *payload;\n} MQTTMessage;\n\n#endif\n\n#endif /*EEZ_LVGL_UI_STRUCTS_H*/\n"
         },
         {
           "objID": "4bb862c9-69dd-41a5-e483-df644cc10cd8",
@@ -84,12 +84,32 @@
         {
           "objID": "d05c0814-03ab-4c21-cef9-684513ff2adc",
           "fileName": "ui.h",
-          "template": "#ifndef EEZ_LVGL_UI_GUI_H\n#define EEZ_LVGL_UI_GUI_H\n\n//${eez-studio LVGL_INCLUDE}\n\n//${eez-studio EEZ_FOR_LVGL_CHECK}\n\n#if defined(EEZ_FOR_LVGL)\n#include <eez/flow/lvgl_api.h>\n#endif\n\n#if !defined(EEZ_FOR_LVGL)\n#include \"screens.h\"\n#endif\n\n#ifdef __cplusplus\nextern \"C\" {\n#endif\n\n//${eez-studio GUI_ASSETS_DECL}\n\nvoid ui_init();\nvoid ui_tick();\n\n#if !defined(EEZ_FOR_LVGL)\nvoid loadScreen(enum ScreensEnum screenId);\n#endif\n\n#ifdef __cplusplus\n}\n#endif\n\n#endif // EEZ_LVGL_UI_GUI_H"
+          "template": "#ifndef EEZ_LVGL_UI_GUI_H\n#define EEZ_LVGL_UI_GUI_H\n\n//${eez-studio LVGL_INCLUDE}\n\n//${eez-studio EEZ_FOR_LVGL_CHECK}\n\n#if defined(EEZ_FOR_LVGL)\n#include <eez/flow/lvgl_api.h>\n#endif\n\n#if !defined(EEZ_FOR_LVGL)\n#include \"screens.h\"\n#endif\n\n#ifdef __cplusplus\nextern \"C\" {\n#endif\n\n//${eez-studio GUI_ASSETS_DECL}\n\nvoid ui_init();\nvoid ui_tick();\nvoid ui_set_speed(float speed_kph);\n\n#if !defined(EEZ_FOR_LVGL)\nvoid loadScreen(enum ScreensEnum screenId);\n#endif\n\n#ifdef __cplusplus\n}\n#endif\n\n#endif // EEZ_LVGL_UI_GUI_H"
         },
         {
           "objID": "084926f1-634e-4671-9fc3-cc34c950eba7",
           "fileName": "ui.c",
-          "template": "#if defined(EEZ_FOR_LVGL)\n#include <eez/core/vars.h>\n#endif\n\n#include \"ui.h\"\n#include \"screens.h\"\n#include \"images.h\"\n#include \"actions.h\"\n#include \"vars.h\"\n\n//${eez-studio GUI_ASSETS_DEF}\n\n//${eez-studio LVGL_NATIVE_VARS_TABLE_DEF}\n\n//${eez-studio LVGL_ACTIONS_ARRAY_DEF}\n\n#if defined(EEZ_FOR_LVGL)\n\nvoid ui_init() {\n    eez_flow_init(assets, sizeof(assets), (lv_obj_t **)&objects, sizeof(objects), images, sizeof(images), actions);\n}\n\nvoid ui_tick() {\n    eez_flow_tick();\n    tick_screen(g_currentScreen);\n}\n\n#else\n\nstatic int16_t currentScreen = -1;\n\nstatic lv_obj_t *getLvglObjectFromIndex(int32_t index) {\n    if (index == -1) {\n        return 0;\n    }\n    return ((lv_obj_t **)&objects)[index];\n}\n\nvoid loadScreen(enum ScreensEnum screenId) {\n    currentScreen = screenId - 1;\n    lv_obj_t *screen = getLvglObjectFromIndex(currentScreen);\n    lv_scr_load_anim(screen, LV_SCR_LOAD_ANIM_FADE_IN, 200, 0, false);\n}\n\nvoid ui_init() {\n    create_screens();\n//${eez-studio LVGL_LOAD_FIRST_SCREEN}\n}\n\nvoid ui_tick() {\n    tick_screen(currentScreen);\n}\n\n#endif\n"
+          "template": "#if defined(EEZ_FOR_LVGL)\n#include <eez/core/vars.h>\n#endif\n\n#include \"ui.h\"\n#include \"screens.h\"\n#include \"images.h\"\n#include \"actions.h\"\n#include \"vars.h\"\n\n#include \"ros2subscriber.h\"\n\n\n//${eez-studio GUI_ASSETS_DEF}\n\n//${eez-studio LVGL_NATIVE_VARS_TABLE_DEF}\n\n//${eez-studio LVGL_ACTIONS_ARRAY_DEF}\n\n#if defined(EEZ_FOR_LVGL)\n\nvoid ui_init() {\n    eez_flow_init(assets, sizeof(assets), (lv_obj_t **)&objects, sizeof(objects), images, sizeof(images), actions);\n    if (ros2subscriber_init() != 0) {\n        ui_set_speed(0.0f);\n        return;\n    }\n\n    ui_set_speed(0.0f);\n}\n\nvoid ui_tick() {\n    float speed_kph;\n\n    if (ros2subscriber_spin_some() == 0 && ros2subscriber_get_latest_speed(&speed_kph)) {\n        ui_set_speed(speed_kph);\n    }\n\n    eez_flow_tick();\n    tick_screen(g_currentScreen);\n}\n\n#else\n\nstatic int16_t currentScreen = -1;\n\nstatic lv_obj_t *getLvglObjectFromIndex(int32_t index) {\n    if (index == -1) {\n        return 0;\n    }\n    return ((lv_obj_t **)&objects)[index];\n}\n\nvoid loadScreen(enum ScreensEnum screenId) {\n    currentScreen = screenId - 1;\n    lv_obj_t *screen = getLvglObjectFromIndex(currentScreen);\n    lv_scr_load_anim(screen, LV_SCR_LOAD_ANIM_FADE_IN, 200, 0, false);\n}\n\nvoid ui_init() {\n    create_screens();\n//${eez-studio LVGL_LOAD_FIRST_SCREEN}\n}\n\nvoid ui_tick() {\n    tick_screen(currentScreen);\n}\n\n#endif\n"
+        },
+        {
+          "objID": "a40698a8-cea3-4c3e-b73f-dca45f315fd8",
+          "fileName": "CMakeLists.txt",
+          "template": "cmake_minimum_required(VERSION 3.8)\nproject(c_subscriber_example C CXX)\n\nset(CMAKE_CXX_STANDARD 17)\nset(CMAKE_CXX_STANDARD_REQUIRED ON)\n\n# Check if building in ROS 2 environment\nfind_package(ament_cmake QUIET)\n\nif(ament_cmake_FOUND)\n    # Try to find ROS 2 C++ packages (without REQUIRED - they're optional)\n    find_package(rclcpp QUIET)\n    find_package(std_msgs QUIET)\n\n    if(rclcpp_FOUND AND std_msgs_FOUND)\n        # Full ROS 2 build possible\n        message(STATUS \"✓ ROS 2 C++ headers found - enabling ros2subscriber\")\n        add_executable(speed_subscriber ros2subscriber.cpp)\n        ament_target_dependencies(speed_subscriber rclcpp std_msgs)\n\n        install(TARGETS\n          speed_subscriber\n          DESTINATION lib/${PROJECT_NAME})\n\n        ament_package()\n    else()\n        # ament_cmake found but ROS 2 development packages missing\n        message(STATUS \"⚠️  ROS 2 C++ headers not available\")\n        message(STATUS \"    Install with: sudo apt install ros-jazzy-rclcpp ros-jazzy-std-msgs\")\n        message(STATUS \"    Then rebuild: colcon build\")\n        \n        add_executable(speed_subscriber ros2subscriber.cpp)\n        ament_package()\n    endif()\nelse()\n    # Non-ROS 2 build environment (e.g., EEZ Studio)\n    message(STATUS \"⚠️  Building outside ROS 2 ament environment\")\n    message(STATUS \"    ROS 2 C++ headers will not be available\")\n    message(STATUS \"    Enable ROS 2 support by building within colcon:\")\n    message(STATUS \"    $ source /opt/ros/jazzy/setup.bash && colcon build\")\n    \n    add_executable(speed_subscriber ros2subscriber.cpp)\nendif()"
+        },
+        {
+          "objID": "60c1d2cb-d97f-4a4e-dde9-fb14c1587755",
+          "fileName": "ros2subscriber.cpp",
+          "template": "#include \"ros2subscriber.h\"\n\n#include <stdio.h>\n\n// Keep this file buildable in non-ROS toolchains used by the UI simulator.\n#if defined(__has_include)\n#if __has_include(<rclcpp/rclcpp.hpp>) && __has_include(<std_msgs/msg/float32.hpp>)\n#define LART_HAVE_ROS2_CPP 1\n#define LART_ROS2_CPP_LAYOUT_SHORT 1\n#elif __has_include(<rclcpp/rclcpp/rclcpp.hpp>) && __has_include(<std_msgs/std_msgs/msg/float32.hpp>)\n#define LART_HAVE_ROS2_CPP 1\n#define LART_ROS2_CPP_LAYOUT_NESTED 1\n#endif\n#endif\n\n#if !defined(LART_HAVE_ROS2_CPP)\n#define LART_HAVE_ROS2_CPP 0\n#endif\n\n#if LART_HAVE_ROS2_CPP\n\n#if defined(LART_ROS2_CPP_LAYOUT_NESTED)\n#include <rclcpp/rclcpp/rclcpp.hpp>\n#include <std_msgs/std_msgs/msg/float32.hpp>\n#else\n#include <rclcpp/rclcpp.hpp>\n#include <std_msgs/msg/float32.hpp>\n#endif\n\n#include <exception>\n#include <memory>\n\n#if defined(__GNUC__) || defined(__clang__)\n#define LART_WEAK __attribute__((weak))\n#else\n#define LART_WEAK\n#endif\n\n// Make the exported symbols weak so a stale duplicate object does not break linking.\nnamespace {\nconstexpr const char *TOPIC_NAME = \"/vehicle/speed_kph\";\n\nint g_is_initialized = 0;\nint g_has_speed = 0;\nfloat g_latest_speed_kph = 0.0f;\n\nstd::shared_ptr<rclcpp::Node> g_node;\nrclcpp::Subscription<std_msgs::msg::Float32>::SharedPtr g_subscriber;\nstd::unique_ptr<rclcpp::executors::SingleThreadedExecutor> g_executor;\n}  // namespace\n\nLART_WEAK int ros2subscriber_init(void) {\n    if (g_is_initialized) {\n        return 0;\n    }\n\n    try {\n        if (!rclcpp::ok()) {\n            int argc = 0;\n            char **argv = nullptr;\n            rclcpp::init(argc, argv);\n        }\n\n        g_node = rclcpp::Node::make_shared(\"lart_dashboard_listener\");\n        g_subscriber = g_node->create_subscription<std_msgs::msg::Float32>(\n            TOPIC_NAME,\n            10,\n            [](const std_msgs::msg::Float32 &msg) {\n                g_latest_speed_kph = msg.data;\n                g_has_speed = 1;\n            });\n\n        g_executor = std::make_unique<rclcpp::executors::SingleThreadedExecutor>();\n        g_executor->add_node(g_node);\n    } catch (const std::exception &ex) {\n        fprintf(stderr, \"ros2subscriber init failed: %s\\n\", ex.what());\n        g_subscriber.reset();\n        g_node.reset();\n        g_executor.reset();\n        g_has_speed = 0;\n        return 1;\n    }\n\n    g_is_initialized = 1;\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_spin_some(void) {\n    if (!g_is_initialized || !g_executor) {\n        return 1;\n    }\n\n    try {\n        g_executor->spin_some();\n    } catch (const std::exception &ex) {\n        fprintf(stderr, \"ros2subscriber spin failed: %s\\n\", ex.what());\n        return 1;\n    }\n\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_get_latest_speed(float *speed_kph) {\n    if (!g_is_initialized || !g_has_speed || speed_kph == nullptr) {\n        return 0;\n    }\n\n    *speed_kph = g_latest_speed_kph;\n    return 1;\n}\n\nLART_WEAK void ros2subscriber_fini(void) {\n    if (!g_is_initialized) {\n        return;\n    }\n\n    g_subscriber.reset();\n\n    if (g_executor && g_node) {\n        g_executor->remove_node(g_node);\n    }\n\n    g_executor.reset();\n    g_node.reset();\n\n    if (rclcpp::ok()) {\n        rclcpp::shutdown();\n    }\n\n    g_is_initialized = 0;\n    g_has_speed = 0;\n}\n\n#else\n\nLART_WEAK int ros2subscriber_init(void) {\n    fprintf(stderr, \"ROS 2 C++ headers not available in current include path; ros2subscriber disabled.\\n\");\n    return 1;\n}\n\nLART_WEAK int ros2subscriber_spin_some(void) {\n    return 1;\n}\n\nLART_WEAK int ros2subscriber_get_latest_speed(float *speed_kph) {\n    (void)speed_kph;\n    return 0;\n}\n\nLART_WEAK void ros2subscriber_fini(void) {\n}\n\n#endif\n"
+        },
+        {
+          "objID": "c0ed5029-b756-44df-a764-7ac1293c69f4",
+          "fileName": "ros2subscriber.h",
+          "template": "#ifndef LART_ROS2SUBSCRIBER_H\n#define LART_ROS2SUBSCRIBER_H\n\n#ifdef __cplusplus\nextern \"C\" {\n#endif\n\nint ros2subscriber_init(void);\nint ros2subscriber_spin_some(void);\nint ros2subscriber_get_latest_speed(float *speed_kph);\nvoid ros2subscriber_fini(void);\n\n#ifdef __cplusplus\n}\n#endif\n\n#endif\n"
+        },
+        {
+          "objID": "f7305de0-3a6b-46e9-9494-4413a6085dd8",
+          "fileName": "package.xml",
+          "template": "<?xml version=\"1.0\"?>\n<?xml-model href=\"http://download.ros.org/schema/package_format3.xsd\"\n            schematypens=\"http://www.w3.org/2001/XMLSchema\"?>\n<package format=\"3\">\n  <name>c_subscriber_example</name>\n  <version>0.1.0</version>\n  <description>ROS 2 C++ subscriber example used by the dashboard container build</description>\n  <maintainer email=\"lart@example.com\">LART</maintainer>\n  <license>MIT</license>\n\n  <buildtool_depend>ament_cmake</buildtool_depend>\n  <build_depend>rclcpp</build_depend>\n  <build_depend>std_msgs</build_depend>\n\n  <exec_depend>rclcpp</exec_depend>\n  <exec_depend>std_msgs</exec_depend>\n\n  <export>\n    <build_type>ament_cmake</build_type>\n  </export>\n</package>\n"
         }
       ],
       "destinationFolder": "src\\ui",
@@ -97,7 +117,7 @@
       "imageExportMode": "source",
       "fontExportMode": "source",
       "fileSystemPath": "",
-      "lvglInclude": "lvgl/lvgl.h",
+      "lvglInclude": "lvgl.h",
       "screensLifetimeSupport": false,
       "useDockerDesktop": true,
       "generateSourceCodeForEezFramework": true,
@@ -153,7 +173,7 @@
         "objID": "469b523e-1925-409c-d508-923138cac9e4",
         "name": "speed",
         "type": "float",
-        "defaultValue": "0",
+        "defaultValue": "0.0",
         "persistent": false,
         "native": false
       },
@@ -179,9 +199,56 @@
         "type": "integer",
         "defaultValue": "0",
         "persistent": false
+      },
+      {
+        "objID": "4e51a69c-569d-4cc6-8fd9-a28d94fab9e2",
+        "name": "mqtt_host",
+        "type": "string",
+        "size": null,
+        "defaultValue": "\"localhost\"",
+        "persistent": false
+      },
+      {
+        "objID": "31d6622a-470c-4b99-9ac3-88248a89952e",
+        "name": "mqtt_port",
+        "type": "integer",
+        "defaultValue": "1883",
+        "persistent": false
+      },
+      {
+        "objID": "ae17daa8-2dd1-4e28-af6d-ae176d4ed132",
+        "name": "mqtt_connected",
+        "type": "boolean",
+        "defaultValue": "true",
+        "persistent": false
+      },
+      {
+        "objID": "e594b5cc-1660-4db5-e633-1c802a7a8b9e",
+        "name": "mqtt_connection_string",
+        "type": "string",
+        "size": null,
+        "defaultValue": "\"mqtt://127.0.0.1:1883\"",
+        "persistent": false
       }
     ],
-    "structures": [],
+    "structures": [
+      {
+        "objID": "9623e46e-7ac7-49f4-eef8-e400e944ed17",
+        "name": "Subscription",
+        "fields": [
+          {
+            "objID": "c8052a03-ed2d-46fc-bcb3-ae6c6887af18",
+            "name": "topic",
+            "type": "string"
+          },
+          {
+            "objID": "55a96552-da33-4c96-cc53-2aaf91419416",
+            "name": "payload",
+            "type": "string"
+          }
+        ]
+      }
+    ],
     "enums": []
   },
   "actions": [],
@@ -270,7 +337,7 @@
               "type": "LVGLLabelWidget",
               "left": 0,
               "top": 200,
-              "width": 203,
+              "width": 339,
               "height": 53,
               "customInputs": [],
               "customOutputs": [],
@@ -280,7 +347,7 @@
                 "conditionalStyles": [],
                 "childStyles": []
               },
-              "hiddenInEditor": true,
+              "hiddenInEditor": false,
               "timeline": [],
               "eventHandlers": [],
               "identifier": "readyLabel",
@@ -334,6 +401,7 @@
                 "conditionalStyles": [],
                 "childStyles": []
               },
+              "hiddenInEditor": false,
               "timeline": [],
               "eventHandlers": [],
               "identifier": "middleContainer",
@@ -1095,6 +1163,7 @@
                     "conditionalStyles": [],
                     "childStyles": []
                   },
+                  "hiddenInEditor": false,
                   "timeline": [],
                   "eventHandlers": [],
                   "identifier": "speedContainer",
@@ -1118,6 +1187,7 @@
                         "conditionalStyles": [],
                         "childStyles": []
                       },
+                      "hiddenInEditor": false,
                       "timeline": [],
                       "eventHandlers": [],
                       "identifier": "speedLabel",
@@ -1168,6 +1238,7 @@
                         "conditionalStyles": [],
                         "childStyles": []
                       },
+                      "hiddenInEditor": false,
                       "timeline": [],
                       "eventHandlers": [],
                       "identifier": "kmLabel",
@@ -1523,6 +1594,7 @@
                 "conditionalStyles": [],
                 "childStyles": []
               },
+              "hiddenInEditor": false,
               "timeline": [],
               "eventHandlers": [],
               "leftUnit": "px",
@@ -1546,8 +1618,8 @@
               },
               "group": "",
               "groupIndex": 0,
-              "color": "#19ff00",
-              "colorType": "literal",
+              "color": "mqtt_connected ? 0x00FF00 : 0xFF0000",
+              "colorType": "expression",
               "brightness": 255,
               "brightnessType": "literal"
             },
@@ -1566,6 +1638,7 @@
                 "conditionalStyles": [],
                 "childStyles": []
               },
+              "hiddenInEditor": false,
               "timeline": [],
               "eventHandlers": [],
               "identifier": "hvBar",
@@ -1636,6 +1709,7 @@
                 "conditionalStyles": [],
                 "childStyles": []
               },
+              "hiddenInEditor": false,
               "timeline": [],
               "eventHandlers": [],
               "identifier": "lvBar",
@@ -1706,6 +1780,7 @@
                 "conditionalStyles": [],
                 "childStyles": []
               },
+              "hiddenInEditor": false,
               "timeline": [],
               "eventHandlers": [],
               "identifier": "hvLabel",
@@ -1751,6 +1826,7 @@
                 "conditionalStyles": [],
                 "childStyles": []
               },
+              "hiddenInEditor": false,
               "timeline": [],
               "eventHandlers": [],
               "identifier": "lvLabel",
@@ -1796,6 +1872,7 @@
                 "conditionalStyles": [],
                 "childStyles": []
               },
+              "hiddenInEditor": false,
               "timeline": [],
               "eventHandlers": [],
               "leftUnit": "px",
@@ -1839,6 +1916,7 @@
                 "conditionalStyles": [],
                 "childStyles": []
               },
+              "hiddenInEditor": false,
               "timeline": [],
               "eventHandlers": [],
               "leftUnit": "px",
@@ -1882,6 +1960,7 @@
                 "conditionalStyles": [],
                 "childStyles": []
               },
+              "hiddenInEditor": false,
               "timeline": [],
               "eventHandlers": [],
               "leftUnit": "px",

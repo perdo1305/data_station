@@ -86,8 +86,13 @@ publisher: build network
 		--network $(NETWORK_NAME) \
 		--hostname publisher \
 		-e ROS_DOMAIN_ID=0 \
-		-e ROS_LOCALHOST_ONLY=0 \
+		-e ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET \
 		-e PYTHONUNBUFFERED=1 \
+		-e DISPLAY=$DISPLAY \
+		-e QT_X11_NO_MITSHM=1 \
+		-e XAUTHORITY=/root/.Xauthority \
+		-v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+		-v $$HOME/.Xauthority:/root/.Xauthority:ro \
 		$(IMAGE_NAME) \
 		bash -c "source /root/.bashrc && echo 'Publisher running...' && ros2 run dashboard_ui dashboard_ui"
 	@echo "✓ Publisher started: $(CONTAINER_PUBLISHER)"
@@ -99,8 +104,13 @@ listener: build network
 		--network $(NETWORK_NAME) \
 		--hostname listener \
 		-e ROS_DOMAIN_ID=0 \
-		-e ROS_LOCALHOST_ONLY=0 \
+		-e ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET \
 		-e PYTHONUNBUFFERED=1 \
+		-e DISPLAY=$DISPLAY \
+		-e QT_X11_NO_MITSHM=1 \
+		-e XAUTHORITY=/root/.Xauthority \
+		-v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+		-v $$HOME/.Xauthority:/root/.Xauthority:ro \
 		$(IMAGE_NAME) \
 		bash -c "source /root/.bashrc && echo 'Listener running...' && ros2 run dashboard_ui speed_listener_node"
 	@echo "✓ Listener started: $(CONTAINER_LISTENER)"

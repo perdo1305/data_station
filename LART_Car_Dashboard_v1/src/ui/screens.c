@@ -13,7 +13,7 @@
 objects_t objects;
 
 static const char *screen_names[] = { "Driver View", "Start Scene", "Autonomous", "Debug Autonomous", "Debug" };
-static const char *object_names[] = { "driver_view", "start_scene", "autonomous", "debug_autonomous", "debug", "ready_label_1", "ready_label", "middle_container", "temp_motor_container", "tempmotor_label", "lap_times_container", "laptime_label", "lastlap_label", "obj0", "obj1", "temp_inv_container", "temp_inv_label", "speed_container", "speed_label", "km_label", "brake_acell_presure_container", "brake_presure_bar", "accellerator_presure_bar", "obj2", "hv_bar", "lv_bar", "hv_label", "lv_label", "logo", "obj3", "obj4", "obj5", "hv_bar_1", "lv_bar_1", "hv_label_1", "lv_label_1", "brake_presure_container", "brake_presure_bar_1", "brake_presure_bar_2", "infos_container", "obj6", "pneumaticresure_container", "brake_presure_bar_3", "brake_presure_bar_4", "lap_times_container_1", "laptime_label_1", "lastlap_label_1", "obj7", "obj8", "max_speed_container", "km_label_2", "km_label_1", "speed_label_1", "km_label_3", "obj9", "obj10", "bat_cells_container_1", "brake_presure_bar_5", "brake_presure_bar_6", "brake_presure_bar_7", "brake_presure_bar_8", "brake_presure_bar_9", "brake_presure_bar_10" };
+static const char *object_names[] = { "driver_view", "start_scene", "autonomous", "debug_autonomous", "debug", "ready_label_1", "ready_label", "middle_container", "temp_motor_container", "tempmotor_label", "lap_times_container", "laptime_label", "lastlap_label", "obj0", "obj1", "temp_inv_container", "temp_inv_label", "speed_container", "speed_label", "km_label", "brake_acell_presure_container", "brake_presure_bar", "accellerator_presure_bar", "hv_bar", "lv_bar", "hv_label", "lv_label", "obj2", "logo", "obj3", "obj4", "obj5", "hv_bar_1", "lv_bar_1", "hv_label_1", "lv_label_1", "brake_presure_container", "brake_presure_bar_1", "brake_presure_bar_2", "infos_container", "obj6", "pneumaticresure_container", "brake_presure_bar_3", "brake_presure_bar_4", "lap_times_container_1", "laptime_label_1", "lastlap_label_1", "obj7", "obj8", "max_speed_container", "km_label_2", "km_label_1", "speed_label_1", "km_label_3", "obj9", "obj10", "bat_cells_container_1", "brake_presure_bar_5", "brake_presure_bar_6", "brake_presure_bar_7", "brake_presure_bar_8", "brake_presure_bar_9", "brake_presure_bar_10" };
 
 //
 // Event handlers
@@ -337,7 +337,6 @@ void create_screen_driver_view() {
             objects.obj2 = obj;
             lv_obj_set_pos(obj, 120, 8);
             lv_obj_set_size(obj, 32, 32);
-            lv_led_set_color(obj, lv_color_hex(0x19ff00));
             lv_led_set_brightness(obj, 255);
         }
         {
@@ -479,6 +478,16 @@ void tick_screen_driver_view() {
         if (new_val != cur_val) {
             tick_value_change_obj = objects.accellerator_presure_bar;
             lv_bar_set_value(objects.accellerator_presure_bar, new_val, LV_ANIM_OFF);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        uint32_t new_val = evalUnsignedIntegerProperty(flowState, 25, 3, "Failed to evaluate Color in Led widget");
+        new_val = lv_color_to_u32(lv_color_hex(new_val));
+        uint32_t cur_val = lv_color_to_u32(((lv_led_t *)objects.obj2)->color);
+        if (new_val != cur_val) {
+            tick_value_change_obj = objects.obj2;
+            lv_led_set_color(objects.obj2, lv_color_hex(new_val));
             tick_value_change_obj = NULL;
         }
     }

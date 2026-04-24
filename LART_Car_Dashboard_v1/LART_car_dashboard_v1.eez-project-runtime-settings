@@ -1,0 +1,36 @@
+{
+  "__persistentVariables": {
+    "subscriptions": [
+      {
+        "topic": "EEZ-BB3/dcpsupply/ch/1/oe"
+      },
+      {
+        "topic": "EEZ-BB3/dcpsupply/ch/1/uset"
+      },
+      {
+        "topic": "EEZ-BB3/dcpsupply/ch/1/umon"
+      },
+      {
+        "topic": "EEZ-BB3/dcpsupply/ch/1/iset"
+      },
+      {
+        "topic": "EEZ-BB3/dcpsupply/ch/1/imon"
+      },
+      {
+        "topic": "EEZ-BB3/dcpsupply/ch/2/oe"
+      },
+      {
+        "topic": "EEZ-BB3/dcpsupply/ch/2/uset"
+      },
+      {
+        "topic": "EEZ-BB3/dcpsupply/ch/2/umon"
+      },
+      {
+        "topic": "EEZ-BB3/dcpsupply/ch/2/iset"
+      },
+      {
+        "topic": "EEZ-BB3/dcpsupply/ch/2/imon"
+      }
+    ]
+  }
+}
