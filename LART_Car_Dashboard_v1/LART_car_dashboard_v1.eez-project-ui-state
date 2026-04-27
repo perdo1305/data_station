@@ -1,7 +1,6 @@
 {
   "navigation": {
     "selectedUserPageObject": "[LART_car_dashboard_v1.eez-project]:/userPages/0",
-    "selectedActionObject": "[LART_car_dashboard_v1.eez-project]:/actions/-1",
     "selectedGlobalVariableObject": "[LART_car_dashboard_v1.eez-project]:/variables/globalVariables/4",
     "selectedStructureObject": "[LART_car_dashboard_v1.eez-project]:/variables/structures/0",
     "selectedFontObject": "[LART_car_dashboard_v1.eez-project]:/fonts/7",
@@ -121,7 +120,16 @@
             "type": "border",
             "size": 240,
             "location": "left",
-            "children": []
+            "children": [
+              {
+                "type": "tab",
+                "id": "changes",
+                "name": "Changes",
+                "component": "changes",
+                "enableClose": false,
+                "icon": "svg:changes"
+              }
+            ]
           }
         ],
         "layout": {
@@ -202,11 +210,22 @@
             {
               "type": "tabset",
               "id": "EDITORS",
-              "weight": 44.750665189232386,
-              "selected": 1,
+              "weight": 49.58299284899911,
+              "selected": 2,
               "enableDeleteWhenEmpty": false,
               "enableClose": false,
               "children": [
+                {
+                  "type": "tab",
+                  "id": "#7669c211-a732-43d8-8379-137632b8418c",
+                  "name": "Autonomous",
+                  "component": "editor",
+                  "config": {
+                    "objectPath": "[LART_car_dashboard_v1.eez-project]:/userPages/2",
+                    "permanent": false
+                  },
+                  "icon": "svg:page"
+                },
                 {
                   "type": "tab",
                   "id": "#20432cdd-e091-414e-bbca-d062006c87ad",
@@ -247,7 +266,7 @@
             {
               "type": "row",
               "id": "#9b9aad4d-85b5-4431-867f-52c6f3936ddf",
-              "weight": 31.56356603387878,
+              "weight": 26.731238374112056,
               "children": [
                 {
                   "type": "tabset",
@@ -344,7 +363,16 @@
             "type": "border",
             "size": 240,
             "location": "left",
-            "children": []
+            "children": [
+              {
+                "type": "tab",
+                "id": "changes",
+                "name": "Changes",
+                "component": "changes",
+                "enableClose": false,
+                "icon": "svg:changes"
+              }
+            ]
           }
         ],
         "layout": {
@@ -1292,7 +1320,7 @@
   "replaceEnabled": false,
   "replaceText": "",
   "pageEditorFrontFace": false,
-  "pageRuntimeFrontFace": false,
+  "pageRuntimeFrontFace": true,
   "breakpoints": {},
   "watchExpressions": [],
   "showComponentDescriptions": true,

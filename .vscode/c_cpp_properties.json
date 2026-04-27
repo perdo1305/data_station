@@ -1,0 +1,29 @@
+{
+  "version": 4,
+  "configurations": [
+    {
+      "name": "Linux-ROS2",
+      "compilerPath": "/usr/bin/g++",
+      "intelliSenseMode": "linux-gcc-x64",
+      "cStandard": "c17",
+      "cppStandard": "c++17",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "/opt/ros/jazzy/include/**",
+        "${env:HOME}/ros2_jazzy/include/**",
+        "${env:HOME}/ros2_jazzy/install/**",
+        "${workspaceFolder}/install/**"
+      ],
+      "browse": {
+        "path": [
+          "${workspaceFolder}",
+          "/opt/ros/jazzy/include",
+          "${env:HOME}/ros2_jazzy/include",
+          "${env:HOME}/ros2_jazzy/install",
+          "${workspaceFolder}/install"
+        ],
+        "limitSymbolsToIncludedHeaders": true
+      }
+    }
+  ]
+}

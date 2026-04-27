@@ -12,6 +12,9 @@ RUN apt-get update && apt-get install -y \
     can-utils \
     git \
     build-essential \
+    pkg-config \
+    libmosquitto-dev \
+    mosquitto-clients \
     vim \
     wget \
     curl \

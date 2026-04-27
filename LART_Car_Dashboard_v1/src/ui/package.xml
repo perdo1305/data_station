@@ -1,21 +1,13 @@
 <?xml version="1.0"?>
-<?xml-model href="http://download.ros.org/schema/package_format3.xsd"
-            schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>c_subscriber_example</name>
-  <version>0.1.0</version>
-  <description>ROS 2 C++ subscriber example used by the dashboard container build</description>
-  <maintainer email="lart@example.com">LART</maintainer>
-  <license>MIT</license>
+  <name>speed_subscriber</name>
+  <version>0.0.1</version>
+  <description>Vehicle speed MQTT subscriber</description>
+  <maintainer email="you@email.com">you</maintainer>
+  <license>Apache-2.0</license>
+
+  <build_depend>libmosquitto-dev</build_depend>
+  <exec_depend>libmosquitto1</exec_depend>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
-  <build_depend>rclcpp</build_depend>
-  <build_depend>std_msgs</build_depend>
-
-  <exec_depend>rclcpp</exec_depend>
-  <exec_depend>std_msgs</exec_depend>
-
-  <export>
-    <build_type>ament_cmake</build_type>
-  </export>
 </package>

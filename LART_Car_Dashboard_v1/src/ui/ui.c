@@ -4,7 +4,7 @@
 #include "actions.h"
 #include "vars.h"
 
-#include "ros2subscriber.h"
+#include "mqttsubscriber.h"
 
 // ASSETS DEFINITION
 const uint8_t assets[6632] = {
@@ -435,7 +435,7 @@ ActionExecFunc actions[] = {
 
 void ui_init() {
     eez_flow_init(assets, sizeof(assets), (lv_obj_t **)&objects, sizeof(objects), images, sizeof(images), actions);
-    if (ros2subscriber_init() != 0) {
+    if (mqttsubscriber_init() != 0) {
         ui_set_speed(0.0f);
         return;
     }
@@ -446,7 +446,7 @@ void ui_init() {
 void ui_tick() {
     float speed_kph;
 
-    if (ros2subscriber_spin_some() == 0 && ros2subscriber_get_latest_speed(&speed_kph)) {
+    if (mqttsubscriber_spin_some() == 0 && mqttsubscriber_get_latest_speed(&speed_kph)) {
         ui_set_speed(speed_kph);
     }
 
