@@ -63,12 +63,7 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ${HOME}/.Xauthority:/root/.Xauthority:ro
       - .:/root/lart_ws/LART_Car_Dashboard_v1
-    command: >
-      bash -c "
-        source /root/.bashrc &&
-        echo 'Starting Speed Publisher...' &&
-        python3 /root/lart_ws/LART_Car_Dashboard_v1/speed.py 40
-      "
+    # command removed so the service uses the image's default CMD
     networks:
       - lart-ros2-network
     stdin_open: true

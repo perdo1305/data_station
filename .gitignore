@@ -24,3 +24,5 @@ venv/
 build/
 install/
 log/
+
+.vscode/
