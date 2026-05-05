@@ -192,8 +192,8 @@ check-ui-deps:
 	@bash -lc 'set -e; if ! pkg-config --exists sdl2; then echo "Missing SDL2 development files for the desktop UI."; echo "Install on Raspberry Pi OS: sudo apt install libsdl2-dev pkg-config"; exit 2; fi; if [[ ! -d "$(PROJECT_DIR)/src/ui/third_party/lvgl/src" ]]; then echo "LVGL sources are missing; initializing the bundled submodule..."; git -C "$(PROJECT_DIR)" submodule update --init --recursive -- src/ui/third_party/lvgl; fi; if [[ ! -d "$(PROJECT_DIR)/src/ui/third_party/lvgl/src" ]]; then echo "Missing LVGL sources at $(PROJECT_DIR)/src/ui/third_party/lvgl/src."; echo "Run: git -C $(PROJECT_DIR) submodule update --init --recursive -- src/ui/third_party/lvgl"; exit 2; fi'
 
 publish-local:
-	@echo "Running local sine-wave publisher at 10Hz. Ctrl-C to stop"
-	@bash -lc 'source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/install/setup.bash >/dev/null 2>&1 || true; python3 -c "import math, time; import rclpy; from rclpy.node import Node; from std_msgs.msg import Float32; rclpy.init(); node = Node(\"lart_sine_publisher\"); pub = node.create_publisher(Float32, \"/vehicle/speed_kph\", 10); start = time.monotonic(); rate = node.create_rate(10);\ntry:\n    while rclpy.ok():\n        elapsed = time.monotonic() - start\n        msg = Float32()\n        msg.data = 40.0 + 20.0 * math.sin(elapsed)\n        pub.publish(msg)\n        rate.sleep()\nexcept KeyboardInterrupt:\n    pass\nfinally:\n    node.destroy_node(); rclpy.shutdown()"'
+	@echo "Running local numeric publisher at 20Hz. Ctrl-C to stop"
+	@bash -lc 'source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/install/setup.bash >/dev/null 2>&1 || true; while true; do for value in 0 10 20 30 40 50 60 70 80 90 100; do echo "speed_kph=$$value"; ros2 topic pub --once /vehicle/speed_kph std_msgs/msg/Float32 "{data: $$value}" >/dev/null; sleep 0.05; done; done'
 
 listener-local:
 	@echo "Running local listener (dashboard_ui.speed_listener)"
