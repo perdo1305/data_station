@@ -428,3 +428,6 @@ LART_Car_Dashboard_v1/
 
 **Last Updated**: May 2026  
 **Version**: 1.0
+
+sudo apt install libsdl2-dev pkg-config
+sudo apt install docker-buildx

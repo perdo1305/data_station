@@ -1,0 +1,4 @@
+[submodule "LART_Car_Dashboard_v1/src/ui/third_party/lvgl"]
+	path = LART_Car_Dashboard_v1/src/ui/third_party/lvgl
+	url = https://github.com/lvgl/lvgl.git
+	branch = master
