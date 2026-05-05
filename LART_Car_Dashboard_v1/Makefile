@@ -27,6 +27,12 @@ help:
 	@echo "  display       - Run only the display container"
 	@echo "  shell         - Open shell in publisher container"
 	@echo "  logs          - Show logs from all containers"
+	@echo ""
+	@echo "Local (no Docker):"
+	@echo "  publish-local  - Run a simple local ROS2 publisher (no docker)"
+	@echo "  listener-local - Run the Python listener locally"
+	@echo "  display-local  - Build and run the UI locally (requires deps)"
+	@echo "  run-all-local   - Start publisher+listener in background and run UI"
 	@echo "  logs-pub      - Follow publisher container logs"
 	@echo "  ps            - Show running containers"
 	@echo "  stop          - Stop all containers"
@@ -177,3 +183,39 @@ logs:
 
 logs-pub:
 	@docker logs -f $(CONTAINER_PUBLISHER)
+
+# ---------------------------------------------------------------------------
+# Local (no Docker) run targets
+# ---------------------------------------------------------------------------
+
+publish-local:
+	@echo "Running local publisher (publishes 40.0 at 10Hz). Ctrl-C to stop"
+	@bash -lc 'source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/install/setup.bash >/dev/null 2>&1 || true; ros2 topic pub -r 10 /vehicle/speed_kph std_msgs/msg/Float32 "{data: 40.0}"'
+
+listener-local:
+	@echo "Running local listener (dashboard_ui.speed_listener)"
+	@bash -lc 'source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; export PYTHONPATH=$(PROJECT_DIR)/src; python3 -m dashboard_ui.speed_listener'
+
+display-local:
+	@echo "Building and running UI locally (requires SDL2, rclcpp dev libs)"
+	@bash -lc '
+	  set -e; \
+	  cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; \
+	  cmake --build $(PROJECT_DIR)/build/ui-build --parallel $$(nproc); \
+	  $(PROJECT_DIR)/build/ui-build/ui_runner
+	'
+
+run-all-local:
+	@echo "Starting publisher and listener in background; launching display in foreground"
+	@bash -lc '
+	  set -e; \
+	  source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; \
+	  source $(PROJECT_DIR)/install/setup.bash >/dev/null 2>&1 || true; \
+	  export PYTHONPATH=$(PROJECT_DIR)/src; \
+	  ros2 topic pub -r 10 /vehicle/speed_kph std_msgs/msg/Float32 "{data: 40.0}" & PUB_PID=$$!; \
+	  python3 -m dashboard_ui.speed_listener & LIST_PID=$$!; \
+	  echo "Started publisher $$PUB_PID and listener $$LIST_PID"; \
+	  cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; \
+	  cmake --build $(PROJECT_DIR)/build/ui-build --parallel $$(nproc); \
+	  $(PROJECT_DIR)/build/ui-build/ui_runner
+	'
