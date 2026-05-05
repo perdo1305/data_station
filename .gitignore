@@ -21,3 +21,6 @@
 venv/
 
 
+build/
+install/
+log/

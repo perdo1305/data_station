@@ -1,57 +1,44 @@
-version: '3.8'
+x-common-environment: &common-environment
+  ROS_DOMAIN_ID: 0
+  ROS_AUTOMATIC_DISCOVERY_RANGE: SUBNET
+  PYTHONUNBUFFERED: 1
+  DISPLAY: ${DISPLAY}
+  QT_X11_NO_MITSHM: 1
+  XDG_RUNTIME_DIR: /tmp
+  XAUTHORITY: /root/.Xauthority
+  LIBGL_ALWAYS_SOFTWARE: 1
+  SDL_VIDEODRIVER: x11
+  SDL_RENDER_DRIVER: software
+  MESA_LOADER_DRIVER_OVERRIDE: softpipe
 
 services:
-  # Publisher container - runs the speed publisher
-  publisher:
+  # Display container - builds and runs the dashboard UI
+  display:
     build:
       context: ..
       dockerfile: LART_Car_Dashboard_v1/Dockerfile
-    container_name: lart-dashboard-publisher
-    hostname: publisher
-    environment:
-      - ROS_DOMAIN_ID=0
-      - ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET
-      - PYTHONUNBUFFERED=1
-      - DISPLAY=${DISPLAY}
-      - QT_X11_NO_MITSHM=1
-      - XAUTHORITY=/root/.Xauthority
+    container_name: lart-dashboard-display
+    hostname: display
+    environment: *common-environment
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ${HOME}/.Xauthority:/root/.Xauthority:ro
+      - .:/root/lart_ws/LART_Car_Dashboard_v1
     command: >
       bash -c "
         source /root/.bashrc &&
-        echo 'Starting Speed Publisher...' &&
-        ros2 run dashboard_ui dashboard_ui
-      "
-    networks:
-      - lart-ros2-network
-    stdin_open: true
-    tty: true
-    restart: unless-stopped
-
-  # Listener container - subscribes to speed topics
-  listener:
-    build:
-      context: ..
-      dockerfile: LART_Car_Dashboard_v1/Dockerfile
-    container_name: lart-dashboard-listener
-    hostname: listener
-    environment:
-      - ROS_DOMAIN_ID=0
-      - ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET
-      - PYTHONUNBUFFERED=1
-      - DISPLAY=${DISPLAY}
-      - QT_X11_NO_MITSHM=1
-      - XAUTHORITY=/root/.Xauthority
-    volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - ${HOME}/.Xauthority:/root/.Xauthority:ro
-    command: >
-      bash -c "
-        source /root/.bashrc &&
-        echo 'Starting Speed Listener...' &&
-        ros2 run dashboard_ui speed_listener_node
+        echo 'Building and starting CMake LVGL Interface...' &&
+        cd /root/lart_ws/LART_Car_Dashboard_v1/src/ui &&
+        mkdir -p build && cd build &&
+        cmake .. && make -j$(nproc) &&
+        if [ -x ./ui_runner ]; then
+          echo 'Starting ui_runner...' &&
+          ./ui_runner
+        else
+          echo 'ERROR: ui_runner was not built successfully' &&
+          ls -la &&
+          exit 1
+        fi
       "
     networks:
       - lart-ros2-network
@@ -60,6 +47,33 @@ services:
     stdin_open: true
     tty: true
     restart: unless-stopped
+    ipc: host
+    devices:
+      - /dev/dri:/dev/dri
+
+  # Publisher container - publishes the test speed topics
+  publisher:
+    build:
+      context: ..
+      dockerfile: LART_Car_Dashboard_v1/Dockerfile
+    container_name: lart-dashboard-publisher
+    hostname: publisher
+    environment: *common-environment
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${HOME}/.Xauthority:/root/.Xauthority:ro
+      - .:/root/lart_ws/LART_Car_Dashboard_v1
+    command: >
+      bash -c "
+        source /root/.bashrc &&
+        echo 'Starting Speed Publisher...' &&
+        python3 /root/lart_ws/LART_Car_Dashboard_v1/speed.py 40
+      "
+    networks:
+      - lart-ros2-network
+    stdin_open: true
+    tty: true
+    ipc: host
 
 networks:
   lart-ros2-network:

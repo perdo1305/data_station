@@ -1,13 +1,16 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>speed_subscriber</name>
-  <version>0.0.1</version>
-  <description>Vehicle speed MQTT subscriber</description>
-  <maintainer email="you@email.com">you</maintainer>
-  <license>Apache-2.0</license>
-
-  <build_depend>libmosquitto-dev</build_depend>
-  <exec_depend>libmosquitto1</exec_depend>
+  <version>0.0.0</version>
+  <description>ROS2 subscriber library used by the dashboard UI</description>
+  <maintainer email="devnull@example.com">Dev</maintainer>
+  <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclcpp</depend>
+  <depend>std_msgs</depend>
+  <depend>lart_msgs</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
 </package>

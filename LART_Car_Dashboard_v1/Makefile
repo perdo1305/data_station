@@ -1,11 +1,12 @@
 .PHONY: help build up down logs clean shell compose-up compose-down compose-logs \
-		build-image rebuild network publisher listener ps stop
+		build-image rebuild network publisher display ps stop
 
 # Docker image and container names
 IMAGE_NAME := lart-dashboard-ros2
 CONTAINER_PUBLISHER := lart-dashboard-publisher
-CONTAINER_LISTENER := lart-dashboard-listener
 NETWORK_NAME := lart-ros2-network
+PROJECT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+CONTAINER_UI_DIR := /root/lart_ws/LART_Car_Dashboard_v1/src/ui
 
 help:
 	@echo "LART Dashboard ROS2 Docker Management"
@@ -19,13 +20,12 @@ help:
 	@echo ""
 	@echo "Manual Docker Management:"
 	@echo "  build         - Build the Docker image"
-	@echo "  up            - Start both publisher and listener containers"
+	@echo "  up            - Start publisher and display containers"
 	@echo "  publisher     - Run only the publisher container"
-	@echo "  listener      - Run only the listener container"
+	@echo "  display       - Run only the display container"
 	@echo "  shell         - Open shell in publisher container"
 	@echo "  logs          - Show logs from all containers"
 	@echo "  logs-pub      - Follow publisher container logs"
-	@echo "  logs-listen   - Follow listener container logs"
 	@echo "  ps            - Show running containers"
 	@echo "  stop          - Stop all containers"
 	@echo "  down          - Stop and remove all containers"
@@ -65,7 +65,7 @@ compose-rebuild:
 
 build:
 	@echo "Building Docker image: $(IMAGE_NAME)"
-	docker build -t $(IMAGE_NAME) .
+	docker build -t $(IMAGE_NAME) $(PROJECT_DIR)
 
 rebuild: clean build
 
@@ -73,8 +73,8 @@ network:
 	@echo "Creating Docker network: $(NETWORK_NAME)"
 	docker network create $(NETWORK_NAME) 2>/dev/null || echo "Network already exists"
 
-up: build network publisher listener
-	@echo "✓ Both publisher and listener are running"
+up: build network publisher display
+	@echo "✓ Publisher and display are running"
 	@echo ""
 	@echo "View logs: make logs"
 	@echo "Stop:      make stop"
@@ -88,14 +88,36 @@ publisher: build network
 		-e ROS_DOMAIN_ID=0 \
 		-e ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET \
 		-e PYTHONUNBUFFERED=1 \
-		-e DISPLAY=$DISPLAY \
+		-e DISPLAY=$$DISPLAY \
 		-e QT_X11_NO_MITSHM=1 \
 		-e XAUTHORITY=/root/.Xauthority \
 		-v /tmp/.X11-unix:/tmp/.X11-unix:rw \
 		-v $$HOME/.Xauthority:/root/.Xauthority:ro \
+		-v $(PROJECT_DIR):/root/lart_ws/LART_Car_Dashboard_v1 \
 		$(IMAGE_NAME) \
-		bash -c "source /root/.bashrc && echo 'Publisher running...' && ros2 run dashboard_ui dashboard_ui"
+		bash -c "source /root/.bashrc && echo 'Publisher running...' && python3 /root/lart_ws/LART_Car_Dashboard_v1/speed.py 40"
 	@echo "✓ Publisher started: $(CONTAINER_PUBLISHER)"
+
+display: build network
+	@echo "Starting display container..."
+	docker run -d \
+		--name lart-dashboard-display \
+		--network $(NETWORK_NAME) \
+		--hostname display \
+		-e ROS_DOMAIN_ID=0 \
+		-e ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET \
+		-e PYTHONUNBUFFERED=1 \
+		-e DISPLAY=$$DISPLAY \
+		-e QT_X11_NO_MITSHM=1 \
+		-e XAUTHORITY=/root/.Xauthority \
+		-v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+		-v $$HOME/.Xauthority:/root/.Xauthority:ro \
+		-v $(PROJECT_DIR):/root/lart_ws/LART_Car_Dashboard_v1 \
+		--ipc=host \
+		--device /dev/dri:/dev/dri \
+		$(IMAGE_NAME) \
+		bash -c "source /root/.bashrc && cd $(CONTAINER_UI_DIR) && mkdir -p build && cd build && cmake .. && make && ./ui_runner"
+	@echo "✓ Display started: lart-dashboard-display"
 
 listener: build network
 	@echo "Starting listener container..."
@@ -106,7 +128,7 @@ listener: build network
 		-e ROS_DOMAIN_ID=0 \
 		-e ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET \
 		-e PYTHONUNBUFFERED=1 \
-		-e DISPLAY=$DISPLAY \
+		-e DISPLAY=$$DISPLAY \
 		-e QT_X11_NO_MITSHM=1 \
 		-e XAUTHORITY=/root/.Xauthority \
 		-v /tmp/.X11-unix:/tmp/.X11-unix:rw \
@@ -124,12 +146,12 @@ ps:
 
 stop:
 	@echo "Stopping all containers..."
-	-docker stop $(CONTAINER_PUBLISHER) $(CONTAINER_LISTENER) 2>/dev/null || true
+	-docker stop $(CONTAINER_PUBLISHER) lart-dashboard-display 2>/dev/null || true
 	@echo "✓ Containers stopped"
 
 down: stop
 	@echo "Removing all containers..."
-	-docker rm $(CONTAINER_PUBLISHER) $(CONTAINER_LISTENER) 2>/dev/null || true
+	-docker rm $(CONTAINER_PUBLISHER) lart-dashboard-display 2>/dev/null || true
 	@echo "✓ Containers removed"
 
 clean: down
@@ -142,11 +164,8 @@ logs:
 	@echo "=== Publisher Logs ==="
 	@docker logs $(CONTAINER_PUBLISHER) 2>/dev/null || echo "Publisher not running"
 	@echo ""
-	@echo "=== Listener Logs ==="
-	@docker logs $(CONTAINER_LISTENER) 2>/dev/null || echo "Listener not running"
+	@echo "=== Display Logs ==="
+	@docker logs lart-dashboard-display 2>/dev/null || echo "Display not running"
 
 logs-pub:
 	@docker logs -f $(CONTAINER_PUBLISHER)
-
-logs-listen:
-	@docker logs -f $(CONTAINER_LISTENER)

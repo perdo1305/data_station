@@ -49,7 +49,9 @@ class SpeedListener(Node):
         self.get_logger().info(
             f'Speed: {msg.speed_kph:.2f} km/h | '
             f'RPM: {msg.rpm:.0f} | '
-            f'Throttle: {msg.throttle_percent:.1f}%'
+            f'BPS: {msg.bps:.1f}% | '
+            f'R2D: {"yes" if msg.r2d_ready else "no"} | '
+            f'CAN: {"up" if msg.can_active else "down"}'
         )
 
 

@@ -75,14 +75,6 @@ typedef struct _objects_t {
     lv_obj_t *speed_label_1;
     lv_obj_t *km_label_3;
     lv_obj_t *obj9;
-    lv_obj_t *obj10;
-    lv_obj_t *bat_cells_container_1;
-    lv_obj_t *brake_presure_bar_5;
-    lv_obj_t *brake_presure_bar_6;
-    lv_obj_t *brake_presure_bar_7;
-    lv_obj_t *brake_presure_bar_8;
-    lv_obj_t *brake_presure_bar_9;
-    lv_obj_t *brake_presure_bar_10;
 } objects_t;
 
 extern objects_t objects;

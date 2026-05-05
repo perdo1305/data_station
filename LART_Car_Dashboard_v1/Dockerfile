@@ -13,8 +13,8 @@ RUN apt-get update && apt-get install -y \
     git \
     build-essential \
     pkg-config \
-    libmosquitto-dev \
-    mosquitto-clients \
+    libsdl2-dev \
+    libsdl2-2.0-0 \
     vim \
     wget \
     curl \

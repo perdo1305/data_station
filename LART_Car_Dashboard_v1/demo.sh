@@ -85,9 +85,7 @@ open_shell() {
 check_topics() {
     echo -e "${GREEN}Checking ROS 2 topics...${NC}"
     echo ""
-    make shell_cmd="docker exec -it lart-dashboard-publisher /root/entrypoint.sh ros2 topic list -t" 2>/dev/null || {
-        docker exec -it lart-dashboard-publisher bash -c "source /root/.bashrc && ros2 topic list -t"
-    } 2>/dev/null || {
+    docker exec -it lart-dashboard-publisher bash -c "source /root/.bashrc && ros2 topic list -t" 2>/dev/null || {
         echo -e "${YELLOW}Publisher container is not running${NC}"
         echo "Run 'make compose-up' first"
     }
