@@ -350,11 +350,18 @@ make compose-down
 make compose-rebuild
 ```
 
-### Issue: "X11 display not found"
+### Issue: "X11 display not found" or "Authorization required"
 
-**Solution**: Set up X11 forwarding (Linux)
+**Solution**: Set up X11 forwarding and permissions (Linux)
+If you see errors like `SDL_Init failed: x11 not available` or `Authorization required, but no authorization protocol specified`:
 ```bash
+# Allow local root access to X11 (required for docker container)
+xhost +local:root
+
+# Ensure DISPLAY variable is set
 export DISPLAY=:0
+
+# Restart containers
 make compose-up
 ```
 

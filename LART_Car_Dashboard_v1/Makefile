@@ -7,6 +7,7 @@ CONTAINER_PUBLISHER := lart-dashboard-publisher
 NETWORK_NAME := lart-ros2-network
 PROJECT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 CONTAINER_UI_DIR := /root/lart_ws/LART_Car_Dashboard_v1/src/ui
+CONTAINER_UI_BUILD_DIR := /tmp/lart-ui-build
 
 help:
 	@echo "LART Dashboard ROS2 Docker Management"
@@ -95,7 +96,7 @@ publisher: build network
 		-v $$HOME/.Xauthority:/root/.Xauthority:ro \
 		-v $(PROJECT_DIR):/root/lart_ws/LART_Car_Dashboard_v1 \
 		$(IMAGE_NAME) \
-		bash -c "source /root/.bashrc && echo 'Publisher running...' && python3 /root/lart_ws/LART_Car_Dashboard_v1/speed.py 40"
+		bash -c "source /root/.bashrc && echo 'Publisher running...' && ros2 topic pub -r 10 /vehicle/speed_kph std_msgs/msg/Float32 '{data: 40.0}'"
 	@echo "✓ Publisher started: $(CONTAINER_PUBLISHER)"
 
 display: build network
@@ -114,9 +115,8 @@ display: build network
 		-v $$HOME/.Xauthority:/root/.Xauthority:ro \
 		-v $(PROJECT_DIR):/root/lart_ws/LART_Car_Dashboard_v1 \
 		--ipc=host \
-		--device /dev/dri:/dev/dri \
 		$(IMAGE_NAME) \
-		bash -c "source /root/.bashrc && cd $(CONTAINER_UI_DIR) && mkdir -p build && cd build && cmake .. && make && ./ui_runner"
+		bash -c "source /root/.bashrc && rm -rf $(CONTAINER_UI_BUILD_DIR) && cmake -S $(CONTAINER_UI_DIR) -B $(CONTAINER_UI_BUILD_DIR) && cmake --build $(CONTAINER_UI_BUILD_DIR) --parallel $$(nproc) && $(CONTAINER_UI_BUILD_DIR)/ui_runner"
 	@echo "✓ Display started: lart-dashboard-display"
 
 listener: build network

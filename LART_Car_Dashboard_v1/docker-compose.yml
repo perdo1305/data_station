@@ -28,15 +28,15 @@ services:
       bash -c "
         source /root/.bashrc &&
         echo 'Building and starting CMake LVGL Interface...' &&
-        cd /root/lart_ws/LART_Car_Dashboard_v1/src/ui &&
-        mkdir -p build && cd build &&
-        cmake .. && make -j$(nproc) &&
-        if [ -x ./ui_runner ]; then
+        rm -rf /tmp/lart-ui-build &&
+        cmake -S /root/lart_ws/LART_Car_Dashboard_v1/src/ui -B /tmp/lart-ui-build &&
+        cmake --build /tmp/lart-ui-build --parallel $(nproc) &&
+        if [ -x /tmp/lart-ui-build/ui_runner ]; then
           echo 'Starting ui_runner...' &&
-          ./ui_runner
+          /tmp/lart-ui-build/ui_runner
         else
           echo 'ERROR: ui_runner was not built successfully' &&
-          ls -la &&
+          ls -la /tmp/lart-ui-build &&
           exit 1
         fi
       "
@@ -48,8 +48,6 @@ services:
     tty: true
     restart: unless-stopped
     ipc: host
-    devices:
-      - /dev/dri:/dev/dri
 
   # Publisher container - publishes the test speed topics
   publisher:
@@ -63,7 +61,12 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ${HOME}/.Xauthority:/root/.Xauthority:ro
       - .:/root/lart_ws/LART_Car_Dashboard_v1
-    # command removed so the service uses the image's default CMD
+    command: >
+      bash -c "
+        source /root/.bashrc &&
+        echo 'Publisher running...' &&
+        ros2 topic pub -r 10 /vehicle/speed_kph std_msgs/msg/Float32 '{data: 40.0}'
+      "
     networks:
       - lart-ros2-network
     stdin_open: true

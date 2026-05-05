@@ -10,6 +10,8 @@ Makefile
 __pycache__/
 *.egg-info/
 build/
+src/ui/build/
+src/ui/.eez-project-build/
 dist/
 .pytest_cache/
 
