@@ -198,24 +198,8 @@ listener-local:
 
 display-local:
 	@echo "Building and running UI locally (requires SDL2, rclcpp dev libs)"
-	@bash -lc '
-	  set -e; \
-	  cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; \
-	  cmake --build $(PROJECT_DIR)/build/ui-build --parallel $$(nproc); \
-	  $(PROJECT_DIR)/build/ui-build/ui_runner
-	'
+	@bash -lc 'set -e; cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; cmake --build $(PROJECT_DIR)/build/ui-build --parallel $$(nproc); $(PROJECT_DIR)/build/ui-build/ui_runner'
 
 run-all-local:
 	@echo "Starting publisher and listener in background; launching display in foreground"
-	@bash -lc '
-	  set -e; \
-	  source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; \
-	  source $(PROJECT_DIR)/install/setup.bash >/dev/null 2>&1 || true; \
-	  export PYTHONPATH=$(PROJECT_DIR)/src; \
-	  ros2 topic pub -r 10 /vehicle/speed_kph std_msgs/msg/Float32 "{data: 40.0}" & PUB_PID=$$!; \
-	  python3 -m dashboard_ui.speed_listener & LIST_PID=$$!; \
-	  echo "Started publisher $$PUB_PID and listener $$LIST_PID"; \
-	  cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; \
-	  cmake --build $(PROJECT_DIR)/build/ui-build --parallel $$(nproc); \
-	  $(PROJECT_DIR)/build/ui-build/ui_runner
-	'
+	@bash -lc 'set -e; source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/install/setup.bash >/dev/null 2>&1 || true; export PYTHONPATH=$(PROJECT_DIR)/src; ros2 topic pub -r 10 /vehicle/speed_kph std_msgs/msg/Float32 "{data: 40.0}" & PUB_PID=$$!; python3 -m dashboard_ui.speed_listener & LIST_PID=$$!; echo "Started publisher $$PUB_PID and listener $$LIST_PID"; cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; cmake --build $(PROJECT_DIR)/build/ui-build --parallel $$(nproc); $(PROJECT_DIR)/build/ui-build/ui_runner'
