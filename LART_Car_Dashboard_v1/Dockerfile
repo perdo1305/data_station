@@ -1,4 +1,4 @@
-FROM osrf/ros:jazzy-desktop
+FROM --platform=linux/arm64 osrf/ros:jazzy-desktop
 
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive

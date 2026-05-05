@@ -8,6 +8,7 @@ NETWORK_NAME := lart-ros2-network
 PROJECT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 CONTAINER_UI_DIR := /root/lart_ws/LART_Car_Dashboard_v1/src/ui
 CONTAINER_UI_BUILD_DIR := /tmp/lart-ui-build
+BUILD_PLAT ?= linux/arm64
 
 help:
 	@echo "LART Dashboard ROS2 Docker Management"
@@ -60,13 +61,20 @@ compose-rebuild:
 	docker compose up -d --build
 	@echo "✓ Rebuild complete"
 
+# Ensure buildx builder exists and is bootstrapped
+.PHONY: ensure-buildx
+ensure-buildx:
+	@docker buildx inspect lart-builder >/dev/null 2>&1 || docker buildx create --name lart-builder --use
+	@docker buildx inspect --bootstrap >/dev/null 2>&1 || true
+
 # ============================================================================
 # Manual Docker Targets
 # ============================================================================
 
 build:
 	@echo "Building Docker image: $(IMAGE_NAME)"
-	docker build -t $(IMAGE_NAME) $(PROJECT_DIR)
+	@$(MAKE) ensure-buildx >/dev/null 2>&1 || true
+	docker buildx build --platform=$(BUILD_PLAT) -t $(IMAGE_NAME) $(PROJECT_DIR) --load
 
 rebuild: clean build
 
