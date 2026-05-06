@@ -203,7 +203,7 @@ check-ui-deps:
 
 publish-local:
 	@echo "Running local numeric publisher at 20Hz. Ctrl-C to stop"
-	@bash -lc 'source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/install/setup.bash >/dev/null 2>&1 || true; while true; do for value in 0 10 20 30 40 50 60 70 80 90 100; do echo "speed_kph=$$value"; ros2 topic pub --once /vehicle/speed_kph std_msgs/msg/Float32 "{data: $$value}" >/dev/null; sleep 0.05; done; done'
+	@bash -lc 'source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/install/setup.bash >/dev/null 2>&1 || true; while true; do for value in 0 10 20 30 40 50 60 70 80 90 100; do echo "speed_kph=$$value"; ros2 topic pub --once /vehicle/speed_kph std_msgs/msg/Float32 "{data: $$value}" >/dev/null; done; done'
 
 listener-local:
 	@echo "Running local listener (dashboard_ui.speed_listener)"
