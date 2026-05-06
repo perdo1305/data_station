@@ -73,7 +73,7 @@ if(SDL2_FOUND AND LVGL_SOURCES)
         ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src
         ${CMAKE_CURRENT_SOURCE_DIR}
     )
-    target_compile_definitions(lvgl PUBLIC LV_CONF_INCLUDE_SIMPLE=1)
+    target_compile_definitions(lvgl PUBLIC LV_CONF_INCLUDE_SIMPLE=1 LV_FONT_FMT_TXT_LARGE=1)
 
     set(UI_SOURCES
         eez-flow.cpp
@@ -102,7 +102,7 @@ if(SDL2_FOUND AND LVGL_SOURCES)
         ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl
         ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src
     )
-    target_compile_definitions(ui_runner PRIVATE LV_CONF_INCLUDE_SIMPLE=1)
+    target_compile_definitions(ui_runner PRIVATE LV_CONF_INCLUDE_SIMPLE=1 LV_FONT_FMT_TXT_LARGE=1)
     target_link_libraries(ui_runner
         lvgl
         ros2subscriber

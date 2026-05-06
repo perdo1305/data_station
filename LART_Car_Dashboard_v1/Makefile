@@ -8,7 +8,7 @@ NETWORK_NAME := lart-ros2-network
 PROJECT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 CONTAINER_UI_DIR := /root/lart_ws/LART_Car_Dashboard_v1/src/ui
 CONTAINER_UI_BUILD_DIR := /tmp/lart-ui-build
-BUILD_PLAT ?= linux/arm64
+BUILD_PLAT ?= linux/amd64
 BUILD_PLAT_ARM ?= linux/arm64
 BUILD_PLAT_AMD ?= linux/amd64
 
@@ -49,6 +49,7 @@ help:
 
 compose-up:
 	@echo "Starting containers with docker compose..."
+	@xhost +local:root >/dev/null 2>&1 || true
 	docker compose up -d
 	@echo "✓ Containers are running"
 	@echo ""
@@ -83,8 +84,7 @@ ensure-buildx:
 
 build:
 	@echo "Building Docker image: $(IMAGE_NAME)"
-	@$(MAKE) ensure-buildx >/dev/null 2>&1 || true
-	docker buildx build --platform=$(BUILD_PLAT) -t $(IMAGE_NAME) $(PROJECT_DIR) --load
+	docker build -t $(IMAGE_NAME) $(PROJECT_DIR)
 
 build-arm:
 	@$(MAKE) build BUILD_PLAT=$(BUILD_PLAT_ARM)
@@ -125,6 +125,7 @@ publisher: build network
 
 display: build network
 	@echo "Starting display container..."
+	@xhost +local:root >/dev/null 2>&1 || true
 	docker run -d \
 		--name lart-dashboard-display \
 		--network $(NETWORK_NAME) \

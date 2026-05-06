@@ -71,7 +71,6 @@
 /*Default Dot Per Inch. Used to initialize default sizes such as widgets sized, style paddings.
  *(Not so important, you can adjust it to modify default sizes and spaces)*/
 #define LV_DPI_DEF 130
-#define LV_USE_DEMO_WIDGETS 1     /*[px/inch]*/
 
 /*=================
  * OPERATING SYSTEM
@@ -430,7 +429,9 @@
 /*Enable handling large font and/or fonts with a lot of characters.
  *The limit depends on the font size, font face and bpp.
  *Compiler error will be triggered if a font needs it.*/
-#define LV_FONT_FMT_TXT_LARGE 0
+#ifndef LV_FONT_FMT_TXT_LARGE
+#define LV_FONT_FMT_TXT_LARGE 1
+#endif
 
 /*Enables/disables support for compressed fonts.*/
 #define LV_USE_FONT_COMPRESSED 0
