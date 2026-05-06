@@ -45,13 +45,7 @@ show_menu() {
 # Action functions
 build_image() {
     echo -e "${GREEN}Building Docker image...${NC}"
-    # If script was invoked with sudo, run the build as the original user
-    if [[ "$EUID" -eq 0 && -n "$SUDO_USER" ]]; then
-        echo -e "${YELLOW}Detected sudo. Running build as $SUDO_USER to avoid root-owned docker artifacts.${NC}"
-        sudo -u "$SUDO_USER" make build
-    else
-        make build
-    fi
+    make build
     echo -e "${GREEN}✓ Build complete${NC}"
 }
 

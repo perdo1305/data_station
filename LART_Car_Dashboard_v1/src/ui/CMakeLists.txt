@@ -10,8 +10,11 @@ endif()
 find_package(ament_cmake QUIET)
 find_package(PkgConfig REQUIRED)
 find_package(Threads REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(std_msgs REQUIRED)
+
+if(ament_cmake_FOUND)
+    find_package(rclcpp REQUIRED)
+    find_package(std_msgs REQUIRED)
+endif()
 
 # Optional: subscribe to /vehicle/dashboard_state if lart_msgs is available
 find_package(lart_msgs QUIET)
@@ -79,15 +82,15 @@ if(SDL2_FOUND AND LVGL_SOURCES)
         speed_api.cpp
         styles.c
         ui.c
-        ui_font_orbiter_bold_100.c
-        ui_font_orbitron_15.c
-        ui_font_orbitron_bold_15.c
-        ui_font_orbitron_bold_20.c
-        ui_font_orbitron_bold_25.c
-        ui_font_orbitron_bold_30.c
-        ui_font_orbitron_bold_40.c
-        ui_font_orbitron_bold_50.c
-        ui_image_lart_logo.c
+        fonts/ui_font_orbiter_bold_100.c
+        fonts/ui_font_orbitron_15.c
+        fonts/ui_font_orbitron_bold_15.c
+        fonts/ui_font_orbitron_bold_20.c
+        fonts/ui_font_orbitron_bold_25.c
+        fonts/ui_font_orbitron_bold_30.c
+        fonts/ui_font_orbitron_bold_40.c
+        fonts/ui_font_orbitron_bold_50.c
+        images/ui_image_lart_logo.c
         ui_runner.cpp
     )
 

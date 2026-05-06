@@ -7,6 +7,18 @@
 #include <strings.h>
 #include <memory>
 
+#ifndef LART_UI_HAVE_RCLCPP
+#define LART_UI_HAVE_RCLCPP 0
+#endif
+
+#if defined(__GNUC__) || defined(__clang__)
+#define LART_WEAK __attribute__((weak))
+#else
+#define LART_WEAK
+#endif
+
+#if LART_UI_HAVE_RCLCPP
+
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp/executors/single_threaded_executor.hpp>
 #include <std_msgs/msg/float32.hpp>
@@ -25,12 +37,6 @@
 
 #if LART_HAVE_DASHBOARD_STATE_MSG
 #include <lart_msgs/msg/dashboard_state.hpp>
-#endif
-
-#if defined(__GNUC__) || defined(__clang__)
-#define LART_WEAK __attribute__((weak))
-#else
-#define LART_WEAK
 #endif
 
 namespace {
@@ -79,8 +85,6 @@ LART_WEAK int ros2subscriber_init(void) {
     g_exec = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
     g_exec->add_node(g_node);
 
-    // Subscribe only to /vehicle/speed_kph Float32 topic
-    // If topic is not available, speed will default to 0
     const char *topic = env_or_default("LART_ROS2_SPEED_TOPIC", DEFAULT_SPEED_TOPIC);
 
     auto callback = [](const std_msgs::msg::Float32::SharedPtr msg) {
@@ -90,8 +94,7 @@ LART_WEAK int ros2subscriber_init(void) {
         }
     };
 
-    g_sub = g_node->create_subscription<std_msgs::msg::Float32>(
-        topic, rclcpp::QoS(10), callback);
+    g_sub = g_node->create_subscription<std_msgs::msg::Float32>(topic, rclcpp::QoS(10), callback);
 
     g_is_initialized.store(1);
     g_has_speed.store(0);
@@ -155,3 +158,25 @@ LART_WEAK void ros2subscriber_fini(void) {
     g_has_speed.store(0);
     g_latest_speed_kph.store(0.0f);
 }
+
+#else
+
+LART_WEAK int ros2subscriber_init(void) {
+    return 0;
+}
+
+LART_WEAK int ros2subscriber_spin_some(void) {
+    return 0;
+}
+
+LART_WEAK int ros2subscriber_get_latest_speed(float *speed_kph) {
+    if (speed_kph != nullptr) {
+        *speed_kph = 0.0f;
+    }
+    return 0;
+}
+
+LART_WEAK void ros2subscriber_fini(void) {
+}
+
+#endif

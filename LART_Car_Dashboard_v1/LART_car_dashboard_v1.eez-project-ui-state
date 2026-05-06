@@ -1,9 +1,9 @@
 {
   "navigation": {
-    "selectedUserPageObject": "[LART_car_dashboard_v1.eez-project]:/userPages/1",
+    "selectedUserPageObject": "[LART_car_dashboard_v1.eez-project]:/userPages/0",
     "selectedGlobalVariableObject": "[LART_car_dashboard_v1.eez-project]:/variables/globalVariables/4",
     "selectedStructureObject": "[LART_car_dashboard_v1.eez-project]:/variables/structures/0",
-    "selectedStyleObject": "[LART_car_dashboard_v1.eez-project]:/lvglStyles/styles/1",
+    "selectedStyleObject": "[LART_car_dashboard_v1.eez-project]:/lvglStyles/styles/2",
     "selectedFontObject": "[LART_car_dashboard_v1.eez-project]:/fonts/7",
     "selectedBitmapObject": "[LART_car_dashboard_v1.eez-project]:/bitmaps/0",
     "subnavigationSelectedItems": {
@@ -28,7 +28,7 @@
           },
           {
             "type": "border",
-            "selected": 1,
+            "selected": 0,
             "size": 240,
             "location": "right",
             "children": [
@@ -141,7 +141,7 @@
             {
               "type": "row",
               "id": "#3d43a90f-6428-4ab6-9b5d-57d4de63898c",
-              "weight": 23.68576877688884,
+              "weight": 17.320154942274137,
               "children": [
                 {
                   "type": "tabset",
@@ -212,13 +212,13 @@
             {
               "type": "tabset",
               "id": "EDITORS",
-              "weight": 66.44815810005802,
+              "weight": 51.151983626644444,
               "enableDeleteWhenEmpty": false,
               "enableClose": false,
               "children": [
                 {
                   "type": "tab",
-                  "id": "#f5193835-af43-4327-b0da-dfad3cb81faf",
+                  "id": "#e01310c2-e5b8-4ea8-a119-d00370c6bd54",
                   "name": "Settings",
                   "component": "editor",
                   "config": {
@@ -227,6 +227,17 @@
                     "permanent": false
                   },
                   "icon": "material:settings"
+                },
+                {
+                  "type": "tab",
+                  "id": "#5dd4b28b-8e84-484b-881a-626f27c6a184",
+                  "name": "Driver View",
+                  "component": "editor",
+                  "config": {
+                    "objectPath": "[LART_car_dashboard_v1.eez-project]:/userPages/0",
+                    "permanent": false
+                  },
+                  "icon": "svg:page"
                 },
                 {
                   "type": "tab",
@@ -245,12 +256,12 @@
             {
               "type": "row",
               "id": "#9b9aad4d-85b5-4431-867f-52c6f3936ddf",
-              "weight": 9.866073123053113,
+              "weight": 31.527861431081398,
               "children": [
                 {
                   "type": "tabset",
                   "id": "#9d1738f9-d324-401a-9c63-d5d2f4f6d83a",
-                  "weight": 1.9752281616688396,
+                  "weight": 2.860031104199067,
                   "children": [
                     {
                       "type": "tab",
@@ -265,7 +276,7 @@
                 {
                   "type": "tabset",
                   "id": "#db7508f5-8187-43e0-9f03-e44f67bc4d7b",
-                  "weight": 1.0247718383311604,
+                  "weight": 0.13996889580093314,
                   "children": [
                     {
                       "type": "tab",
@@ -1158,13 +1169,9 @@
       "selectionFront": {},
       "selectionBack": {
         "0": {
-          "0": {
-            "$selected": true
-          },
+          "0": {},
           "1": {},
-          "4": {
-            "$selected": true
-          }
+          "4": {}
         }
       },
       "transform": {
@@ -1198,7 +1205,9 @@
             "1": {},
             "2": {},
             "3": {
-              "0": {}
+              "0": {
+                "$selected": true
+              }
             },
             "4": {}
           }
@@ -1299,7 +1308,11 @@
       }
     },
     "[LART_car_dashboard_v1.eez-project]:/lvglStyles/styles[tree-state]": {
-      "1": {
+      "0": {
+        "$selected": true
+      },
+      "1": {},
+      "2": {
         "$selected": true
       }
     }
@@ -1311,7 +1324,7 @@
   "replaceEnabled": false,
   "replaceText": "",
   "pageEditorFrontFace": false,
-  "pageRuntimeFrontFace": false,
+  "pageRuntimeFrontFace": true,
   "breakpoints": {},
   "watchExpressions": [],
   "showComponentDescriptions": true,
@@ -1320,6 +1333,8 @@
   "lvglPart": "INDICATOR",
   "lvglState": "DEFAULT",
   "lvglExpandedPropertiesGroup": [
+    "MISCELLANEOUS",
+    "POSITION AND SIZE",
     "TEXT"
   ],
   "showInactiveFlowsInDebugger": true,

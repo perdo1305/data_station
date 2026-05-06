@@ -1,4 +1,4 @@
-.PHONY: help build up down logs clean shell compose-up compose-down compose-logs \
+.PHONY: help build build-arm build-amd up down logs clean shell compose-up compose-down compose-logs \
 		build-image rebuild network publisher display ps stop
 
 # Docker image and container names
@@ -9,6 +9,8 @@ PROJECT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 CONTAINER_UI_DIR := /root/lart_ws/LART_Car_Dashboard_v1/src/ui
 CONTAINER_UI_BUILD_DIR := /tmp/lart-ui-build
 BUILD_PLAT ?= linux/arm64
+BUILD_PLAT_ARM ?= linux/arm64
+BUILD_PLAT_AMD ?= linux/amd64
 
 help:
 	@echo "LART Dashboard ROS2 Docker Management"
@@ -22,6 +24,8 @@ help:
 	@echo ""
 	@echo "Manual Docker Management:"
 	@echo "  build         - Build the Docker image"
+	@echo "  build-arm     - Build the Docker image for ARM64"
+	@echo "  build-amd     - Build the Docker image for AMD64"
 	@echo "  up            - Start publisher and display containers"
 	@echo "  publisher     - Run only the publisher container"
 	@echo "  display       - Run only the display container"
@@ -81,6 +85,12 @@ build:
 	@echo "Building Docker image: $(IMAGE_NAME)"
 	@$(MAKE) ensure-buildx >/dev/null 2>&1 || true
 	docker buildx build --platform=$(BUILD_PLAT) -t $(IMAGE_NAME) $(PROJECT_DIR) --load
+
+build-arm:
+	@$(MAKE) build BUILD_PLAT=$(BUILD_PLAT_ARM)
+
+build-amd:
+	@$(MAKE) build BUILD_PLAT=$(BUILD_PLAT_AMD)
 
 rebuild: clean build
 
@@ -200,7 +210,7 @@ listener-local:
 	@bash -lc 'source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; export PYTHONPATH=$(PROJECT_DIR)/src; python3 -m dashboard_ui.speed_listener'
 
 display-local: check-ui-deps
-	@echo "Building and running UI locally (requires SDL2, rclcpp dev libs)"
+	@echo "Building and running UI locally (requires SDL2; ROS2 is optional)"
 	@bash -lc 'set -e; cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; cmake --build $(PROJECT_DIR)/build/ui-build --parallel $$(nproc); UI_BIN="$(PROJECT_DIR)/build/ui-build/ui_runner"; if [[ ! -x "$$UI_BIN" ]]; then echo "ui_runner was not generated. Install libsdl2-dev and ensure LVGL sources exist at $(PROJECT_DIR)/src/ui/third_party/lvgl/src."; exit 2; fi; exec "$$UI_BIN"'
 
 run-all-local: check-ui-deps
