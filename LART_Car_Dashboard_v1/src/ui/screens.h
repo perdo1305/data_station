@@ -59,22 +59,23 @@ typedef struct _objects_t {
     lv_obj_t *brake_presure_container;
     lv_obj_t *brake_presure_bar_1;
     lv_obj_t *brake_presure_bar_2;
-    lv_obj_t *infos_container;
-    lv_obj_t *obj6;
     lv_obj_t *pneumaticresure_container;
     lv_obj_t *brake_presure_bar_3;
     lv_obj_t *brake_presure_bar_4;
     lv_obj_t *lap_times_container_1;
     lv_obj_t *laptime_label_1;
     lv_obj_t *lastlap_label_1;
+    lv_obj_t *obj6;
     lv_obj_t *obj7;
-    lv_obj_t *obj8;
     lv_obj_t *max_speed_container;
     lv_obj_t *km_label_2;
     lv_obj_t *km_label_1;
     lv_obj_t *speed_label_1;
     lv_obj_t *km_label_3;
+    lv_obj_t *obj8;
+    lv_obj_t *debug_text;
     lv_obj_t *obj9;
+    lv_obj_t *debug_text_1;
 } objects_t;
 
 extern objects_t objects;

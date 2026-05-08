@@ -1,7 +1,7 @@
 {
   "navigation": {
     "selectedUserPageObject": "[LART_car_dashboard_v1.eez-project]:/userPages/0",
-    "selectedGlobalVariableObject": "[LART_car_dashboard_v1.eez-project]:/variables/globalVariables/4",
+    "selectedGlobalVariableObject": "[LART_car_dashboard_v1.eez-project]:/variables/globalVariables/13",
     "selectedStructureObject": "[LART_car_dashboard_v1.eez-project]:/variables/structures/0",
     "selectedStyleObject": "[LART_car_dashboard_v1.eez-project]:/lvglStyles/styles/2",
     "selectedFontObject": "[LART_car_dashboard_v1.eez-project]:/fonts/7",
@@ -28,7 +28,7 @@
           },
           {
             "type": "border",
-            "selected": 0,
+            "selected": 2,
             "size": 240,
             "location": "right",
             "children": [
@@ -218,6 +218,17 @@
               "children": [
                 {
                   "type": "tab",
+                  "id": "#c5c2cb63-3fd8-4b91-b5bf-d506252b8f76",
+                  "name": "Driver View",
+                  "component": "editor",
+                  "config": {
+                    "objectPath": "[LART_car_dashboard_v1.eez-project]:/userPages/0",
+                    "permanent": true
+                  },
+                  "icon": "svg:page"
+                },
+                {
+                  "type": "tab",
                   "id": "#e01310c2-e5b8-4ea8-a119-d00370c6bd54",
                   "name": "Settings",
                   "component": "editor",
@@ -231,11 +242,11 @@
                 {
                   "type": "tab",
                   "id": "#5dd4b28b-8e84-484b-881a-626f27c6a184",
-                  "name": "Driver View",
+                  "name": "Autonomous",
                   "component": "editor",
                   "config": {
-                    "objectPath": "[LART_car_dashboard_v1.eez-project]:/userPages/0",
-                    "permanent": false
+                    "objectPath": "[LART_car_dashboard_v1.eez-project]:/userPages/2",
+                    "permanent": true
                   },
                   "icon": "svg:page"
                 },
@@ -250,8 +261,7 @@
                   },
                   "icon": "svg:page"
                 }
-              ],
-              "active": true
+              ]
             },
             {
               "type": "row",
@@ -271,7 +281,8 @@
                       "enableClose": false,
                       "icon": "svg:properties"
                     }
-                  ]
+                  ],
+                  "active": true
                 },
                 {
                   "type": "tabset",
@@ -1231,16 +1242,15 @@
       "selectionBack": {
         "0": {
           "1": {},
-          "6": {
-            "$selected": true
-          },
+          "6": {},
           "8": {},
-          "9": {
-            "0": {}
-          },
+          "9": {},
           "10": {},
-          "11": {},
-          "12": {}
+          "11": {
+            "2": {
+              "$selected": true
+            }
+          }
         }
       },
       "transform": {
