@@ -43,6 +43,7 @@ target_include_directories(ros2subscriber PUBLIC
 
 target_link_libraries(ros2subscriber Threads::Threads)
 if(ament_cmake_FOUND)
+    target_compile_definitions(ros2subscriber PRIVATE LART_UI_HAVE_RCLCPP=1)
     ament_target_dependencies(ros2subscriber rclcpp std_msgs)
 else()
     target_link_libraries(ros2subscriber rclcpp::rclcpp)

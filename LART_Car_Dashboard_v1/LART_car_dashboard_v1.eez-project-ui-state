@@ -3,8 +3,8 @@
     "selectedUserPageObject": "[LART_car_dashboard_v1.eez-project]:/userPages/0",
     "selectedGlobalVariableObject": "[LART_car_dashboard_v1.eez-project]:/variables/globalVariables/13",
     "selectedStructureObject": "[LART_car_dashboard_v1.eez-project]:/variables/structures/0",
-    "selectedStyleObject": "[LART_car_dashboard_v1.eez-project]:/lvglStyles/styles/2",
-    "selectedFontObject": "[LART_car_dashboard_v1.eez-project]:/fonts/7",
+    "selectedStyleObject": "[LART_car_dashboard_v1.eez-project]:/lvglStyles/styles/1",
+    "selectedFontObject": "[LART_car_dashboard_v1.eez-project]:/fonts/3",
     "selectedBitmapObject": "[LART_car_dashboard_v1.eez-project]:/bitmaps/0",
     "subnavigationSelectedItems": {
       "variables-tab/sub-navigation/selected-item": "Global"
@@ -28,7 +28,7 @@
           },
           {
             "type": "border",
-            "selected": 2,
+            "selected": 1,
             "size": 240,
             "location": "right",
             "children": [
@@ -84,7 +84,7 @@
           },
           {
             "type": "border",
-            "selected": 1,
+            "selected": 0,
             "size": 252.5,
             "location": "bottom",
             "children": [
@@ -178,7 +178,7 @@
                 {
                   "type": "tabset",
                   "id": "#147b4422-6afd-4c26-91fb-445f1c2dec81",
-                  "weight": 1,
+                  "weight": 1.2651356993736953,
                   "enableClose": false,
                   "children": [
                     {
@@ -194,7 +194,7 @@
                 {
                   "type": "tabset",
                   "id": "#a3f831b1-2361-467d-b070-51214106e7bb",
-                  "weight": 1,
+                  "weight": 0.7348643006263048,
                   "enableClose": false,
                   "children": [
                     {
@@ -213,9 +213,21 @@
               "type": "tabset",
               "id": "EDITORS",
               "weight": 51.151983626644444,
+              "selected": 3,
               "enableDeleteWhenEmpty": false,
               "enableClose": false,
               "children": [
+                {
+                  "type": "tab",
+                  "id": "#ad55caad-dcdc-4f24-ae59-01bd7e56c609",
+                  "name": "Start Scene",
+                  "component": "editor",
+                  "config": {
+                    "objectPath": "[LART_car_dashboard_v1.eez-project]:/userPages/1",
+                    "permanent": false
+                  },
+                  "icon": "svg:page"
+                },
                 {
                   "type": "tab",
                   "id": "#c5c2cb63-3fd8-4b91-b5bf-d506252b8f76",
@@ -249,17 +261,6 @@
                     "permanent": true
                   },
                   "icon": "svg:page"
-                },
-                {
-                  "type": "tab",
-                  "id": "#20432cdd-e091-414e-bbca-d062006c87ad",
-                  "name": "Start Scene",
-                  "component": "editor",
-                  "config": {
-                    "objectPath": "[LART_car_dashboard_v1.eez-project]:/userPages/1",
-                    "permanent": true
-                  },
-                  "icon": "svg:page"
                 }
               ]
             },
@@ -271,7 +272,7 @@
                 {
                   "type": "tabset",
                   "id": "#9d1738f9-d324-401a-9c63-d5d2f4f6d83a",
-                  "weight": 2.860031104199067,
+                  "weight": 2.3609958506224067,
                   "children": [
                     {
                       "type": "tab",
@@ -287,7 +288,7 @@
                 {
                   "type": "tabset",
                   "id": "#db7508f5-8187-43e0-9f03-e44f67bc4d7b",
-                  "weight": 0.13996889580093314,
+                  "weight": 0.6390041493775933,
                   "children": [
                     {
                       "type": "tab",
@@ -1182,6 +1183,9 @@
         "0": {
           "0": {},
           "1": {},
+          "2": {
+            "$selected": true
+          },
           "4": {}
         }
       },
@@ -1190,7 +1194,7 @@
           "x": -416.25947346600276,
           "y": -108.6769918265815
         },
-        "scale": 0.8
+        "scale": 0.75
       },
       "timeline": {
         "isEditorActive": false,
@@ -1205,7 +1209,7 @@
           "x": -378,
           "y": -132.83999999999997
         },
-        "scale": 0.8
+        "scale": 0.75
       },
       "selectionFront": {},
       "selectionBack": {
@@ -1216,9 +1220,7 @@
             "1": {},
             "2": {},
             "3": {
-              "0": {
-                "$selected": true
-              }
+              "0": {}
             },
             "4": {}
           }
@@ -1247,18 +1249,19 @@
           "9": {},
           "10": {},
           "11": {
-            "2": {
-              "$selected": true
-            }
+            "2": {}
+          },
+          "12": {
+            "$selected": true
           }
         }
       },
       "transform": {
         "translate": {
-          "x": -361.02876984126993,
-          "y": -188.05943362193398
+          "x": -257.96175685425686,
+          "y": -140.1182503607509
         },
-        "scale": 0.8
+        "scale": 0.75
       },
       "timeline": {
         "isEditorActive": false,
@@ -1270,7 +1273,14 @@
     "[LART_car_dashboard_v1.eez-project]:/userPages/3[flow-state]": {
       "selectionFront": {},
       "selectionBack": {
-        "0": {}
+        "0": {
+          "0": {
+            "$selected": true
+          },
+          "1": {
+            "$selected": true
+          }
+        }
       },
       "transform": {
         "translate": {
@@ -1291,14 +1301,18 @@
         "0": {}
       },
       "selectionBack": {
-        "0": {}
+        "0": {
+          "1": {
+            "$selected": true
+          }
+        }
       },
       "transform": {
         "translate": {
-          "x": -178.92639380821203,
-          "y": -106.89576938213324
+          "x": -256.21224419519876,
+          "y": -100.23040879574991
         },
-        "scale": 0.8
+        "scale": 0.75
       },
       "timeline": {
         "isEditorActive": false,
@@ -1318,13 +1332,9 @@
       }
     },
     "[LART_car_dashboard_v1.eez-project]:/lvglStyles/styles[tree-state]": {
-      "0": {
-        "$selected": true
-      },
+      "0": {},
       "1": {},
-      "2": {
-        "$selected": true
-      }
+      "2": {}
     }
   },
   "activeOutputSection": 0,
@@ -1349,7 +1359,7 @@
   ],
   "showInactiveFlowsInDebugger": true,
   "globalFlowZoom": true,
-  "flowZoom": 0.8,
+  "flowZoom": 0.75,
   "implementationLanguage": "C++",
-  "openDialogDefaultPath": "/home/sintra/eez-projects/LART Car Dashboard v1/fonts/Orbitron-Bold.ttf"
+  "openDialogDefaultPath": "/home/sintra/eez-projects/LART Car Dashboard v1/fonts/Inter-VariableFont_opsz,wght.ttf"
 }

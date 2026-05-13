@@ -65,7 +65,7 @@ services:
       bash -c "
         source /root/.bashrc &&
         echo 'Publisher running...' &&
-        ros2 topic pub -r 10 /vehicle/speed_kph std_msgs/msg/Float32 '{data: 40.0}'
+        ros2 topic pub -r 1 /vehicle/speed_kph std_msgs/msg/Float32 '{data: 40.0}'
       "
     networks:
       - lart-ros2-network

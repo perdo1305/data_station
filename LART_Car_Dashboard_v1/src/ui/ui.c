@@ -3,6 +3,7 @@
 #include "images.h"
 #include "actions.h"
 #include "vars.h"
+#include "eez-flow.h"
 #include "stdio.h"
 
 #include "ros2subscriber.h"
@@ -400,6 +401,29 @@ void ui_tick() {
 
     eez_flow_tick();
     tick_screen(g_currentScreen);
+
+    // Check for screen change requests from ROS 2 topic
+    int screen_id;
+    if (ros2subscriber_get_screen_change_request(&screen_id)) {
+        int16_t current = eez_flow_get_current_screen();
+        if (screen_id >= _SCREEN_ID_FIRST && screen_id <= _SCREEN_ID_LAST && screen_id != current) {
+            // Bypass eez_flow_set_screen to avoid EEZ flow engine freeze.
+            // Switch LVGL screen directly and update the internal index.
+            lv_obj_t *target = NULL;
+            switch (screen_id) {
+                case SCREEN_ID_DRIVER_VIEW:      target = objects.driver_view; break;
+                case SCREEN_ID_START_SCENE:       target = objects.start_scene; break;
+                case SCREEN_ID_AUTONOMOUS:        target = objects.autonomous; break;
+                case SCREEN_ID_DEBUG_AUTONOMOUS:  target = objects.debug_autonomous; break;
+                case SCREEN_ID_DEBUG:             target = objects.debug; break;
+            }
+            if (target) {
+                g_currentScreen = screen_id - 1;
+                lv_scr_load(target);
+                printf("[ui_tick] Screen changed to %d\n", screen_id);
+            }
+        }
+    }
 }
 void ui_setup_timers(void) {
     // No LVGL timers required for ROS2 subscriber mode.
