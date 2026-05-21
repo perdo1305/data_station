@@ -1,4 +1,4 @@
-.PHONY: help build up down logs clean shell compose-up compose-down compose-logs \
+.PHONY: help build build-arm build-amd up down logs clean shell compose-up compose-down compose-logs \
 		build-image rebuild network publisher display ps stop
 
 # Docker image and container names
@@ -8,7 +8,9 @@ NETWORK_NAME := lart-ros2-network
 PROJECT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 CONTAINER_UI_DIR := /root/lart_ws/LART_Car_Dashboard_v1/src/ui
 CONTAINER_UI_BUILD_DIR := /tmp/lart-ui-build
-BUILD_PLAT ?= linux/arm64
+BUILD_PLAT ?= linux/amd64
+BUILD_PLAT_ARM ?= linux/arm64
+BUILD_PLAT_AMD ?= linux/amd64
 
 help:
 	@echo "LART Dashboard ROS2 Docker Management"
@@ -22,6 +24,8 @@ help:
 	@echo ""
 	@echo "Manual Docker Management:"
 	@echo "  build         - Build the Docker image"
+	@echo "  build-arm     - Build the Docker image for ARM64"
+	@echo "  build-amd     - Build the Docker image for AMD64"
 	@echo "  up            - Start publisher and display containers"
 	@echo "  publisher     - Run only the publisher container"
 	@echo "  display       - Run only the display container"
@@ -45,6 +49,7 @@ help:
 
 compose-up:
 	@echo "Starting containers with docker compose..."
+	@xhost +local:root >/dev/null 2>&1 || true
 	docker compose up -d
 	@echo "✓ Containers are running"
 	@echo ""
@@ -79,8 +84,13 @@ ensure-buildx:
 
 build:
 	@echo "Building Docker image: $(IMAGE_NAME)"
-	@$(MAKE) ensure-buildx >/dev/null 2>&1 || true
-	docker buildx build --platform=$(BUILD_PLAT) -t $(IMAGE_NAME) $(PROJECT_DIR) --load
+	docker build -t $(IMAGE_NAME) $(PROJECT_DIR)
+
+build-arm:
+	@$(MAKE) build BUILD_PLAT=$(BUILD_PLAT_ARM)
+
+build-amd:
+	@$(MAKE) build BUILD_PLAT=$(BUILD_PLAT_AMD)
 
 rebuild: clean build
 
@@ -115,6 +125,7 @@ publisher: build network
 
 display: build network
 	@echo "Starting display container..."
+	@xhost +local:root >/dev/null 2>&1 || true
 	docker run -d \
 		--name lart-dashboard-display \
 		--network $(NETWORK_NAME) \
@@ -188,34 +199,21 @@ logs-pub:
 # Local (no Docker) run targets
 # ---------------------------------------------------------------------------
 
+check-ui-deps:
+	@bash -lc 'set -e; if ! pkg-config --exists sdl2; then echo "Missing SDL2 development files for the desktop UI."; echo "Install on Raspberry Pi OS: sudo apt install libsdl2-dev pkg-config"; exit 2; fi; if [[ ! -d "$(PROJECT_DIR)/src/ui/third_party/lvgl/src" ]]; then echo "LVGL sources are missing; initializing the bundled submodule..."; git -C "$(PROJECT_DIR)" submodule update --init --recursive -- src/ui/third_party/lvgl; fi; if [[ ! -d "$(PROJECT_DIR)/src/ui/third_party/lvgl/src" ]]; then echo "Missing LVGL sources at $(PROJECT_DIR)/src/ui/third_party/lvgl/src."; echo "Run: git -C $(PROJECT_DIR) submodule update --init --recursive -- src/ui/third_party/lvgl"; exit 2; fi'
+
 publish-local:
-	@echo "Running local publisher (publishes 40.0 at 10Hz). Ctrl-C to stop"
-	@bash -lc 'source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/install/setup.bash >/dev/null 2>&1 || true; ros2 topic pub -r 10 /vehicle/speed_kph std_msgs/msg/Float32 "{data: 40.0}"'
+	@echo "Running local numeric publisher at 20Hz. Ctrl-C to stop"
+	@bash -lc 'source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/install/setup.bash >/dev/null 2>&1 || true; while true; do for value in 0 10 20 30 40 50 60 70 80 90 100; do echo "speed_kph=$$value"; ros2 topic pub --once /vehicle/speed_kph std_msgs/msg/Float32 "{data: $$value}" >/dev/null; done; done'
 
 listener-local:
 	@echo "Running local listener (dashboard_ui.speed_listener)"
 	@bash -lc 'source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; export PYTHONPATH=$(PROJECT_DIR)/src; python3 -m dashboard_ui.speed_listener'
 
-display-local:
-	@echo "Building and running UI locally (requires SDL2, rclcpp dev libs)"
-	@bash -lc '
-	  set -e; \
-	  cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; \
-	  cmake --build $(PROJECT_DIR)/build/ui-build --parallel $$(nproc); \
-	  $(PROJECT_DIR)/build/ui-build/ui_runner
-	'
+display-local: check-ui-deps
+	@echo "Building and running UI locally (requires SDL2; ROS2 is optional)"
+	@bash -lc 'set -e; cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; cmake --build $(PROJECT_DIR)/build/ui-build --parallel $$(nproc); UI_BIN="$(PROJECT_DIR)/build/ui-build/ui_runner"; if [[ ! -x "$$UI_BIN" ]]; then echo "ui_runner was not generated. Install libsdl2-dev and ensure LVGL sources exist at $(PROJECT_DIR)/src/ui/third_party/lvgl/src."; exit 2; fi; exec "$$UI_BIN"'
 
-run-all-local:
+run-all-local: check-ui-deps
 	@echo "Starting publisher and listener in background; launching display in foreground"
-	@bash -lc '
-	  set -e; \
-	  source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; \
-	  source $(PROJECT_DIR)/install/setup.bash >/dev/null 2>&1 || true; \
-	  export PYTHONPATH=$(PROJECT_DIR)/src; \
-	  ros2 topic pub -r 10 /vehicle/speed_kph std_msgs/msg/Float32 "{data: 40.0}" & PUB_PID=$$!; \
-	  python3 -m dashboard_ui.speed_listener & LIST_PID=$$!; \
-	  echo "Started publisher $$PUB_PID and listener $$LIST_PID"; \
-	  cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; \
-	  cmake --build $(PROJECT_DIR)/build/ui-build --parallel $$(nproc); \
-	  $(PROJECT_DIR)/build/ui-build/ui_runner
-	'
+	@bash -lc 'set -e; source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/install/setup.bash >/dev/null 2>&1 || true; export PYTHONPATH=$(PROJECT_DIR)/src; ros2 topic pub -r 10 /vehicle/speed_kph std_msgs/msg/Float32 "{data: 40.0}" & PUB_PID=$$!; python3 -m dashboard_ui.speed_listener & LIST_PID=$$!; trap "kill $$PUB_PID $$LIST_PID 2>/dev/null || true" EXIT INT TERM; echo "Started publisher $$PUB_PID and listener $$LIST_PID"; cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; cmake --build $(PROJECT_DIR)/build/ui-build --parallel $$(nproc); UI_BIN="$(PROJECT_DIR)/build/ui-build/ui_runner"; if [[ ! -x "$$UI_BIN" ]]; then echo "ui_runner was not generated. Install libsdl2-dev and ensure LVGL sources exist at $(PROJECT_DIR)/src/ui/third_party/lvgl/src."; exit 2; fi; exec "$$UI_BIN"'

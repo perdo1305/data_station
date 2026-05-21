@@ -33,25 +33,20 @@ show_menu() {
     echo -e "${BLUE}Select an action:${NC}"
     echo "1) Build Docker image"
     echo "2) Start containers (docker-compose)"
-    echo "3) View logs"
-    echo "4) Open shell in publisher container"
-    echo "5) Check ROS 2 topics"
-    echo "6) Stop containers"
-    echo "7) Clean everything"
-    echo "8) Exit"
+    echo "3) View all logs"
+    echo "4) View display logs only"
+    echo "5) Open shell in publisher container"
+    echo "6) Check ROS 2 topics"
+    echo "7) Stop containers"
+    echo "8) Clean everything"
+    echo "9) Exit"
     echo ""
 }
 
 # Action functions
 build_image() {
     echo -e "${GREEN}Building Docker image...${NC}"
-    # If script was invoked with sudo, run the build as the original user
-    if [[ "$EUID" -eq 0 && -n "$SUDO_USER" ]]; then
-        echo -e "${YELLOW}Detected sudo. Running build as $SUDO_USER to avoid root-owned docker artifacts.${NC}"
-        sudo -u "$SUDO_USER" make build
-    else
-        make build
-    fi
+    make build
     echo -e "${GREEN}✓ Build complete${NC}"
 }
 
@@ -73,6 +68,14 @@ view_logs() {
     echo ""
     make compose-logs 2>/dev/null || {
         echo -e "${YELLOW}Containers may not be running. Start them first with option 2${NC}"
+    }
+}
+
+view_display_logs() {
+    echo -e "${GREEN}Viewing display logs (Press Ctrl+C to exit)...${NC}"
+    echo ""
+    docker compose logs -f display 2>/dev/null || {
+        echo -e "${YELLOW}Display container may not be running. Start it first with option 2${NC}"
     }
 }
 
@@ -119,7 +122,7 @@ clean_everything() {
 # Main loop
 while true; do
     show_menu
-    read -p "Enter your choice [1-8]: " choice
+    read -p "Enter your choice [1-9]: " choice
     
     case $choice in
         1)
@@ -132,23 +135,26 @@ while true; do
             view_logs
             ;;
         4)
-            open_shell
+            view_display_logs
             ;;
         5)
-            check_topics
+            open_shell
             ;;
         6)
-            stop_containers
+            check_topics
             ;;
         7)
-            clean_everything
+            stop_containers
             ;;
         8)
+            clean_everything
+            ;;
+        9)
             echo -e "${GREEN}Goodbye!${NC}"
             exit 0
             ;;
         *)
-            echo -e "${YELLOW}Invalid option. Please select 1-8.${NC}"
+            echo -e "${YELLOW}Invalid option. Please select 1-9.${NC}"
             ;;
     esac
 done

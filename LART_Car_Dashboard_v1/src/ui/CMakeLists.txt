@@ -10,8 +10,11 @@ endif()
 find_package(ament_cmake QUIET)
 find_package(PkgConfig REQUIRED)
 find_package(Threads REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(std_msgs REQUIRED)
+
+if(ament_cmake_FOUND)
+    find_package(rclcpp REQUIRED)
+    find_package(std_msgs REQUIRED)
+endif()
 
 # Optional: subscribe to /vehicle/dashboard_state if lart_msgs is available
 find_package(lart_msgs QUIET)
@@ -40,6 +43,7 @@ target_include_directories(ros2subscriber PUBLIC
 
 target_link_libraries(ros2subscriber Threads::Threads)
 if(ament_cmake_FOUND)
+    target_compile_definitions(ros2subscriber PRIVATE LART_UI_HAVE_RCLCPP=1)
     ament_target_dependencies(ros2subscriber rclcpp std_msgs)
 else()
     target_link_libraries(ros2subscriber rclcpp::rclcpp)
@@ -70,24 +74,25 @@ if(SDL2_FOUND AND LVGL_SOURCES)
         ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src
         ${CMAKE_CURRENT_SOURCE_DIR}
     )
-    target_compile_definitions(lvgl PUBLIC LV_CONF_INCLUDE_SIMPLE=1)
+    target_compile_definitions(lvgl PUBLIC LV_CONF_INCLUDE_SIMPLE=1 LV_FONT_FMT_TXT_LARGE=1)
 
     set(UI_SOURCES
         eez-flow.cpp
         images.c
+        screen_api.cpp
         screens.c
         speed_api.cpp
         styles.c
         ui.c
-        ui_font_orbiter_bold_100.c
-        ui_font_orbitron_15.c
-        ui_font_orbitron_bold_15.c
-        ui_font_orbitron_bold_20.c
-        ui_font_orbitron_bold_25.c
-        ui_font_orbitron_bold_30.c
-        ui_font_orbitron_bold_40.c
-        ui_font_orbitron_bold_50.c
-        ui_image_lart_logo.c
+        fonts/ui_font_orbiter_bold_100.c
+        fonts/ui_font_orbitron_15.c
+        fonts/ui_font_orbitron_bold_15.c
+        fonts/ui_font_orbitron_bold_20.c
+        fonts/ui_font_orbitron_bold_25.c
+        fonts/ui_font_orbitron_bold_30.c
+        fonts/ui_font_orbitron_bold_40.c
+        fonts/ui_font_orbitron_bold_50.c
+        images/ui_image_lart_logo.c
         ui_runner.cpp
     )
 
@@ -99,7 +104,7 @@ if(SDL2_FOUND AND LVGL_SOURCES)
         ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl
         ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src
     )
-    target_compile_definitions(ui_runner PRIVATE LV_CONF_INCLUDE_SIMPLE=1)
+    target_compile_definitions(ui_runner PRIVATE LV_CONF_INCLUDE_SIMPLE=1 LV_FONT_FMT_TXT_LARGE=1)
     target_link_libraries(ui_runner
         lvgl
         ros2subscriber

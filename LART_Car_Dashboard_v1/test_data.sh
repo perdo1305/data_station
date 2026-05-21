@@ -5,7 +5,9 @@
 set -e
 
 CONTAINER_NAME="lart-dashboard-publisher"
+SCREEN_CONTAINER_NAME="lart-dashboard-screen-changer"
 TOPIC_PREFIX="/vehicle"
+SCREEN_TOPIC="/dashboard/set_screen"
 SPEED_VALUES=(10 20 30 40 50 60 70 80 90 100)
 SEND_DELAY_NORMAL=0
 SEND_DELAY_FAST=0
@@ -97,7 +99,6 @@ publish_test_data() {
 
     publish_speed_batch 0 "$speed_kph"
 }
-
 # Menu
 show_menu() {
     echo "Select test scenario:"
@@ -108,8 +109,9 @@ show_menu() {
     echo "5) Deceleration sequence"
     echo "6) Random values"
     echo "7) Custom speed"
-    echo "8) Help"
-    echo "9) Exit"
+    echo "8) Change screen (ROS topic)"
+    echo "9) Help"
+    echo "0) Exit"
     echo ""
 }
 
@@ -171,6 +173,46 @@ test_custom() {
     echo "✓ Custom speed published"
 }
 
+publish_screen() {
+    local screen_id=$1
+    echo "Publishing screen change: id=$screen_id to $SCREEN_TOPIC..."
+
+    # Try screen_changer container first, fall back to publisher
+    local container="$SCREEN_CONTAINER_NAME"
+    if ! docker ps -q --filter "name=$container" | grep -q .; then
+        echo "  (screen_changer container not running, using publisher instead)"
+        container="$CONTAINER_NAME"
+    fi
+
+    docker exec "$container" bash -lc "
+        source /opt/ros/jazzy/setup.bash &&
+        source /root/lart_ws/install/setup.bash 2>/dev/null || true &&
+        ros2 topic pub -1 $SCREEN_TOPIC std_msgs/msg/Int32 '{data: $screen_id}'
+    "
+}
+
+show_screen_menu() {
+    echo ""
+    echo "╔════════════════════════════════════════════╗"
+    echo "║  Change Screen (ROS /dashboard/set_screen) ║"
+    echo "╚════════════════════════════════════════════╝"
+    echo "  0) Driver View"
+    echo "  1) Autonomous"
+    echo "  2) Debug Autonomous"
+    echo "  3) Debug"
+    echo "  b) Back"
+    echo ""
+    read -p "Select screen [0-3/b]: " scr
+    case $scr in
+        0) publish_screen 0 && echo "✓ Switched to Driver View" ;;
+        1) publish_screen 1 && echo "✓ Switched to Autonomous" ;;
+        2) publish_screen 2 && echo "✓ Switched to Debug Autonomous" ;;
+        3) publish_screen 3 && echo "✓ Switched to Debug" ;;
+        b|B) return ;;
+        *) echo "✗ Invalid option." ;;
+    esac
+}
+
 show_help() {
     cat << EOF
 ╔════════════════════════════════════════════════════════════╗
@@ -182,6 +224,7 @@ sample speed data to dashboard topics.
 
 Publishing to:
     - $TOPIC_PREFIX/speed_kph (std_msgs/Float32)
+    - $SCREEN_TOPIC (std_msgs/Int32)
 
 Test Scenarios:
   1. Idle      - Tests zero speed (0 km/h)
@@ -191,6 +234,8 @@ Test Scenarios:
   5. Decel     - Deceleration from 100 to 0 km/h
   6. Random    - Random speeds for 10 seconds
   7. Custom    - Publish a single custom speed
+  8. Screen    - Change dashboard screen via ROS topic
+                 0=Driver View, 1=Autonomous, 2=Debug Autonomous, 3=Debug
 
 Prerequisites:
   - Docker containers must be running: make compose-up
@@ -200,6 +245,7 @@ Monitoring:
   - View publisher logs:    make logs-pub
   - Check all topics:       make shell
                             ros2 topic echo /vehicle/speed_kph
+                            ros2 topic echo /dashboard/set_screen
 
 Example workflow:
   1. make compose-up        # Start containers
@@ -220,7 +266,7 @@ EOF
 while true; do
     echo ""
     show_menu
-    read -p "Select option [1-9]: " choice
+    read -p "Select option [0-9]: " choice
     
     case $choice in
         1) test_idle ;;
@@ -230,13 +276,14 @@ while true; do
         5) test_deceleration ;;
         6) test_random ;;
         7) test_custom ;;
-        8) show_help ;;
-        9) 
+        8) show_screen_menu ;;
+        9) show_help ;;
+        0) 
             echo "Goodbye!"
             exit 0
             ;;
         *)
-            echo "✗ Invalid option. Please select 1-9."
+            echo "✗ Invalid option. Please select 0-9."
             ;;
     esac
     

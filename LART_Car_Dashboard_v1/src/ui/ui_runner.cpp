@@ -118,13 +118,15 @@ void pointer_read_cb(lv_indev_drv_t *, lv_indev_data_t *data) {
 }
 
 bool create_window() {
+    const uint32_t window_flags = SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN_DESKTOP;
+
     g_window = SDL_CreateWindow(
         "LART UI Runner",
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
         kUiWidth,
         kUiHeight,
-        SDL_WINDOW_SHOWN
+        window_flags
     );
 
     if (g_window == nullptr) {

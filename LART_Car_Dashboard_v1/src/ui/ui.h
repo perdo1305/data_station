@@ -9,11 +9,12 @@
 extern "C" {
 #endif
 
-extern const uint8_t assets[5728];
+extern const uint8_t assets[6900];
 
 void ui_init();
 void ui_tick();
 void ui_set_speed(float speed_kph);
+void ui_set_screen_var(int screen_id);
 
 #ifdef __cplusplus
 }

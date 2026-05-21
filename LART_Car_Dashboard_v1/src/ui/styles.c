@@ -39,7 +39,7 @@ void remove_style_info_containers(lv_obj_t *obj) {
 //
 
 void init_style_text_MAIN_DEFAULT(lv_style_t *style) {
-    lv_style_set_text_font(style, &lv_font_montserrat_24);
+    lv_style_set_text_font(style, &ui_font_orbitron_bold_20);
     lv_style_set_text_align(style, LV_TEXT_ALIGN_CENTER);
     lv_style_set_text_color(style, lv_color_hex(0xfefefe));
     lv_style_set_text_decor(style, LV_TEXT_DECOR_NONE);

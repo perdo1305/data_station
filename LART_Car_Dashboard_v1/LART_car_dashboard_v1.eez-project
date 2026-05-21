@@ -89,26 +89,26 @@
         {
           "objID": "084926f1-634e-4671-9fc3-cc34c950eba7",
           "fileName": "ui.c",
-          "template": "#if defined(EEZ_FOR_LVGL)\n#include <eez/core/vars.h>\n#endif\n\n#include \"ui.h\"\n#include \"screens.h\"\n#include \"images.h\"\n#include \"actions.h\"\n#include \"vars.h\"\n#include \"stdio.h\"\n\n\n#include \"ros2subscriber.h\"\n\n\n\n//${eez-studio GUI_ASSETS_DEF}\n\n//${eez-studio LVGL_NATIVE_VARS_TABLE_DEF}\n\n//${eez-studio LVGL_ACTIONS_ARRAY_DEF}\n\n#if defined(EEZ_FOR_LVGL)\n\n\nvoid ui_init() {\n    eez_flow_init(assets, sizeof(assets), (lv_obj_t **)&objects, sizeof(objects), images, sizeof(images), actions);\n    if (ros2subscriber_init() != 0) {\n        ui_set_speed(0.0f);\n        return;\n    }\n\n    ui_set_speed(0.0f);\n}\n\nvoid ui_tick() {\n    float speed_kph;\n\n    if (ros2subscriber_spin_some() == 0 && ros2subscriber_get_latest_speed(&speed_kph)) {\n        ui_set_speed(speed_kph);\n    }\n\n    eez_flow_tick();\n    tick_screen(g_currentScreen);\n}\nvoid ui_setup_timers(void) {\n    // No LVGL timers required for ROS2 subscriber mode.\n}\n\n// Cleanup on shutdown\nvoid ui_fini(void) {\n    ros2subscriber_fini();\n}\n\n#else\n\nstatic int16_t currentScreen = -1;\n\nstatic lv_obj_t *getLvglObjectFromIndex(int32_t index) {\n    if (index == -1) {\n        return 0;\n    }\n    return ((lv_obj_t **)&objects)[index];\n}\n\nvoid loadScreen(enum ScreensEnum screenId) {\n    currentScreen = screenId - 1;\n    lv_obj_t *screen = getLvglObjectFromIndex(currentScreen);\n    lv_scr_load_anim(screen, LV_SCR_LOAD_ANIM_FADE_IN, 200, 0, false);\n}\n\nvoid ui_init() {\n    create_screens();\n//${eez-studio LVGL_LOAD_FIRST_SCREEN}\n}\n\nvoid ui_tick() {\n    tick_screen(currentScreen);\n}\n\n#endif\n"
+          "template": "#if defined(EEZ_FOR_LVGL)\n#include <eez/core/vars.h>\n#endif\n\n#include \"ui.h\"\n#include \"screens.h\"\n#include \"images.h\"\n#include \"actions.h\"\n#include \"vars.h\"\n#include \"stdio.h\"\n\n\n#include \"ros2subscriber.h\"\n\n\n\n//${eez-studio GUI_ASSETS_DEF}\n\n//${eez-studio LVGL_NATIVE_VARS_TABLE_DEF}\n\n//${eez-studio LVGL_ACTIONS_ARRAY_DEF}\n\n#if defined(EEZ_FOR_LVGL)\n\n\nvoid ui_init() {\n    eez_flow_init(assets, sizeof(assets), (lv_obj_t **)&objects, sizeof(objects), images, sizeof(images), actions);\n    if (ros2subscriber_init() != 0) {\n        ui_set_speed(0.0f);\n        return;\n    }\n\n    ui_set_speed(0.0f);\n}\n\nvoid ui_tick() {\n    float speed_kph;\n\n    if (ros2subscriber_spin_some() == 0 && ros2subscriber_get_latest_speed(&speed_kph)) {\n        ui_set_speed(speed_kph);\n    }\n\n    eez_flow_tick();\n    tick_screen(g_currentScreen);\n\n    // Check for screen change requests from ROS 2 topic\n    int screen_id;\n    if (ros2subscriber_get_screen_change_request(&screen_id)) {\n        int16_t current = eez_flow_get_current_screen();\n        if (screen_id >= _SCREEN_ID_FIRST && screen_id <= _SCREEN_ID_LAST && screen_id != current) {\n            printf(\"[ui_tick] Screen change requested: %d -> %d (current=%d)\\n\", current, screen_id, g_currentScreen);\n            eez_flow_set_screen(screen_id, LV_SCR_LOAD_ANIM_NONE, 0, 0);\n        }\n    }\n}\nvoid ui_setup_timers(void) {\n    // No LVGL timers required for ROS2 subscriber mode.\n}\n\n// Cleanup on shutdown\nvoid ui_fini(void) {\n    ros2subscriber_fini();\n}\n#endif\n"
         },
         {
           "objID": "a40698a8-cea3-4c3e-b73f-dca45f315fd8",
           "fileName": "CMakeLists.txt",
-          "template": "cmake_minimum_required(VERSION 3.8)\nproject(speed_subscriber LANGUAGES C CXX)\n\n# Compiler flags\nif(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES \"Clang\")\n    add_compile_options(-Wall -Wextra -Wpedantic)\nendif()\n\n# ROS 2 (required)\nfind_package(ament_cmake QUIET)\nfind_package(PkgConfig REQUIRED)\nfind_package(Threads REQUIRED)\nfind_package(rclcpp REQUIRED)\nfind_package(std_msgs REQUIRED)\n\n# Optional: subscribe to /vehicle/dashboard_state if lart_msgs is available\nfind_package(lart_msgs QUIET)\n\n# Desktop UI runner dependency (requires SDL2 development package for headers + pkg-config file)\npkg_check_modules(SDL2 QUIET IMPORTED_TARGET sdl2)\n\nfile(GLOB_RECURSE LVGL_SOURCES CONFIGURE_DEPENDS\n    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src/*.c\n)\n\n# ============================================================================\n# CREATE ROS2 SUBSCRIBER LIBRARY\n# ============================================================================\n\nadd_library(ros2subscriber STATIC\n    ros2subscriber.cpp\n)\n\ntarget_compile_features(ros2subscriber PUBLIC cxx_std_17)\n\ntarget_include_directories(ros2subscriber PUBLIC\n    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>\n    $<INSTALL_INTERFACE:include/${PROJECT_NAME}>\n)\n\ntarget_link_libraries(ros2subscriber PRIVATE rclcpp::rclcpp std_msgs::std_msgs Threads::Threads)\nif(lart_msgs_FOUND)\n    target_compile_definitions(ros2subscriber PRIVATE LART_HAVE_DASHBOARD_STATE_MSG=1)\n    target_link_libraries(ros2subscriber PRIVATE lart_msgs::lart_msgs)\n    message(STATUS \"ROS2 subscriber: lart_msgs detected (DashboardState supported)\")\nelse()\n    message(STATUS \"ROS2 subscriber: lart_msgs not found (Float32 speed topic only)\")\nendif()\n\n# Installation targets\ninstall(TARGETS ros2subscriber\n    ARCHIVE DESTINATION lib\n    LIBRARY DESTINATION lib\n    RUNTIME DESTINATION bin\n)\ninstall(FILES ros2subscriber.h DESTINATION include/${PROJECT_NAME})\n\nif(SDL2_FOUND AND LVGL_SOURCES)\n    add_library(lvgl STATIC ${LVGL_SOURCES})\n    target_compile_features(lvgl PUBLIC c_std_99)\n    target_include_directories(lvgl PUBLIC\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src\n        ${CMAKE_CURRENT_SOURCE_DIR}\n    )\n    target_compile_definitions(lvgl PUBLIC LV_CONF_INCLUDE_SIMPLE=1)\n\n    set(UI_SOURCES\n        eez-flow.cpp\n        images.c\n        screens.c\n        speed_api.cpp\n        styles.c\n        ui.c\n        ui_font_orbiter_bold_100.c\n        ui_font_orbitron_15.c\n        ui_font_orbitron_bold_15.c\n        ui_font_orbitron_bold_20.c\n        ui_font_orbitron_bold_25.c\n        ui_font_orbitron_bold_30.c\n        ui_font_orbitron_bold_40.c\n        ui_font_orbitron_bold_50.c\n        ui_image_lart_logo.c\n        ui_runner.cpp\n    )\n\n    add_executable(ui_runner ${UI_SOURCES})\n\n    target_compile_features(ui_runner PUBLIC cxx_std_17)\n    target_include_directories(ui_runner PRIVATE\n        ${CMAKE_CURRENT_SOURCE_DIR}\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src\n    )\n    target_compile_definitions(ui_runner PRIVATE LV_CONF_INCLUDE_SIMPLE=1)\n    target_link_libraries(ui_runner PRIVATE\n        lvgl\n        ros2subscriber\n        rclcpp::rclcpp\n        std_msgs::std_msgs\n        PkgConfig::SDL2\n        Threads::Threads\n    )\n    if(lart_msgs_FOUND)\n        target_link_libraries(ui_runner PRIVATE lart_msgs::lart_msgs)\n    endif()\nelse()\n    message(STATUS \"Desktop UI runner disabled: SDL2 (libsdl2-dev) or LVGL sources not available\")\nendif()\n\nif(ament_cmake_FOUND)\n    ament_package()\nendif()"
+          "template": "cmake_minimum_required(VERSION 3.8)\nproject(speed_subscriber LANGUAGES C CXX)\n\n# Compiler flags\nif(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES \"Clang\")\n    add_compile_options(-Wall -Wextra -Wpedantic)\nendif()\n\n# ROS 2 (required)\nfind_package(ament_cmake QUIET)\nfind_package(PkgConfig REQUIRED)\nfind_package(Threads REQUIRED)\n\nif(ament_cmake_FOUND)\n    find_package(rclcpp REQUIRED)\n    find_package(std_msgs REQUIRED)\nendif()\n\n# Optional: subscribe to /vehicle/dashboard_state if lart_msgs is available\nfind_package(lart_msgs QUIET)\n\n# Desktop UI runner dependency (requires SDL2 development package for headers + pkg-config file)\npkg_check_modules(SDL2 QUIET IMPORTED_TARGET sdl2)\n\nfile(GLOB_RECURSE LVGL_SOURCES CONFIGURE_DEPENDS\n    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src/*.c\n)\n\n# ============================================================================\n# CREATE ROS2 SUBSCRIBER LIBRARY\n# ============================================================================\n\nadd_library(ros2subscriber STATIC\n    ros2subscriber.cpp\n)\n\ntarget_compile_features(ros2subscriber PUBLIC cxx_std_17)\n\ntarget_include_directories(ros2subscriber PUBLIC\n    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>\n    $<INSTALL_INTERFACE:include/${PROJECT_NAME}>\n)\n\ntarget_link_libraries(ros2subscriber Threads::Threads)\nif(ament_cmake_FOUND)\n    target_compile_definitions(ros2subscriber PRIVATE LART_UI_HAVE_RCLCPP=1)\n    ament_target_dependencies(ros2subscriber rclcpp std_msgs)\nelse()\n    target_link_libraries(ros2subscriber rclcpp::rclcpp)\nendif()\nif(lart_msgs_FOUND)\n    target_compile_definitions(ros2subscriber PRIVATE LART_HAVE_DASHBOARD_STATE_MSG=1)\n    if(ament_cmake_FOUND)\n        ament_target_dependencies(ros2subscriber lart_msgs)\n    endif()\n    message(STATUS \"ROS2 subscriber: lart_msgs detected (DashboardState supported)\")\nelse()\n    message(STATUS \"ROS2 subscriber: lart_msgs not found (Float32 speed topic only)\")\nendif()\n\n# Installation targets\ninstall(TARGETS ros2subscriber\n    ARCHIVE DESTINATION lib\n    LIBRARY DESTINATION lib\n    RUNTIME DESTINATION bin\n)\ninstall(FILES ros2subscriber.h DESTINATION include/${PROJECT_NAME})\n\nif(SDL2_FOUND AND LVGL_SOURCES)\n    add_library(lvgl STATIC ${LVGL_SOURCES})\n    target_compile_features(lvgl PUBLIC c_std_99)\n    target_include_directories(lvgl PUBLIC\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src\n        ${CMAKE_CURRENT_SOURCE_DIR}\n    )\n    target_compile_definitions(lvgl PUBLIC LV_CONF_INCLUDE_SIMPLE=1 LV_FONT_FMT_TXT_LARGE=1)\n\n    set(UI_SOURCES\n        eez-flow.cpp\n        images.c\n        screens.c\n        speed_api.cpp\n        styles.c\n        ui.c\n        fonts/ui_font_orbiter_bold_100.c\n        fonts/ui_font_orbitron_15.c\n        fonts/ui_font_orbitron_bold_15.c\n        fonts/ui_font_orbitron_bold_20.c\n        fonts/ui_font_orbitron_bold_25.c\n        fonts/ui_font_orbitron_bold_30.c\n        fonts/ui_font_orbitron_bold_40.c\n        fonts/ui_font_orbitron_bold_50.c\n        images/ui_image_lart_logo.c\n        ui_runner.cpp\n    )\n\n    add_executable(ui_runner ${UI_SOURCES})\n\n    target_compile_features(ui_runner PUBLIC cxx_std_17)\n    target_include_directories(ui_runner PRIVATE\n        ${CMAKE_CURRENT_SOURCE_DIR}\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src\n    )\n    target_compile_definitions(ui_runner PRIVATE LV_CONF_INCLUDE_SIMPLE=1 LV_FONT_FMT_TXT_LARGE=1)\n    target_link_libraries(ui_runner\n        lvgl\n        ros2subscriber\n        PkgConfig::SDL2\n        Threads::Threads\n    )\n    if(ament_cmake_FOUND)\n        ament_target_dependencies(ui_runner rclcpp std_msgs)\n    else()\n        target_link_libraries(ui_runner rclcpp::rclcpp)\n    endif()\n    if(lart_msgs_FOUND)\n        if(ament_cmake_FOUND)\n            ament_target_dependencies(ui_runner lart_msgs)\n        endif()\n    endif()\nelse()\n    message(STATUS \"Desktop UI runner disabled: SDL2 (libsdl2-dev) or LVGL sources not available\")\nendif()\n\nif(ament_cmake_FOUND)\n    ament_package()\nendif()"
         },
         {
           "objID": "5d5ceb45-7278-44e0-bf56-250aaf12c7fc",
           "fileName": "ros2subscriber.cpp",
-          "template": "#include \"ros2subscriber.h\"\n\n#include <atomic>\n#include <chrono>\n#include <cstdlib>\n#include <cstring>\n#include <strings.h>\n#include <memory>\n\n#include <rclcpp/rclcpp.hpp>\n#include <rclcpp/executors/single_threaded_executor.hpp>\n#include <std_msgs/msg/float32.hpp>\n\n#if !defined(LART_HAVE_DASHBOARD_STATE_MSG)\n#if defined(__has_include)\n#if __has_include(<lart_msgs/msg/dashboard_state.hpp>)\n#define LART_HAVE_DASHBOARD_STATE_MSG 1\n#else\n#define LART_HAVE_DASHBOARD_STATE_MSG 0\n#endif\n#else\n#define LART_HAVE_DASHBOARD_STATE_MSG 0\n#endif\n#endif\n\n#if LART_HAVE_DASHBOARD_STATE_MSG\n#include <lart_msgs/msg/dashboard_state.hpp>\n#endif\n\n#if defined(__GNUC__) || defined(__clang__)\n#define LART_WEAK __attribute__((weak))\n#else\n#define LART_WEAK\n#endif\n\nnamespace {\nconstexpr const char *DEFAULT_SPEED_TOPIC = \"/vehicle/speed_kph\";\nconstexpr const char *DEFAULT_DASHBOARD_STATE_TOPIC = \"/vehicle/dashboard_state\";\n\nstd::atomic<int> g_is_initialized(0);\nstd::atomic<int> g_has_speed(0);\nstd::atomic<float> g_latest_speed_kph(0.0f);\n\nbool g_did_init_rclcpp = false;\nstd::shared_ptr<rclcpp::Node> g_node;\nstd::shared_ptr<rclcpp::executors::SingleThreadedExecutor> g_exec;\nrclcpp::SubscriptionBase::SharedPtr g_sub;\n\nbool env_is_true(const char *name, bool default_value) {\n    const char *value = std::getenv(name);\n    if (value == nullptr || *value == '\\0') {\n        return default_value;\n    }\n    return std::strcmp(value, \"1\") == 0 || strcasecmp(value, \"true\") == 0 || strcasecmp(value, \"yes\") == 0;\n}\n\nconst char *env_or_default(const char *name, const char *fallback) {\n    const char *value = std::getenv(name);\n    if (value == nullptr || *value == '\\0') {\n        return fallback;\n    }\n    return value;\n}\n}  // namespace\n\nLART_WEAK int ros2subscriber_init(void) {\n    if (g_is_initialized.load()) {\n        return 0;\n    }\n\n    if (!rclcpp::ok()) {\n        g_did_init_rclcpp = true;\n        int argc = 0;\n        char **argv = nullptr;\n        rclcpp::init(argc, argv);\n    }\n\n    g_node = std::make_shared<rclcpp::Node>(\"lart_dashboard_listener\");\n    g_exec = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();\n    g_exec->add_node(g_node);\n\n#if LART_HAVE_DASHBOARD_STATE_MSG\n    const bool use_dashboard_state = env_is_true(\"LART_ROS2_USE_DASHBOARD_STATE\", true);\n#else\n    const bool use_dashboard_state = false;\n#endif\n\n    if (use_dashboard_state) {\n#if LART_HAVE_DASHBOARD_STATE_MSG\n        const char *topic = env_or_default(\"LART_ROS2_DASHBOARD_STATE_TOPIC\", DEFAULT_DASHBOARD_STATE_TOPIC);\n        auto callback = [](const lart_msgs::msg::DashboardState::SharedPtr msg) {\n            if (msg) {\n                g_latest_speed_kph.store(msg->speed_kph);\n                g_has_speed.store(1);\n            }\n        };\n\n        g_sub = g_node->create_subscription<lart_msgs::msg::DashboardState>(\n            topic, rclcpp::QoS(10), callback);\n#endif\n    } else {\n        const char *topic = env_or_default(\"LART_ROS2_SPEED_TOPIC\", DEFAULT_SPEED_TOPIC);\n\n        auto callback = [](const std_msgs::msg::Float32::SharedPtr msg) {\n            if (msg) {\n                g_latest_speed_kph.store(msg->data);\n                g_has_speed.store(1);\n            }\n        };\n\n        g_sub = g_node->create_subscription<std_msgs::msg::Float32>(\n            topic, rclcpp::QoS(10), callback);\n    }\n\n    g_is_initialized.store(1);\n    g_has_speed.store(0);\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_spin_some(void) {\n    if (!g_is_initialized.load() || !g_exec) {\n        return 1;\n    }\n\n    try {\n        g_exec->spin_some();\n    } catch (...) {\n    }\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_get_latest_speed(float *speed_kph) {\n    if (!g_is_initialized.load() || !g_has_speed.load() || speed_kph == nullptr) {\n        return 0;\n    }\n\n    *speed_kph = g_latest_speed_kph.load();\n    return 1;\n}\n\nLART_WEAK void ros2subscriber_fini(void) {\n    if (!g_is_initialized.load()) {\n        return;\n    }\n\n    try {\n        if (g_exec) {\n            g_exec->cancel();\n        }\n    } catch (...) {\n    }\n\n    g_sub.reset();\n\n    if (g_exec && g_node) {\n        try {\n            g_exec->remove_node(g_node);\n        } catch (...) {\n        }\n    }\n\n    g_node.reset();\n    g_exec.reset();\n\n    if (g_did_init_rclcpp && rclcpp::ok()) {\n        try {\n            rclcpp::shutdown();\n        } catch (...) {\n        }\n    }\n    g_did_init_rclcpp = false;\n\n    g_is_initialized.store(0);\n    g_has_speed.store(0);\n    g_latest_speed_kph.store(0.0f);\n}"
+          "template": "#include \"ros2subscriber.h\"\n\n#include <atomic>\n#include <chrono>\n#include <cstdlib>\n#include <cstring>\n#include <strings.h>\n#include <memory>\n\n#ifndef LART_UI_HAVE_RCLCPP\n#define LART_UI_HAVE_RCLCPP 0\n#endif\n\n#if defined(__GNUC__) || defined(__clang__)\n#define LART_WEAK __attribute__((weak))\n#else\n#define LART_WEAK\n#endif\n\n#if LART_UI_HAVE_RCLCPP\n\n#include <rclcpp/rclcpp.hpp>\n#include <rclcpp/executors/single_threaded_executor.hpp>\n#include <std_msgs/msg/float32.hpp>\n#include <std_msgs/msg/int32.hpp>\n\n#if !defined(LART_HAVE_DASHBOARD_STATE_MSG)\n#if defined(__has_include)\n#if __has_include(<lart_msgs/msg/dashboard_state.hpp>)\n#define LART_HAVE_DASHBOARD_STATE_MSG 1\n#else\n#define LART_HAVE_DASHBOARD_STATE_MSG 0\n#endif\n#else\n#define LART_HAVE_DASHBOARD_STATE_MSG 0\n#endif\n#endif\n\n#if LART_HAVE_DASHBOARD_STATE_MSG\n#include <lart_msgs/msg/dashboard_state.hpp>\n#endif\n\nnamespace {\nconstexpr const char *DEFAULT_SPEED_TOPIC = \"/vehicle/speed_kph\";\nconstexpr const char *DEFAULT_DASHBOARD_STATE_TOPIC = \"/vehicle/dashboard_state\";\nconstexpr const char *DEFAULT_SET_SCREEN_TOPIC = \"/dashboard/set_screen\";\n\nstd::atomic<int> g_is_initialized(0);\nstd::atomic<int> g_has_speed(0);\nstd::atomic<float> g_latest_speed_kph(0.0f);\nstd::atomic<int> g_screen_change_requested(0);\nstd::atomic<int> g_requested_screen_id(0);\n\nbool g_did_init_rclcpp = false;\nstd::shared_ptr<rclcpp::Node> g_node;\nstd::shared_ptr<rclcpp::executors::SingleThreadedExecutor> g_exec;\nrclcpp::SubscriptionBase::SharedPtr g_sub;\nrclcpp::SubscriptionBase::SharedPtr g_sub_screen;\n\nbool env_is_true(const char *name, bool default_value) {\n    const char *value = std::getenv(name);\n    if (value == nullptr || *value == '\\0') {\n        return default_value;\n    }\n    return std::strcmp(value, \"1\") == 0 || strcasecmp(value, \"true\") == 0 || strcasecmp(value, \"yes\") == 0;\n}\n\nconst char *env_or_default(const char *name, const char *fallback) {\n    const char *value = std::getenv(name);\n    if (value == nullptr || *value == '\\0') {\n        return fallback;\n    }\n    return value;\n}\n}  // namespace\n\nLART_WEAK int ros2subscriber_init(void) {\n    if (g_is_initialized.load()) {\n        return 0;\n    }\n\n    if (!rclcpp::ok()) {\n        g_did_init_rclcpp = true;\n        int argc = 0;\n        char **argv = nullptr;\n        rclcpp::init(argc, argv);\n    }\n\n    g_node = std::make_shared<rclcpp::Node>(\"lart_dashboard_listener\");\n    g_exec = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();\n    g_exec->add_node(g_node);\n\n    const char *topic = env_or_default(\"LART_ROS2_SPEED_TOPIC\", DEFAULT_SPEED_TOPIC);\n\n    auto callback = [](const std_msgs::msg::Float32::SharedPtr msg) {\n        if (msg) {\n            g_latest_speed_kph.store(msg->data);\n            g_has_speed.store(1);\n        }\n    };\n\n    g_sub = g_node->create_subscription<std_msgs::msg::Float32>(topic, rclcpp::QoS(10), callback);\n\n    // Screen change subscription\n    const char *screen_topic = env_or_default(\"LART_ROS2_SET_SCREEN_TOPIC\", DEFAULT_SET_SCREEN_TOPIC);\n\n    auto screen_callback = [](const std_msgs::msg::Int32::SharedPtr msg) {\n        if (msg) {\n            int id = msg->data;\n            // Clamp to valid screen range [1, 5]\n            if (id < 1) id = 1;\n            if (id > 5) id = 5;\n            g_requested_screen_id.store(id);\n            g_screen_change_requested.store(1);\n        }\n    };\n\n    g_sub_screen = g_node->create_subscription<std_msgs::msg::Int32>(screen_topic, rclcpp::QoS(10), screen_callback);\n\n    g_is_initialized.store(1);\n    g_has_speed.store(0);\n    g_screen_change_requested.store(0);\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_spin_some(void) {\n    if (!g_is_initialized.load() || !g_exec) {\n        return 1;\n    }\n\n    try {\n        g_exec->spin_some();\n    } catch (...) {\n    }\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_get_latest_speed(float *speed_kph) {\n    if (!g_is_initialized.load() || !g_has_speed.load() || speed_kph == nullptr) {\n        return 0;\n    }\n\n    *speed_kph = g_latest_speed_kph.load();\n    return 1;\n}\n\nLART_WEAK int ros2subscriber_get_screen_change_request(int *screen_id) {\n    if (!g_is_initialized.load() || !g_screen_change_requested.load() || screen_id == nullptr) {\n        return 0;\n    }\n\n    *screen_id = g_requested_screen_id.load();\n    g_screen_change_requested.store(0);\n    return 1;\n}\n\nLART_WEAK void ros2subscriber_fini(void) {\n    if (!g_is_initialized.load()) {\n        return;\n    }\n\n    try {\n        if (g_exec) {\n            g_exec->cancel();\n        }\n    } catch (...) {\n    }\n\n    g_sub.reset();\n    g_sub_screen.reset();\n\n    if (g_exec && g_node) {\n        try {\n            g_exec->remove_node(g_node);\n        } catch (...) {\n        }\n    }\n\n    g_node.reset();\n    g_exec.reset();\n\n    if (g_did_init_rclcpp && rclcpp::ok()) {\n        try {\n            rclcpp::shutdown();\n        } catch (...) {\n        }\n    }\n    g_did_init_rclcpp = false;\n\n    g_is_initialized.store(0);\n    g_has_speed.store(0);\n    g_latest_speed_kph.store(0.0f);\n    g_screen_change_requested.store(0);\n    g_requested_screen_id.store(0);\n}\n\n#else\n\nLART_WEAK int ros2subscriber_init(void) {\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_spin_some(void) {\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_get_latest_speed(float *speed_kph) {\n    if (speed_kph != nullptr) {\n        *speed_kph = 0.0f;\n    }\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_get_screen_change_request(int *screen_id) {\n    (void)screen_id;\n    return 0;\n}\n\nLART_WEAK void ros2subscriber_fini(void) {\n}\n\n#endif"
         },
         {
           "objID": "c7507690-dd2c-41a6-b733-cff533746e67",
           "fileName": "ros2subscriber.h",
-          "template": "#ifndef LART_ROS2SUBSCRIBER_H\n#define LART_ROS2SUBSCRIBER_H\n\n#ifdef __cplusplus\nextern \"C\" {\n#endif\n\nint ros2subscriber_init(void);\nint ros2subscriber_spin_some(void);\nint ros2subscriber_get_latest_speed(float *speed_kph);\nvoid ros2subscriber_fini(void);\n\n#ifdef __cplusplus\n}\n#endif\n\n#endif"
+          "template": "#ifndef LART_ROS2SUBSCRIBER_H\n#define LART_ROS2SUBSCRIBER_H\n\n#ifdef __cplusplus\nextern \"C\" {\n#endif\n\nint ros2subscriber_init(void);\nint ros2subscriber_spin_some(void);\nint ros2subscriber_get_latest_speed(float *speed_kph);\nint ros2subscriber_get_screen_change_request(int *screen_id);\nvoid ros2subscriber_fini(void);\n\n#ifdef __cplusplus\n}\n#endif\n\n#endif"
         }
       ],
       "destinationFolder": "src\\ui",
-      "separateFolderForImagesAndFonts": false,
+      "separateFolderForImagesAndFonts": true,
       "imageExportMode": "source",
       "fontExportMode": "source",
       "fileSystemPath": "",
@@ -196,33 +196,18 @@
         "persistent": false
       },
       {
-        "objID": "4e51a69c-569d-4cc6-8fd9-a28d94fab9e2",
-        "name": "mqtt_host",
+        "objID": "1040a4f1-6242-403c-da65-4623deed5b5b",
+        "name": "state",
         "type": "string",
         "size": null,
-        "defaultValue": "\"localhost\"",
+        "defaultValue": "\"\"",
         "persistent": false
       },
       {
-        "objID": "31d6622a-470c-4b99-9ac3-88248a89952e",
-        "name": "mqtt_port",
+        "objID": "9ef045fe-9d39-4064-a7ad-06eb608b4df5",
+        "name": "screen_changer_var",
         "type": "integer",
-        "defaultValue": "1883",
-        "persistent": false
-      },
-      {
-        "objID": "ae17daa8-2dd1-4e28-af6d-ae176d4ed132",
-        "name": "mqtt_connected",
-        "type": "boolean",
-        "defaultValue": "true",
-        "persistent": false
-      },
-      {
-        "objID": "e594b5cc-1660-4db5-e633-1c802a7a8b9e",
-        "name": "mqtt_connection_string",
-        "type": "string",
-        "size": null,
-        "defaultValue": "\"mqtt://127.0.0.1:1883\"",
+        "defaultValue": "1",
         "persistent": false
       }
     ],
@@ -246,7 +231,252 @@
     ],
     "enums": []
   },
-  "actions": [],
+  "actions": [
+    {
+      "objID": "4d82ebeb-79cc-420a-ee81-4117ba822a54",
+      "components": [
+        {
+          "objID": "46d21072-4a1f-4ad3-c309-e4961bce3caf",
+          "type": "StartActionComponent",
+          "left": -617,
+          "top": -853,
+          "width": 87,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": []
+        },
+        {
+          "objID": "bad66a40-9f5e-48e6-e31a-ec6cbe1329b7",
+          "type": "LVGLActionComponent",
+          "left": -142,
+          "top": -769,
+          "width": 329,
+          "height": 54,
+          "customInputs": [],
+          "customOutputs": [],
+          "actions": [
+            {
+              "objID": "30cad9b4-f4d9-4baf-c5c7-3e6ffac96e8c",
+              "action": "changeScreen",
+              "screen": "Driver View",
+              "screenType": "literal",
+              "fadeMode": "FADE_IN",
+              "fadeModeType": "literal",
+              "speed": 200,
+              "speedType": "literal",
+              "delay": 0,
+              "delayType": "literal",
+              "useStack": true,
+              "useStackType": "literal"
+            }
+          ]
+        },
+        {
+          "objID": "920b0d11-6f8d-4703-805d-3714fbbe8f80",
+          "type": "IsTrueActionComponent",
+          "left": -362,
+          "top": -758,
+          "width": 178,
+          "height": 70,
+          "customInputs": [],
+          "customOutputs": [],
+          "value": "screen_changer_var==1"
+        },
+        {
+          "objID": "1a3aa2cf-9a2a-4001-94d5-68f248971c73",
+          "type": "LVGLActionComponent",
+          "left": -149,
+          "top": -657,
+          "width": 323,
+          "height": 54,
+          "customInputs": [],
+          "customOutputs": [],
+          "actions": [
+            {
+              "objID": "13dc13e9-43fc-4c49-eac6-d610bb51e0e8",
+              "action": "changeScreen",
+              "screen": "Autonomous",
+              "screenType": "literal",
+              "fadeMode": "FADE_IN",
+              "fadeModeType": "literal",
+              "speed": 200,
+              "speedType": "literal",
+              "delay": 0,
+              "delayType": "literal",
+              "useStack": true,
+              "useStackType": "literal"
+            }
+          ]
+        },
+        {
+          "objID": "cee112a2-48e6-4b67-bcb8-6013e81fb63b",
+          "type": "IsTrueActionComponent",
+          "left": -375,
+          "top": -665,
+          "width": 178,
+          "height": 70,
+          "customInputs": [],
+          "customOutputs": [],
+          "value": "screen_changer_var==2"
+        },
+        {
+          "objID": "9e0bdfa3-4636-444e-eebc-e1bc447851c6",
+          "type": "LVGLActionComponent",
+          "left": -175,
+          "top": -552,
+          "width": 293,
+          "height": 54,
+          "customInputs": [],
+          "customOutputs": [],
+          "actions": [
+            {
+              "objID": "6ba689b6-47af-4209-e5b4-58f85215d0f6",
+              "action": "changeScreen",
+              "screen": "Debug",
+              "screenType": "literal",
+              "fadeMode": "FADE_IN",
+              "fadeModeType": "literal",
+              "speed": 200,
+              "speedType": "literal",
+              "delay": 0,
+              "delayType": "literal",
+              "useStack": true,
+              "useStackType": "literal"
+            }
+          ]
+        },
+        {
+          "objID": "1585fc40-7bf9-49e2-db24-c3aa96f77cf4",
+          "type": "IsTrueActionComponent",
+          "left": -375,
+          "top": -560,
+          "width": 178,
+          "height": 70,
+          "customInputs": [],
+          "customOutputs": [],
+          "value": "screen_changer_var==3"
+        },
+        {
+          "objID": "1624f152-6585-4a89-85bd-f254facda2db",
+          "type": "LVGLActionComponent",
+          "left": -136,
+          "top": -420,
+          "width": 360,
+          "height": 54,
+          "customInputs": [],
+          "customOutputs": [],
+          "actions": [
+            {
+              "objID": "ef2eebd7-1b85-4531-e34b-c7544c371db5",
+              "action": "changeScreen",
+              "screen": "Debug Autonomous",
+              "screenType": "literal",
+              "fadeMode": "FADE_IN",
+              "fadeModeType": "literal",
+              "speed": 200,
+              "speedType": "literal",
+              "delay": 0,
+              "delayType": "literal",
+              "useStack": true,
+              "useStackType": "literal"
+            }
+          ]
+        },
+        {
+          "objID": "c72df5bc-f8dd-4668-8780-0eadf34e5f36",
+          "type": "IsTrueActionComponent",
+          "left": -395,
+          "top": -436,
+          "width": 178,
+          "height": 70,
+          "customInputs": [],
+          "customOutputs": [],
+          "value": "screen_changer_var==4"
+        },
+        {
+          "objID": "fd5d9ae1-febd-4e9b-f9c3-da6ef415ff61",
+          "type": "LogActionComponent",
+          "left": 272,
+          "top": -750,
+          "width": 206,
+          "height": 54,
+          "customInputs": [],
+          "customOutputs": [],
+          "value": "\"Screen changed to Driver view\""
+        }
+      ],
+      "connectionLines": [
+        {
+          "objID": "f7fe3884-04e6-40ea-c425-3b8ef98cd151",
+          "source": "46d21072-4a1f-4ad3-c309-e4961bce3caf",
+          "output": "@seqout",
+          "target": "920b0d11-6f8d-4703-805d-3714fbbe8f80",
+          "input": "@seqin"
+        },
+        {
+          "objID": "4b1336f2-a3a4-4d79-d947-40937eb724da",
+          "source": "920b0d11-6f8d-4703-805d-3714fbbe8f80",
+          "output": "True",
+          "target": "bad66a40-9f5e-48e6-e31a-ec6cbe1329b7",
+          "input": "@seqin"
+        },
+        {
+          "objID": "31ed716b-4ced-4e77-cbb1-f4fb6dac692b",
+          "source": "cee112a2-48e6-4b67-bcb8-6013e81fb63b",
+          "output": "True",
+          "target": "1a3aa2cf-9a2a-4001-94d5-68f248971c73",
+          "input": "@seqin"
+        },
+        {
+          "objID": "28624b8b-bc6d-4861-ccd7-f6011781837c",
+          "source": "1585fc40-7bf9-49e2-db24-c3aa96f77cf4",
+          "output": "True",
+          "target": "9e0bdfa3-4636-444e-eebc-e1bc447851c6",
+          "input": "@seqin"
+        },
+        {
+          "objID": "4fd176cf-7820-44b5-f7ac-36e9be3a8a61",
+          "source": "c72df5bc-f8dd-4668-8780-0eadf34e5f36",
+          "output": "True",
+          "target": "1624f152-6585-4a89-85bd-f254facda2db",
+          "input": "@seqin"
+        },
+        {
+          "objID": "8f0dc4f4-755c-4bc3-a621-78a5b53db6fd",
+          "source": "bad66a40-9f5e-48e6-e31a-ec6cbe1329b7",
+          "output": "@seqout",
+          "target": "fd5d9ae1-febd-4e9b-f9c3-da6ef415ff61",
+          "input": "@seqin"
+        },
+        {
+          "objID": "1510fb46-a114-4736-b111-4a407ba2514c",
+          "source": "920b0d11-6f8d-4703-805d-3714fbbe8f80",
+          "output": "False",
+          "target": "cee112a2-48e6-4b67-bcb8-6013e81fb63b",
+          "input": "@seqin"
+        },
+        {
+          "objID": "b5c198d9-3ed1-40fc-9abf-ff50124db870",
+          "source": "cee112a2-48e6-4b67-bcb8-6013e81fb63b",
+          "output": "False",
+          "target": "1585fc40-7bf9-49e2-db24-c3aa96f77cf4",
+          "input": "@seqin"
+        },
+        {
+          "objID": "12d5af8c-9cab-429a-bdcd-365a8d844c2e",
+          "source": "1585fc40-7bf9-49e2-db24-c3aa96f77cf4",
+          "output": "False",
+          "target": "c72df5bc-f8dd-4668-8780-0eadf34e5f36",
+          "input": "@seqin"
+        }
+      ],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "screen_changer_action",
+      "implementationType": "flow"
+    }
+  ],
   "userPages": [
     {
       "objID": "0ce9bee7-e908-4adc-f135-27a926780151",
@@ -274,66 +504,12 @@
           "heightUnit": "px",
           "children": [
             {
-              "objID": "2dc09b38-01eb-4ba9-e0ac-4a8ba111b1f1",
-              "type": "LVGLLabelWidget",
-              "left": 0,
-              "top": 200,
-              "width": 171,
-              "height": 52,
-              "customInputs": [],
-              "customOutputs": [],
-              "style": {
-                "objID": "977aa456-7af5-4d20-a270-46b47c0631a6",
-                "useStyle": "default",
-                "conditionalStyles": [],
-                "childStyles": []
-              },
-              "hiddenInEditor": false,
-              "timeline": [],
-              "eventHandlers": [],
-              "identifier": "readyLabel_1",
-              "leftUnit": "px",
-              "topUnit": "px",
-              "widthUnit": "content",
-              "heightUnit": "content",
-              "children": [],
-              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
-              "clickableFlagType": "literal",
-              "flagScrollbarMode": "",
-              "flagScrollDirection": "",
-              "scrollSnapX": "",
-              "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledStateType": "literal",
-              "states": "",
-              "localStyles": {
-                "objID": "0a143523-ca49-4041-8870-d6200a03ad60",
-                "definition": {
-                  "MAIN": {
-                    "DEFAULT": {
-                      "text_font": "MONTSERRAT_48",
-                      "text_color": "#02ff02",
-                      "align": "CENTER"
-                    }
-                  }
-                }
-              },
-              "group": "",
-              "groupIndex": 0,
-              "text": "READY",
-              "textType": "literal",
-              "longMode": "WRAP",
-              "recolor": false,
-              "previewValue": "NOT READY"
-            },
-            {
               "objID": "e2347f2a-2f0b-439d-a395-d79d34bb9c66",
               "type": "LVGLLabelWidget",
               "left": 0,
               "top": 200,
-              "width": 171,
-              "height": 52,
+              "width": 203,
+              "height": 53,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -367,9 +543,9 @@
                 "definition": {
                   "MAIN": {
                     "DEFAULT": {
-                      "text_color": "#fe0000",
+                      "text_color": "#3FFF00",
                       "align": "CENTER",
-                      "text_font": "MONTSERRAT_48"
+                      "text_font": "orbitron_bold_50"
                     }
                   }
                 }
@@ -380,7 +556,7 @@
               "textType": "expression",
               "longMode": "WRAP",
               "recolor": false,
-              "previewValue": "NOT READY"
+              "previewValue": "READY"
             },
             {
               "objID": "0d5c1074-4af9-4c58-d613-0b49478cb5b9",
@@ -433,10 +609,10 @@
                     {
                       "objID": "7c18ac44-e154-4520-e8e7-46e77dbfb725",
                       "type": "LVGLLabelWidget",
-                      "left": 13,
-                      "top": 18,
-                      "width": 23,
-                      "height": 38,
+                      "left": 10,
+                      "top": 22,
+                      "width": 124,
+                      "height": 33,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -469,7 +645,7 @@
                         "definition": {
                           "MAIN": {
                             "DEFAULT": {
-                              "text_font": "MONTSERRAT_34"
+                              "text_font": "orbitron_bold_30"
                             }
                           }
                         }
@@ -487,8 +663,8 @@
                       "type": "LVGLLabelWidget",
                       "left": 10,
                       "top": -15,
-                      "width": 136,
-                      "height": 24,
+                      "width": 131,
+                      "height": 23,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -516,14 +692,7 @@
                       "states": "",
                       "useStyle": "text",
                       "localStyles": {
-                        "objID": "7222d74b-8880-4772-c115-133aa6ae1cf6",
-                        "definition": {
-                          "MAIN": {
-                            "DEFAULT": {
-                              "text_font": "MONTSERRAT_22"
-                            }
-                          }
-                        }
+                        "objID": "7222d74b-8880-4772-c115-133aa6ae1cf6"
                       },
                       "group": "",
                       "groupIndex": 0,
@@ -596,8 +765,8 @@
                       "type": "LVGLLabelWidget",
                       "left": 6,
                       "top": 9,
-                      "width": 161,
-                      "height": 35,
+                      "width": 159,
+                      "height": 28,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -630,7 +799,7 @@
                         "definition": {
                           "MAIN": {
                             "DEFAULT": {
-                              "text_font": "MONTSERRAT_32"
+                              "text_font": "orbitron_bold_25"
                             }
                           }
                         }
@@ -648,8 +817,8 @@
                       "type": "LVGLLabelWidget",
                       "left": 6,
                       "top": -14,
-                      "width": 113,
-                      "height": 24,
+                      "width": 115,
+                      "height": 23,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -677,14 +846,7 @@
                       "states": "",
                       "useStyle": "text",
                       "localStyles": {
-                        "objID": "d5499154-6b04-4779-fa7f-9619901c2b7b",
-                        "definition": {
-                          "MAIN": {
-                            "DEFAULT": {
-                              "text_font": "MONTSERRAT_22"
-                            }
-                          }
-                        }
+                        "objID": "d5499154-6b04-4779-fa7f-9619901c2b7b"
                       },
                       "group": "",
                       "groupIndex": 0,
@@ -698,8 +860,8 @@
                       "type": "LVGLLabelWidget",
                       "left": 5,
                       "top": 42,
-                      "width": 161,
-                      "height": 35,
+                      "width": 159,
+                      "height": 28,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -732,7 +894,7 @@
                         "definition": {
                           "MAIN": {
                             "DEFAULT": {
-                              "text_font": "MONTSERRAT_32",
+                              "text_font": "orbitron_bold_25",
                               "text_color": "#fff500"
                             }
                           }
@@ -751,8 +913,8 @@
                       "type": "LVGLLabelWidget",
                       "left": 329,
                       "top": 11,
-                      "width": 18,
-                      "height": 52,
+                      "width": 20,
+                      "height": 53,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -785,7 +947,7 @@
                           "MAIN": {
                             "DEFAULT": {
                               "text_color": "#fefefe",
-                              "text_font": "MONTSERRAT_48"
+                              "text_font": "orbitron_bold_50"
                             }
                           }
                         }
@@ -800,10 +962,10 @@
                     {
                       "objID": "7c25dcd6-2cfd-4862-f8f0-a36f6d5c5e84",
                       "type": "LVGLLabelWidget",
-                      "left": 247,
+                      "left": 235,
                       "top": -14,
-                      "width": 37,
-                      "height": 22,
+                      "width": 39,
+                      "height": 23,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -831,14 +993,7 @@
                       "states": "",
                       "useStyle": "text",
                       "localStyles": {
-                        "objID": "a0a28a29-a051-4908-cf41-669ae2c7d5de",
-                        "definition": {
-                          "MAIN": {
-                            "DEFAULT": {
-                              "text_font": "MONTSERRAT_20"
-                            }
-                          }
-                        }
+                        "objID": "a0a28a29-a051-4908-cf41-669ae2c7d5de"
                       },
                       "group": "",
                       "groupIndex": 0,
@@ -850,10 +1005,10 @@
                     {
                       "objID": "a0a2f103-9305-413b-af6b-48e072afc6cd",
                       "type": "LVGLLabelWidget",
-                      "left": 247,
-                      "top": 14,
-                      "width": 60,
-                      "height": 30,
+                      "left": 220,
+                      "top": 21,
+                      "width": 70,
+                      "height": 33,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -885,8 +1040,8 @@
                         "definition": {
                           "MAIN": {
                             "DEFAULT": {
-                              "text_font": "MONTSERRAT_28",
-                              "text_color": "#ff0000"
+                              "text_color": "#ff0000",
+                              "text_font": "orbitron_bold_30"
                             }
                           }
                         }
@@ -903,8 +1058,8 @@
                       "type": "LVGLLabelWidget",
                       "left": 317,
                       "top": -15,
-                      "width": 41,
-                      "height": 24,
+                      "width": 43,
+                      "height": 23,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -932,14 +1087,7 @@
                       "states": "",
                       "useStyle": "text",
                       "localStyles": {
-                        "objID": "f07b30b5-3345-4b3d-a8cd-330b7693314e",
-                        "definition": {
-                          "MAIN": {
-                            "DEFAULT": {
-                              "text_font": "MONTSERRAT_22"
-                            }
-                          }
-                        }
+                        "objID": "f07b30b5-3345-4b3d-a8cd-330b7693314e"
                       },
                       "group": "",
                       "groupIndex": 0,
@@ -1010,10 +1158,10 @@
                     {
                       "objID": "ab2641bc-2b65-4f26-d293-0ef391f9665d",
                       "type": "LVGLLabelWidget",
-                      "left": 22,
-                      "top": 18,
-                      "width": 23,
-                      "height": 38,
+                      "left": 11,
+                      "top": 20,
+                      "width": 129,
+                      "height": 33,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -1046,7 +1194,7 @@
                         "definition": {
                           "MAIN": {
                             "DEFAULT": {
-                              "text_font": "MONTSERRAT_34"
+                              "text_font": "orbitron_bold_30"
                             }
                           }
                         }
@@ -1064,8 +1212,8 @@
                       "type": "LVGLLabelWidget",
                       "left": 20,
                       "top": -15,
-                      "width": 110,
-                      "height": 24,
+                      "width": 108,
+                      "height": 23,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -1093,14 +1241,7 @@
                       "states": "",
                       "useStyle": "text",
                       "localStyles": {
-                        "objID": "9e6a5b4e-b1dc-4ed6-9185-f4dfbf05329e",
-                        "definition": {
-                          "MAIN": {
-                            "DEFAULT": {
-                              "text_font": "MONTSERRAT_22"
-                            }
-                          }
-                        }
+                        "objID": "9e6a5b4e-b1dc-4ed6-9185-f4dfbf05329e"
                       },
                       "group": "",
                       "groupIndex": 0,
@@ -1173,8 +1314,8 @@
                       "type": "LVGLLabelWidget",
                       "left": -47,
                       "top": 6,
-                      "width": 32,
-                      "height": 52,
+                      "width": 166,
+                      "height": 106,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -1203,7 +1344,7 @@
                         "definition": {
                           "MAIN": {
                             "DEFAULT": {
-                              "text_font": "MONTSERRAT_48",
+                              "text_font": "ORBITER_BOLD_100",
                               "text_align": "CENTER",
                               "bg_color": "#ffffff",
                               "text_color": "#ffffff",
@@ -1217,15 +1358,15 @@
                       "textType": "expression",
                       "longMode": "WRAP",
                       "recolor": false,
-                      "previewValue": ""
+                      "previewValue": "20"
                     },
                     {
                       "objID": "ce664378-722f-4535-c04e-435dff407e07",
                       "type": "LVGLLabelWidget",
                       "left": 253,
                       "top": 64,
-                      "width": 62,
-                      "height": 24,
+                      "width": 89,
+                      "height": 33,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -1259,7 +1400,7 @@
                         "definition": {
                           "MAIN": {
                             "DEFAULT": {
-                              "text_font": "MONTSERRAT_22"
+                              "text_font": "orbitron_bold_30"
                             }
                           }
                         }
@@ -1332,8 +1473,8 @@
                       "type": "LVGLLabelWidget",
                       "left": 11,
                       "top": -15,
-                      "width": 74,
-                      "height": 24,
+                      "width": 77,
+                      "height": 23,
                       "customInputs": [],
                       "customOutputs": [],
                       "style": {
@@ -1361,14 +1502,7 @@
                       "states": "",
                       "useStyle": "text",
                       "localStyles": {
-                        "objID": "bb41d12b-ea7b-4cac-92d5-98250a5cee57",
-                        "definition": {
-                          "MAIN": {
-                            "DEFAULT": {
-                              "text_font": "MONTSERRAT_22"
-                            }
-                          }
-                        }
+                        "objID": "bb41d12b-ea7b-4cac-92d5-98250a5cee57"
                       },
                       "group": "",
                       "groupIndex": 0,
@@ -1614,8 +1748,8 @@
               },
               "group": "",
               "groupIndex": 0,
-              "color": "mqtt_connected ? 0x00FF00 : 0xFF0000",
-              "colorType": "expression",
+              "color": "#29FF00",
+              "colorType": "literal",
               "brightness": 255,
               "brightnessType": "literal"
             },
@@ -1684,8 +1818,9 @@
               "max": 100,
               "maxType": "literal",
               "mode": "RANGE",
-              "value": "hv",
-              "valueType": "expression",
+              "value": 50,
+              "valueType": "literal",
+              "previewValue": "50",
               "valueStart": 0,
               "valueStartType": "literal",
               "enableAnimation": false
@@ -1752,11 +1887,12 @@
               "groupIndex": 0,
               "min": 18,
               "minType": "literal",
-              "max": 33,
+              "max": 30,
               "maxType": "literal",
               "mode": "RANGE",
-              "value": "lv",
-              "valueType": "expression",
+              "value": 25,
+              "valueType": "literal",
+              "previewValue": "24.0",
               "valueStart": 0,
               "valueStartType": "literal",
               "enableAnimation": true
@@ -1766,8 +1902,8 @@
               "type": "LVGLLabelWidget",
               "left": 733,
               "top": 436,
-              "width": 42,
-              "height": 27,
+              "width": 53,
+              "height": 23,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -1812,8 +1948,8 @@
               "type": "LVGLLabelWidget",
               "left": 9,
               "top": 436,
-              "width": 37,
-              "height": 24,
+              "width": 74,
+              "height": 23,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -1843,14 +1979,7 @@
               "states": "",
               "useStyle": "text",
               "localStyles": {
-                "objID": "aa1bee79-893c-44ea-af43-c7d2a3a46df4",
-                "definition": {
-                  "MAIN": {
-                    "DEFAULT": {
-                      "text_font": "MONTSERRAT_22"
-                    }
-                  }
-                }
+                "objID": "aa1bee79-893c-44ea-af43-c7d2a3a46df4"
               },
               "group": "",
               "groupIndex": 0,
@@ -1865,8 +1994,8 @@
               "type": "LVGLLabelWidget",
               "left": 736,
               "top": 73,
-              "width": 52,
-              "height": 27,
+              "width": 50,
+              "height": 23,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -1909,8 +2038,8 @@
               "type": "LVGLLabelWidget",
               "left": 22,
               "top": 75,
-              "width": 30,
-              "height": 27,
+              "width": 31,
+              "height": 23,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -1953,8 +2082,8 @@
               "type": "LVGLLabelWidget",
               "left": 11,
               "top": 17,
-              "width": 93,
-              "height": 27,
+              "width": 98,
+              "height": 23,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -2011,343 +2140,57 @@
             }
           },
           "groupIndex": 0
+        },
+        {
+          "objID": "278d55f5-0d7c-4144-ba5d-ef83a639a95d",
+          "type": "CallActionActionComponent",
+          "left": 195,
+          "top": -246,
+          "width": 165,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": [],
+          "action": "screen_changer_action",
+          "userPropertyValues": {
+            "objID": "ae25f8d1-b0cd-4ef9-d84c-0af25a65581b",
+            "values": {}
+          }
+        },
+        {
+          "objID": "7b28947e-870d-40b9-b051-fcf2a3db9a41",
+          "type": "StartActionComponent",
+          "left": 51,
+          "top": -246,
+          "width": 87,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": []
+        },
+        {
+          "objID": "4d65c7e7-4120-4e6f-9aee-c59ddebfb8af",
+          "type": "LVGLActionComponent",
+          "left": 461,
+          "top": -211,
+          "width": 87,
+          "height": 36,
+          "customInputs": [],
+          "customOutputs": [],
+          "actions": []
         }
       ],
-      "connectionLines": [],
+      "connectionLines": [
+        {
+          "objID": "5e4f7c81-9230-40b4-a978-8eae42f638ad",
+          "source": "7b28947e-870d-40b9-b051-fcf2a3db9a41",
+          "output": "@seqout",
+          "target": "278d55f5-0d7c-4144-ba5d-ef83a639a95d",
+          "input": "@seqin"
+        }
+      ],
       "localVariables": [],
       "componentGroups": [],
       "userProperties": [],
       "name": "Driver View",
-      "left": 0,
-      "top": 0,
-      "width": 800,
-      "height": 480,
-      "isUsedAsUserWidget": false,
-      "createAtStart": true,
-      "deleteOnScreenUnload": false
-    },
-    {
-      "objID": "204a3a87-8236-4f54-c580-380a511a4f07",
-      "components": [
-        {
-          "objID": "2063c226-2d4e-4d83-9c17-a1c347178940",
-          "type": "LVGLScreenWidget",
-          "left": 0,
-          "top": 0,
-          "width": 800,
-          "height": 480,
-          "customInputs": [],
-          "customOutputs": [],
-          "style": {
-            "objID": "89da0fe9-c895-4fef-eb87-cca426cd6f8a",
-            "useStyle": "default",
-            "conditionalStyles": [],
-            "childStyles": []
-          },
-          "timeline": [],
-          "eventHandlers": [],
-          "leftUnit": "px",
-          "topUnit": "px",
-          "widthUnit": "px",
-          "heightUnit": "px",
-          "children": [
-            {
-              "objID": "bcfd452e-dca1-42f7-c0b8-1e44689c6a7f",
-              "type": "LVGLLabelWidget",
-              "left": 313,
-              "top": 339,
-              "width": 177,
-              "height": 35,
-              "customInputs": [],
-              "customOutputs": [],
-              "style": {
-                "objID": "055c6d97-869c-48b4-b6a8-272f2e3badef",
-                "useStyle": "default",
-                "conditionalStyles": [],
-                "childStyles": []
-              },
-              "timeline": [],
-              "eventHandlers": [],
-              "leftUnit": "px",
-              "topUnit": "px",
-              "widthUnit": "content",
-              "heightUnit": "content",
-              "children": [],
-              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
-              "clickableFlagType": "literal",
-              "flagScrollbarMode": "",
-              "flagScrollDirection": "",
-              "scrollSnapX": "",
-              "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledStateType": "literal",
-              "states": "",
-              "useStyle": "text",
-              "localStyles": {
-                "objID": "3c7cb2ad-c316-48d5-a05b-8a1dceaa64bc",
-                "definition": {
-                  "MAIN": {
-                    "DEFAULT": {
-                      "text_font": "MONTSERRAT_32"
-                    }
-                  }
-                }
-              },
-              "group": "",
-              "groupIndex": 0,
-              "text": "LOADING...",
-              "textType": "literal",
-              "longMode": "WRAP",
-              "recolor": false
-            },
-            {
-              "objID": "251f9107-e231-4422-d92c-6051b7c96313",
-              "type": "LVGLImageWidget",
-              "left": 50,
-              "top": 128,
-              "width": 700,
-              "height": 200,
-              "customInputs": [],
-              "customOutputs": [],
-              "style": {
-                "objID": "b42991d9-2aef-4928-b5a4-5da7ffbd9a1b",
-                "useStyle": "default",
-                "conditionalStyles": [],
-                "childStyles": []
-              },
-              "timeline": [],
-              "eventHandlers": [],
-              "identifier": "logo",
-              "leftUnit": "px",
-              "topUnit": "px",
-              "widthUnit": "content",
-              "heightUnit": "content",
-              "children": [],
-              "widgetFlags": "ADV_HITTEST|CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
-              "clickableFlagType": "literal",
-              "flagScrollbarMode": "",
-              "flagScrollDirection": "",
-              "scrollSnapX": "",
-              "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledStateType": "literal",
-              "states": "",
-              "localStyles": {
-                "objID": "8af61ab1-945a-49a7-8f2b-91712807382b",
-                "definition": {
-                  "MAIN": {
-                    "DEFAULT": {
-                      "width": 700,
-                      "height": 200
-                    }
-                  }
-                }
-              },
-              "group": "",
-              "groupIndex": 0,
-              "image": "lart logo",
-              "setPivot": false,
-              "pivotX": 0,
-              "pivotY": 0,
-              "zoom": 160,
-              "angle": 0,
-              "innerAlign": "CENTER",
-              "sizeMode": "VIRTUAL",
-              "value": 0,
-              "valueType": "literal",
-              "previewValue": 0
-            },
-            {
-              "objID": "c6a7c13a-c9a0-437c-c2ee-f05ae0410a58",
-              "type": "LVGLLabelWidget",
-              "left": 221,
-              "top": 46,
-              "width": 358,
-              "height": 52,
-              "customInputs": [],
-              "customOutputs": [],
-              "style": {
-                "objID": "1c7f6d83-4f7a-446f-94a5-7afc74b112c1",
-                "useStyle": "default",
-                "conditionalStyles": [],
-                "childStyles": []
-              },
-              "timeline": [],
-              "eventHandlers": [],
-              "leftUnit": "px",
-              "topUnit": "px",
-              "widthUnit": "content",
-              "heightUnit": "content",
-              "children": [],
-              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
-              "clickableFlagType": "literal",
-              "flagScrollbarMode": "",
-              "flagScrollDirection": "",
-              "scrollSnapX": "",
-              "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledStateType": "literal",
-              "states": "",
-              "useStyle": "text",
-              "localStyles": {
-                "objID": "effb015b-9f71-4611-c429-d468326c036f",
-                "definition": {
-                  "MAIN": {
-                    "DEFAULT": {
-                      "text_font": "MONTSERRAT_48"
-                    }
-                  }
-                }
-              },
-              "group": "",
-              "groupIndex": 0,
-              "text": "DATA STATION",
-              "textType": "literal",
-              "longMode": "WRAP",
-              "recolor": false
-            },
-            {
-              "objID": "4a804204-f08f-4591-f391-46a25895bf54",
-              "type": "LVGLBarWidget",
-              "left": 75,
-              "top": 372,
-              "width": 694,
-              "height": 50,
-              "customInputs": [],
-              "customOutputs": [],
-              "style": {
-                "objID": "e5710cb1-a70a-44d6-b2cf-bd9573d067b6",
-                "useStyle": "default",
-                "conditionalStyles": [],
-                "childStyles": []
-              },
-              "timeline": [],
-              "eventHandlers": [],
-              "leftUnit": "px",
-              "topUnit": "px",
-              "widthUnit": "px",
-              "heightUnit": "px",
-              "children": [],
-              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
-              "clickableFlag": true,
-              "clickableFlagType": "literal",
-              "flagScrollbarMode": "",
-              "flagScrollDirection": "",
-              "scrollSnapX": "",
-              "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledStateType": "literal",
-              "states": "",
-              "useStyle": "bar",
-              "localStyles": {
-                "objID": "d2349407-5a76-495b-e7f7-7b9053d58250",
-                "definition": {
-                  "INDICATOR": {
-                    "DEFAULT": {
-                      "bg_color": "#000000",
-                      "bg_grad_dir": "HOR",
-                      "bg_grad_color": "#FFFFFF",
-                      "bg_grad_stop": 200
-                    }
-                  }
-                }
-              },
-              "group": "",
-              "groupIndex": 0,
-              "min": 0,
-              "minType": "literal",
-              "max": 100,
-              "maxType": "literal",
-              "mode": "NORMAL",
-              "value": "loading",
-              "valueType": "expression",
-              "previewValue": "25",
-              "valueStart": 0,
-              "valueStartType": "literal",
-              "previewValueStart": "0",
-              "enableAnimation": false
-            },
-            {
-              "objID": "e3a2ed0f-2dfb-45de-ca0a-a9cc0d56bade",
-              "type": "LVGLLabelWidget",
-              "left": 374,
-              "top": 439,
-              "width": 48,
-              "height": 35,
-              "customInputs": [],
-              "customOutputs": [],
-              "style": {
-                "objID": "3cc85686-7081-4b22-eaf9-227ca984c253",
-                "useStyle": "default",
-                "conditionalStyles": [],
-                "childStyles": []
-              },
-              "timeline": [],
-              "eventHandlers": [],
-              "leftUnit": "px",
-              "topUnit": "px",
-              "widthUnit": "content",
-              "heightUnit": "content",
-              "children": [],
-              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
-              "clickableFlagType": "literal",
-              "flagScrollbarMode": "",
-              "flagScrollDirection": "",
-              "scrollSnapX": "",
-              "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledStateType": "literal",
-              "states": "",
-              "useStyle": "text",
-              "localStyles": {
-                "objID": "0ba6f05f-3421-48b2-b029-bd17edb5c815",
-                "definition": {
-                  "MAIN": {
-                    "DEFAULT": {
-                      "text_font": "MONTSERRAT_32"
-                    }
-                  }
-                }
-              },
-              "group": "",
-              "groupIndex": 0,
-              "text": "loading+\"%\"",
-              "textType": "expression",
-              "longMode": "WRAP",
-              "recolor": false,
-              "previewValue": "0%"
-            }
-          ],
-          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
-          "hiddenFlagType": "literal",
-          "clickableFlag": true,
-          "clickableFlagType": "literal",
-          "checkedStateType": "literal",
-          "disabledStateType": "literal",
-          "states": "",
-          "localStyles": {
-            "objID": "c230186a-edb5-4e9b-bf44-9dd87b63586f",
-            "definition": {
-              "MAIN": {
-                "DEFAULT": {
-                  "bg_color": "#000000"
-                }
-              }
-            }
-          },
-          "groupIndex": 0
-        }
-      ],
-      "connectionLines": [],
-      "localVariables": [],
-      "componentGroups": [],
-      "userProperties": [],
-      "name": "Start Scene",
       "left": 0,
       "top": 0,
       "width": 800,
@@ -2384,10 +2227,10 @@
             {
               "objID": "ab8e4df8-93e4-4434-bab0-9f9a9f275bc7",
               "type": "LVGLLabelWidget",
-              "left": 126,
-              "top": 11,
-              "width": 599,
-              "height": 52,
+              "left": 70,
+              "top": 10,
+              "width": 668,
+              "height": 53,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -2419,7 +2262,7 @@
                 "definition": {
                   "MAIN": {
                     "DEFAULT": {
-                      "text_font": "MONTSERRAT_48"
+                      "text_font": "orbitron_bold_50"
                     }
                   }
                 }
@@ -2434,10 +2277,10 @@
             {
               "objID": "b8622d6b-30cf-4061-fd9b-dd460289bd60",
               "type": "LVGLLabelWidget",
-              "left": 105,
-              "top": 415,
-              "width": 598,
-              "height": 50,
+              "left": 125,
+              "top": 407,
+              "width": 572,
+              "height": 42,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -2469,9 +2312,9 @@
                 "definition": {
                   "MAIN": {
                     "DEFAULT": {
-                      "text_font": "MONTSERRAT_46",
                       "text_align": "CENTER",
-                      "text_color": "#13ff00"
+                      "text_color": "#13ff00",
+                      "text_font": "orbitron_bold_40"
                     }
                   }
                 }
@@ -2628,8 +2471,8 @@
               "type": "LVGLLabelWidget",
               "left": 738,
               "top": 424,
-              "width": 50,
-              "height": 27,
+              "width": 17,
+              "height": 23,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -2673,8 +2516,8 @@
               "type": "LVGLLabelWidget",
               "left": 11,
               "top": 426,
-              "width": 65,
-              "height": 27,
+              "width": 17,
+              "height": 23,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -2718,8 +2561,8 @@
               "type": "LVGLLabelWidget",
               "left": 738,
               "top": 63,
-              "width": 52,
-              "height": 27,
+              "width": 50,
+              "height": 23,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -2761,8 +2604,8 @@
               "type": "LVGLLabelWidget",
               "left": 24,
               "top": 65,
-              "width": 30,
-              "height": 27,
+              "width": 31,
+              "height": 23,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -2805,7 +2648,7 @@
               "left": 97,
               "top": 90,
               "width": 93,
-              "height": 151,
+              "height": 154,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -2826,10 +2669,10 @@
                 {
                   "objID": "c533ca0f-4181-4aef-980b-40723d835714",
                   "type": "LVGLLabelWidget",
-                  "left": 13,
+                  "left": 4,
                   "top": -16,
-                  "width": 66,
-                  "height": 44,
+                  "width": 82,
+                  "height": 46,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -2857,14 +2700,7 @@
                   "states": "",
                   "useStyle": "text",
                   "localStyles": {
-                    "objID": "81a06b5a-74bc-45db-ae01-ee3dc292f7d9",
-                    "definition": {
-                      "MAIN": {
-                        "DEFAULT": {
-                          "text_font": "MONTSERRAT_20"
-                        }
-                      }
-                    }
+                    "objID": "81a06b5a-74bc-45db-ae01-ee3dc292f7d9"
                   },
                   "group": "",
                   "groupIndex": 0,
@@ -3006,10 +2842,10 @@
                 {
                   "objID": "332db900-c843-4f4e-d940-b47ecf442e8f",
                   "type": "LVGLLabelWidget",
-                  "left": 17,
-                  "top": 108,
-                  "width": 17,
-                  "height": 18,
+                  "left": 14,
+                  "top": 106,
+                  "width": 25,
+                  "height": 23,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -3037,14 +2873,7 @@
                   "states": "",
                   "useStyle": "text",
                   "localStyles": {
-                    "objID": "89775e3e-4674-4294-e989-72678be18a01",
-                    "definition": {
-                      "MAIN": {
-                        "DEFAULT": {
-                          "text_font": "MONTSERRAT_16"
-                        }
-                      }
-                    }
+                    "objID": "89775e3e-4674-4294-e989-72678be18a01"
                   },
                   "group": "",
                   "groupIndex": 0,
@@ -3056,10 +2885,10 @@
                 {
                   "objID": "051311cf-1197-450d-90fc-401cb9ec42db",
                   "type": "LVGLLabelWidget",
-                  "left": 57,
-                  "top": 108,
-                  "width": 17,
-                  "height": 18,
+                  "left": 54,
+                  "top": 106,
+                  "width": 25,
+                  "height": 23,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -3087,14 +2916,7 @@
                   "states": "",
                   "useStyle": "text",
                   "localStyles": {
-                    "objID": "40473796-d115-409c-d97e-703eed082668",
-                    "definition": {
-                      "MAIN": {
-                        "DEFAULT": {
-                          "text_font": "MONTSERRAT_16"
-                        }
-                      }
-                    }
+                    "objID": "40473796-d115-409c-d97e-703eed082668"
                   },
                   "group": "",
                   "groupIndex": 0,
@@ -3139,172 +2961,12 @@
               "containerVersion": 1
             },
             {
-              "objID": "17d9858a-83aa-432c-8aca-dc5a3c2d967c",
-              "type": "LVGLContainerWidget",
-              "left": 106,
-              "top": 327,
-              "width": 609,
-              "height": 59,
-              "customInputs": [],
-              "customOutputs": [],
-              "style": {
-                "objID": "7fd484f1-3c63-4cbf-9096-eb3e0b9fa272",
-                "useStyle": "default",
-                "conditionalStyles": [],
-                "childStyles": []
-              },
-              "hiddenInEditor": false,
-              "timeline": [],
-              "eventHandlers": [],
-              "identifier": "infosContainer",
-              "leftUnit": "px",
-              "topUnit": "px",
-              "widthUnit": "px",
-              "heightUnit": "px",
-              "children": [
-                {
-                  "objID": "6d5e57cc-15ab-419b-874a-607b1485d07c",
-                  "type": "LVGLLabelWidget",
-                  "left": 17,
-                  "top": 6,
-                  "width": 642,
-                  "height": 24,
-                  "customInputs": [],
-                  "customOutputs": [],
-                  "style": {
-                    "objID": "b5d44056-dfee-4f3a-d3e5-29661e256611",
-                    "useStyle": "default",
-                    "conditionalStyles": [],
-                    "childStyles": []
-                  },
-                  "timeline": [],
-                  "eventHandlers": [],
-                  "leftUnit": "px",
-                  "topUnit": "px",
-                  "widthUnit": "content",
-                  "heightUnit": "content",
-                  "children": [],
-                  "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-                  "hiddenFlagType": "literal",
-                  "clickableFlagType": "literal",
-                  "flagScrollbarMode": "",
-                  "flagScrollDirection": "",
-                  "scrollSnapX": "",
-                  "scrollSnapY": "",
-                  "checkedStateType": "literal",
-                  "disabledStateType": "literal",
-                  "states": "",
-                  "useStyle": "text",
-                  "localStyles": {
-                    "objID": "88a6163f-097b-4109-989b-85c7e12a245f",
-                    "definition": {
-                      "MAIN": {
-                        "DEFAULT": {
-                          "text_font": "MONTSERRAT_22",
-                          "text_color": "#ff9400"
-                        }
-                      }
-                    }
-                  },
-                  "group": "",
-                  "groupIndex": 0,
-                  "text": "BUG BUG BUG INFO INFO INFOOOOOOOOOOOOOOOO",
-                  "textType": "literal",
-                  "longMode": "WRAP",
-                  "recolor": false
-                },
-                {
-                  "objID": "ab03c64a-d277-44ed-a6bd-60b463744170",
-                  "type": "LVGLLabelWidget",
-                  "left": 17,
-                  "top": -17,
-                  "width": 55,
-                  "height": 24,
-                  "customInputs": [],
-                  "customOutputs": [],
-                  "style": {
-                    "objID": "9fc8cbe0-3306-468b-958c-8695e659fe9b",
-                    "useStyle": "default",
-                    "conditionalStyles": [],
-                    "childStyles": []
-                  },
-                  "timeline": [],
-                  "eventHandlers": [],
-                  "leftUnit": "px",
-                  "topUnit": "px",
-                  "widthUnit": "content",
-                  "heightUnit": "content",
-                  "children": [],
-                  "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-                  "hiddenFlagType": "literal",
-                  "clickableFlagType": "literal",
-                  "flagScrollbarMode": "",
-                  "flagScrollDirection": "",
-                  "scrollSnapX": "",
-                  "scrollSnapY": "",
-                  "checkedStateType": "literal",
-                  "disabledStateType": "literal",
-                  "states": "",
-                  "useStyle": "text",
-                  "localStyles": {
-                    "objID": "85f4a723-fdd4-4ab6-bef3-24dfe2dd9615",
-                    "definition": {
-                      "MAIN": {
-                        "DEFAULT": {
-                          "text_font": "MONTSERRAT_22"
-                        }
-                      }
-                    }
-                  },
-                  "group": "",
-                  "groupIndex": 0,
-                  "text": "Infos",
-                  "textType": "literal",
-                  "longMode": "WRAP",
-                  "recolor": false
-                }
-              ],
-              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
-              "clickableFlag": true,
-              "clickableFlagType": "literal",
-              "flagScrollbarMode": "",
-              "flagScrollDirection": "",
-              "scrollSnapX": "",
-              "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledStateType": "literal",
-              "states": "",
-              "useStyle": "info_containers",
-              "localStyles": {
-                "objID": "2c4b798c-27a2-4247-ecb8-0a74babc47b5",
-                "definition": {
-                  "MAIN": {
-                    "DEFAULT": {
-                      "border_color": "#ffffff",
-                      "border_width": 2,
-                      "border_opa": 255,
-                      "radius": 10,
-                      "pad_top": 20,
-                      "pad_left": 0,
-                      "pad_right": 0,
-                      "pad_bottom": 0,
-                      "bg_opa": 0
-                    }
-                  }
-                }
-              },
-              "group": "",
-              "groupIndex": 0,
-              "containerVersion": 1
-            },
-            {
               "objID": "8cbbef76-00e1-4df5-be1f-8de9ff00b4fa",
               "type": "LVGLContainerWidget",
               "left": 219,
               "top": 90,
               "width": 93,
-              "height": 151,
+              "height": 154,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -3325,10 +2987,10 @@
                 {
                   "objID": "45cc62a2-e462-461d-8974-f8f4c5aa3ead",
                   "type": "LVGLLabelWidget",
-                  "left": 6,
+                  "left": 3,
                   "top": -16,
-                  "width": 78,
-                  "height": 44,
+                  "width": 84,
+                  "height": 46,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -3356,14 +3018,7 @@
                   "states": "",
                   "useStyle": "text",
                   "localStyles": {
-                    "objID": "793782a6-6a27-40b6-9b06-6bf6d1d16000",
-                    "definition": {
-                      "MAIN": {
-                        "DEFAULT": {
-                          "text_font": "MONTSERRAT_20"
-                        }
-                      }
-                    }
+                    "objID": "793782a6-6a27-40b6-9b06-6bf6d1d16000"
                   },
                   "group": "",
                   "groupIndex": 0,
@@ -3505,10 +3160,10 @@
                 {
                   "objID": "7f6f798c-82bd-4a82-aacf-d973a0a43daf",
                   "type": "LVGLLabelWidget",
-                  "left": 17,
-                  "top": 108,
-                  "width": 17,
-                  "height": 18,
+                  "left": 14,
+                  "top": 106,
+                  "width": 25,
+                  "height": 23,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -3536,14 +3191,7 @@
                   "states": "",
                   "useStyle": "text",
                   "localStyles": {
-                    "objID": "847bacc8-5c52-4ec3-97f3-5e646259567c",
-                    "definition": {
-                      "MAIN": {
-                        "DEFAULT": {
-                          "text_font": "MONTSERRAT_16"
-                        }
-                      }
-                    }
+                    "objID": "847bacc8-5c52-4ec3-97f3-5e646259567c"
                   },
                   "group": "",
                   "groupIndex": 0,
@@ -3555,10 +3203,10 @@
                 {
                   "objID": "51d5fd5e-7dda-4d75-a7fb-490690c6c886",
                   "type": "LVGLLabelWidget",
-                  "left": 57,
-                  "top": 108,
-                  "width": 17,
-                  "height": 18,
+                  "left": 54,
+                  "top": 106,
+                  "width": 25,
+                  "height": 23,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -3586,14 +3234,7 @@
                   "states": "",
                   "useStyle": "text",
                   "localStyles": {
-                    "objID": "1a1997c3-1bd5-438c-82ec-b37b03e1948d",
-                    "definition": {
-                      "MAIN": {
-                        "DEFAULT": {
-                          "text_font": "MONTSERRAT_16"
-                        }
-                      }
-                    }
+                    "objID": "1a1997c3-1bd5-438c-82ec-b37b03e1948d"
                   },
                   "group": "",
                   "groupIndex": 0,
@@ -3666,8 +3307,8 @@
                   "type": "LVGLLabelWidget",
                   "left": 7,
                   "top": 11,
-                  "width": 144,
-                  "height": 30,
+                  "width": 159,
+                  "height": 28,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -3700,7 +3341,7 @@
                     "definition": {
                       "MAIN": {
                         "DEFAULT": {
-                          "text_font": "MONTSERRAT_28"
+                          "text_font": "orbitron_bold_25"
                         }
                       }
                     }
@@ -3718,8 +3359,8 @@
                   "type": "LVGLLabelWidget",
                   "left": 6,
                   "top": -14,
-                  "width": 113,
-                  "height": 24,
+                  "width": 115,
+                  "height": 23,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -3747,14 +3388,7 @@
                   "states": "",
                   "useStyle": "text",
                   "localStyles": {
-                    "objID": "17e9db60-9fdb-47fe-c66f-8e37cbb087f0",
-                    "definition": {
-                      "MAIN": {
-                        "DEFAULT": {
-                          "text_font": "MONTSERRAT_22"
-                        }
-                      }
-                    }
+                    "objID": "17e9db60-9fdb-47fe-c66f-8e37cbb087f0"
                   },
                   "group": "",
                   "groupIndex": 0,
@@ -3768,8 +3402,8 @@
                   "type": "LVGLLabelWidget",
                   "left": 5,
                   "top": 42,
-                  "width": 144,
-                  "height": 30,
+                  "width": 159,
+                  "height": 28,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -3802,8 +3436,8 @@
                     "definition": {
                       "MAIN": {
                         "DEFAULT": {
-                          "text_font": "MONTSERRAT_28",
-                          "text_color": "#fff500"
+                          "text_color": "#fff500",
+                          "text_font": "orbitron_bold_25"
                         }
                       }
                     }
@@ -3821,8 +3455,8 @@
                   "type": "LVGLLabelWidget",
                   "left": 265,
                   "top": 18,
-                  "width": 18,
-                  "height": 52,
+                  "width": 20,
+                  "height": 53,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -3855,7 +3489,7 @@
                       "MAIN": {
                         "DEFAULT": {
                           "text_color": "#fefefe",
-                          "text_font": "MONTSERRAT_48"
+                          "text_font": "orbitron_bold_50"
                         }
                       }
                     }
@@ -3872,8 +3506,8 @@
                   "type": "LVGLLabelWidget",
                   "left": 197,
                   "top": -14,
-                  "width": 40,
-                  "height": 24,
+                  "width": 39,
+                  "height": 23,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -3901,14 +3535,7 @@
                   "states": "",
                   "useStyle": "text",
                   "localStyles": {
-                    "objID": "6a067954-761f-4f38-9d86-973845f2c2dc",
-                    "definition": {
-                      "MAIN": {
-                        "DEFAULT": {
-                          "text_font": "MONTSERRAT_22"
-                        }
-                      }
-                    }
+                    "objID": "6a067954-761f-4f38-9d86-973845f2c2dc"
                   },
                   "group": "",
                   "groupIndex": 0,
@@ -3922,8 +3549,8 @@
                   "type": "LVGLLabelWidget",
                   "left": 197,
                   "top": 14,
-                  "width": 46,
-                  "height": 24,
+                  "width": 48,
+                  "height": 23,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -3955,7 +3582,6 @@
                     "definition": {
                       "MAIN": {
                         "DEFAULT": {
-                          "text_font": "MONTSERRAT_22",
                           "text_color": "#ff0000"
                         }
                       }
@@ -3973,8 +3599,8 @@
                   "type": "LVGLLabelWidget",
                   "left": 253,
                   "top": -14,
-                  "width": 41,
-                  "height": 24,
+                  "width": 43,
+                  "height": 23,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -4002,14 +3628,7 @@
                   "states": "",
                   "useStyle": "text",
                   "localStyles": {
-                    "objID": "ae7beac4-bd01-4cdb-e02e-6cf7fd618270",
-                    "definition": {
-                      "MAIN": {
-                        "DEFAULT": {
-                          "text_font": "MONTSERRAT_22"
-                        }
-                      }
-                    }
+                    "objID": "ae7beac4-bd01-4cdb-e02e-6cf7fd618270"
                   },
                   "group": "",
                   "groupIndex": 0,
@@ -4057,9 +3676,9 @@
               "objID": "fc815b11-da25-4b19-f818-bec30d52e9f1",
               "type": "LVGLContainerWidget",
               "left": 404,
-              "top": 75,
+              "top": 65,
               "width": 320,
-              "height": 121,
+              "height": 143,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -4079,10 +3698,10 @@
                 {
                   "objID": "d8b41668-1d74-4319-8768-7c9a107a1d78",
                   "type": "LVGLLabelWidget",
-                  "left": 36,
-                  "top": 16,
+                  "left": 22,
+                  "top": 6,
                   "width": 119,
-                  "height": 24,
+                  "height": 23,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -4111,14 +3730,7 @@
                   "states": "",
                   "useStyle": "text",
                   "localStyles": {
-                    "objID": "a6b4aa8c-c694-4ebd-b3c0-5f399c28d94c",
-                    "definition": {
-                      "MAIN": {
-                        "DEFAULT": {
-                          "text_font": "MONTSERRAT_22"
-                        }
-                      }
-                    }
+                    "objID": "a6b4aa8c-c694-4ebd-b3c0-5f399c28d94c"
                   },
                   "group": "",
                   "groupIndex": 0,
@@ -4130,9 +3742,9 @@
                 {
                   "objID": "50f57761-09bd-49fa-ad65-e840fea550f8",
                   "type": "LVGLLabelWidget",
-                  "left": 186,
-                  "top": 64,
-                  "width": 84,
+                  "left": 215,
+                  "top": 72,
+                  "width": 89,
                   "height": 33,
                   "customInputs": [],
                   "customOutputs": [],
@@ -4166,7 +3778,7 @@
                     "definition": {
                       "MAIN": {
                         "DEFAULT": {
-                          "text_font": "MONTSERRAT_30"
+                          "text_font": "orbitron_bold_30"
                         }
                       }
                     }
@@ -4181,10 +3793,10 @@
                 {
                   "objID": "1c53885f-13f1-481c-cb1e-952b20df8d1b",
                   "type": "LVGLLabelWidget",
-                  "left": -44,
-                  "top": 17,
-                  "width": 77,
-                  "height": 52,
+                  "left": -52,
+                  "top": 15,
+                  "width": 83,
+                  "height": 106,
                   "customInputs": [],
                   "customOutputs": [],
                   "style": {
@@ -4212,7 +3824,7 @@
                     "definition": {
                       "MAIN": {
                         "DEFAULT": {
-                          "text_font": "MONTSERRAT_48",
+                          "text_font": "ORBITER_BOLD_100",
                           "text_align": "CENTER",
                           "bg_color": "#ffffff",
                           "text_color": "#ffffff",
@@ -4265,8 +3877,8 @@
               "type": "LVGLLabelWidget",
               "left": 106,
               "top": 268,
-              "width": 275,
-              "height": 52,
+              "width": 256,
+              "height": 33,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -4299,18 +3911,19 @@
                 "definition": {
                   "MAIN": {
                     "DEFAULT": {
-                      "text_font": "MONTSERRAT_48",
-                      "text_color": "#f7ff00"
+                      "text_color": "#f7ff00",
+                      "text_font": "orbitron_bold_30"
                     }
                   }
                 }
               },
               "group": "",
               "groupIndex": 0,
-              "text": "STATE: OFF",
-              "textType": "literal",
+              "text": "\"State\"+state",
+              "textType": "expression",
               "longMode": "WRAP",
-              "recolor": false
+              "recolor": false,
+              "previewValue": ""
             }
           ],
           "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
@@ -4332,9 +3945,42 @@
             }
           },
           "groupIndex": 0
+        },
+        {
+          "objID": "5a7dc5d5-a546-4d34-d1a2-7a76f8b84182",
+          "type": "CallActionActionComponent",
+          "left": 328,
+          "top": -201,
+          "width": 165,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": [],
+          "action": "screen_changer_action",
+          "userPropertyValues": {
+            "objID": "45ccc538-ea1c-4221-d335-e07427b49742",
+            "values": {}
+          }
+        },
+        {
+          "objID": "158bb59d-09d5-49a3-e0f4-19e3979cb167",
+          "type": "StartActionComponent",
+          "left": 184,
+          "top": -201,
+          "width": 87,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": []
         }
       ],
-      "connectionLines": [],
+      "connectionLines": [
+        {
+          "objID": "f350b2e8-b08e-4a37-8881-9740d34be78c",
+          "source": "158bb59d-09d5-49a3-e0f4-19e3979cb167",
+          "output": "@seqout",
+          "target": "5a7dc5d5-a546-4d34-d1a2-7a76f8b84182",
+          "input": "@seqin"
+        }
+      ],
       "localVariables": [],
       "componentGroups": [],
       "userProperties": [],
@@ -4377,8 +4023,8 @@
               "type": "LVGLLabelWidget",
               "left": 18,
               "top": 13,
-              "width": 121,
-              "height": 35,
+              "width": 321,
+              "height": 28,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -4411,14 +4057,71 @@
                     "DEFAULT": {
                       "text_color": "#ff9400",
                       "text_opa": 255,
-                      "text_font": "MONTSERRAT_32"
+                      "text_font": "orbitron_bold_25"
                     }
                   }
                 }
               },
               "group": "",
               "groupIndex": 0,
-              "text": "DEBUG",
+              "text": "DEBUG AUTONOMOUS",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            },
+            {
+              "objID": "0961f028-367b-4c08-c36a-9ef78905bc80",
+              "type": "LVGLLabelWidget",
+              "left": 10,
+              "top": 62,
+              "width": 780,
+              "height": 400,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "ef55e207-e979-44d1-8698-4471e9531631",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "debugText",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "2ac7530f-ee5f-459a-a285-e3b5c22dee41",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 780,
+                      "height": 400,
+                      "text_align": "LEFT",
+                      "text_font": "MONTSERRAT_20",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400"
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": "[00:42.184] CAN_ID: 0x0A2 | INVERTER_L_STATUS: RUNNING\n[00:42.186] CAN_ID: 0x0A3 | INVERTER_R_STATUS: RUNNING\n[00:42.189] AMS_STATE: AS_READY\n[00:42.192] VCU_STATE: RTD_ACTIVE\n[00:42.195] SENSOR_APPS1: 1.42V | SENSOR_APPS2: 0.71V | DEV: 0.02%\n[00:42.198] SENSOR_BSE: 0.85V | BRAKE_PRES: 12.4 BAR\n[00:42.201] HV_BUS: 584.2V | BATT_CURRENT: -142.8A\n[00:42.204] BATT_TEMP_MAX: 42.1°C | BATT_TEMP_MIN: 38.4°C\n[00:42.207] MOTOR_RPM_L: 8420 | MOTOR_RPM_R: 8418\n[00:42.210] TORQUE_REQ: 45.0 Nm | TORQUE_ACT: 44.8 Nm\n[00:42.215] [DEBUG] TV_RATIO: 1.02 (L: 0.49 | R: 0.51)\n[00:42.220] [WARNING] INV_L_TEMP: 68.4°C (Approach Derating Limit)",
               "textType": "literal",
               "longMode": "WRAP",
               "recolor": false
@@ -4442,9 +4145,42 @@
             }
           },
           "groupIndex": 0
+        },
+        {
+          "objID": "145beced-4a57-4e02-897e-742106cbf83f",
+          "type": "CallActionActionComponent",
+          "left": 370,
+          "top": -270,
+          "width": 165,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": [],
+          "action": "screen_changer_action",
+          "userPropertyValues": {
+            "objID": "477f96de-e137-4ffe-a136-69feecd5a7bb",
+            "values": {}
+          }
+        },
+        {
+          "objID": "89182451-6d39-41fe-9ccf-ae5d2fd8f1b7",
+          "type": "StartActionComponent",
+          "left": 226,
+          "top": -270,
+          "width": 87,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": []
         }
       ],
-      "connectionLines": [],
+      "connectionLines": [
+        {
+          "objID": "73e91cec-2297-4d61-c1e7-e76ea5cebc35",
+          "source": "89182451-6d39-41fe-9ccf-ae5d2fd8f1b7",
+          "output": "@seqout",
+          "target": "145beced-4a57-4e02-897e-742106cbf83f",
+          "input": "@seqin"
+        }
+      ],
       "localVariables": [],
       "componentGroups": [],
       "userProperties": [],
@@ -4481,7 +4217,116 @@
           "topUnit": "px",
           "widthUnit": "px",
           "heightUnit": "px",
-          "children": [],
+          "children": [
+            {
+              "objID": "dcfd40ce-13c6-4d41-d923-700cc5c40d5f",
+              "type": "LVGLLabelWidget",
+              "left": 19,
+              "top": 10,
+              "width": 103,
+              "height": 28,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "4f4115e4-1e79-402e-d456-27eb73931dbd",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "localStyles": {
+                "objID": "11ed3ab4-1ed7-4c24-88ce-03cb4d0c373c",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "text_color": "#ff9400",
+                      "text_opa": 255,
+                      "text_font": "orbitron_bold_25"
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": "DEBUG",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            },
+            {
+              "objID": "2a85b825-c3fe-4cb9-dab2-0366a91208dd",
+              "type": "LVGLLabelWidget",
+              "left": 10,
+              "top": 49,
+              "width": 780,
+              "height": 400,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "aba6d3c0-ca64-4c41-cdb8-dc2ba037f5a1",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "debugText_1",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "1c22ef56-4893-4b71-d9c6-d699918b3539",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 780,
+                      "height": 400,
+                      "text_align": "LEFT",
+                      "text_font": "MONTSERRAT_20",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400"
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": "[00:42.184] CAN_ID: 0x0A2 | INVERTER_L_STATUS: RUNNING\n[00:42.186] CAN_ID: 0x0A3 | INVERTER_R_STATUS: RUNNING\n[00:42.189] AMS_STATE: AS_READY\n[00:42.192] VCU_STATE: RTD_ACTIVE\n[00:42.195] SENSOR_APPS1: 1.42V | SENSOR_APPS2: 0.71V | DEV: 0.02%\n[00:42.198] SENSOR_BSE: 0.85V | BRAKE_PRES: 12.4 BAR\n[00:42.201] HV_BUS: 584.2V | BATT_CURRENT: -142.8A\n[00:42.204] BATT_TEMP_MAX: 42.1°C | BATT_TEMP_MIN: 38.4°C\n[00:42.207] MOTOR_RPM_L: 8420 | MOTOR_RPM_R: 8418\n[00:42.210] TORQUE_REQ: 45.0 Nm | TORQUE_ACT: 44.8 Nm\n[00:42.215] [DEBUG] TV_RATIO: 1.02 (L: 0.49 | R: 0.51)\n[00:42.220] [WARNING] INV_L_TEMP: 68.4°C (Approach Derating Limit)",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
           "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
           "hiddenFlagType": "literal",
           "clickableFlag": true,
@@ -4500,9 +4345,42 @@
             }
           },
           "groupIndex": 0
+        },
+        {
+          "objID": "d0c004d5-4d8a-488a-b738-cd13467fedde",
+          "type": "CallActionActionComponent",
+          "left": 354,
+          "top": -190,
+          "width": 165,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": [],
+          "action": "screen_changer_action",
+          "userPropertyValues": {
+            "objID": "33271791-4e4f-4a04-e5c3-96187508003f",
+            "values": {}
+          }
+        },
+        {
+          "objID": "3064189a-e9d3-4065-b826-8ab6622add75",
+          "type": "StartActionComponent",
+          "left": 210,
+          "top": -190,
+          "width": 87,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": []
         }
       ],
-      "connectionLines": [],
+      "connectionLines": [
+        {
+          "objID": "f02312e4-077e-42cd-b616-b4001e8cce0c",
+          "source": "3064189a-e9d3-4065-b826-8ab6622add75",
+          "output": "@seqout",
+          "target": "d0c004d5-4d8a-488a-b738-cd13467fedde",
+          "input": "@seqin"
+        }
+      ],
       "localVariables": [],
       "componentGroups": [],
       "userProperties": [],
@@ -4547,7 +4425,7 @@
           "definition": {
             "MAIN": {
               "DEFAULT": {
-                "text_font": "MONTSERRAT_24",
+                "text_font": "orbitron_bold_20",
                 "text_align": "CENTER",
                 "text_color": "#fefefe",
                 "text_decor": "NONE"
@@ -4602,7 +4480,7 @@
         "size": 20
       },
       "embeddedFontFile": "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Av4AOgL+ADoC/gA6Av4AOgLTADoDPgA4A1MAOQDWACoA1gAkANb/2gDW/8YA1gAEAwwABAMdADkDCwA5A6AAOANAADgDQAA4AzwANgM8ADYDPAA2AzwANgM8ADYDPAA2BV4ANQMXADgDdAA2AzkAOAM6ADUDOgA1AvcAFAM8ADYDPAA2AzwANgM8ADYDPAA2A+sAIwSbACMDLAAuAyYABAMmAAQDJgAEAzUAMwM1ADMDBgABAzYANAMyADEChQADAz0ANgSDADYDOwA2AzgANgNkADYDOgA2AywALgMGADYEhABGAz0ANgM4ADMDMgAxAwYANgMGAAAEdv//AzsANQSDADUCtgA0ArYANAK2ADQCtgA0ArYANAK2ADQCtgA0BJoANAKbADYCtwAzArcAMwKbABcCtAAzArQAMwK0ADMCtAAzArQAMwGuADUCqwApApwANgDeADQA1gAqANYAIgDW/9gA1v/EANYAAgDv/0UChgA2AUYANAPSADYCuAA2ArgANgK0ADMCtAAzArQAMwK0ADMCtAAzArQAMwSZADQCmAA2ApgAFAIKADQCrgAwAq4AMANBADkBtgA1ArcANQK3ADUCtwA1ArcANQK3ADUDFgAVBCMAIwK0AC4CrQAqAq0AKgKtACoCugA2AroANgK1ADMCnQA2ArkANQPSADUCugA2ArQAMwLVADUCvAA2ArUAMwLBADYCfgA2Ak8ANgKyADMCzAA3ANYANgKRAAUCqgA2ApMANgM4ADYCxAA2ArQAMwKUADYDAgAzArwANgKvADEChAAWArcANQMhABUENwAiArQALgKwABICugA2A0IAOQGHAAEDPgA5AzoANQLaAAYDPgA5AzQAOQKUAAMDQgA5AzwANQMvADEC0wAJAwMALgMQAAwA4wA2AOMANgDtADYA8wAzAj4ANgDcADoA0gA1AqYAHwKjABMBcwB3AfwAGQMdACACCQAGAggABQKbABsBIQA0ASMAOAEhABcBIQAzARMANgEUADMCBQA7AsQANgM2ADYDPAA2AbIALgGyADYA2gAiANgANgGFACsA8wA7ATIAAAEyAAADHwAjAnwAIQMUACIC3gAnAcAAEQIFADsCIgA1AgQACgJ+ADsB2wA7AdkABQGUABgDxgAwAzQANgOqADUDQQA4AbcALQDWADYAAP9ZAAD/vgAA/5cAAP+3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AHIAZwAvAE8ARgBMAFQAaABpAHMAIABGAG8AbgB0ACAAUwBvAGYAdAB3AGEAcgBlACAAaQBzACAAbABpAGMAZQBuAHMAZQBkACAAdQBuAGQAZQByACAAdABoAGUAIABTAEkATAAgAE8AcABlAG4AIABGAG8AbgB0ACAATABpAGMAZQBuAHMAZQAsACAAVgBlAHIAcwBpAG8AbgAgADEALgAxAC4AIABUAGgAaQBzACAAbABpAGMAZQBuAHMAZQAgAGkAcwAgAGEAdgBhAGkAbABhAGIAbABlACAAdwBpAHQAaAAgAGEAIABGAEEAUQAgAGEAdAA6ACAAaAB0AHQAcAA6AC8ALwBzAGMAcgBpAHAAdABzAC4AcwBpAGwALgBvAHIAZwAvAE8ARgBMAGgAdAB0AHAAOgAvAC8AbQBhAHQAdAAuAGMAYwAvAGgAdAB0AHAAcwA6AC8ALwB3AHcAdwAuAHQAaABlAGwAZQBhAGcAdQBlAG8AZgBtAG8AdgBlAGEAYgBsAGUAdAB5AHAAZQAuAGMAbwBtAC8ATQBhAHQAdAAgAE0AYwBJAG4AZQByAG4AZQB5AFQAaABlACAATABlAGEAZwB1AGUAIABvAGYAIABNAG8AdgBlAGEAYgBsAGUAIABUAHkAcABlAE8AcgBiAGkAdAByAG8AbgAtAEIAbwBsAGQAVgBlAHIAcwBpAG8AbgAgADIALgAwADAAMQBPAHIAYgBpAHQAcgBvAG4AIABCAG8AbABkADIALgAwADAAMQA7AE4ATwBOAEUAOwBPAHIAYgBpAHQAcgBvAG4ALQBCAG8AbABkAEIAbwBsAGQATwByAGIAaQB0AHIAbwBuAEMAbwBwAHkAcgBpAGcAaAB0ACAAMgAwADEAOAAgAFQAaABlACAATwByAGIAaQB0AHIAbwBuACAAUAByAG8AagBlAGMAdAAgAEEAdQB0AGgAbwByAHMAIAAoAGgAdAB0AHAAcwA6AC8ALwBnAGkAdABoAHUAYgAuAGMAbwBtAC8AdABoAGUAbABlAGEAZwB1AGUAbwBmAC8AbwByAGIAaQB0AHIAbwBuACkALAAgAHcAaQB0AGgAIABSAGUAcwBlAHIAdgBlAGQAIABGAG8AbgB0ACAATgBhAG0AZQA6ACAAIgBPAHIAYgBpAHQAcgBvAG4AIgAuAAEAAAAKACYAQAAC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",
-      "bpp": 8,
+      "bpp": 4,
       "threshold": 128,
       "height": 23,
       "ascent": 18,
@@ -4630,7 +4508,7 @@
         "filePath": "fonts/Orbitron-Bold.ttf",
         "size": 100
       },
-      "bpp": 8,
+      "bpp": 4,
       "threshold": 128,
       "height": 106,
       "ascent": 83,
@@ -4659,7 +4537,7 @@
         "filePath": "fonts/Orbitron-Bold.ttf",
         "size": 30
       },
-      "bpp": 8,
+      "bpp": 4,
       "threshold": 128,
       "height": 33,
       "ascent": 26,
@@ -4688,7 +4566,7 @@
         "filePath": "fonts/Orbitron-Bold.ttf",
         "size": 50
       },
-      "bpp": 8,
+      "bpp": 4,
       "threshold": 128,
       "height": 53,
       "ascent": 42,
@@ -4717,7 +4595,7 @@
         "filePath": "fonts/Orbitron-Bold.ttf",
         "size": 15
       },
-      "bpp": 8,
+      "bpp": 4,
       "threshold": 128,
       "height": 17,
       "ascent": 13,
@@ -4747,7 +4625,7 @@
         "size": 15
       },
       "embeddedFontFile": "AAEAAAAQAQAABAAAR0RFRgWoBcgAAAIoAAAAgkdQT1MTUu73AAAYoAAACfpHU1VCSOUBrgAAB2wAAALqT1MvMmAwzEoAAAHIAAAAYFNUQVR5kGzdAAABYAAAAC5jbWFw08F8iwAABMQAAAKmZ2FzcAAAABAAAAEUAAAACGdseWYWd8F6AAAinAAAPe5oZWFkCsWkvQAAAZAAAAA2aGhlYQiBA5AAAAE8AAAAJGhtdHiawCxlAAAKWAAABCRsb2Nh8rfivgAAAqwAAAIWbWF4cAEWAJgAAAEcAAAAIG5hbWWrpN8GAAASuAAABehwb3N09e1qvwAADnwAAAQ7cHJlcGgGjIUAAAEMAAAAB7gB/4WwBI0AAAEAAf//AA8AAQAAAQoAUwAFAEMABAABAAAAAAAAAAAAAAAAAAIAAQABAAAD8/8NAAAFX/9F/hsFRgABAAAAAAAAAAAAAAAAAAABCAABAAEACAABAAAAFAABAAAAHAACd2dodAEAAAAAAgADAAAAAgEBAZAAAAK8AAAAAAABAAAAAgBCAfDQXF8PPPUAAwPoAAAAAMoDDTEAAAAA3R9Tk/9F/wYFRgPOAAAABgACAAAAAAAAAAQCngGQAAUAAAKKAlgAAABLAooCWAAAAV4AMgFcAAAAAAAAAAAAAAAAgAAAZxAAAEIAAAAAAAAAAE5PTkUAwAAg4AwD8/8NAAAD8wDzAAAAAQAAAAACRALQAAAAIAACAAEAAAAMAAAAAAAAAAIAEwABAAcAAQAKAAsAAQANABEAAQAVABkAAQAeACUAAQAoACgAAQAqACsAAQAtADEAAQA1ADkAAQBBAEIAAQBPAFUAAQBYAFkAAQBbAF8AAQBkAGgAAQBtAHQAAQB5AHoAAQB9AIEAAQCFAIkAAQDrAPMAAwAAAAAAFgBDAE8AWwBnAHMAfwCLALsBBQEoATMBYAF2AYIBjgGaAaYBugH1AgwCGAIkAjACPAJIAmoCiAKXArICyALUAwsDFwMjAy8DOwNHA30DqwPqBCEEbgR6BI0EsQS9BMkE1QThBPYFFAU2BU4FWgVmBXwFiAWiBdUF7AYEBjMGVwZyBrEG7wcuB2YHegebB9cIAwg7CFYIagiLCKcIzAj1CQEJDQkZCSUJMQk9CX0JrAnQCdsKCgo9CkkKVQphCm0KiArJCuoK/QsKCxULIAsrCzYLVAtwC4gLsgvRC90MFAwgDCwMOAxEDFAMmQzJDPoNEg1gDWwNrQ3JDe0N+Q4FDhEOHQ4yDk8ObQ6ZDqUOsQ7HDtMPAg8oD0QPbw+kD90QBhBPEHMQoBC3EMsRBxEdESoRTRFoEXcRkhGpEeASDhJMEoASzhLhEwUTGhM3E1UTaxOBE7gTyRQHFFQUcRSrFOkVAhVdFaEVzxXrFf8WNBZAFlAWYxZ6FpEWpBa3FusXIBc1F1IXgxeUF6YX4BgCGCQYThh4GIkYmhinGLQYwRjOGOkZBBkVGSYZOBlFGUUZRRl7GawaDxo+GlIaXxp9Gpcaqxq9GtEa8BtRG6Qb8hwnHFwcaRx8HIgclhykHLYcyBz2HQ8dHB0lHS0dNh0+HUcdUB1sHXQdfR2KHZMdnx2zHekeFx5QHmwejR6uHsIe3B73AAAAAAACAAAAAwAAABQAAwABAAAAFAAEApIAAABOAEAABQAOAC8AOQBdAH4AowCoALAAtAC2ALgAzwDXAN0A7wD3AP0A/wExAVMBYQF4AX4CxwLcAwMDCAMKAwwDJyAUIBkgHSAiICYgrCIS4APgDP//AAAAIAAwADoAXwCgAKgArwC0ALYAuAC/ANEA2QDfAPEA+QD/ATEBUgFgAXgBfQLGAtgDAAMHAwoDDAMnIBMgGCAcICIgJiCsIhLgAuAF//8AAAB6AAAAAAAAAEwAAABDADIARgAAAAAAAAAAAAAAAP+I/zMAAAAA/r8AAP4yAAAAAAAA/ef95P3M4Lvgu+C14J/gluAt3swg/iD9AAEATgAAAGoAsADuAAAA8gAAAAAAAADuAQ4BGgEiAUIBTgAAAAABUgFUAAABVAAAAVQBXAFiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA1wC9ANUAwwDbAOUA5wDWAMcAyADCAN0AuQDNALgAxAC6ALsA4wDhAOIAvwDmAAEACQAKAAwADQASABMAFAAVABoAGwAcAB0AHgAgACcAKAApACoALAAtADIAMwA0ADUAOADLAMUAzADQAPYATwBXAFgAWgBbAGAAYQBiAGMAaQBqAGsAbABtAG8AdgB3AHgAeQB8AH0AggCDAIQAhQCIAMkA6gDKAOQA2AC+ANoA3AD9AOkAwAAFAAIAAwAHAAQABgAIAAsAEQAOAA8AEAAZABYAFwAYAB8AJAAhACIAJQAjAN8AMQAuAC8AMAA2AHsAUwBQAFEAVQBSAFQAVgBZAF8AXABdAF4AaABlAGYAZwBuAHMAcABxAHQAcgDgAIEAfgB/AIAAhgAmAHUAKwB6ADkAiQD6APUA+wD/APwA7QDuAO8A8gDsAOsAAAABAAAACgA8AIgAAkRGTFQAJGxhdG4ADgAEAAAAAP//AAYAAAABAAIAAwAEAAUABAAAAAD//wACAAAAAgAGYWFsdABEc2FsdAA+c21jcAA4c3MwMQAyc3MwMgAsc3MwMwAmAAAAAQAGAAAAAQAFAAAAAQAEAAAAAQACAAAAAQADAAAAAgAAAAEABwG4AUgAzgBkAEYAMgAQAAEAAAABAAgAAgAOAAQAtAC1ALYAtwABAAQArACuALEAswABAAAAAQAIAAIAIAADAEoASwBMAAEAAAABAAgAAgAMAAMAOgBFAEYAAQADAAEAMgAzAAEAAAABAAgAAgAyABYAOwA8AD0APgA/AEAAQQBCAEMARABNAE4ARwBIAEkAigCLAIwAjQCOAI8AxgABABYACgAVABoAGwAdAB4AIAAoACkAKgAyADMANAA1ADgATwBqAIIAgwCEAIgAvwABAAAAAQAIAAIAOgAaAJAAkQCSAJMAlACVAJYAlwCYAJkAmgCbAJwAnQCeAJ8AoAChAKIAowCkAKUApgCnAKgAqQABABoATwBXAFgAWgBbAGAAYQBiAGMAaQBqAGsAbABtAG8AdgB3AHgAeQB8AH0AggCDAIQAhQCIAAMAAAABAAgAAQAYAAkAYgBaAFIATABGAEAAOgA0AC4AAQAJAAEAMgAzAE8AagCCAIMAhACIAAIAjwCpAAIAjgCnAAIAjQCmAAIAjAClAAIAiwCaAAIAigCQAAMARgBMAE4AAwBFAEsATQACADoASgABAAAAAQAIAAIAUgAmADsAPAA9AD4APwBAAEEAQgBDAEQARwBIAEkAkQCSAJMAlACVAJYAlwCYAJkAmwCcAJ0AngCfAKAAoQCiAKMApACoALQAtQC2ALcAxgABACYACgAVABoAGwAdAB4AIAAoACkAKgA0ADUAOABXAFgAWgBbAGAAYQBiAGMAaQBrAGwAbQBvAHYAdwB4AHkAfAB9AIUArACuALEAswC/AAAB9AAUA0QAOgNEADoDRAA6A0QAOgNEADoDRAA6A0QAOgVfADYDQAA7AzYAOAM2ADgDQgA6Av4AOgL+ADoC/gA6Av4AOgL+ADoC0wA6Az4AOANTADkA1gBCANYAPgDW//UA1v/oANYAKQMMAAQDHQA5AwsAOQOgADgDQAA4A0AAOAM8ADYDPAA2AzwANgM8ADYDPAA2AzwANgVeADUDFwA4A3QANgM5ADgDNgAzAzYAMwL3ABQDPAA2AzwANgM8ADYDPAA2AzwANgPrACMEmwAjAywALgMmACADJgAgAyYAIAM1ADMDNQAzAwYABAM2ADQDMgAxAoUAAwM9ADYEgwA2AzsANgM4ADYDZAA2AzoANgMsAC4DBgA2BJMAMQM9ADYDOAAzAzIAMQMGADYDBgAABJAAAAM7ADUEgwA1ArYANAK2ADQCtgA0ArYANAK2ADQCtgA0ArYANASaADUCmwA2ArcAMwK3ADMCmwAXArQAMwK0ADMCtAAzArQAMwK0ADMBlwA1AqsAKQKcADYA0AA0ANYAQgDWADwA1v/zANb/5gDWACcA7/9FAoYANgEuADQD0gA2ArgANgK4ADYCtAAzArQAMwK0ADMCtAAzArQAMwK0ADMEmQA0ApgANgKYABQCAAA0Aq4AMAKuADADQQA5AZoANQK3ADUCtwA1ArcANQK3ADUCtwA1AxYAFQQvACMCtAAuAq0AKgKtACoCrQAqAroANgK6ADYCtQAzAp0ANgK5ADUD0gA1AroANgK0ADMC1QA1ArwANgK1ADMCwQA2An4ANgJPADYCsgAzAssANgDWADYCkQAFAqoANgKTADYDOAA2AsUANgK0ADMClAA2AwIAMwK8ADYCrwAxAoQAFgK3ADUDIQAVBDYAIgK0AC4CsAASAroANgNCADkBhwABAz4AOQM6ADUC2gAGAz4AOQM0ADkClAADA0IAOQM8ADMDLwAxAtMACQMDAC4DEAAMANYANgDBADYA1gA2AMEAMwI+ADYA3AA6ANIANQKmAB8CowATAXMAkAHrABkDHQAgAgkABgIIAAUCmwAbARUANAEWADgBIQAXASEAMwETADYBFAAzAgUAOwLEADYDNgA2AzwANgFrAC8BawA2AKgAIQCmADYBdAA7AOAAOwEQAAABEAAAAx8AIwJ8ACEDFAAiAt4AJwGxABECBQA7AiIANQH8ABICfgA7AdsAOwHZAAUBlAAYA8YAMANAADYDqgA1A0EAOAG3AC0A1gA2AAD/ewAA/9YAAP+8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AEYATABUAGgAaQBzACAARgBvAG4AdAAgAFMAbwBmAHQAdwBhAHIAZQAgAGkAcwAgAGwAaQBjAGUAbgBzAGUAZAAgAHUAbgBkAGUAcgAgAHQAaABlACAAUwBJAEwAIABPAHAAZQBuACAARgBvAG4AdAAgAEwAaQBjAGUAbgBzAGUALAAgAFYAZQByAHMAaQBvAG4AIAAxAC4AMQAuACAAVABoAGkAcwAgAGwAaQBjAGUAbgBzAGUAIABpAHMAIABhAHYAYQBpAGwAYQBiAGwAZQAgAHcAaQB0AGgAIABhACAARgBBAFEAIABhAHQAOgAgAGgAdAB0AHAAOgAvAC8AcwBjAHIAaQBwAHQAcwAuAHMAaQBsAC4AbwByAGcALwBPAEYATABoAHQAdABwADoALwAvAG0AYQB0AHQALgBjAGMALwBoAHQAdABwAHMAOgAvAC8AdwB3AHcALgB0AGgAZQBsAGUAYQBnAHUAZQBvAGYAbQBvAHYAZQBhAGIAbABlAHQAeQBwAGUALgBjAG8AbQAvAE0AYQB0AHQAIABNAGMASQBuAGUAcgBuAGUAeQBUAGgAZQAgAEwAZQBhAGcAdQBlACAAbwBmACAATQBvAHYAZQBhAGIAbABlACAAVAB5AHAAZQBPAHIAYgBpAHQAcgBvAG4ALQBSAGUAZwB1AGwAYQByAFYAZQByAHMAaQBvAG4AIAAyAC4AMAAwADEATwByAGIAaQB0AHIAbwBuACAAUgBlAGcAdQBsAGEAcgAyAC4AMAAwADEAOwBOAE8ATgBFADsATwByAGIAaQB0AHIAbwBuAC0AUgBlAGcAdQBsAGEAcgBSAGUAZwB1AGwAYQByAE8AcgBiAGkAdAByAG8AbgBDAG8AcAB5AHIAaQBnAGgAdAAgADIAMAAxADgAIABUAGgAZQAgAE8AcgBiAGkAdAByAG8AbgAgAFAAcgBvAGoAZQBjAHQAIABBAHUAdABoAG8AcgBzACAAKABoAHQAdABwAHMAOgAvAC8AZwBpAHQAaAB1AGIALgBjAG8AbQAvAHQAaABlAGwAZQBhAGcAdQBlAG8AZgAvAG8AcgBiAGkAdAByAG8AbgApACwAIAB3AGkAdABoACAAUgBlAHMAZQByAHYAZQBkACAARgBvAG4AdAAgAE4AYQBtAGUAOgAgACIATwByAGIAaQB0AHIAbwBu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",
-      "bpp": 8,
+      "bpp": 4,
       "threshold": 128,
       "height": 17,
       "ascent": 13,
@@ -4775,7 +4653,7 @@
         "filePath": "fonts/Orbitron-Bold.ttf",
         "size": 25
       },
-      "bpp": 8,
+      "bpp": 4,
       "threshold": 128,
       "height": 28,
       "ascent": 22,
@@ -4804,7 +4682,7 @@
         "filePath": "fonts/Orbitron-Bold.ttf",
         "size": 40
       },
-      "bpp": 8,
+      "bpp": 4,
       "threshold": 128,
       "height": 42,
       "ascent": 33,

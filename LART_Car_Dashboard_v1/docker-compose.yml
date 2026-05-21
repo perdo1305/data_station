@@ -13,10 +13,9 @@ x-common-environment: &common-environment
 
 services:
   # Display container - builds and runs the dashboard UI
+  # Image is pre-built via: make build  (docker build -t lart-dashboard-ros2 ...)
   display:
-    build:
-      context: ..
-      dockerfile: LART_Car_Dashboard_v1/Dockerfile
+    image: lart-dashboard-ros2
     container_name: lart-dashboard-display
     hostname: display
     environment: *common-environment
@@ -51,9 +50,7 @@ services:
 
   # Publisher container - publishes the test speed topics
   publisher:
-    build:
-      context: ..
-      dockerfile: LART_Car_Dashboard_v1/Dockerfile
+    image: lart-dashboard-ros2
     container_name: lart-dashboard-publisher
     hostname: publisher
     environment: *common-environment
@@ -64,11 +61,40 @@ services:
     command: >
       bash -c "
         source /root/.bashrc &&
-        echo 'Publisher running...' &&
-        ros2 topic pub -r 10 /vehicle/speed_kph std_msgs/msg/Float32 '{data: 40.0}'
+        echo 'Publisher ready.' &&
+        sleep infinity
       "
     networks:
       - lart-ros2-network
+    stdin_open: true
+    tty: true
+    ipc: host
+
+  # Screen changer container - idle helper for publishing /dashboard/set_screen
+  # Usage: docker exec lart-dashboard-screen-changer bash -lc \
+  #   "ros2 topic pub -1 /dashboard/set_screen std_msgs/msg/Int32 '{data: 2}'"
+  # Screen IDs: 1=Driver View  2=Autonomous  3=Debug  4=Debug Autonomous
+  screen_changer:
+    image: lart-dashboard-ros2
+    container_name: lart-dashboard-screen-changer
+    hostname: screen_changer
+    environment: *common-environment
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${HOME}/.Xauthority:/root/.Xauthority:ro
+      - .:/root/lart_ws/LART_Car_Dashboard_v1
+    command: >
+      bash -c "
+        source /root/.bashrc &&
+        echo 'Screen changer ready.' &&
+        echo 'Usage: ros2 topic pub -1 /dashboard/set_screen std_msgs/msg/Int32 \"{data: N}\"' &&
+        echo '  1=Driver View  2=Autonomous  3=Debug  4=Debug Autonomous' &&
+        sleep infinity
+      "
+    networks:
+      - lart-ros2-network
+    depends_on:
+      - publisher
     stdin_open: true
     tty: true
     ipc: host

@@ -7,9 +7,22 @@
 #include <strings.h>
 #include <memory>
 
+#ifndef LART_UI_HAVE_RCLCPP
+#define LART_UI_HAVE_RCLCPP 0
+#endif
+
+#if defined(__GNUC__) || defined(__clang__)
+#define LART_WEAK __attribute__((weak))
+#else
+#define LART_WEAK
+#endif
+
+#if LART_UI_HAVE_RCLCPP
+
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp/executors/single_threaded_executor.hpp>
 #include <std_msgs/msg/float32.hpp>
+#include <std_msgs/msg/int32.hpp>
 
 #if !defined(LART_HAVE_DASHBOARD_STATE_MSG)
 #if defined(__has_include)
@@ -27,24 +40,22 @@
 #include <lart_msgs/msg/dashboard_state.hpp>
 #endif
 
-#if defined(__GNUC__) || defined(__clang__)
-#define LART_WEAK __attribute__((weak))
-#else
-#define LART_WEAK
-#endif
-
 namespace {
 constexpr const char *DEFAULT_SPEED_TOPIC = "/vehicle/speed_kph";
 constexpr const char *DEFAULT_DASHBOARD_STATE_TOPIC = "/vehicle/dashboard_state";
+constexpr const char *DEFAULT_SET_SCREEN_TOPIC = "/dashboard/set_screen";
 
 std::atomic<int> g_is_initialized(0);
 std::atomic<int> g_has_speed(0);
 std::atomic<float> g_latest_speed_kph(0.0f);
+std::atomic<int> g_screen_change_requested(0);
+std::atomic<int> g_requested_screen_id(0);
 
 bool g_did_init_rclcpp = false;
 std::shared_ptr<rclcpp::Node> g_node;
 std::shared_ptr<rclcpp::executors::SingleThreadedExecutor> g_exec;
 rclcpp::SubscriptionBase::SharedPtr g_sub;
+rclcpp::SubscriptionBase::SharedPtr g_sub_screen;
 
 bool env_is_true(const char *name, bool default_value) {
     const char *value = std::getenv(name);
@@ -79,8 +90,6 @@ LART_WEAK int ros2subscriber_init(void) {
     g_exec = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
     g_exec->add_node(g_node);
 
-    // Subscribe only to /vehicle/speed_kph Float32 topic
-    // If topic is not available, speed will default to 0
     const char *topic = env_or_default("LART_ROS2_SPEED_TOPIC", DEFAULT_SPEED_TOPIC);
 
     auto callback = [](const std_msgs::msg::Float32::SharedPtr msg) {
@@ -90,11 +99,27 @@ LART_WEAK int ros2subscriber_init(void) {
         }
     };
 
-    g_sub = g_node->create_subscription<std_msgs::msg::Float32>(
-        topic, rclcpp::QoS(10), callback);
+    g_sub = g_node->create_subscription<std_msgs::msg::Float32>(topic, rclcpp::QoS(10), callback);
+
+    // Screen change subscription
+    const char *screen_topic = env_or_default("LART_ROS2_SET_SCREEN_TOPIC", DEFAULT_SET_SCREEN_TOPIC);
+
+    auto screen_callback = [](const std_msgs::msg::Int32::SharedPtr msg) {
+        if (msg) {
+            int id = msg->data;
+            // Clamp to valid screen range [1, 5]
+            if (id < 1) id = 1;
+            if (id > 5) id = 5;
+            g_requested_screen_id.store(id);
+            g_screen_change_requested.store(1);
+        }
+    };
+
+    g_sub_screen = g_node->create_subscription<std_msgs::msg::Int32>(screen_topic, rclcpp::QoS(10), screen_callback);
 
     g_is_initialized.store(1);
     g_has_speed.store(0);
+    g_screen_change_requested.store(0);
     return 0;
 }
 
@@ -119,6 +144,16 @@ LART_WEAK int ros2subscriber_get_latest_speed(float *speed_kph) {
     return 1;
 }
 
+LART_WEAK int ros2subscriber_get_screen_change_request(int *screen_id) {
+    if (!g_is_initialized.load() || !g_screen_change_requested.load() || screen_id == nullptr) {
+        return 0;
+    }
+
+    *screen_id = g_requested_screen_id.load();
+    g_screen_change_requested.store(0);
+    return 1;
+}
+
 LART_WEAK void ros2subscriber_fini(void) {
     if (!g_is_initialized.load()) {
         return;
@@ -132,6 +167,7 @@ LART_WEAK void ros2subscriber_fini(void) {
     }
 
     g_sub.reset();
+    g_sub_screen.reset();
 
     if (g_exec && g_node) {
         try {
@@ -154,4 +190,33 @@ LART_WEAK void ros2subscriber_fini(void) {
     g_is_initialized.store(0);
     g_has_speed.store(0);
     g_latest_speed_kph.store(0.0f);
+    g_screen_change_requested.store(0);
+    g_requested_screen_id.store(0);
 }
+
+#else
+
+LART_WEAK int ros2subscriber_init(void) {
+    return 0;
+}
+
+LART_WEAK int ros2subscriber_spin_some(void) {
+    return 0;
+}
+
+LART_WEAK int ros2subscriber_get_latest_speed(float *speed_kph) {
+    if (speed_kph != nullptr) {
+        *speed_kph = 0.0f;
+    }
+    return 0;
+}
+
+LART_WEAK int ros2subscriber_get_screen_change_request(int *screen_id) {
+    (void)screen_id;
+    return 0;
+}
+
+LART_WEAK void ros2subscriber_fini(void) {
+}
+
+#endif
