@@ -89,22 +89,22 @@
         {
           "objID": "084926f1-634e-4671-9fc3-cc34c950eba7",
           "fileName": "ui.c",
-          "template": "#if defined(EEZ_FOR_LVGL)\n#include <eez/core/vars.h>\n#endif\n\n#include \"ui.h\"\n#include \"screens.h\"\n#include \"images.h\"\n#include \"actions.h\"\n#include \"vars.h\"\n#include \"stdio.h\"\n\n\n#include \"ros2subscriber.h\"\n\n\n\n//${eez-studio GUI_ASSETS_DEF}\n\n//${eez-studio LVGL_NATIVE_VARS_TABLE_DEF}\n\n//${eez-studio LVGL_ACTIONS_ARRAY_DEF}\n\n#if defined(EEZ_FOR_LVGL)\n\n\nvoid ui_init() {\n    eez_flow_init(assets, sizeof(assets), (lv_obj_t **)&objects, sizeof(objects), images, sizeof(images), actions);\n    if (ros2subscriber_init() != 0) {\n        ui_set_speed(0.0f);\n        return;\n    }\n\n    ui_set_speed(0.0f);\n}\n\nvoid ui_tick() {\n    float speed_kph;\n\n    if (ros2subscriber_spin_some() == 0 && ros2subscriber_get_latest_speed(&speed_kph)) {\n        ui_set_speed(speed_kph);\n    }\n\n    eez_flow_tick();\n    tick_screen(g_currentScreen);\n}\nvoid ui_setup_timers(void) {\n    // No LVGL timers required for ROS2 subscriber mode.\n}\n\n// Cleanup on shutdown\nvoid ui_fini(void) {\n    ros2subscriber_fini();\n}\n\n#else\n\nstatic int16_t currentScreen = -1;\n\nstatic lv_obj_t *getLvglObjectFromIndex(int32_t index) {\n    if (index == -1) {\n        return 0;\n    }\n    return ((lv_obj_t **)&objects)[index];\n}\n\nvoid loadScreen(enum ScreensEnum screenId) {\n    currentScreen = screenId - 1;\n    lv_obj_t *screen = getLvglObjectFromIndex(currentScreen);\n    lv_scr_load_anim(screen, LV_SCR_LOAD_ANIM_FADE_IN, 200, 0, false);\n}\n\nvoid ui_init() {\n    create_screens();\n//${eez-studio LVGL_LOAD_FIRST_SCREEN}\n}\n\nvoid ui_tick() {\n    tick_screen(currentScreen);\n}\n\n#endif\n"
+          "template": "#if defined(EEZ_FOR_LVGL)\n#include <eez/core/vars.h>\n#endif\n\n#include \"ui.h\"\n#include \"screens.h\"\n#include \"images.h\"\n#include \"actions.h\"\n#include \"vars.h\"\n#include \"stdio.h\"\n\n\n#include \"ros2subscriber.h\"\n\n\n\n//${eez-studio GUI_ASSETS_DEF}\n\n//${eez-studio LVGL_NATIVE_VARS_TABLE_DEF}\n\n//${eez-studio LVGL_ACTIONS_ARRAY_DEF}\n\n#if defined(EEZ_FOR_LVGL)\n\n\nvoid ui_init() {\n    eez_flow_init(assets, sizeof(assets), (lv_obj_t **)&objects, sizeof(objects), images, sizeof(images), actions);\n    if (ros2subscriber_init() != 0) {\n        ui_set_speed(0.0f);\n        return;\n    }\n\n    ui_set_speed(0.0f);\n}\n\nvoid ui_tick() {\n    float speed_kph;\n\n    if (ros2subscriber_spin_some() == 0 && ros2subscriber_get_latest_speed(&speed_kph)) {\n        ui_set_speed(speed_kph);\n    }\n\n    eez_flow_tick();\n    tick_screen(g_currentScreen);\n\n    // Check for screen change requests from ROS 2 topic\n    int screen_id;\n    if (ros2subscriber_get_screen_change_request(&screen_id)) {\n        int16_t current = eez_flow_get_current_screen();\n        if (screen_id >= _SCREEN_ID_FIRST && screen_id <= _SCREEN_ID_LAST && screen_id != current) {\n            printf(\"[ui_tick] Screen change requested: %d -> %d (current=%d)\\n\", current, screen_id, g_currentScreen);\n            eez_flow_set_screen(screen_id, LV_SCR_LOAD_ANIM_NONE, 0, 0);\n        }\n    }\n}\nvoid ui_setup_timers(void) {\n    // No LVGL timers required for ROS2 subscriber mode.\n}\n\n// Cleanup on shutdown\nvoid ui_fini(void) {\n    ros2subscriber_fini();\n}\n#endif\n"
         },
         {
           "objID": "a40698a8-cea3-4c3e-b73f-dca45f315fd8",
           "fileName": "CMakeLists.txt",
-          "template": "cmake_minimum_required(VERSION 3.8)\nproject(speed_subscriber LANGUAGES C CXX)\n\n# Compiler flags\nif(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES \"Clang\")\n    add_compile_options(-Wall -Wextra -Wpedantic)\nendif()\n\n# ROS 2 (required)\nfind_package(ament_cmake QUIET)\nfind_package(PkgConfig REQUIRED)\nfind_package(Threads REQUIRED)\n\nif(ament_cmake_FOUND)\n    find_package(rclcpp REQUIRED)\n    find_package(std_msgs REQUIRED)\nendif()\n\n# Optional: subscribe to /vehicle/dashboard_state if lart_msgs is available\nfind_package(lart_msgs QUIET)\n\n# Desktop UI runner dependency (requires SDL2 development package for headers + pkg-config file)\npkg_check_modules(SDL2 QUIET IMPORTED_TARGET sdl2)\n\nfile(GLOB_RECURSE LVGL_SOURCES CONFIGURE_DEPENDS\n    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src/*.c\n)\n\n# ============================================================================\n# CREATE ROS2 SUBSCRIBER LIBRARY\n# ============================================================================\n\nadd_library(ros2subscriber STATIC\n    ros2subscriber.cpp\n)\n\ntarget_compile_features(ros2subscriber PUBLIC cxx_std_17)\n\ntarget_include_directories(ros2subscriber PUBLIC\n    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>\n    $<INSTALL_INTERFACE:include/${PROJECT_NAME}>\n)\n\ntarget_link_libraries(ros2subscriber Threads::Threads)\nif(ament_cmake_FOUND)\n    ament_target_dependencies(ros2subscriber rclcpp std_msgs)\nelse()\n    target_link_libraries(ros2subscriber rclcpp::rclcpp)\nendif()\nif(lart_msgs_FOUND)\n    target_compile_definitions(ros2subscriber PRIVATE LART_HAVE_DASHBOARD_STATE_MSG=1)\n    if(ament_cmake_FOUND)\n        ament_target_dependencies(ros2subscriber lart_msgs)\n    endif()\n    message(STATUS \"ROS2 subscriber: lart_msgs detected (DashboardState supported)\")\nelse()\n    message(STATUS \"ROS2 subscriber: lart_msgs not found (Float32 speed topic only)\")\nendif()\n\n# Installation targets\ninstall(TARGETS ros2subscriber\n    ARCHIVE DESTINATION lib\n    LIBRARY DESTINATION lib\n    RUNTIME DESTINATION bin\n)\ninstall(FILES ros2subscriber.h DESTINATION include/${PROJECT_NAME})\n\nif(SDL2_FOUND AND LVGL_SOURCES)\n    add_library(lvgl STATIC ${LVGL_SOURCES})\n    target_compile_features(lvgl PUBLIC c_std_99)\n    target_include_directories(lvgl PUBLIC\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src\n        ${CMAKE_CURRENT_SOURCE_DIR}\n    )\n    target_compile_definitions(lvgl PUBLIC LV_CONF_INCLUDE_SIMPLE=1 LV_FONT_FMT_TXT_LARGE=1)\n\n    set(UI_SOURCES\n        eez-flow.cpp\n        images.c\n        screens.c\n        speed_api.cpp\n        styles.c\n        ui.c\n        fonts/ui_font_orbiter_bold_100.c\n        fonts/ui_font_orbitron_15.c\n        fonts/ui_font_orbitron_bold_15.c\n        fonts/ui_font_orbitron_bold_20.c\n        fonts/ui_font_orbitron_bold_25.c\n        fonts/ui_font_orbitron_bold_30.c\n        fonts/ui_font_orbitron_bold_40.c\n        fonts/ui_font_orbitron_bold_50.c\n        images/ui_image_lart_logo.c\n        ui_runner.cpp\n    )\n\n    add_executable(ui_runner ${UI_SOURCES})\n\n    target_compile_features(ui_runner PUBLIC cxx_std_17)\n    target_include_directories(ui_runner PRIVATE\n        ${CMAKE_CURRENT_SOURCE_DIR}\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src\n    )\n    target_compile_definitions(ui_runner PRIVATE LV_CONF_INCLUDE_SIMPLE=1 LV_FONT_FMT_TXT_LARGE=1)\n    target_link_libraries(ui_runner\n        lvgl\n        ros2subscriber\n        PkgConfig::SDL2\n        Threads::Threads\n    )\n    if(ament_cmake_FOUND)\n        ament_target_dependencies(ui_runner rclcpp std_msgs)\n    else()\n        target_link_libraries(ui_runner rclcpp::rclcpp)\n    endif()\n    if(lart_msgs_FOUND)\n        if(ament_cmake_FOUND)\n            ament_target_dependencies(ui_runner lart_msgs)\n        endif()\n    endif()\nelse()\n    message(STATUS \"Desktop UI runner disabled: SDL2 (libsdl2-dev) or LVGL sources not available\")\nendif()\n\nif(ament_cmake_FOUND)\n    ament_package()\nendif()"
+          "template": "cmake_minimum_required(VERSION 3.8)\nproject(speed_subscriber LANGUAGES C CXX)\n\n# Compiler flags\nif(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES \"Clang\")\n    add_compile_options(-Wall -Wextra -Wpedantic)\nendif()\n\n# ROS 2 (required)\nfind_package(ament_cmake QUIET)\nfind_package(PkgConfig REQUIRED)\nfind_package(Threads REQUIRED)\n\nif(ament_cmake_FOUND)\n    find_package(rclcpp REQUIRED)\n    find_package(std_msgs REQUIRED)\nendif()\n\n# Optional: subscribe to /vehicle/dashboard_state if lart_msgs is available\nfind_package(lart_msgs QUIET)\n\n# Desktop UI runner dependency (requires SDL2 development package for headers + pkg-config file)\npkg_check_modules(SDL2 QUIET IMPORTED_TARGET sdl2)\n\nfile(GLOB_RECURSE LVGL_SOURCES CONFIGURE_DEPENDS\n    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src/*.c\n)\n\n# ============================================================================\n# CREATE ROS2 SUBSCRIBER LIBRARY\n# ============================================================================\n\nadd_library(ros2subscriber STATIC\n    ros2subscriber.cpp\n)\n\ntarget_compile_features(ros2subscriber PUBLIC cxx_std_17)\n\ntarget_include_directories(ros2subscriber PUBLIC\n    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>\n    $<INSTALL_INTERFACE:include/${PROJECT_NAME}>\n)\n\ntarget_link_libraries(ros2subscriber Threads::Threads)\nif(ament_cmake_FOUND)\n    target_compile_definitions(ros2subscriber PRIVATE LART_UI_HAVE_RCLCPP=1)\n    ament_target_dependencies(ros2subscriber rclcpp std_msgs)\nelse()\n    target_link_libraries(ros2subscriber rclcpp::rclcpp)\nendif()\nif(lart_msgs_FOUND)\n    target_compile_definitions(ros2subscriber PRIVATE LART_HAVE_DASHBOARD_STATE_MSG=1)\n    if(ament_cmake_FOUND)\n        ament_target_dependencies(ros2subscriber lart_msgs)\n    endif()\n    message(STATUS \"ROS2 subscriber: lart_msgs detected (DashboardState supported)\")\nelse()\n    message(STATUS \"ROS2 subscriber: lart_msgs not found (Float32 speed topic only)\")\nendif()\n\n# Installation targets\ninstall(TARGETS ros2subscriber\n    ARCHIVE DESTINATION lib\n    LIBRARY DESTINATION lib\n    RUNTIME DESTINATION bin\n)\ninstall(FILES ros2subscriber.h DESTINATION include/${PROJECT_NAME})\n\nif(SDL2_FOUND AND LVGL_SOURCES)\n    add_library(lvgl STATIC ${LVGL_SOURCES})\n    target_compile_features(lvgl PUBLIC c_std_99)\n    target_include_directories(lvgl PUBLIC\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src\n        ${CMAKE_CURRENT_SOURCE_DIR}\n    )\n    target_compile_definitions(lvgl PUBLIC LV_CONF_INCLUDE_SIMPLE=1 LV_FONT_FMT_TXT_LARGE=1)\n\n    set(UI_SOURCES\n        eez-flow.cpp\n        images.c\n        screens.c\n        speed_api.cpp\n        styles.c\n        ui.c\n        fonts/ui_font_orbiter_bold_100.c\n        fonts/ui_font_orbitron_15.c\n        fonts/ui_font_orbitron_bold_15.c\n        fonts/ui_font_orbitron_bold_20.c\n        fonts/ui_font_orbitron_bold_25.c\n        fonts/ui_font_orbitron_bold_30.c\n        fonts/ui_font_orbitron_bold_40.c\n        fonts/ui_font_orbitron_bold_50.c\n        images/ui_image_lart_logo.c\n        ui_runner.cpp\n    )\n\n    add_executable(ui_runner ${UI_SOURCES})\n\n    target_compile_features(ui_runner PUBLIC cxx_std_17)\n    target_include_directories(ui_runner PRIVATE\n        ${CMAKE_CURRENT_SOURCE_DIR}\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src\n    )\n    target_compile_definitions(ui_runner PRIVATE LV_CONF_INCLUDE_SIMPLE=1 LV_FONT_FMT_TXT_LARGE=1)\n    target_link_libraries(ui_runner\n        lvgl\n        ros2subscriber\n        PkgConfig::SDL2\n        Threads::Threads\n    )\n    if(ament_cmake_FOUND)\n        ament_target_dependencies(ui_runner rclcpp std_msgs)\n    else()\n        target_link_libraries(ui_runner rclcpp::rclcpp)\n    endif()\n    if(lart_msgs_FOUND)\n        if(ament_cmake_FOUND)\n            ament_target_dependencies(ui_runner lart_msgs)\n        endif()\n    endif()\nelse()\n    message(STATUS \"Desktop UI runner disabled: SDL2 (libsdl2-dev) or LVGL sources not available\")\nendif()\n\nif(ament_cmake_FOUND)\n    ament_package()\nendif()"
         },
         {
           "objID": "5d5ceb45-7278-44e0-bf56-250aaf12c7fc",
           "fileName": "ros2subscriber.cpp",
-          "template": "#include \"ros2subscriber.h\"\n\n#include <atomic>\n#include <chrono>\n#include <cstdlib>\n#include <cstring>\n#include <strings.h>\n#include <memory>\n\n#ifndef LART_UI_HAVE_RCLCPP\n#define LART_UI_HAVE_RCLCPP 0\n#endif\n\n#if defined(__GNUC__) || defined(__clang__)\n#define LART_WEAK __attribute__((weak))\n#else\n#define LART_WEAK\n#endif\n\n#if LART_UI_HAVE_RCLCPP\n\n#include <rclcpp/rclcpp.hpp>\n#include <rclcpp/executors/single_threaded_executor.hpp>\n#include <std_msgs/msg/float32.hpp>\n\n#if !defined(LART_HAVE_DASHBOARD_STATE_MSG)\n#if defined(__has_include)\n#if __has_include(<lart_msgs/msg/dashboard_state.hpp>)\n#define LART_HAVE_DASHBOARD_STATE_MSG 1\n#else\n#define LART_HAVE_DASHBOARD_STATE_MSG 0\n#endif\n#else\n#define LART_HAVE_DASHBOARD_STATE_MSG 0\n#endif\n#endif\n\n#if LART_HAVE_DASHBOARD_STATE_MSG\n#include <lart_msgs/msg/dashboard_state.hpp>\n#endif\n\nnamespace {\nconstexpr const char *DEFAULT_SPEED_TOPIC = \"/vehicle/speed_kph\";\nconstexpr const char *DEFAULT_DASHBOARD_STATE_TOPIC = \"/vehicle/dashboard_state\";\n\nstd::atomic<int> g_is_initialized(0);\nstd::atomic<int> g_has_speed(0);\nstd::atomic<float> g_latest_speed_kph(0.0f);\n\nbool g_did_init_rclcpp = false;\nstd::shared_ptr<rclcpp::Node> g_node;\nstd::shared_ptr<rclcpp::executors::SingleThreadedExecutor> g_exec;\nrclcpp::SubscriptionBase::SharedPtr g_sub;\n\nbool env_is_true(const char *name, bool default_value) {\n    const char *value = std::getenv(name);\n    if (value == nullptr || *value == '\\0') {\n        return default_value;\n    }\n    return std::strcmp(value, \"1\") == 0 || strcasecmp(value, \"true\") == 0 || strcasecmp(value, \"yes\") == 0;\n}\n\nconst char *env_or_default(const char *name, const char *fallback) {\n    const char *value = std::getenv(name);\n    if (value == nullptr || *value == '\\0') {\n        return fallback;\n    }\n    return value;\n}\n}  // namespace\n\nLART_WEAK int ros2subscriber_init(void) {\n    if (g_is_initialized.load()) {\n        return 0;\n    }\n\n    if (!rclcpp::ok()) {\n        g_did_init_rclcpp = true;\n        int argc = 0;\n        char **argv = nullptr;\n        rclcpp::init(argc, argv);\n    }\n\n    g_node = std::make_shared<rclcpp::Node>(\"lart_dashboard_listener\");\n    g_exec = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();\n    g_exec->add_node(g_node);\n\n    const char *topic = env_or_default(\"LART_ROS2_SPEED_TOPIC\", DEFAULT_SPEED_TOPIC);\n\n    auto callback = [](const std_msgs::msg::Float32::SharedPtr msg) {\n        if (msg) {\n            g_latest_speed_kph.store(msg->data);\n            g_has_speed.store(1);\n        }\n    };\n\n    g_sub = g_node->create_subscription<std_msgs::msg::Float32>(topic, rclcpp::QoS(10), callback);\n\n    g_is_initialized.store(1);\n    g_has_speed.store(0);\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_spin_some(void) {\n    if (!g_is_initialized.load() || !g_exec) {\n        return 1;\n    }\n\n    try {\n        g_exec->spin_some();\n    } catch (...) {\n    }\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_get_latest_speed(float *speed_kph) {\n    if (!g_is_initialized.load() || !g_has_speed.load() || speed_kph == nullptr) {\n        return 0;\n    }\n\n    *speed_kph = g_latest_speed_kph.load();\n    return 1;\n}\n\nLART_WEAK void ros2subscriber_fini(void) {\n    if (!g_is_initialized.load()) {\n        return;\n    }\n\n    try {\n        if (g_exec) {\n            g_exec->cancel();\n        }\n    } catch (...) {\n    }\n\n    g_sub.reset();\n\n    if (g_exec && g_node) {\n        try {\n            g_exec->remove_node(g_node);\n        } catch (...) {\n        }\n    }\n\n    g_node.reset();\n    g_exec.reset();\n\n    if (g_did_init_rclcpp && rclcpp::ok()) {\n        try {\n            rclcpp::shutdown();\n        } catch (...) {\n        }\n    }\n    g_did_init_rclcpp = false;\n\n    g_is_initialized.store(0);\n    g_has_speed.store(0);\n    g_latest_speed_kph.store(0.0f);\n}\n\n#else\n\nLART_WEAK int ros2subscriber_init(void) {\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_spin_some(void) {\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_get_latest_speed(float *speed_kph) {\n    if (speed_kph != nullptr) {\n        *speed_kph = 0.0f;\n    }\n    return 0;\n}\n\nLART_WEAK void ros2subscriber_fini(void) {\n}\n\n#endif"
+          "template": "#include \"ros2subscriber.h\"\n\n#include <atomic>\n#include <chrono>\n#include <cstdlib>\n#include <cstring>\n#include <strings.h>\n#include <memory>\n\n#ifndef LART_UI_HAVE_RCLCPP\n#define LART_UI_HAVE_RCLCPP 0\n#endif\n\n#if defined(__GNUC__) || defined(__clang__)\n#define LART_WEAK __attribute__((weak))\n#else\n#define LART_WEAK\n#endif\n\n#if LART_UI_HAVE_RCLCPP\n\n#include <rclcpp/rclcpp.hpp>\n#include <rclcpp/executors/single_threaded_executor.hpp>\n#include <std_msgs/msg/float32.hpp>\n#include <std_msgs/msg/int32.hpp>\n\n#if !defined(LART_HAVE_DASHBOARD_STATE_MSG)\n#if defined(__has_include)\n#if __has_include(<lart_msgs/msg/dashboard_state.hpp>)\n#define LART_HAVE_DASHBOARD_STATE_MSG 1\n#else\n#define LART_HAVE_DASHBOARD_STATE_MSG 0\n#endif\n#else\n#define LART_HAVE_DASHBOARD_STATE_MSG 0\n#endif\n#endif\n\n#if LART_HAVE_DASHBOARD_STATE_MSG\n#include <lart_msgs/msg/dashboard_state.hpp>\n#endif\n\nnamespace {\nconstexpr const char *DEFAULT_SPEED_TOPIC = \"/vehicle/speed_kph\";\nconstexpr const char *DEFAULT_DASHBOARD_STATE_TOPIC = \"/vehicle/dashboard_state\";\nconstexpr const char *DEFAULT_SET_SCREEN_TOPIC = \"/dashboard/set_screen\";\n\nstd::atomic<int> g_is_initialized(0);\nstd::atomic<int> g_has_speed(0);\nstd::atomic<float> g_latest_speed_kph(0.0f);\nstd::atomic<int> g_screen_change_requested(0);\nstd::atomic<int> g_requested_screen_id(0);\n\nbool g_did_init_rclcpp = false;\nstd::shared_ptr<rclcpp::Node> g_node;\nstd::shared_ptr<rclcpp::executors::SingleThreadedExecutor> g_exec;\nrclcpp::SubscriptionBase::SharedPtr g_sub;\nrclcpp::SubscriptionBase::SharedPtr g_sub_screen;\n\nbool env_is_true(const char *name, bool default_value) {\n    const char *value = std::getenv(name);\n    if (value == nullptr || *value == '\\0') {\n        return default_value;\n    }\n    return std::strcmp(value, \"1\") == 0 || strcasecmp(value, \"true\") == 0 || strcasecmp(value, \"yes\") == 0;\n}\n\nconst char *env_or_default(const char *name, const char *fallback) {\n    const char *value = std::getenv(name);\n    if (value == nullptr || *value == '\\0') {\n        return fallback;\n    }\n    return value;\n}\n}  // namespace\n\nLART_WEAK int ros2subscriber_init(void) {\n    if (g_is_initialized.load()) {\n        return 0;\n    }\n\n    if (!rclcpp::ok()) {\n        g_did_init_rclcpp = true;\n        int argc = 0;\n        char **argv = nullptr;\n        rclcpp::init(argc, argv);\n    }\n\n    g_node = std::make_shared<rclcpp::Node>(\"lart_dashboard_listener\");\n    g_exec = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();\n    g_exec->add_node(g_node);\n\n    const char *topic = env_or_default(\"LART_ROS2_SPEED_TOPIC\", DEFAULT_SPEED_TOPIC);\n\n    auto callback = [](const std_msgs::msg::Float32::SharedPtr msg) {\n        if (msg) {\n            g_latest_speed_kph.store(msg->data);\n            g_has_speed.store(1);\n        }\n    };\n\n    g_sub = g_node->create_subscription<std_msgs::msg::Float32>(topic, rclcpp::QoS(10), callback);\n\n    // Screen change subscription\n    const char *screen_topic = env_or_default(\"LART_ROS2_SET_SCREEN_TOPIC\", DEFAULT_SET_SCREEN_TOPIC);\n\n    auto screen_callback = [](const std_msgs::msg::Int32::SharedPtr msg) {\n        if (msg) {\n            int id = msg->data;\n            // Clamp to valid screen range [1, 5]\n            if (id < 1) id = 1;\n            if (id > 5) id = 5;\n            g_requested_screen_id.store(id);\n            g_screen_change_requested.store(1);\n        }\n    };\n\n    g_sub_screen = g_node->create_subscription<std_msgs::msg::Int32>(screen_topic, rclcpp::QoS(10), screen_callback);\n\n    g_is_initialized.store(1);\n    g_has_speed.store(0);\n    g_screen_change_requested.store(0);\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_spin_some(void) {\n    if (!g_is_initialized.load() || !g_exec) {\n        return 1;\n    }\n\n    try {\n        g_exec->spin_some();\n    } catch (...) {\n    }\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_get_latest_speed(float *speed_kph) {\n    if (!g_is_initialized.load() || !g_has_speed.load() || speed_kph == nullptr) {\n        return 0;\n    }\n\n    *speed_kph = g_latest_speed_kph.load();\n    return 1;\n}\n\nLART_WEAK int ros2subscriber_get_screen_change_request(int *screen_id) {\n    if (!g_is_initialized.load() || !g_screen_change_requested.load() || screen_id == nullptr) {\n        return 0;\n    }\n\n    *screen_id = g_requested_screen_id.load();\n    g_screen_change_requested.store(0);\n    return 1;\n}\n\nLART_WEAK void ros2subscriber_fini(void) {\n    if (!g_is_initialized.load()) {\n        return;\n    }\n\n    try {\n        if (g_exec) {\n            g_exec->cancel();\n        }\n    } catch (...) {\n    }\n\n    g_sub.reset();\n    g_sub_screen.reset();\n\n    if (g_exec && g_node) {\n        try {\n            g_exec->remove_node(g_node);\n        } catch (...) {\n        }\n    }\n\n    g_node.reset();\n    g_exec.reset();\n\n    if (g_did_init_rclcpp && rclcpp::ok()) {\n        try {\n            rclcpp::shutdown();\n        } catch (...) {\n        }\n    }\n    g_did_init_rclcpp = false;\n\n    g_is_initialized.store(0);\n    g_has_speed.store(0);\n    g_latest_speed_kph.store(0.0f);\n    g_screen_change_requested.store(0);\n    g_requested_screen_id.store(0);\n}\n\n#else\n\nLART_WEAK int ros2subscriber_init(void) {\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_spin_some(void) {\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_get_latest_speed(float *speed_kph) {\n    if (speed_kph != nullptr) {\n        *speed_kph = 0.0f;\n    }\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_get_screen_change_request(int *screen_id) {\n    (void)screen_id;\n    return 0;\n}\n\nLART_WEAK void ros2subscriber_fini(void) {\n}\n\n#endif"
         },
         {
           "objID": "c7507690-dd2c-41a6-b733-cff533746e67",
           "fileName": "ros2subscriber.h",
-          "template": "#ifndef LART_ROS2SUBSCRIBER_H\n#define LART_ROS2SUBSCRIBER_H\n\n#ifdef __cplusplus\nextern \"C\" {\n#endif\n\nint ros2subscriber_init(void);\nint ros2subscriber_spin_some(void);\nint ros2subscriber_get_latest_speed(float *speed_kph);\nvoid ros2subscriber_fini(void);\n\n#ifdef __cplusplus\n}\n#endif\n\n#endif"
+          "template": "#ifndef LART_ROS2SUBSCRIBER_H\n#define LART_ROS2SUBSCRIBER_H\n\n#ifdef __cplusplus\nextern \"C\" {\n#endif\n\nint ros2subscriber_init(void);\nint ros2subscriber_spin_some(void);\nint ros2subscriber_get_latest_speed(float *speed_kph);\nint ros2subscriber_get_screen_change_request(int *screen_id);\nvoid ros2subscriber_fini(void);\n\n#ifdef __cplusplus\n}\n#endif\n\n#endif"
         }
       ],
       "destinationFolder": "src\\ui",
@@ -196,41 +196,18 @@
         "persistent": false
       },
       {
-        "objID": "4e51a69c-569d-4cc6-8fd9-a28d94fab9e2",
-        "name": "mqtt_host",
-        "type": "string",
-        "size": null,
-        "defaultValue": "\"localhost\"",
-        "persistent": false
-      },
-      {
-        "objID": "31d6622a-470c-4b99-9ac3-88248a89952e",
-        "name": "mqtt_port",
-        "type": "integer",
-        "defaultValue": "1883",
-        "persistent": false
-      },
-      {
-        "objID": "ae17daa8-2dd1-4e28-af6d-ae176d4ed132",
-        "name": "mqtt_connected",
-        "type": "boolean",
-        "defaultValue": "true",
-        "persistent": false
-      },
-      {
-        "objID": "e594b5cc-1660-4db5-e633-1c802a7a8b9e",
-        "name": "mqtt_connection_string",
-        "type": "string",
-        "size": null,
-        "defaultValue": "\"mqtt://127.0.0.1:1883\"",
-        "persistent": false
-      },
-      {
         "objID": "1040a4f1-6242-403c-da65-4623deed5b5b",
         "name": "state",
         "type": "string",
         "size": null,
         "defaultValue": "\"\"",
+        "persistent": false
+      },
+      {
+        "objID": "9ef045fe-9d39-4064-a7ad-06eb608b4df5",
+        "name": "screen_changer_var",
+        "type": "integer",
+        "defaultValue": "1",
         "persistent": false
       }
     ],
@@ -254,7 +231,252 @@
     ],
     "enums": []
   },
-  "actions": [],
+  "actions": [
+    {
+      "objID": "4d82ebeb-79cc-420a-ee81-4117ba822a54",
+      "components": [
+        {
+          "objID": "46d21072-4a1f-4ad3-c309-e4961bce3caf",
+          "type": "StartActionComponent",
+          "left": -617,
+          "top": -853,
+          "width": 87,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": []
+        },
+        {
+          "objID": "bad66a40-9f5e-48e6-e31a-ec6cbe1329b7",
+          "type": "LVGLActionComponent",
+          "left": -142,
+          "top": -769,
+          "width": 329,
+          "height": 54,
+          "customInputs": [],
+          "customOutputs": [],
+          "actions": [
+            {
+              "objID": "30cad9b4-f4d9-4baf-c5c7-3e6ffac96e8c",
+              "action": "changeScreen",
+              "screen": "Driver View",
+              "screenType": "literal",
+              "fadeMode": "FADE_IN",
+              "fadeModeType": "literal",
+              "speed": 200,
+              "speedType": "literal",
+              "delay": 0,
+              "delayType": "literal",
+              "useStack": true,
+              "useStackType": "literal"
+            }
+          ]
+        },
+        {
+          "objID": "920b0d11-6f8d-4703-805d-3714fbbe8f80",
+          "type": "IsTrueActionComponent",
+          "left": -362,
+          "top": -758,
+          "width": 178,
+          "height": 70,
+          "customInputs": [],
+          "customOutputs": [],
+          "value": "screen_changer_var==1"
+        },
+        {
+          "objID": "1a3aa2cf-9a2a-4001-94d5-68f248971c73",
+          "type": "LVGLActionComponent",
+          "left": -149,
+          "top": -657,
+          "width": 323,
+          "height": 54,
+          "customInputs": [],
+          "customOutputs": [],
+          "actions": [
+            {
+              "objID": "13dc13e9-43fc-4c49-eac6-d610bb51e0e8",
+              "action": "changeScreen",
+              "screen": "Autonomous",
+              "screenType": "literal",
+              "fadeMode": "FADE_IN",
+              "fadeModeType": "literal",
+              "speed": 200,
+              "speedType": "literal",
+              "delay": 0,
+              "delayType": "literal",
+              "useStack": true,
+              "useStackType": "literal"
+            }
+          ]
+        },
+        {
+          "objID": "cee112a2-48e6-4b67-bcb8-6013e81fb63b",
+          "type": "IsTrueActionComponent",
+          "left": -375,
+          "top": -665,
+          "width": 178,
+          "height": 70,
+          "customInputs": [],
+          "customOutputs": [],
+          "value": "screen_changer_var==2"
+        },
+        {
+          "objID": "9e0bdfa3-4636-444e-eebc-e1bc447851c6",
+          "type": "LVGLActionComponent",
+          "left": -175,
+          "top": -552,
+          "width": 293,
+          "height": 54,
+          "customInputs": [],
+          "customOutputs": [],
+          "actions": [
+            {
+              "objID": "6ba689b6-47af-4209-e5b4-58f85215d0f6",
+              "action": "changeScreen",
+              "screen": "Debug",
+              "screenType": "literal",
+              "fadeMode": "FADE_IN",
+              "fadeModeType": "literal",
+              "speed": 200,
+              "speedType": "literal",
+              "delay": 0,
+              "delayType": "literal",
+              "useStack": true,
+              "useStackType": "literal"
+            }
+          ]
+        },
+        {
+          "objID": "1585fc40-7bf9-49e2-db24-c3aa96f77cf4",
+          "type": "IsTrueActionComponent",
+          "left": -375,
+          "top": -560,
+          "width": 178,
+          "height": 70,
+          "customInputs": [],
+          "customOutputs": [],
+          "value": "screen_changer_var==3"
+        },
+        {
+          "objID": "1624f152-6585-4a89-85bd-f254facda2db",
+          "type": "LVGLActionComponent",
+          "left": -136,
+          "top": -420,
+          "width": 360,
+          "height": 54,
+          "customInputs": [],
+          "customOutputs": [],
+          "actions": [
+            {
+              "objID": "ef2eebd7-1b85-4531-e34b-c7544c371db5",
+              "action": "changeScreen",
+              "screen": "Debug Autonomous",
+              "screenType": "literal",
+              "fadeMode": "FADE_IN",
+              "fadeModeType": "literal",
+              "speed": 200,
+              "speedType": "literal",
+              "delay": 0,
+              "delayType": "literal",
+              "useStack": true,
+              "useStackType": "literal"
+            }
+          ]
+        },
+        {
+          "objID": "c72df5bc-f8dd-4668-8780-0eadf34e5f36",
+          "type": "IsTrueActionComponent",
+          "left": -395,
+          "top": -436,
+          "width": 178,
+          "height": 70,
+          "customInputs": [],
+          "customOutputs": [],
+          "value": "screen_changer_var==4"
+        },
+        {
+          "objID": "fd5d9ae1-febd-4e9b-f9c3-da6ef415ff61",
+          "type": "LogActionComponent",
+          "left": 272,
+          "top": -750,
+          "width": 206,
+          "height": 54,
+          "customInputs": [],
+          "customOutputs": [],
+          "value": "\"Screen changed to Driver view\""
+        }
+      ],
+      "connectionLines": [
+        {
+          "objID": "f7fe3884-04e6-40ea-c425-3b8ef98cd151",
+          "source": "46d21072-4a1f-4ad3-c309-e4961bce3caf",
+          "output": "@seqout",
+          "target": "920b0d11-6f8d-4703-805d-3714fbbe8f80",
+          "input": "@seqin"
+        },
+        {
+          "objID": "4b1336f2-a3a4-4d79-d947-40937eb724da",
+          "source": "920b0d11-6f8d-4703-805d-3714fbbe8f80",
+          "output": "True",
+          "target": "bad66a40-9f5e-48e6-e31a-ec6cbe1329b7",
+          "input": "@seqin"
+        },
+        {
+          "objID": "31ed716b-4ced-4e77-cbb1-f4fb6dac692b",
+          "source": "cee112a2-48e6-4b67-bcb8-6013e81fb63b",
+          "output": "True",
+          "target": "1a3aa2cf-9a2a-4001-94d5-68f248971c73",
+          "input": "@seqin"
+        },
+        {
+          "objID": "28624b8b-bc6d-4861-ccd7-f6011781837c",
+          "source": "1585fc40-7bf9-49e2-db24-c3aa96f77cf4",
+          "output": "True",
+          "target": "9e0bdfa3-4636-444e-eebc-e1bc447851c6",
+          "input": "@seqin"
+        },
+        {
+          "objID": "4fd176cf-7820-44b5-f7ac-36e9be3a8a61",
+          "source": "c72df5bc-f8dd-4668-8780-0eadf34e5f36",
+          "output": "True",
+          "target": "1624f152-6585-4a89-85bd-f254facda2db",
+          "input": "@seqin"
+        },
+        {
+          "objID": "8f0dc4f4-755c-4bc3-a621-78a5b53db6fd",
+          "source": "bad66a40-9f5e-48e6-e31a-ec6cbe1329b7",
+          "output": "@seqout",
+          "target": "fd5d9ae1-febd-4e9b-f9c3-da6ef415ff61",
+          "input": "@seqin"
+        },
+        {
+          "objID": "1510fb46-a114-4736-b111-4a407ba2514c",
+          "source": "920b0d11-6f8d-4703-805d-3714fbbe8f80",
+          "output": "False",
+          "target": "cee112a2-48e6-4b67-bcb8-6013e81fb63b",
+          "input": "@seqin"
+        },
+        {
+          "objID": "b5c198d9-3ed1-40fc-9abf-ff50124db870",
+          "source": "cee112a2-48e6-4b67-bcb8-6013e81fb63b",
+          "output": "False",
+          "target": "1585fc40-7bf9-49e2-db24-c3aa96f77cf4",
+          "input": "@seqin"
+        },
+        {
+          "objID": "12d5af8c-9cab-429a-bdcd-365a8d844c2e",
+          "source": "1585fc40-7bf9-49e2-db24-c3aa96f77cf4",
+          "output": "False",
+          "target": "c72df5bc-f8dd-4668-8780-0eadf34e5f36",
+          "input": "@seqin"
+        }
+      ],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "screen_changer_action",
+      "implementationType": "flow"
+    }
+  ],
   "userPages": [
     {
       "objID": "0ce9bee7-e908-4adc-f135-27a926780151",
@@ -282,65 +504,11 @@
           "heightUnit": "px",
           "children": [
             {
-              "objID": "2dc09b38-01eb-4ba9-e0ac-4a8ba111b1f1",
-              "type": "LVGLLabelWidget",
-              "left": 0,
-              "top": 200,
-              "width": 203,
-              "height": 53,
-              "customInputs": [],
-              "customOutputs": [],
-              "style": {
-                "objID": "977aa456-7af5-4d20-a270-46b47c0631a6",
-                "useStyle": "default",
-                "conditionalStyles": [],
-                "childStyles": []
-              },
-              "hiddenInEditor": false,
-              "timeline": [],
-              "eventHandlers": [],
-              "identifier": "readyLabel_1",
-              "leftUnit": "px",
-              "topUnit": "px",
-              "widthUnit": "content",
-              "heightUnit": "content",
-              "children": [],
-              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
-              "clickableFlagType": "literal",
-              "flagScrollbarMode": "",
-              "flagScrollDirection": "",
-              "scrollSnapX": "",
-              "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledStateType": "literal",
-              "states": "",
-              "localStyles": {
-                "objID": "0a143523-ca49-4041-8870-d6200a03ad60",
-                "definition": {
-                  "MAIN": {
-                    "DEFAULT": {
-                      "text_font": "orbitron_bold_50",
-                      "text_color": "#02ff02",
-                      "align": "CENTER"
-                    }
-                  }
-                }
-              },
-              "group": "",
-              "groupIndex": 0,
-              "text": "READY",
-              "textType": "literal",
-              "longMode": "WRAP",
-              "recolor": false,
-              "previewValue": "NOT READY"
-            },
-            {
               "objID": "e2347f2a-2f0b-439d-a395-d79d34bb9c66",
               "type": "LVGLLabelWidget",
               "left": 0,
               "top": 200,
-              "width": 339,
+              "width": 203,
               "height": 53,
               "customInputs": [],
               "customOutputs": [],
@@ -375,7 +543,7 @@
                 "definition": {
                   "MAIN": {
                     "DEFAULT": {
-                      "text_color": "#fe0000",
+                      "text_color": "#3FFF00",
                       "align": "CENTER",
                       "text_font": "orbitron_bold_50"
                     }
@@ -388,7 +556,7 @@
               "textType": "expression",
               "longMode": "WRAP",
               "recolor": false,
-              "previewValue": "NOT READY"
+              "previewValue": "READY"
             },
             {
               "objID": "0d5c1074-4af9-4c58-d613-0b49478cb5b9",
@@ -441,8 +609,8 @@
                     {
                       "objID": "7c18ac44-e154-4520-e8e7-46e77dbfb725",
                       "type": "LVGLLabelWidget",
-                      "left": 13,
-                      "top": 18,
+                      "left": 10,
+                      "top": 22,
                       "width": 124,
                       "height": 33,
                       "customInputs": [],
@@ -990,8 +1158,8 @@
                     {
                       "objID": "ab2641bc-2b65-4f26-d293-0ef391f9665d",
                       "type": "LVGLLabelWidget",
-                      "left": 22,
-                      "top": 18,
+                      "left": 11,
+                      "top": 20,
                       "width": 129,
                       "height": 33,
                       "customInputs": [],
@@ -1146,7 +1314,7 @@
                       "type": "LVGLLabelWidget",
                       "left": -47,
                       "top": 6,
-                      "width": 396,
+                      "width": 166,
                       "height": 106,
                       "customInputs": [],
                       "customOutputs": [],
@@ -1190,7 +1358,7 @@
                       "textType": "expression",
                       "longMode": "WRAP",
                       "recolor": false,
-                      "previewValue": ""
+                      "previewValue": "20"
                     },
                     {
                       "objID": "ce664378-722f-4535-c04e-435dff407e07",
@@ -1580,8 +1748,8 @@
               },
               "group": "",
               "groupIndex": 0,
-              "color": "mqtt_connected ? 0x00FF00 : 0xFF0000",
-              "colorType": "expression",
+              "color": "#29FF00",
+              "colorType": "literal",
               "brightness": 255,
               "brightnessType": "literal"
             },
@@ -1650,8 +1818,9 @@
               "max": 100,
               "maxType": "literal",
               "mode": "RANGE",
-              "value": "hv",
-              "valueType": "expression",
+              "value": 50,
+              "valueType": "literal",
+              "previewValue": "50",
               "valueStart": 0,
               "valueStartType": "literal",
               "enableAnimation": false
@@ -1718,11 +1887,12 @@
               "groupIndex": 0,
               "min": 18,
               "minType": "literal",
-              "max": 33,
+              "max": 30,
               "maxType": "literal",
               "mode": "RANGE",
-              "value": "lv",
-              "valueType": "expression",
+              "value": 25,
+              "valueType": "literal",
+              "previewValue": "24.0",
               "valueStart": 0,
               "valueStartType": "literal",
               "enableAnimation": true
@@ -1970,343 +2140,57 @@
             }
           },
           "groupIndex": 0
+        },
+        {
+          "objID": "278d55f5-0d7c-4144-ba5d-ef83a639a95d",
+          "type": "CallActionActionComponent",
+          "left": 195,
+          "top": -246,
+          "width": 165,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": [],
+          "action": "screen_changer_action",
+          "userPropertyValues": {
+            "objID": "ae25f8d1-b0cd-4ef9-d84c-0af25a65581b",
+            "values": {}
+          }
+        },
+        {
+          "objID": "7b28947e-870d-40b9-b051-fcf2a3db9a41",
+          "type": "StartActionComponent",
+          "left": 51,
+          "top": -246,
+          "width": 87,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": []
+        },
+        {
+          "objID": "4d65c7e7-4120-4e6f-9aee-c59ddebfb8af",
+          "type": "LVGLActionComponent",
+          "left": 461,
+          "top": -211,
+          "width": 87,
+          "height": 36,
+          "customInputs": [],
+          "customOutputs": [],
+          "actions": []
         }
       ],
-      "connectionLines": [],
+      "connectionLines": [
+        {
+          "objID": "5e4f7c81-9230-40b4-a978-8eae42f638ad",
+          "source": "7b28947e-870d-40b9-b051-fcf2a3db9a41",
+          "output": "@seqout",
+          "target": "278d55f5-0d7c-4144-ba5d-ef83a639a95d",
+          "input": "@seqin"
+        }
+      ],
       "localVariables": [],
       "componentGroups": [],
       "userProperties": [],
       "name": "Driver View",
-      "left": 0,
-      "top": 0,
-      "width": 800,
-      "height": 480,
-      "isUsedAsUserWidget": false,
-      "createAtStart": true,
-      "deleteOnScreenUnload": false
-    },
-    {
-      "objID": "204a3a87-8236-4f54-c580-380a511a4f07",
-      "components": [
-        {
-          "objID": "2063c226-2d4e-4d83-9c17-a1c347178940",
-          "type": "LVGLScreenWidget",
-          "left": 0,
-          "top": 0,
-          "width": 800,
-          "height": 480,
-          "customInputs": [],
-          "customOutputs": [],
-          "style": {
-            "objID": "89da0fe9-c895-4fef-eb87-cca426cd6f8a",
-            "useStyle": "default",
-            "conditionalStyles": [],
-            "childStyles": []
-          },
-          "timeline": [],
-          "eventHandlers": [],
-          "leftUnit": "px",
-          "topUnit": "px",
-          "widthUnit": "px",
-          "heightUnit": "px",
-          "children": [
-            {
-              "objID": "bcfd452e-dca1-42f7-c0b8-1e44689c6a7f",
-              "type": "LVGLLabelWidget",
-              "left": 313,
-              "top": 339,
-              "width": 175,
-              "height": 33,
-              "customInputs": [],
-              "customOutputs": [],
-              "style": {
-                "objID": "055c6d97-869c-48b4-b6a8-272f2e3badef",
-                "useStyle": "default",
-                "conditionalStyles": [],
-                "childStyles": []
-              },
-              "timeline": [],
-              "eventHandlers": [],
-              "leftUnit": "px",
-              "topUnit": "px",
-              "widthUnit": "content",
-              "heightUnit": "content",
-              "children": [],
-              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
-              "clickableFlagType": "literal",
-              "flagScrollbarMode": "",
-              "flagScrollDirection": "",
-              "scrollSnapX": "",
-              "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledStateType": "literal",
-              "states": "",
-              "useStyle": "text",
-              "localStyles": {
-                "objID": "3c7cb2ad-c316-48d5-a05b-8a1dceaa64bc",
-                "definition": {
-                  "MAIN": {
-                    "DEFAULT": {
-                      "text_font": "orbitron_bold_30"
-                    }
-                  }
-                }
-              },
-              "group": "",
-              "groupIndex": 0,
-              "text": "LOADING...",
-              "textType": "literal",
-              "longMode": "WRAP",
-              "recolor": false
-            },
-            {
-              "objID": "251f9107-e231-4422-d92c-6051b7c96313",
-              "type": "LVGLImageWidget",
-              "left": 50,
-              "top": 128,
-              "width": 700,
-              "height": 200,
-              "customInputs": [],
-              "customOutputs": [],
-              "style": {
-                "objID": "b42991d9-2aef-4928-b5a4-5da7ffbd9a1b",
-                "useStyle": "default",
-                "conditionalStyles": [],
-                "childStyles": []
-              },
-              "timeline": [],
-              "eventHandlers": [],
-              "identifier": "logo",
-              "leftUnit": "px",
-              "topUnit": "px",
-              "widthUnit": "content",
-              "heightUnit": "content",
-              "children": [],
-              "widgetFlags": "ADV_HITTEST|CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
-              "clickableFlagType": "literal",
-              "flagScrollbarMode": "",
-              "flagScrollDirection": "",
-              "scrollSnapX": "",
-              "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledStateType": "literal",
-              "states": "",
-              "localStyles": {
-                "objID": "8af61ab1-945a-49a7-8f2b-91712807382b",
-                "definition": {
-                  "MAIN": {
-                    "DEFAULT": {
-                      "width": 700,
-                      "height": 200
-                    }
-                  }
-                }
-              },
-              "group": "",
-              "groupIndex": 0,
-              "image": "lart logo",
-              "setPivot": false,
-              "pivotX": 0,
-              "pivotY": 0,
-              "zoom": 160,
-              "angle": 0,
-              "innerAlign": "CENTER",
-              "sizeMode": "VIRTUAL",
-              "value": 0,
-              "valueType": "literal",
-              "previewValue": 0
-            },
-            {
-              "objID": "c6a7c13a-c9a0-437c-c2ee-f05ae0410a58",
-              "type": "LVGLLabelWidget",
-              "left": 184,
-              "top": 45,
-              "width": 432,
-              "height": 53,
-              "customInputs": [],
-              "customOutputs": [],
-              "style": {
-                "objID": "1c7f6d83-4f7a-446f-94a5-7afc74b112c1",
-                "useStyle": "default",
-                "conditionalStyles": [],
-                "childStyles": []
-              },
-              "timeline": [],
-              "eventHandlers": [],
-              "leftUnit": "px",
-              "topUnit": "px",
-              "widthUnit": "content",
-              "heightUnit": "content",
-              "children": [],
-              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
-              "clickableFlagType": "literal",
-              "flagScrollbarMode": "",
-              "flagScrollDirection": "",
-              "scrollSnapX": "",
-              "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledStateType": "literal",
-              "states": "",
-              "useStyle": "text",
-              "localStyles": {
-                "objID": "effb015b-9f71-4611-c429-d468326c036f",
-                "definition": {
-                  "MAIN": {
-                    "DEFAULT": {
-                      "text_font": "orbitron_bold_50"
-                    }
-                  }
-                }
-              },
-              "group": "",
-              "groupIndex": 0,
-              "text": "DATA STATION",
-              "textType": "literal",
-              "longMode": "WRAP",
-              "recolor": false
-            },
-            {
-              "objID": "4a804204-f08f-4591-f391-46a25895bf54",
-              "type": "LVGLBarWidget",
-              "left": 75,
-              "top": 372,
-              "width": 694,
-              "height": 50,
-              "customInputs": [],
-              "customOutputs": [],
-              "style": {
-                "objID": "e5710cb1-a70a-44d6-b2cf-bd9573d067b6",
-                "useStyle": "default",
-                "conditionalStyles": [],
-                "childStyles": []
-              },
-              "timeline": [],
-              "eventHandlers": [],
-              "leftUnit": "px",
-              "topUnit": "px",
-              "widthUnit": "px",
-              "heightUnit": "px",
-              "children": [],
-              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
-              "clickableFlag": true,
-              "clickableFlagType": "literal",
-              "flagScrollbarMode": "",
-              "flagScrollDirection": "",
-              "scrollSnapX": "",
-              "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledStateType": "literal",
-              "states": "",
-              "useStyle": "bar",
-              "localStyles": {
-                "objID": "d2349407-5a76-495b-e7f7-7b9053d58250",
-                "definition": {
-                  "INDICATOR": {
-                    "DEFAULT": {
-                      "bg_color": "#000000",
-                      "bg_grad_dir": "HOR",
-                      "bg_grad_color": "#FFFFFF",
-                      "bg_grad_stop": 200
-                    }
-                  }
-                }
-              },
-              "group": "",
-              "groupIndex": 0,
-              "min": 0,
-              "minType": "literal",
-              "max": 100,
-              "maxType": "literal",
-              "mode": "NORMAL",
-              "value": "loading",
-              "valueType": "expression",
-              "previewValue": "25",
-              "valueStart": 0,
-              "valueStartType": "literal",
-              "previewValueStart": "0",
-              "enableAnimation": false
-            },
-            {
-              "objID": "e3a2ed0f-2dfb-45de-ca0a-a9cc0d56bade",
-              "type": "LVGLLabelWidget",
-              "left": 374,
-              "top": 439,
-              "width": 54,
-              "height": 33,
-              "customInputs": [],
-              "customOutputs": [],
-              "style": {
-                "objID": "3cc85686-7081-4b22-eaf9-227ca984c253",
-                "useStyle": "default",
-                "conditionalStyles": [],
-                "childStyles": []
-              },
-              "timeline": [],
-              "eventHandlers": [],
-              "leftUnit": "px",
-              "topUnit": "px",
-              "widthUnit": "content",
-              "heightUnit": "content",
-              "children": [],
-              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
-              "clickableFlagType": "literal",
-              "flagScrollbarMode": "",
-              "flagScrollDirection": "",
-              "scrollSnapX": "",
-              "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledStateType": "literal",
-              "states": "",
-              "useStyle": "text",
-              "localStyles": {
-                "objID": "0ba6f05f-3421-48b2-b029-bd17edb5c815",
-                "definition": {
-                  "MAIN": {
-                    "DEFAULT": {
-                      "text_font": "orbitron_bold_30"
-                    }
-                  }
-                }
-              },
-              "group": "",
-              "groupIndex": 0,
-              "text": "loading+\"%\"",
-              "textType": "expression",
-              "longMode": "WRAP",
-              "recolor": false,
-              "previewValue": "0%"
-            }
-          ],
-          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
-          "hiddenFlagType": "literal",
-          "clickableFlag": true,
-          "clickableFlagType": "literal",
-          "checkedStateType": "literal",
-          "disabledStateType": "literal",
-          "states": "",
-          "localStyles": {
-            "objID": "c230186a-edb5-4e9b-bf44-9dd87b63586f",
-            "definition": {
-              "MAIN": {
-                "DEFAULT": {
-                  "bg_color": "#000000"
-                }
-              }
-            }
-          },
-          "groupIndex": 0
-        }
-      ],
-      "connectionLines": [],
-      "localVariables": [],
-      "componentGroups": [],
-      "userProperties": [],
-      "name": "Start Scene",
       "left": 0,
       "top": 0,
       "width": 800,
@@ -2587,7 +2471,7 @@
               "type": "LVGLLabelWidget",
               "left": 738,
               "top": 424,
-              "width": 53,
+              "width": 17,
               "height": 23,
               "customInputs": [],
               "customOutputs": [],
@@ -2632,7 +2516,7 @@
               "type": "LVGLLabelWidget",
               "left": 11,
               "top": 426,
-              "width": 74,
+              "width": 17,
               "height": 23,
               "customInputs": [],
               "customOutputs": [],
@@ -3911,7 +3795,7 @@
                   "type": "LVGLLabelWidget",
                   "left": -52,
                   "top": 15,
-                  "width": 205,
+                  "width": 83,
                   "height": 106,
                   "customInputs": [],
                   "customOutputs": [],
@@ -3993,7 +3877,7 @@
               "type": "LVGLLabelWidget",
               "left": 106,
               "top": 268,
-              "width": 239,
+              "width": 256,
               "height": 33,
               "customInputs": [],
               "customOutputs": [],
@@ -4061,9 +3945,42 @@
             }
           },
           "groupIndex": 0
+        },
+        {
+          "objID": "5a7dc5d5-a546-4d34-d1a2-7a76f8b84182",
+          "type": "CallActionActionComponent",
+          "left": 328,
+          "top": -201,
+          "width": 165,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": [],
+          "action": "screen_changer_action",
+          "userPropertyValues": {
+            "objID": "45ccc538-ea1c-4221-d335-e07427b49742",
+            "values": {}
+          }
+        },
+        {
+          "objID": "158bb59d-09d5-49a3-e0f4-19e3979cb167",
+          "type": "StartActionComponent",
+          "left": 184,
+          "top": -201,
+          "width": 87,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": []
         }
       ],
-      "connectionLines": [],
+      "connectionLines": [
+        {
+          "objID": "f350b2e8-b08e-4a37-8881-9740d34be78c",
+          "source": "158bb59d-09d5-49a3-e0f4-19e3979cb167",
+          "output": "@seqout",
+          "target": "5a7dc5d5-a546-4d34-d1a2-7a76f8b84182",
+          "input": "@seqin"
+        }
+      ],
       "localVariables": [],
       "componentGroups": [],
       "userProperties": [],
@@ -4228,9 +4145,42 @@
             }
           },
           "groupIndex": 0
+        },
+        {
+          "objID": "145beced-4a57-4e02-897e-742106cbf83f",
+          "type": "CallActionActionComponent",
+          "left": 370,
+          "top": -270,
+          "width": 165,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": [],
+          "action": "screen_changer_action",
+          "userPropertyValues": {
+            "objID": "477f96de-e137-4ffe-a136-69feecd5a7bb",
+            "values": {}
+          }
+        },
+        {
+          "objID": "89182451-6d39-41fe-9ccf-ae5d2fd8f1b7",
+          "type": "StartActionComponent",
+          "left": 226,
+          "top": -270,
+          "width": 87,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": []
         }
       ],
-      "connectionLines": [],
+      "connectionLines": [
+        {
+          "objID": "73e91cec-2297-4d61-c1e7-e76ea5cebc35",
+          "source": "89182451-6d39-41fe-9ccf-ae5d2fd8f1b7",
+          "output": "@seqout",
+          "target": "145beced-4a57-4e02-897e-742106cbf83f",
+          "input": "@seqin"
+        }
+      ],
       "localVariables": [],
       "componentGroups": [],
       "userProperties": [],
@@ -4395,9 +4345,42 @@
             }
           },
           "groupIndex": 0
+        },
+        {
+          "objID": "d0c004d5-4d8a-488a-b738-cd13467fedde",
+          "type": "CallActionActionComponent",
+          "left": 354,
+          "top": -190,
+          "width": 165,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": [],
+          "action": "screen_changer_action",
+          "userPropertyValues": {
+            "objID": "33271791-4e4f-4a04-e5c3-96187508003f",
+            "values": {}
+          }
+        },
+        {
+          "objID": "3064189a-e9d3-4065-b826-8ab6622add75",
+          "type": "StartActionComponent",
+          "left": 210,
+          "top": -190,
+          "width": 87,
+          "height": 24,
+          "customInputs": [],
+          "customOutputs": []
         }
       ],
-      "connectionLines": [],
+      "connectionLines": [
+        {
+          "objID": "f02312e4-077e-42cd-b616-b4001e8cce0c",
+          "source": "3064189a-e9d3-4065-b826-8ab6622add75",
+          "output": "@seqout",
+          "target": "d0c004d5-4d8a-488a-b738-cd13467fedde",
+          "input": "@seqin"
+        }
+      ],
       "localVariables": [],
       "componentGroups": [],
       "userProperties": [],

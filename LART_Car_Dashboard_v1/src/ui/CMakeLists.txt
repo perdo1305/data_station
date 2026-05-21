@@ -79,6 +79,7 @@ if(SDL2_FOUND AND LVGL_SOURCES)
     set(UI_SOURCES
         eez-flow.cpp
         images.c
+        screen_api.cpp
         screens.c
         speed_api.cpp
         styles.c

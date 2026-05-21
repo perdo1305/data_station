@@ -12,8 +12,8 @@
 
 objects_t objects;
 
-static const char *screen_names[] = { "Driver View", "Start Scene", "Autonomous", "Debug Autonomous", "Debug" };
-static const char *object_names[] = { "driver_view", "start_scene", "autonomous", "debug_autonomous", "debug", "ready_label_1", "ready_label", "middle_container", "temp_motor_container", "tempmotor_label", "lap_times_container", "laptime_label", "lastlap_label", "obj0", "obj1", "temp_inv_container", "temp_inv_label", "speed_container", "speed_label", "km_label", "brake_acell_presure_container", "brake_presure_bar", "accellerator_presure_bar", "hv_bar", "lv_bar", "hv_label", "lv_label", "obj2", "logo", "obj3", "obj4", "obj5", "hv_bar_1", "lv_bar_1", "hv_label_1", "lv_label_1", "brake_presure_container", "brake_presure_bar_1", "brake_presure_bar_2", "pneumaticresure_container", "brake_presure_bar_3", "brake_presure_bar_4", "lap_times_container_1", "laptime_label_1", "lastlap_label_1", "obj6", "obj7", "max_speed_container", "km_label_2", "km_label_1", "speed_label_1", "km_label_3", "obj8", "debug_text", "obj9", "debug_text_1" };
+static const char *screen_names[] = { "Driver View", "Autonomous", "Debug Autonomous", "Debug" };
+static const char *object_names[] = { "driver_view", "autonomous", "debug_autonomous", "debug", "ready_label", "middle_container", "temp_motor_container", "tempmotor_label", "lap_times_container", "laptime_label", "lastlap_label", "obj0", "obj1", "temp_inv_container", "temp_inv_label", "speed_container", "speed_label", "km_label", "brake_acell_presure_container", "brake_presure_bar", "accellerator_presure_bar", "obj2", "hv_bar", "lv_bar", "hv_label", "lv_label", "obj3", "hv_bar_1", "lv_bar_1", "hv_label_1", "lv_label_1", "brake_presure_container", "brake_presure_bar_1", "brake_presure_bar_2", "pneumaticresure_container", "brake_presure_bar_3", "brake_presure_bar_4", "lap_times_container_1", "laptime_label_1", "lastlap_label_1", "obj4", "obj5", "max_speed_container", "km_label_2", "km_label_1", "speed_label_1", "km_label_3", "obj6", "debug_text", "obj7", "debug_text_1" };
 
 //
 // Event handlers
@@ -36,24 +36,13 @@ void create_screen_driver_view() {
     {
         lv_obj_t *parent_obj = obj;
         {
-            // readyLabel_1
-            lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.ready_label_1 = obj;
-            lv_obj_set_pos(obj, 0, 200);
-            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_50, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_color(obj, lv_color_hex(0x02ff02), LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_align(obj, LV_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_label_set_text_static(obj, "READY");
-        }
-        {
             // readyLabel
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.ready_label = obj;
             lv_obj_set_pos(obj, 0, 200);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             add_style_text(obj);
-            lv_obj_set_style_text_color(obj, lv_color_hex(0xfe0000), LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_color(obj, lv_color_hex(0x3fff00), LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_align(obj, LV_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_50, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_label_set_text(obj, "");
@@ -96,7 +85,7 @@ void create_screen_driver_view() {
                             // tempmotorLabel
                             lv_obj_t *obj = lv_label_create(parent_obj);
                             objects.tempmotor_label = obj;
-                            lv_obj_set_pos(obj, 13, 18);
+                            lv_obj_set_pos(obj, 10, 22);
                             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
                             add_style_text(obj);
                             lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_30, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -215,7 +204,7 @@ void create_screen_driver_view() {
                             // tempInvLabel
                             lv_obj_t *obj = lv_label_create(parent_obj);
                             objects.temp_inv_label = obj;
-                            lv_obj_set_pos(obj, 22, 18);
+                            lv_obj_set_pos(obj, 11, 20);
                             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
                             add_style_text(obj);
                             lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_30, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -332,6 +321,7 @@ void create_screen_driver_view() {
             objects.obj2 = obj;
             lv_obj_set_pos(obj, 120, 8);
             lv_obj_set_size(obj, 32, 32);
+            lv_led_set_color(obj, lv_color_hex(0x29ff00));
             lv_led_set_brightness(obj, 255);
         }
         {
@@ -423,7 +413,7 @@ void tick_screen_driver_view() {
     void *flowState = getFlowState(0, 0);
     (void)flowState;
     {
-        const char *new_val = evalTextProperty(flowState, 2, 3, "Failed to evaluate Text in Label widget");
+        const char *new_val = evalTextProperty(flowState, 0, 3, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.ready_label);
         if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.ready_label;
@@ -432,7 +422,7 @@ void tick_screen_driver_view() {
         }
     }
     {
-        const char *new_val = evalTextProperty(flowState, 5, 3, "Failed to evaluate Text in Label widget");
+        const char *new_val = evalTextProperty(flowState, 4, 3, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.tempmotor_label);
         if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.tempmotor_label;
@@ -441,7 +431,7 @@ void tick_screen_driver_view() {
         }
     }
     {
-        const char *new_val = evalTextProperty(flowState, 16, 3, "Failed to evaluate Text in Label widget");
+        const char *new_val = evalTextProperty(flowState, 15, 3, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.temp_inv_label);
         if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.temp_inv_label;
@@ -450,7 +440,7 @@ void tick_screen_driver_view() {
         }
     }
     {
-        const char *new_val = evalTextProperty(flowState, 19, 3, "Failed to evaluate Text in Label widget");
+        const char *new_val = evalTextProperty(flowState, 18, 3, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.speed_label);
         if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.speed_label;
@@ -459,7 +449,7 @@ void tick_screen_driver_view() {
         }
     }
     {
-        int32_t new_val = evalIntegerProperty(flowState, 23, 3, "Failed to evaluate Value in Bar widget");
+        int32_t new_val = evalIntegerProperty(flowState, 22, 3, "Failed to evaluate Value in Bar widget");
         int32_t cur_val = lv_bar_get_value(objects.brake_presure_bar);
         if (new_val != cur_val) {
             tick_value_change_obj = objects.brake_presure_bar;
@@ -468,7 +458,7 @@ void tick_screen_driver_view() {
         }
     }
     {
-        int32_t new_val = evalIntegerProperty(flowState, 24, 3, "Failed to evaluate Value in Bar widget");
+        int32_t new_val = evalIntegerProperty(flowState, 23, 3, "Failed to evaluate Value in Bar widget");
         int32_t cur_val = lv_bar_get_value(objects.accellerator_presure_bar);
         if (new_val != cur_val) {
             tick_value_change_obj = objects.accellerator_presure_bar;
@@ -477,17 +467,7 @@ void tick_screen_driver_view() {
         }
     }
     {
-        uint32_t new_val = evalUnsignedIntegerProperty(flowState, 25, 3, "Failed to evaluate Color in Led widget");
-        new_val = lv_color_to_u32(lv_color_hex(new_val));
-        uint32_t cur_val = lv_color_to_u32(((lv_led_t *)objects.obj2)->color);
-        if (new_val != cur_val) {
-            tick_value_change_obj = objects.obj2;
-            lv_led_set_color(objects.obj2, lv_color_hex(new_val));
-            tick_value_change_obj = NULL;
-        }
-    }
-    {
-        int32_t new_val = evalIntegerProperty(flowState, 26, 3, "Failed to evaluate Value in Bar widget");
+        int32_t new_val = evalIntegerProperty(flowState, 25, 3, "Failed to evaluate Value in Bar widget");
         int32_t cur_val = lv_bar_get_value(objects.hv_bar);
         if (new_val != cur_val) {
             tick_value_change_obj = objects.hv_bar;
@@ -496,7 +476,7 @@ void tick_screen_driver_view() {
         }
     }
     {
-        int32_t new_val = evalIntegerProperty(flowState, 27, 3, "Failed to evaluate Value in Bar widget");
+        int32_t new_val = evalIntegerProperty(flowState, 26, 3, "Failed to evaluate Value in Bar widget");
         int32_t cur_val = lv_bar_get_value(objects.lv_bar);
         if (new_val != cur_val) {
             tick_value_change_obj = objects.lv_bar;
@@ -505,7 +485,7 @@ void tick_screen_driver_view() {
         }
     }
     {
-        const char *new_val = evalTextProperty(flowState, 28, 3, "Failed to evaluate Text in Label widget");
+        const char *new_val = evalTextProperty(flowState, 27, 3, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.hv_label);
         if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.hv_label;
@@ -514,7 +494,7 @@ void tick_screen_driver_view() {
         }
     }
     {
-        const char *new_val = evalTextProperty(flowState, 29, 3, "Failed to evaluate Text in Label widget");
+        const char *new_val = evalTextProperty(flowState, 28, 3, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.lv_label);
         if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.lv_label;
@@ -524,93 +504,8 @@ void tick_screen_driver_view() {
     }
 }
 
-void create_screen_start_scene() {
-    void *flowState = getFlowState(0, 1);
-    (void)flowState;
-    lv_obj_t *obj = lv_obj_create(0);
-    objects.start_scene = obj;
-    lv_obj_set_pos(obj, 0, 0);
-    lv_obj_set_size(obj, 800, 480);
-    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    {
-        lv_obj_t *parent_obj = obj;
-        {
-            lv_obj_t *obj = lv_label_create(parent_obj);
-            lv_obj_set_pos(obj, 313, 339);
-            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-            add_style_text(obj);
-            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_30, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_label_set_text_static(obj, "LOADING...");
-        }
-        {
-            // logo
-            lv_obj_t *obj = lv_image_create(parent_obj);
-            objects.logo = obj;
-            lv_obj_set_pos(obj, 50, 128);
-            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-            lv_image_set_src(obj, &img_lart_logo);
-            lv_image_set_scale(obj, 160);
-            lv_obj_set_style_width(obj, 700, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_height(obj, 200, LV_PART_MAIN | LV_STATE_DEFAULT);
-        }
-        {
-            lv_obj_t *obj = lv_label_create(parent_obj);
-            lv_obj_set_pos(obj, 184, 45);
-            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-            add_style_text(obj);
-            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_50, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_label_set_text_static(obj, "DATA STATION");
-        }
-        {
-            lv_obj_t *obj = lv_bar_create(parent_obj);
-            objects.obj3 = obj;
-            lv_obj_set_pos(obj, 75, 372);
-            lv_obj_set_size(obj, 694, 50);
-            add_style_bar(obj);
-            lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_INDICATOR | LV_STATE_DEFAULT);
-            lv_obj_set_style_bg_grad_dir(obj, LV_GRAD_DIR_HOR, LV_PART_INDICATOR | LV_STATE_DEFAULT);
-            lv_obj_set_style_bg_grad_color(obj, lv_color_hex(0xffffff), LV_PART_INDICATOR | LV_STATE_DEFAULT);
-            lv_obj_set_style_bg_grad_stop(obj, 200, LV_PART_INDICATOR | LV_STATE_DEFAULT);
-        }
-        {
-            lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.obj4 = obj;
-            lv_obj_set_pos(obj, 374, 439);
-            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-            add_style_text(obj);
-            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_30, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_label_set_text(obj, "");
-        }
-    }
-    
-    tick_screen_start_scene();
-}
-
-void tick_screen_start_scene() {
-    void *flowState = getFlowState(0, 1);
-    (void)flowState;
-    {
-        int32_t new_val = evalIntegerProperty(flowState, 4, 3, "Failed to evaluate Value in Bar widget");
-        int32_t cur_val = lv_bar_get_value(objects.obj3);
-        if (new_val != cur_val) {
-            tick_value_change_obj = objects.obj3;
-            lv_bar_set_value(objects.obj3, new_val, LV_ANIM_OFF);
-            tick_value_change_obj = NULL;
-        }
-    }
-    {
-        const char *new_val = evalTextProperty(flowState, 5, 3, "Failed to evaluate Text in Label widget");
-        const char *cur_val = lv_label_get_text(objects.obj4);
-        if (strcmp(new_val, cur_val) != 0) {
-            tick_value_change_obj = objects.obj4;
-            lv_label_set_text(objects.obj4, new_val);
-            tick_value_change_obj = NULL;
-        }
-    }
-}
-
 void create_screen_autonomous() {
-    void *flowState = getFlowState(0, 2);
+    void *flowState = getFlowState(0, 1);
     (void)flowState;
     lv_obj_t *obj = lv_obj_create(0);
     objects.autonomous = obj;
@@ -630,7 +525,7 @@ void create_screen_autonomous() {
         }
         {
             lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.obj5 = obj;
+            objects.obj3 = obj;
             lv_obj_set_pos(obj, 125, 407);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             add_style_text(obj);
@@ -897,7 +792,7 @@ void create_screen_autonomous() {
                 }
                 {
                     lv_obj_t *obj = lv_label_create(parent_obj);
-                    objects.obj6 = obj;
+                    objects.obj4 = obj;
                     lv_obj_set_pos(obj, 265, 18);
                     lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
                     add_style_text(obj);
@@ -914,7 +809,7 @@ void create_screen_autonomous() {
                 }
                 {
                     lv_obj_t *obj = lv_label_create(parent_obj);
-                    objects.obj7 = obj;
+                    objects.obj5 = obj;
                     lv_obj_set_pos(obj, 197, 14);
                     lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
                     add_style_text(obj);
@@ -996,7 +891,7 @@ void create_screen_autonomous() {
 }
 
 void tick_screen_autonomous() {
-    void *flowState = getFlowState(0, 2);
+    void *flowState = getFlowState(0, 1);
     (void)flowState;
     {
         const char *new_val = evalTextProperty(flowState, 5, 3, "Failed to evaluate Text in Label widget");
@@ -1037,7 +932,7 @@ void tick_screen_autonomous() {
 }
 
 void create_screen_debug_autonomous() {
-    void *flowState = getFlowState(0, 3);
+    void *flowState = getFlowState(0, 2);
     (void)flowState;
     lv_obj_t *obj = lv_obj_create(0);
     objects.debug_autonomous = obj;
@@ -1048,7 +943,7 @@ void create_screen_debug_autonomous() {
         lv_obj_t *parent_obj = obj;
         {
             lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.obj8 = obj;
+            objects.obj6 = obj;
             lv_obj_set_pos(obj, 18, 13);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_obj_set_style_text_color(obj, lv_color_hex(0xff9400), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -1078,12 +973,12 @@ void create_screen_debug_autonomous() {
 }
 
 void tick_screen_debug_autonomous() {
-    void *flowState = getFlowState(0, 3);
+    void *flowState = getFlowState(0, 2);
     (void)flowState;
 }
 
 void create_screen_debug() {
-    void *flowState = getFlowState(0, 4);
+    void *flowState = getFlowState(0, 3);
     (void)flowState;
     lv_obj_t *obj = lv_obj_create(0);
     objects.debug = obj;
@@ -1094,7 +989,7 @@ void create_screen_debug() {
         lv_obj_t *parent_obj = obj;
         {
             lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.obj9 = obj;
+            objects.obj7 = obj;
             lv_obj_set_pos(obj, 19, 10);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_obj_set_style_text_color(obj, lv_color_hex(0xff9400), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -1124,20 +1019,19 @@ void create_screen_debug() {
 }
 
 void tick_screen_debug() {
-    void *flowState = getFlowState(0, 4);
+    void *flowState = getFlowState(0, 3);
     (void)flowState;
 }
 
 typedef void (*tick_screen_func_t)();
 tick_screen_func_t tick_screen_funcs[] = {
     tick_screen_driver_view,
-    tick_screen_start_scene,
     tick_screen_autonomous,
     tick_screen_debug_autonomous,
     tick_screen_debug,
 };
 void tick_screen(int screen_index) {
-    if (screen_index >= 0 && screen_index < 5) {
+    if (screen_index >= 0 && screen_index < 4) {
         tick_screen_funcs[screen_index]();
     }
 }
@@ -1254,7 +1148,6 @@ eez_flow_init_fonts(fonts, sizeof(fonts) / sizeof(ext_font_desc_t));
     
     // Create screens
     create_screen_driver_view();
-    create_screen_start_scene();
     create_screen_autonomous();
     create_screen_debug_autonomous();
     create_screen_debug();
