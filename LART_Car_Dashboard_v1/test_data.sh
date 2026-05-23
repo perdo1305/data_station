@@ -187,7 +187,7 @@ publish_screen() {
     docker exec "$container" bash -lc "
         source /opt/ros/jazzy/setup.bash &&
         source /root/lart_ws/install/setup.bash 2>/dev/null || true &&
-        ros2 topic pub -1 $SCREEN_TOPIC std_msgs/msg/Int32 '{data: $screen_id}'
+        ros2 topic pub -1 $SCREEN_TOPIC std_msgs/msg/Int32 '{data: ${screen_id}}'
     "
 }
 

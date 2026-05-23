@@ -107,9 +107,10 @@ LART_WEAK int ros2subscriber_init(void) {
     auto screen_callback = [](const std_msgs::msg::Int32::SharedPtr msg) {
         if (msg) {
             int id = msg->data;
-            // Clamp to valid screen range [1, 5]
-            if (id < 1) id = 1;
-            if (id > 5) id = 5;
+            // Valid 0-based screen range: 0=Driver, 1=Autonomous, 2=Debug Autonomous, 3=Debug
+            if (id < 0 || id > 3) {
+                return;  // Ignore out-of-range IDs silently
+            }
             g_requested_screen_id.store(id);
             g_screen_change_requested.store(1);
         }

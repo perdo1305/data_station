@@ -2165,17 +2165,6 @@
           "height": 24,
           "customInputs": [],
           "customOutputs": []
-        },
-        {
-          "objID": "4d65c7e7-4120-4e6f-9aee-c59ddebfb8af",
-          "type": "LVGLActionComponent",
-          "left": 461,
-          "top": -211,
-          "width": 87,
-          "height": 36,
-          "customInputs": [],
-          "customOutputs": [],
-          "actions": []
         }
       ],
       "connectionLines": [
@@ -2279,7 +2268,7 @@
               "type": "LVGLLabelWidget",
               "left": 125,
               "top": 407,
-              "width": 572,
+              "width": 420,
               "height": 42,
               "customInputs": [],
               "customOutputs": [],
@@ -2321,7 +2310,7 @@
               },
               "group": "",
               "groupIndex": 0,
-              "text": "MISSION: ACCELERATION",
+              "text": "MISSION: {MISSION}",
               "textType": "literal",
               "longMode": "WRAP",
               "recolor": false
@@ -2471,7 +2460,7 @@
               "type": "LVGLLabelWidget",
               "left": 738,
               "top": 424,
-              "width": 17,
+              "width": 53,
               "height": 23,
               "customInputs": [],
               "customOutputs": [],
@@ -2516,7 +2505,7 @@
               "type": "LVGLLabelWidget",
               "left": 11,
               "top": 426,
-              "width": 17,
+              "width": 74,
               "height": 23,
               "customInputs": [],
               "customOutputs": [],
@@ -3795,7 +3784,7 @@
                   "type": "LVGLLabelWidget",
                   "left": -52,
                   "top": 15,
-                  "width": 83,
+                  "width": 205,
                   "height": 106,
                   "customInputs": [],
                   "customOutputs": [],
@@ -3877,7 +3866,7 @@
               "type": "LVGLLabelWidget",
               "left": 106,
               "top": 268,
-              "width": 256,
+              "width": 232,
               "height": 33,
               "customInputs": [],
               "customOutputs": [],
@@ -3923,7 +3912,7 @@
               "textType": "expression",
               "longMode": "WRAP",
               "recolor": false,
-              "previewValue": ""
+              "previewValue": "State: READY"
             }
           ],
           "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",

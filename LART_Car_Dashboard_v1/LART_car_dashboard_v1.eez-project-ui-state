@@ -1,6 +1,6 @@
 {
   "navigation": {
-    "selectedUserPageObject": "[LART_car_dashboard_v1.eez-project]:/userPages/0",
+    "selectedUserPageObject": "[LART_car_dashboard_v1.eez-project]:/userPages/1",
     "selectedActionObject": "[LART_car_dashboard_v1.eez-project]:/actions/0",
     "selectedGlobalVariableObject": "[LART_car_dashboard_v1.eez-project]:/variables/globalVariables/10",
     "selectedStructureObject": "[LART_car_dashboard_v1.eez-project]:/variables/structures/0",
@@ -215,7 +215,7 @@
               "type": "tabset",
               "id": "EDITORS",
               "weight": 55.628992444385226,
-              "selected": 2,
+              "selected": 1,
               "enableDeleteWhenEmpty": false,
               "enableClose": false,
               "children": [
@@ -230,17 +230,6 @@
                     "permanent": false
                   },
                   "icon": "material:settings"
-                },
-                {
-                  "type": "tab",
-                  "id": "#81c002c1-bc5d-44b9-943d-44899bc33293",
-                  "name": "screen_changer_action",
-                  "component": "editor",
-                  "config": {
-                    "objectPath": "[LART_car_dashboard_v1.eez-project]:/actions/0",
-                    "permanent": true
-                  },
-                  "icon": "material:code"
                 },
                 {
                   "type": "tab",
@@ -1225,8 +1214,8 @@
       },
       "transform": {
         "translate": {
-          "x": -257.96175685425686,
-          "y": -140.1182503607509
+          "x": -414.96175685425686,
+          "y": -217.1182503607509
         },
         "scale": 1
       },
@@ -1260,8 +1249,7 @@
             },
             "4": {}
           }
-        },
-        "3": {}
+        }
       },
       "timeline": {
         "isEditorActive": false,
@@ -1354,8 +1342,8 @@
       "selection": {},
       "transform": {
         "translate": {
-          "x": 150.71532773971558,
-          "y": 711
+          "x": 39.715327739715576,
+          "y": 619
         },
         "scale": 1
       }
