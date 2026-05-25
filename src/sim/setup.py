@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'mock_can = sim.mock_can:main',
+            'can_simulator = sim.can_simulator:main',
         ],
     },
 )

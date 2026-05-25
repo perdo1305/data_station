@@ -11,6 +11,10 @@ can_bridge:
     rpm_length_bytes: 2          # number of bytes (big-endian unsigned)
     rpm_scale: 1.0               # raw_value * scale + offset = RPM
     rpm_offset: 0.0
+    # DBC-based dynamic decoding (optional).
+    # Set to the absolute path of a .dbc file to enable /can/dbc/* topics.
+    # Leave empty for legacy RPM-only mode (no cantools dependency needed).
+    dbc_path: ""    # e.g. /home/user/lart_ws/dbc_signals/autonomous_t26.dbc
 
 input_handler:
   ros__parameters:
@@ -38,6 +42,14 @@ mock_can:
     rpm_shift: 11500.0
     sweep_period_s: 5.0
     publish_hz: 100.0
+
+can_simulator:
+  ros__parameters:
+    can_interface: vcan0    # virtual CAN interface created at startup
+    # dbc_path is set to the resolved absolute path by dbc_sim.launch.py
+    dbc_path: ""
+    publish_hz: 10.0        # frames per second per message (round-robin)
+    message_ids: []         # empty = all messages in DBC
 
 dashboard_ui:
   ros__parameters:
