@@ -154,7 +154,7 @@ void create_screen_driver_view() {
                             add_style_text(obj);
                             lv_obj_set_style_text_color(obj, lv_color_hex(0xfefefe), LV_PART_MAIN | LV_STATE_DEFAULT);
                             lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_50, LV_PART_MAIN | LV_STATE_DEFAULT);
-                            lv_label_set_text_static(obj, "1");
+                            lv_label_set_text(obj, "");
                         }
                         {
                             lv_obj_t *obj = lv_label_create(parent_obj);
@@ -331,7 +331,7 @@ void create_screen_driver_view() {
             lv_obj_set_pos(obj, 734, 106);
             lv_obj_set_size(obj, 53, 314);
             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
-            lv_bar_set_value(obj, 50, LV_ANIM_OFF);
+            lv_bar_set_value(obj, 0, LV_ANIM_OFF);
             lv_bar_set_start_value(obj, 0, LV_ANIM_OFF);
             add_style_bar(obj);
             lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_INDICATOR | LV_STATE_DEFAULT);
@@ -352,7 +352,7 @@ void create_screen_driver_view() {
             lv_obj_set_size(obj, 53, 314);
             lv_bar_set_range(obj, 18, 30);
             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
-            lv_bar_set_value(obj, 25, LV_ANIM_ON);
+            lv_bar_set_value(obj, 0, LV_ANIM_ON);
             lv_bar_set_start_value(obj, 0, LV_ANIM_ON);
             add_style_bar(obj);
             lv_obj_set_style_bg_color(obj, lv_color_hex(0x02ff02), LV_PART_INDICATOR | LV_STATE_DEFAULT);
@@ -431,6 +431,15 @@ void tick_screen_driver_view() {
         }
     }
     {
+        const char *new_val = evalTextProperty(flowState, 10, 3, "Failed to evaluate Text in Label widget");
+        const char *cur_val = lv_label_get_text(objects.obj0);
+        if (strcmp(new_val, cur_val) != 0) {
+            tick_value_change_obj = objects.obj0;
+            lv_label_set_text(objects.obj0, new_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
         const char *new_val = evalTextProperty(flowState, 15, 3, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.temp_inv_label);
         if (strcmp(new_val, cur_val) != 0) {
@@ -463,6 +472,24 @@ void tick_screen_driver_view() {
         if (new_val != cur_val) {
             tick_value_change_obj = objects.accellerator_presure_bar;
             lv_bar_set_value(objects.accellerator_presure_bar, new_val, LV_ANIM_OFF);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        int32_t new_val = evalIntegerProperty(flowState, 25, 3, "Failed to evaluate Value in Bar widget");
+        int32_t cur_val = lv_bar_get_value(objects.hv_bar);
+        if (new_val != cur_val) {
+            tick_value_change_obj = objects.hv_bar;
+            lv_bar_set_value(objects.hv_bar, new_val, LV_ANIM_OFF);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        int32_t new_val = evalIntegerProperty(flowState, 26, 3, "Failed to evaluate Value in Bar widget");
+        int32_t cur_val = lv_bar_get_value(objects.lv_bar);
+        if (new_val != cur_val) {
+            tick_value_change_obj = objects.lv_bar;
+            lv_bar_set_value(objects.lv_bar, new_val, LV_ANIM_ON);
             tick_value_change_obj = NULL;
         }
     }

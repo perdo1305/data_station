@@ -27,6 +27,14 @@ def generate_launch_description():
             emulate_tty=True,
         ),
         Node(
+            package='lart_bringup',
+            executable='dashboard_state_bridge',
+            name='dashboard_state_bridge',
+            parameters=[config],
+            output='screen',
+            emulate_tty=True,
+        ),
+        Node(
             package='input_handler',
             executable='input_handler',
             name='input_handler',

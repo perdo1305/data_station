@@ -21,6 +21,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp/executors/single_threaded_executor.hpp>
+#include <rclcpp/qos.hpp>
 #include <std_msgs/msg/float32.hpp>
 #include <std_msgs/msg/int32.hpp>
 
@@ -41,13 +42,16 @@
 #endif
 
 namespace {
-constexpr const char *DEFAULT_SPEED_TOPIC = "/vehicle/speed_kph";
+constexpr const char *DEFAULT_SPEED_TOPIC = "/can/dbc/dv_dynamics_1/speed_actual";
+constexpr const char *DEFAULT_HV_TOPIC = "/can/dbc/vcu_hv/hv";
 constexpr const char *DEFAULT_DASHBOARD_STATE_TOPIC = "/vehicle/dashboard_state";
 constexpr const char *DEFAULT_SET_SCREEN_TOPIC = "/dashboard/set_screen";
 
 std::atomic<int> g_is_initialized(0);
 std::atomic<int> g_has_speed(0);
 std::atomic<float> g_latest_speed_kph(0.0f);
+std::atomic<int> g_has_hv(0);
+std::atomic<float> g_latest_hv(0.0f);
 std::atomic<int> g_screen_change_requested(0);
 std::atomic<int> g_requested_screen_id(0);
 
@@ -55,6 +59,7 @@ bool g_did_init_rclcpp = false;
 std::shared_ptr<rclcpp::Node> g_node;
 std::shared_ptr<rclcpp::executors::SingleThreadedExecutor> g_exec;
 rclcpp::SubscriptionBase::SharedPtr g_sub;
+rclcpp::SubscriptionBase::SharedPtr g_sub_hv;
 rclcpp::SubscriptionBase::SharedPtr g_sub_screen;
 
 bool env_is_true(const char *name, bool default_value) {
@@ -91,6 +96,7 @@ LART_WEAK int ros2subscriber_init(void) {
     g_exec->add_node(g_node);
 
     const char *topic = env_or_default("LART_ROS2_SPEED_TOPIC", DEFAULT_SPEED_TOPIC);
+    const char *hv_topic = env_or_default("LART_ROS2_HV_TOPIC", DEFAULT_HV_TOPIC);
 
     auto callback = [](const std_msgs::msg::Float32::SharedPtr msg) {
         if (msg) {
@@ -99,7 +105,18 @@ LART_WEAK int ros2subscriber_init(void) {
         }
     };
 
-    g_sub = g_node->create_subscription<std_msgs::msg::Float32>(topic, rclcpp::QoS(10), callback);
+    auto hv_callback = [](const std_msgs::msg::Float32::SharedPtr msg) {
+        if (msg) {
+            g_latest_hv.store(msg->data);
+            g_has_hv.store(1);
+        }
+    };
+
+    // Use BEST_EFFORT to match the can_bridge publisher's QoS profile
+    auto sensor_qos = rclcpp::QoS(10).best_effort();
+
+    g_sub = g_node->create_subscription<std_msgs::msg::Float32>(topic, sensor_qos, callback);
+    g_sub_hv = g_node->create_subscription<std_msgs::msg::Float32>(hv_topic, sensor_qos, hv_callback);
 
     // Screen change subscription
     const char *screen_topic = env_or_default("LART_ROS2_SET_SCREEN_TOPIC", DEFAULT_SET_SCREEN_TOPIC);
@@ -120,6 +137,7 @@ LART_WEAK int ros2subscriber_init(void) {
 
     g_is_initialized.store(1);
     g_has_speed.store(0);
+    g_has_hv.store(0);
     g_screen_change_requested.store(0);
     return 0;
 }
@@ -142,6 +160,15 @@ LART_WEAK int ros2subscriber_get_latest_speed(float *speed_kph) {
     }
 
     *speed_kph = g_latest_speed_kph.load();
+    return 1;
+}
+
+LART_WEAK int ros2subscriber_get_latest_hv(float *hv_value) {
+    if (!g_is_initialized.load() || !g_has_hv.load() || hv_value == nullptr) {
+        return 0;
+    }
+
+    *hv_value = g_latest_hv.load();
     return 1;
 }
 
@@ -168,6 +195,7 @@ LART_WEAK void ros2subscriber_fini(void) {
     }
 
     g_sub.reset();
+    g_sub_hv.reset();
     g_sub_screen.reset();
 
     if (g_exec && g_node) {
@@ -191,6 +219,8 @@ LART_WEAK void ros2subscriber_fini(void) {
     g_is_initialized.store(0);
     g_has_speed.store(0);
     g_latest_speed_kph.store(0.0f);
+    g_has_hv.store(0);
+    g_latest_hv.store(0.0f);
     g_screen_change_requested.store(0);
     g_requested_screen_id.store(0);
 }
@@ -208,6 +238,13 @@ LART_WEAK int ros2subscriber_spin_some(void) {
 LART_WEAK int ros2subscriber_get_latest_speed(float *speed_kph) {
     if (speed_kph != nullptr) {
         *speed_kph = 0.0f;
+    }
+    return 0;
+}
+
+LART_WEAK int ros2subscriber_get_latest_hv(float *hv_value) {
+    if (hv_value != nullptr) {
+        *hv_value = 0.0f;
     }
     return 0;
 }

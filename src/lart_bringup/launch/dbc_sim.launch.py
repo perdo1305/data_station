@@ -76,4 +76,14 @@ def generate_launch_description():
             output='screen',
             emulate_tty=True,
         ),
+
+        # ── Bridge decoded signals into DashboardState + /vehicle/speed_kph ─
+        Node(
+            package='lart_bringup',
+            executable='dashboard_state_bridge',
+            name='dashboard_state_bridge',
+            parameters=[config],
+            output='screen',
+            emulate_tty=True,
+        ),
     ])

@@ -209,6 +209,13 @@
         "type": "integer",
         "defaultValue": "1",
         "persistent": false
+      },
+      {
+        "objID": "145db213-343d-4831-95e4-b2efcebdf7e1",
+        "name": "lap_count",
+        "type": "integer",
+        "defaultValue": "0",
+        "persistent": false
       }
     ],
     "structures": [
@@ -913,7 +920,7 @@
                       "type": "LVGLLabelWidget",
                       "left": 329,
                       "top": 11,
-                      "width": 20,
+                      "width": 312,
                       "height": 53,
                       "customInputs": [],
                       "customOutputs": [],
@@ -954,8 +961,8 @@
                       },
                       "group": "",
                       "groupIndex": 0,
-                      "text": "1",
-                      "textType": "literal",
+                      "text": "lap_count",
+                      "textType": "expression",
                       "longMode": "WRAP",
                       "recolor": false
                     },
@@ -1818,8 +1825,8 @@
               "max": 100,
               "maxType": "literal",
               "mode": "RANGE",
-              "value": 50,
-              "valueType": "literal",
+              "value": "hv",
+              "valueType": "expression",
               "previewValue": "50",
               "valueStart": 0,
               "valueStartType": "literal",
@@ -1890,8 +1897,8 @@
               "max": 30,
               "maxType": "literal",
               "mode": "RANGE",
-              "value": 25,
-              "valueType": "literal",
+              "value": "lv",
+              "valueType": "expression",
               "previewValue": "24.0",
               "valueStart": 0,
               "valueStartType": "literal",

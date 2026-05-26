@@ -16,6 +16,27 @@ can_bridge:
     # Leave empty for legacy RPM-only mode (no cantools dependency needed).
     dbc_path: ""    # e.g. /home/user/lart_ws/dbc_signals/autonomous_t26.dbc
 
+dashboard_state_bridge:
+  ros__parameters:
+    publish_hz: 20.0
+    can_active_timeout_s: 1.0
+    # If speed_topic is empty, speed can be derived from RPM:
+    # speed_kph = rpm * speed_from_rpm_scale
+    speed_scale: 1.0
+    speed_from_rpm_scale: 0.02454
+    # Topic mapping (empty string disables that input)
+    rpm_topic: /vehicle/rpm
+    speed_topic: ""         # e.g. /can/dbc/dv_dynamics_1/speed_actual
+    inv_temp_topic: ""      # e.g. /can/dbc/hv500_temperatures/actual_tempcontroller
+    motor_temp_topic: ""    # e.g. /can/dbc/hv500_temperatures/actual_tempmotor
+    bps_topic: ""           # e.g. /can/dbc/dv_dynamics_1/brake_hydr_actual
+    kw_inst_topic: ""
+    kw_limit_topic: ""
+    soc_lv_topic: ""
+    soc_hv_topic: ""        # e.g. /can/dbc/master_soc_accumulator/soc_float
+    lv_voltage_topic: ""
+    r2d_ready_topic: ""     # e.g. /can/dbc/dashboard/ready_to_drive
+
 input_handler:
   ros__parameters:
     button_a: 17

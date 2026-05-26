@@ -79,6 +79,7 @@ if(SDL2_FOUND AND LVGL_SOURCES)
         images.c
         screen_api.cpp
         screens.c
+        power_api.cpp
         speed_api.cpp
         styles.c
         ui.c

@@ -2,13 +2,13 @@
   "navigation": {
     "selectedUserPageObject": "[LART_car_dashboard_v1.eez-project]:/userPages/0",
     "selectedActionObject": "[LART_car_dashboard_v1.eez-project]:/actions/0",
-    "selectedGlobalVariableObject": "[LART_car_dashboard_v1.eez-project]:/variables/globalVariables/10",
+    "selectedGlobalVariableObject": "[LART_car_dashboard_v1.eez-project]:/variables/globalVariables/3",
     "selectedStructureObject": "[LART_car_dashboard_v1.eez-project]:/variables/structures/0",
     "selectedStyleObject": "[LART_car_dashboard_v1.eez-project]:/lvglStyles/styles/1",
     "selectedFontObject": "[LART_car_dashboard_v1.eez-project]:/fonts/3",
     "selectedBitmapObject": "[LART_car_dashboard_v1.eez-project]:/bitmaps/0",
     "subnavigationSelectedItems": {
-      "variables-tab/sub-navigation/selected-item": "Actions"
+      "variables-tab/sub-navigation/selected-item": "Global"
     }
   },
   "layoutModel": {
@@ -85,8 +85,8 @@
           },
           {
             "type": "border",
-            "selected": 0,
-            "size": 56.5,
+            "selected": 1,
+            "size": 319.5,
             "location": "bottom",
             "children": [
               {
@@ -215,7 +215,6 @@
               "type": "tabset",
               "id": "EDITORS",
               "weight": 55.628992444385226,
-              "selected": 1,
               "enableDeleteWhenEmpty": false,
               "enableClose": false,
               "children": [
@@ -1242,7 +1241,9 @@
             "0": {
               "0": {}
             },
-            "1": {},
+            "1": {
+              "$selected": true
+            },
             "2": {},
             "3": {
               "0": {}
