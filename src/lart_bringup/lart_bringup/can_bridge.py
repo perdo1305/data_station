@@ -39,7 +39,10 @@ _UNSAFE = re.compile(r'[^a-zA-Z0-9_]')
 
 def _ros_name(raw: str) -> str:
     """Convert a DBC identifier to a valid, lowercase ROS topic segment."""
-    return _UNSAFE.sub('_', raw).strip('_').lower()
+    slug = _UNSAFE.sub('_', raw).strip('_').lower()
+    if slug and slug[0].isdigit():
+        slug = 'val_' + slug
+    return slug
 
 
 class CanBridgeNode(Node):
@@ -96,7 +99,7 @@ class CanBridgeNode(Node):
     # ──────────────────────────────────────────────────────────────────────
 
     def _load_dbc(self, dbc_path: str) -> None:
-        """Load DBC file and pre-create one Float32 publisher per signal."""
+        """Load DBC file or directory of DBC files and pre-create one Float32 publisher per signal."""
         try:
             import cantools  # imported here so missing lib is a soft error
         except ImportError:
@@ -106,11 +109,28 @@ class CanBridgeNode(Node):
             )
             return
 
-        try:
-            self._db = cantools.database.load_file(dbc_path)
-        except Exception as exc:
-            self.get_logger().error(f'Failed to load DBC file "{dbc_path}": {exc}')
-            return
+        import glob
+        import os
+        self._db = None
+        if os.path.isdir(dbc_path):
+            self.get_logger().info(f'Loading all DBC files from directory: {dbc_path}')
+            dbc_files = sorted(glob.glob(os.path.join(dbc_path, '*.dbc')))
+        else:
+            self.get_logger().info(f'Loading single DBC file: {dbc_path}')
+            dbc_files = [dbc_path]
+
+        for df in dbc_files:
+            try:
+                if self._db is None:
+                    self._db = cantools.database.load_file(df)
+                else:
+                    self._db.add_dbc_file(df)
+                self.get_logger().info(f'  Loaded DBC: {os.path.basename(df)}')
+            except Exception as exc:
+                self.get_logger().error(f'Failed to load DBC file "{df}": {exc}')
+
+        if self._db is None:
+            self._db = cantools.database.Database()
 
         total_signals = 0
         for msg in self._db.messages:
@@ -126,7 +146,7 @@ class CanBridgeNode(Node):
                 total_signals += 1
 
         self.get_logger().info(
-            f'DBC loaded: {dbc_path}\n'
+            f'DBC loaded from: {dbc_path}\n'
             f'  → {len(self._dbc_pubs)} messages, {total_signals} signals\n'
             f'  → Publishing on /can/dbc/<msg>/<signal>'
         )

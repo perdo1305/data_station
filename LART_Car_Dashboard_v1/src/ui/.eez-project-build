@@ -1,6 +1,5 @@
 {
   "files": [
-    "CMakeLists.txt",
     "actions.h",
     "eez-flow.cpp",
     "eez-flow.h",
@@ -16,8 +15,6 @@
     "images.c",
     "images.h",
     "images/ui_image_lart_logo.c",
-    "ros2subscriber.cpp",
-    "ros2subscriber.h",
     "screens.c",
     "screens.h",
     "structs.h",

@@ -90,21 +90,6 @@
           "objID": "084926f1-634e-4671-9fc3-cc34c950eba7",
           "fileName": "ui.c",
           "template": "#if defined(EEZ_FOR_LVGL)\n#include <eez/core/vars.h>\n#endif\n\n#include \"ui.h\"\n#include \"screens.h\"\n#include \"images.h\"\n#include \"actions.h\"\n#include \"vars.h\"\n#include \"stdio.h\"\n\n\n#include \"ros2subscriber.h\"\n\n\n\n//${eez-studio GUI_ASSETS_DEF}\n\n//${eez-studio LVGL_NATIVE_VARS_TABLE_DEF}\n\n//${eez-studio LVGL_ACTIONS_ARRAY_DEF}\n\n#if defined(EEZ_FOR_LVGL)\n\n\nvoid ui_init() {\n    eez_flow_init(assets, sizeof(assets), (lv_obj_t **)&objects, sizeof(objects), images, sizeof(images), actions);\n    if (ros2subscriber_init() != 0) {\n        ui_set_speed(0.0f);\n        return;\n    }\n\n    ui_set_speed(0.0f);\n}\n\n// Screen change names for logging (1-based EEZ-Flow IDs)\nstatic const char *ui_screen_name(int eez_id) {\n    static const char *names[] = { \"?\", \"Driver View\", \"Autonomous\", \"Debug Autonomous\", \"Debug\" };\n    if (eez_id >= 1 && eez_id <= 4) return names[eez_id];\n    return \"?\";\n}\n\n// Pending screen change (1-based EEZ-Flow ID, 0 = no pending change).\n// Set by ui_set_screen(), consumed at the top of the next ui_tick()\n// BEFORE eez_flow_tick() runs, preventing state corruption and crashes.\nstatic int g_pending_screen_id = 0;\n\nvoid ui_tick() {\n    // Apply any pending screen change FIRST, before eez_flow_tick().\n    if (g_pending_screen_id != 0) {\n        int16_t current = eez_flow_get_current_screen(); // 1-based\n        int target = g_pending_screen_id;\n        g_pending_screen_id = 0;\n\n        if (target >= _SCREEN_ID_FIRST && target <= _SCREEN_ID_LAST && target != current) {\n            printf(\"[ui_tick] Screen change: %d (%s) -> %d (%s)\\n\",\n                current, ui_screen_name(current),\n                target,  ui_screen_name(target));\n            eez_flow_set_screen((int16_t)target, LV_SCR_LOAD_ANIM_NONE, 0, 0);\n        }\n    }\n\n    // Update speed from ROS\n    float speed_kph;\n    if (ros2subscriber_spin_some() == 0 && ros2subscriber_get_latest_speed(&speed_kph)) {\n        ui_set_speed(speed_kph);\n    }\n\n    eez_flow_tick();\n    tick_screen(g_currentScreen);\n\n    // Queue any screen change request received this tick.\n    // It will be applied at the top of the NEXT tick, before eez_flow_tick().\n    int screen_id;\n    if (ros2subscriber_get_screen_change_request(&screen_id)) {\n        ui_set_screen(screen_id);\n    }\n}\n\nvoid ui_setup_timers(void) {\n    // No LVGL timers required for ROS2 subscriber mode.\n}\n\n// Cleanup on shutdown\nvoid ui_fini(void) {\n    ros2subscriber_fini();\n}\n\n// Request a screen change by ROS2 0-based ID (0=Driver View, 1=Autonomous, 2=Debug Autonomous, 3=Debug).\n// Converts to EEZ-Flow's 1-based ID and queues it for the next tick.\nvoid ui_set_screen(int screen_id) {\n    if (screen_id >= 0 && screen_id <= 3) {\n        g_pending_screen_id = screen_id + 1; // 0-based -> 1-based EEZ-Flow ID\n        printf(\"[ui_set_screen] Queued screen: ROS2 id=%d (%s) -> eez_id=%d\\n\",\n               screen_id, ui_screen_name(screen_id + 1), screen_id + 1);\n    } else {\n        printf(\"[ui_set_screen] Ignoring invalid screen_id: %d\\n\", screen_id);\n    }\n}\n\n#endif\n"
-        },
-        {
-          "objID": "a40698a8-cea3-4c3e-b73f-dca45f315fd8",
-          "fileName": "CMakeLists.txt",
-          "template": "cmake_minimum_required(VERSION 3.8)\nproject(speed_subscriber LANGUAGES C CXX)\n\n# Compiler flags\nif(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES \"Clang\")\n    add_compile_options(-Wall -Wextra -Wpedantic)\nendif()\n\n# ROS 2 (required)\nfind_package(ament_cmake QUIET)\nfind_package(PkgConfig REQUIRED)\nfind_package(Threads REQUIRED)\n\nif(ament_cmake_FOUND)\n    find_package(rclcpp REQUIRED)\n    find_package(std_msgs REQUIRED)\nendif()\n\n# Optional: subscribe to /vehicle/dashboard_state if lart_msgs is available\nfind_package(lart_msgs QUIET)\n\n# Desktop UI runner dependency (requires SDL2 development package for headers + pkg-config file)\npkg_check_modules(SDL2 QUIET IMPORTED_TARGET sdl2)\n\nfile(GLOB_RECURSE LVGL_SOURCES CONFIGURE_DEPENDS\n    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src/*.c\n)\n\n# ============================================================================\n# CREATE ROS2 SUBSCRIBER LIBRARY\n# ============================================================================\n\nadd_library(ros2subscriber STATIC\n    ros2subscriber.cpp\n)\n\ntarget_compile_features(ros2subscriber PUBLIC cxx_std_17)\n\ntarget_include_directories(ros2subscriber PUBLIC\n    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>\n    $<INSTALL_INTERFACE:include/${PROJECT_NAME}>\n)\n\ntarget_link_libraries(ros2subscriber Threads::Threads)\nif(ament_cmake_FOUND)\n    target_compile_definitions(ros2subscriber PRIVATE LART_UI_HAVE_RCLCPP=1)\n    ament_target_dependencies(ros2subscriber rclcpp std_msgs)\nendif()\nif(lart_msgs_FOUND)\n    target_compile_definitions(ros2subscriber PRIVATE LART_HAVE_DASHBOARD_STATE_MSG=1)\n    if(ament_cmake_FOUND)\n        ament_target_dependencies(ros2subscriber lart_msgs)\n    endif()\n    message(STATUS \"ROS2 subscriber: lart_msgs detected (DashboardState supported)\")\nelse()\n    message(STATUS \"ROS2 subscriber: lart_msgs not found (Float32 speed topic only)\")\nendif()\n\n# Installation targets\ninstall(TARGETS ros2subscriber\n    ARCHIVE DESTINATION lib\n    LIBRARY DESTINATION lib\n    RUNTIME DESTINATION bin\n)\ninstall(FILES ros2subscriber.h DESTINATION include/${PROJECT_NAME})\n\nif(SDL2_FOUND AND LVGL_SOURCES)\n    add_library(lvgl STATIC ${LVGL_SOURCES})\n    target_compile_features(lvgl PUBLIC c_std_99)\n    target_include_directories(lvgl PUBLIC\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src\n        ${CMAKE_CURRENT_SOURCE_DIR}\n    )\n    target_compile_definitions(lvgl PUBLIC LV_CONF_INCLUDE_SIMPLE=1 LV_FONT_FMT_TXT_LARGE=1)\n\n    set(UI_SOURCES\n        eez-flow.cpp\n        images.c\n        screen_api.cpp\n        screens.c\n        speed_api.cpp\n        styles.c\n        ui.c\n        fonts/ui_font_orbiter_bold_100.c\n        fonts/ui_font_orbitron_15.c\n        fonts/ui_font_orbitron_bold_15.c\n        fonts/ui_font_orbitron_bold_20.c\n        fonts/ui_font_orbitron_bold_25.c\n        fonts/ui_font_orbitron_bold_30.c\n        fonts/ui_font_orbitron_bold_40.c\n        fonts/ui_font_orbitron_bold_50.c\n        images/ui_image_lart_logo.c\n        ui_runner.cpp\n    )\n\n    add_executable(ui_runner ${UI_SOURCES})\n\n    target_compile_features(ui_runner PUBLIC cxx_std_17)\n    target_include_directories(ui_runner PRIVATE\n        ${CMAKE_CURRENT_SOURCE_DIR}\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src\n    )\n    target_compile_definitions(ui_runner PRIVATE LV_CONF_INCLUDE_SIMPLE=1 LV_FONT_FMT_TXT_LARGE=1)\n    target_link_libraries(ui_runner\n        lvgl\n        ros2subscriber\n        PkgConfig::SDL2\n        Threads::Threads\n    )\n    if(ament_cmake_FOUND)\n        ament_target_dependencies(ui_runner rclcpp std_msgs)\n    endif()\n    if(lart_msgs_FOUND)\n        if(ament_cmake_FOUND)\n            ament_target_dependencies(ui_runner lart_msgs)\n        endif()\n    endif()\nelse()\n    message(STATUS \"Desktop UI runner disabled: SDL2 (libsdl2-dev) or LVGL sources not available\")\nendif()\n\nif(ament_cmake_FOUND)\n    ament_package()\nendif()"
-        },
-        {
-          "objID": "5d5ceb45-7278-44e0-bf56-250aaf12c7fc",
-          "fileName": "ros2subscriber.cpp",
-          "template": "#include \"ros2subscriber.h\"\n\n#include <atomic>\n#include <chrono>\n#include <cstdlib>\n#include <cstring>\n#include <strings.h>\n#include <memory>\n\n#ifndef LART_UI_HAVE_RCLCPP\n#define LART_UI_HAVE_RCLCPP 0\n#endif\n\n#if defined(__GNUC__) || defined(__clang__)\n#define LART_WEAK __attribute__((weak))\n#else\n#define LART_WEAK\n#endif\n\n#if LART_UI_HAVE_RCLCPP\n\n#include <rclcpp/rclcpp.hpp>\n#include <rclcpp/executors/single_threaded_executor.hpp>\n#include <std_msgs/msg/float32.hpp>\n#include <std_msgs/msg/int32.hpp>\n\n#if !defined(LART_HAVE_DASHBOARD_STATE_MSG)\n#if defined(__has_include)\n#if __has_include(<lart_msgs/msg/dashboard_state.hpp>)\n#define LART_HAVE_DASHBOARD_STATE_MSG 1\n#else\n#define LART_HAVE_DASHBOARD_STATE_MSG 0\n#endif\n#else\n#define LART_HAVE_DASHBOARD_STATE_MSG 0\n#endif\n#endif\n\n#if LART_HAVE_DASHBOARD_STATE_MSG\n#include <lart_msgs/msg/dashboard_state.hpp>\n#endif\n\nnamespace {\nconstexpr const char *DEFAULT_SPEED_TOPIC = \"/vehicle/speed_kph\";\nconstexpr const char *DEFAULT_DASHBOARD_STATE_TOPIC = \"/vehicle/dashboard_state\";\nconstexpr const char *DEFAULT_SET_SCREEN_TOPIC = \"/dashboard/set_screen\";\n\nstd::atomic<int> g_is_initialized(0);\nstd::atomic<int> g_has_speed(0);\nstd::atomic<float> g_latest_speed_kph(0.0f);\nstd::atomic<int> g_screen_change_requested(0);\nstd::atomic<int> g_requested_screen_id(0);\n\nbool g_did_init_rclcpp = false;\nstd::shared_ptr<rclcpp::Node> g_node;\nstd::shared_ptr<rclcpp::executors::SingleThreadedExecutor> g_exec;\nrclcpp::SubscriptionBase::SharedPtr g_sub;\nrclcpp::SubscriptionBase::SharedPtr g_sub_screen;\n\nbool env_is_true(const char *name, bool default_value) {\n    const char *value = std::getenv(name);\n    if (value == nullptr || *value == '\\0') {\n        return default_value;\n    }\n    return std::strcmp(value, \"1\") == 0 || strcasecmp(value, \"true\") == 0 || strcasecmp(value, \"yes\") == 0;\n}\n\nconst char *env_or_default(const char *name, const char *fallback) {\n    const char *value = std::getenv(name);\n    if (value == nullptr || *value == '\\0') {\n        return fallback;\n    }\n    return value;\n}\n}  // namespace\n\nLART_WEAK int ros2subscriber_init(void) {\n    if (g_is_initialized.load()) {\n        return 0;\n    }\n\n    if (!rclcpp::ok()) {\n        g_did_init_rclcpp = true;\n        int argc = 0;\n        char **argv = nullptr;\n        rclcpp::init(argc, argv);\n    }\n\n    g_node = std::make_shared<rclcpp::Node>(\"lart_dashboard_listener\");\n    g_exec = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();\n    g_exec->add_node(g_node);\n\n    const char *topic = env_or_default(\"LART_ROS2_SPEED_TOPIC\", DEFAULT_SPEED_TOPIC);\n\n    auto callback = [](const std_msgs::msg::Float32::SharedPtr msg) {\n        if (msg) {\n            g_latest_speed_kph.store(msg->data);\n            g_has_speed.store(1);\n        }\n    };\n\n    g_sub = g_node->create_subscription<std_msgs::msg::Float32>(topic, rclcpp::QoS(10), callback);\n\n    // Screen change subscription\n    const char *screen_topic = env_or_default(\"LART_ROS2_SET_SCREEN_TOPIC\", DEFAULT_SET_SCREEN_TOPIC);\n\n    auto screen_callback = [](const std_msgs::msg::Int32::SharedPtr msg) {\n        if (msg) {\n            int id = msg->data;\n            // Valid 0-based screen range: 0=Driver, 1=Autonomous, 2=Debug Autonomous, 3=Debug\n            if (id < 0 || id > 3) {\n                return;  // Ignore out-of-range IDs silently\n            }\n            g_requested_screen_id.store(id);\n            g_screen_change_requested.store(1);\n        }\n    };\n\n    g_sub_screen = g_node->create_subscription<std_msgs::msg::Int32>(screen_topic, rclcpp::QoS(10), screen_callback);\n\n    g_is_initialized.store(1);\n    g_has_speed.store(0);\n    g_screen_change_requested.store(0);\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_spin_some(void) {\n    if (!g_is_initialized.load() || !g_exec) {\n        return 1;\n    }\n\n    try {\n        g_exec->spin_some();\n    } catch (...) {\n    }\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_get_latest_speed(float *speed_kph) {\n    if (!g_is_initialized.load() || !g_has_speed.load() || speed_kph == nullptr) {\n        return 0;\n    }\n\n    *speed_kph = g_latest_speed_kph.load();\n    return 1;\n}\n\nLART_WEAK int ros2subscriber_get_screen_change_request(int *screen_id) {\n    if (!g_is_initialized.load() || !g_screen_change_requested.load() || screen_id == nullptr) {\n        return 0;\n    }\n\n    *screen_id = g_requested_screen_id.load();\n    g_screen_change_requested.store(0);\n    return 1;\n}\n\nLART_WEAK void ros2subscriber_fini(void) {\n    if (!g_is_initialized.load()) {\n        return;\n    }\n\n    try {\n        if (g_exec) {\n            g_exec->cancel();\n        }\n    } catch (...) {\n    }\n\n    g_sub.reset();\n    g_sub_screen.reset();\n\n    if (g_exec && g_node) {\n        try {\n            g_exec->remove_node(g_node);\n        } catch (...) {\n        }\n    }\n\n    g_node.reset();\n    g_exec.reset();\n\n    if (g_did_init_rclcpp && rclcpp::ok()) {\n        try {\n            rclcpp::shutdown();\n        } catch (...) {\n        }\n    }\n    g_did_init_rclcpp = false;\n\n    g_is_initialized.store(0);\n    g_has_speed.store(0);\n    g_latest_speed_kph.store(0.0f);\n    g_screen_change_requested.store(0);\n    g_requested_screen_id.store(0);\n}\n\n#else\n\nLART_WEAK int ros2subscriber_init(void) {\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_spin_some(void) {\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_get_latest_speed(float *speed_kph) {\n    if (speed_kph != nullptr) {\n        *speed_kph = 0.0f;\n    }\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_get_screen_change_request(int *screen_id) {\n    (void)screen_id;\n    return 0;\n}\n\nLART_WEAK void ros2subscriber_fini(void) {\n}\n\n#endif"
-        },
-        {
-          "objID": "c7507690-dd2c-41a6-b733-cff533746e67",
-          "fileName": "ros2subscriber.h",
-          "template": "#ifndef LART_ROS2SUBSCRIBER_H\n#define LART_ROS2SUBSCRIBER_H\n\n#ifdef __cplusplus\nextern \"C\" {\n#endif\n\nint ros2subscriber_init(void);\nint ros2subscriber_spin_some(void);\nint ros2subscriber_get_latest_speed(float *speed_kph);\nint ros2subscriber_get_screen_change_request(int *screen_id);\nvoid ros2subscriber_fini(void);\n\n#ifdef __cplusplus\n}\n#endif\n\n#endif"
         }
       ],
       "destinationFolder": "src\\ui",
@@ -126,23 +111,23 @@
     "globalVariables": [
       {
         "objID": "fa882709-5537-4ba7-c56f-985a1c6de14e",
-        "name": "brake_pressure",
-        "type": "float",
-        "defaultValue": "0",
+        "name": "brake_pedal_pressure",
+        "type": "integer",
+        "defaultValue": "20",
         "persistent": false,
         "native": false
       },
       {
         "objID": "d28a4165-7ad7-47b1-9da1-1ec6013b7823",
-        "name": "accell_pressure",
-        "type": "float",
+        "name": "accell_pedal_pressure",
+        "type": "integer",
         "defaultValue": "0",
         "persistent": false,
         "native": false
       },
       {
         "objID": "0fa29e0e-ae15-4a8b-8c19-807f71a06aad",
-        "name": "hv",
+        "name": "soc",
         "type": "integer",
         "defaultValue": "0",
         "persistent": false,
@@ -215,6 +200,29 @@
         "name": "lap_count",
         "type": "integer",
         "defaultValue": "0",
+        "persistent": false
+      },
+      {
+        "objID": "17138e19-e644-4fd9-e139-11b8a5d139cb",
+        "name": "mission",
+        "type": "string",
+        "size": null,
+        "defaultValue": "\"\"",
+        "persistent": false
+      },
+      {
+        "objID": "3f814067-5769-4f88-f01c-7e0f3a28c7dd",
+        "name": "time_diff",
+        "type": "float",
+        "defaultValue": "0",
+        "persistent": false
+      },
+      {
+        "objID": "be3ee398-c7c3-4f53-a831-70e1ffe733f5",
+        "name": "last_lap_time",
+        "type": "string",
+        "size": null,
+        "defaultValue": "\"\"",
         "persistent": false
       }
     ],
@@ -1014,7 +1022,7 @@
                       "type": "LVGLLabelWidget",
                       "left": 220,
                       "top": 21,
-                      "width": 70,
+                      "width": 166,
                       "height": 33,
                       "customInputs": [],
                       "customOutputs": [],
@@ -1055,8 +1063,8 @@
                       },
                       "group": "",
                       "groupIndex": 0,
-                      "text": "+0.8",
-                      "textType": "literal",
+                      "text": "time_diff",
+                      "textType": "expression",
                       "longMode": "WRAP",
                       "recolor": false
                     },
@@ -1577,11 +1585,12 @@
                       "max": 100,
                       "maxType": "literal",
                       "mode": "RANGE",
-                      "value": "brake_pressure",
+                      "value": "brake_pedal_pressure",
                       "valueType": "expression",
+                      "previewValue": "20",
                       "valueStart": 0,
                       "valueStartType": "literal",
-                      "enableAnimation": false
+                      "enableAnimation": true
                     },
                     {
                       "objID": "9b38af54-3a35-4080-8f7d-73c4ba3c39ce",
@@ -1642,11 +1651,12 @@
                       "max": 100,
                       "maxType": "literal",
                       "mode": "RANGE",
-                      "value": "accell_pressure",
+                      "value": "accell_pedal_pressure",
                       "valueType": "expression",
+                      "previewValue": "0",
                       "valueStart": 0,
                       "valueStartType": "literal",
-                      "enableAnimation": false
+                      "enableAnimation": true
                     }
                   ],
                   "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
@@ -1825,12 +1835,12 @@
               "max": 100,
               "maxType": "literal",
               "mode": "RANGE",
-              "value": "hv",
+              "value": "soc",
               "valueType": "expression",
               "previewValue": "50",
               "valueStart": 0,
               "valueStartType": "literal",
-              "enableAnimation": false
+              "enableAnimation": true
             },
             {
               "objID": "7781856b-b90b-4aac-9258-e9b17c1c6fa6",
@@ -1944,7 +1954,7 @@
               },
               "group": "",
               "groupIndex": 0,
-              "text": "hv+\" %\"",
+              "text": "soc+\" %\"",
               "textType": "expression",
               "longMode": "WRAP",
               "recolor": false,
@@ -2147,42 +2157,9 @@
             }
           },
           "groupIndex": 0
-        },
-        {
-          "objID": "278d55f5-0d7c-4144-ba5d-ef83a639a95d",
-          "type": "CallActionActionComponent",
-          "left": 195,
-          "top": -246,
-          "width": 165,
-          "height": 24,
-          "customInputs": [],
-          "customOutputs": [],
-          "action": "screen_changer_action",
-          "userPropertyValues": {
-            "objID": "ae25f8d1-b0cd-4ef9-d84c-0af25a65581b",
-            "values": {}
-          }
-        },
-        {
-          "objID": "7b28947e-870d-40b9-b051-fcf2a3db9a41",
-          "type": "StartActionComponent",
-          "left": 51,
-          "top": -246,
-          "width": 87,
-          "height": 24,
-          "customInputs": [],
-          "customOutputs": []
         }
       ],
-      "connectionLines": [
-        {
-          "objID": "5e4f7c81-9230-40b4-a978-8eae42f638ad",
-          "source": "7b28947e-870d-40b9-b051-fcf2a3db9a41",
-          "output": "@seqout",
-          "target": "278d55f5-0d7c-4144-ba5d-ef83a639a95d",
-          "input": "@seqin"
-        }
-      ],
+      "connectionLines": [],
       "localVariables": [],
       "componentGroups": [],
       "userProperties": [],
@@ -2273,9 +2250,9 @@
             {
               "objID": "b8622d6b-30cf-4061-fd9b-dd460289bd60",
               "type": "LVGLLabelWidget",
-              "left": 125,
+              "left": 106,
               "top": 407,
-              "width": 420,
+              "width": 438,
               "height": 42,
               "customInputs": [],
               "customOutputs": [],
@@ -2317,8 +2294,8 @@
               },
               "group": "",
               "groupIndex": 0,
-              "text": "MISSION: {MISSION}",
-              "textType": "literal",
+              "text": "\"MISSION:\"+mission",
+              "textType": "expression",
               "longMode": "WRAP",
               "recolor": false
             },
@@ -2386,8 +2363,8 @@
               "max": 100,
               "maxType": "literal",
               "mode": "RANGE",
-              "value": 50,
-              "valueType": "literal",
+              "value": "soc",
+              "valueType": "expression",
               "valueStart": 0,
               "valueStartType": "literal",
               "enableAnimation": false
@@ -2451,13 +2428,13 @@
               },
               "group": "",
               "groupIndex": 0,
-              "min": 0,
+              "min": 18,
               "minType": "literal",
-              "max": 100,
+              "max": 30,
               "maxType": "literal",
               "mode": "RANGE",
-              "value": 50,
-              "valueType": "literal",
+              "value": "lv",
+              "valueType": "expression",
               "valueStart": 0,
               "valueStartType": "literal",
               "enableAnimation": true
@@ -2501,7 +2478,7 @@
               },
               "group": "",
               "groupIndex": 0,
-              "text": "hv",
+              "text": "soc+\"%\"",
               "textType": "expression",
               "longMode": "WRAP",
               "recolor": false,
@@ -2546,7 +2523,7 @@
               },
               "group": "",
               "groupIndex": 0,
-              "text": "lv",
+              "text": "lv+\"V\"",
               "textType": "expression",
               "longMode": "WRAP",
               "recolor": false,
@@ -3671,9 +3648,9 @@
             {
               "objID": "fc815b11-da25-4b19-f818-bec30d52e9f1",
               "type": "LVGLContainerWidget",
-              "left": 404,
+              "left": 379,
               "top": 65,
-              "width": 320,
+              "width": 345,
               "height": 143,
               "customInputs": [],
               "customOutputs": [],
@@ -3738,7 +3715,7 @@
                 {
                   "objID": "50f57761-09bd-49fa-ad65-e840fea550f8",
                   "type": "LVGLLabelWidget",
-                  "left": 215,
+                  "left": 230,
                   "top": 72,
                   "width": 89,
                   "height": 33,
@@ -3789,7 +3766,7 @@
                 {
                   "objID": "1c53885f-13f1-481c-cb1e-952b20df8d1b",
                   "type": "LVGLLabelWidget",
-                  "left": -52,
+                  "left": -55,
                   "top": 15,
                   "width": 205,
                   "height": 106,
@@ -3941,246 +3918,13 @@
             }
           },
           "groupIndex": 0
-        },
-        {
-          "objID": "5a7dc5d5-a546-4d34-d1a2-7a76f8b84182",
-          "type": "CallActionActionComponent",
-          "left": 328,
-          "top": -201,
-          "width": 165,
-          "height": 24,
-          "customInputs": [],
-          "customOutputs": [],
-          "action": "screen_changer_action",
-          "userPropertyValues": {
-            "objID": "45ccc538-ea1c-4221-d335-e07427b49742",
-            "values": {}
-          }
-        },
-        {
-          "objID": "158bb59d-09d5-49a3-e0f4-19e3979cb167",
-          "type": "StartActionComponent",
-          "left": 184,
-          "top": -201,
-          "width": 87,
-          "height": 24,
-          "customInputs": [],
-          "customOutputs": []
         }
       ],
-      "connectionLines": [
-        {
-          "objID": "f350b2e8-b08e-4a37-8881-9740d34be78c",
-          "source": "158bb59d-09d5-49a3-e0f4-19e3979cb167",
-          "output": "@seqout",
-          "target": "5a7dc5d5-a546-4d34-d1a2-7a76f8b84182",
-          "input": "@seqin"
-        }
-      ],
+      "connectionLines": [],
       "localVariables": [],
       "componentGroups": [],
       "userProperties": [],
       "name": "Autonomous",
-      "left": 0,
-      "top": 0,
-      "width": 800,
-      "height": 480,
-      "isUsedAsUserWidget": false,
-      "createAtStart": true,
-      "deleteOnScreenUnload": false
-    },
-    {
-      "objID": "35331414-aa25-4ec1-be2d-d54a497b85a7",
-      "components": [
-        {
-          "objID": "335091c4-e83f-4beb-a770-b8bcef044c64",
-          "type": "LVGLScreenWidget",
-          "left": 0,
-          "top": 0,
-          "width": 800,
-          "height": 480,
-          "customInputs": [],
-          "customOutputs": [],
-          "style": {
-            "objID": "fb43a54e-664c-4278-c5ca-31aa86630a6d",
-            "useStyle": "default",
-            "conditionalStyles": [],
-            "childStyles": []
-          },
-          "timeline": [],
-          "eventHandlers": [],
-          "leftUnit": "px",
-          "topUnit": "px",
-          "widthUnit": "px",
-          "heightUnit": "px",
-          "children": [
-            {
-              "objID": "edce6662-80ee-40df-e2fd-fa8d35a3d1e7",
-              "type": "LVGLLabelWidget",
-              "left": 18,
-              "top": 13,
-              "width": 321,
-              "height": 28,
-              "customInputs": [],
-              "customOutputs": [],
-              "style": {
-                "objID": "e065bed8-f00b-48cd-fa16-4dece92ec8a2",
-                "useStyle": "default",
-                "conditionalStyles": [],
-                "childStyles": []
-              },
-              "timeline": [],
-              "eventHandlers": [],
-              "leftUnit": "px",
-              "topUnit": "px",
-              "widthUnit": "content",
-              "heightUnit": "content",
-              "children": [],
-              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
-              "clickableFlagType": "literal",
-              "flagScrollbarMode": "",
-              "flagScrollDirection": "",
-              "scrollSnapX": "",
-              "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledStateType": "literal",
-              "states": "",
-              "localStyles": {
-                "objID": "008a6bbb-fd2c-4726-d5e1-cb7345384d1f",
-                "definition": {
-                  "MAIN": {
-                    "DEFAULT": {
-                      "text_color": "#ff9400",
-                      "text_opa": 255,
-                      "text_font": "orbitron_bold_25"
-                    }
-                  }
-                }
-              },
-              "group": "",
-              "groupIndex": 0,
-              "text": "DEBUG AUTONOMOUS",
-              "textType": "literal",
-              "longMode": "WRAP",
-              "recolor": false
-            },
-            {
-              "objID": "0961f028-367b-4c08-c36a-9ef78905bc80",
-              "type": "LVGLLabelWidget",
-              "left": 10,
-              "top": 62,
-              "width": 780,
-              "height": 400,
-              "customInputs": [],
-              "customOutputs": [],
-              "style": {
-                "objID": "ef55e207-e979-44d1-8698-4471e9531631",
-                "useStyle": "default",
-                "conditionalStyles": [],
-                "childStyles": []
-              },
-              "timeline": [],
-              "eventHandlers": [],
-              "identifier": "debugText",
-              "leftUnit": "px",
-              "topUnit": "px",
-              "widthUnit": "content",
-              "heightUnit": "content",
-              "children": [],
-              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
-              "clickableFlagType": "literal",
-              "flagScrollbarMode": "",
-              "flagScrollDirection": "",
-              "scrollSnapX": "",
-              "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledStateType": "literal",
-              "states": "",
-              "useStyle": "text",
-              "localStyles": {
-                "objID": "2ac7530f-ee5f-459a-a285-e3b5c22dee41",
-                "definition": {
-                  "MAIN": {
-                    "DEFAULT": {
-                      "width": 780,
-                      "height": 400,
-                      "text_align": "LEFT",
-                      "text_font": "MONTSERRAT_20",
-                      "text_letter_space": 1,
-                      "text_line_space": 2,
-                      "text_color": "#ff9400"
-                    }
-                  }
-                }
-              },
-              "group": "",
-              "groupIndex": 0,
-              "text": "[00:42.184] CAN_ID: 0x0A2 | INVERTER_L_STATUS: RUNNING\n[00:42.186] CAN_ID: 0x0A3 | INVERTER_R_STATUS: RUNNING\n[00:42.189] AMS_STATE: AS_READY\n[00:42.192] VCU_STATE: RTD_ACTIVE\n[00:42.195] SENSOR_APPS1: 1.42V | SENSOR_APPS2: 0.71V | DEV: 0.02%\n[00:42.198] SENSOR_BSE: 0.85V | BRAKE_PRES: 12.4 BAR\n[00:42.201] HV_BUS: 584.2V | BATT_CURRENT: -142.8A\n[00:42.204] BATT_TEMP_MAX: 42.1°C | BATT_TEMP_MIN: 38.4°C\n[00:42.207] MOTOR_RPM_L: 8420 | MOTOR_RPM_R: 8418\n[00:42.210] TORQUE_REQ: 45.0 Nm | TORQUE_ACT: 44.8 Nm\n[00:42.215] [DEBUG] TV_RATIO: 1.02 (L: 0.49 | R: 0.51)\n[00:42.220] [WARNING] INV_L_TEMP: 68.4°C (Approach Derating Limit)",
-              "textType": "literal",
-              "longMode": "WRAP",
-              "recolor": false
-            }
-          ],
-          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
-          "hiddenFlagType": "literal",
-          "clickableFlag": true,
-          "clickableFlagType": "literal",
-          "checkedStateType": "literal",
-          "disabledStateType": "literal",
-          "states": "",
-          "localStyles": {
-            "objID": "f536df26-52c4-4895-f08c-fd1edb1e461d",
-            "definition": {
-              "MAIN": {
-                "DEFAULT": {
-                  "bg_color": "#000000"
-                }
-              }
-            }
-          },
-          "groupIndex": 0
-        },
-        {
-          "objID": "145beced-4a57-4e02-897e-742106cbf83f",
-          "type": "CallActionActionComponent",
-          "left": 370,
-          "top": -270,
-          "width": 165,
-          "height": 24,
-          "customInputs": [],
-          "customOutputs": [],
-          "action": "screen_changer_action",
-          "userPropertyValues": {
-            "objID": "477f96de-e137-4ffe-a136-69feecd5a7bb",
-            "values": {}
-          }
-        },
-        {
-          "objID": "89182451-6d39-41fe-9ccf-ae5d2fd8f1b7",
-          "type": "StartActionComponent",
-          "left": 226,
-          "top": -270,
-          "width": 87,
-          "height": 24,
-          "customInputs": [],
-          "customOutputs": []
-        }
-      ],
-      "connectionLines": [
-        {
-          "objID": "73e91cec-2297-4d61-c1e7-e76ea5cebc35",
-          "source": "89182451-6d39-41fe-9ccf-ae5d2fd8f1b7",
-          "output": "@seqout",
-          "target": "145beced-4a57-4e02-897e-742106cbf83f",
-          "input": "@seqin"
-        }
-      ],
-      "localVariables": [],
-      "componentGroups": [],
-      "userProperties": [],
-      "name": "Debug Autonomous",
       "left": 0,
       "top": 0,
       "width": 800,
@@ -4229,6 +3973,7 @@
                 "conditionalStyles": [],
                 "childStyles": []
               },
+              "hiddenInEditor": true,
               "timeline": [],
               "eventHandlers": [],
               "leftUnit": "px",
@@ -4268,10 +4013,10 @@
             {
               "objID": "2a85b825-c3fe-4cb9-dab2-0366a91208dd",
               "type": "LVGLLabelWidget",
-              "left": 10,
-              "top": 49,
-              "width": 780,
-              "height": 400,
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -4304,20 +4049,21 @@
                 "definition": {
                   "MAIN": {
                     "DEFAULT": {
-                      "width": 780,
-                      "height": 400,
+                      "width": 800,
+                      "height": 480,
                       "text_align": "LEFT",
-                      "text_font": "MONTSERRAT_20",
+                      "text_font": "orbitron_bold_15",
                       "text_letter_space": 1,
                       "text_line_space": 2,
-                      "text_color": "#ff9400"
+                      "text_color": "#ff9400",
+                      "length": 0
                     }
                   }
                 }
               },
               "group": "",
               "groupIndex": 0,
-              "text": "[00:42.184] CAN_ID: 0x0A2 | INVERTER_L_STATUS: RUNNING\n[00:42.186] CAN_ID: 0x0A3 | INVERTER_R_STATUS: RUNNING\n[00:42.189] AMS_STATE: AS_READY\n[00:42.192] VCU_STATE: RTD_ACTIVE\n[00:42.195] SENSOR_APPS1: 1.42V | SENSOR_APPS2: 0.71V | DEV: 0.02%\n[00:42.198] SENSOR_BSE: 0.85V | BRAKE_PRES: 12.4 BAR\n[00:42.201] HV_BUS: 584.2V | BATT_CURRENT: -142.8A\n[00:42.204] BATT_TEMP_MAX: 42.1°C | BATT_TEMP_MIN: 38.4°C\n[00:42.207] MOTOR_RPM_L: 8420 | MOTOR_RPM_R: 8418\n[00:42.210] TORQUE_REQ: 45.0 Nm | TORQUE_ACT: 44.8 Nm\n[00:42.215] [DEBUG] TV_RATIO: 1.02 (L: 0.49 | R: 0.51)\n[00:42.220] [WARNING] INV_L_TEMP: 68.4°C (Approach Derating Limit)",
+              "text": " GENERAL DEBUG                                                          \n------------------------------------------+---------------------------------------------\n AMS                                     | INVERTER (HV500)\n State:    --------   SOC: ---.--%       | ERPM:     ------    Duty: ---.--%\n Runtime:  -----s     Fans: ---%         | Vin:      ---- V    Fault: ---\n MCU Vref: -.--V      MCU T: ---°C      | AC Curr:  ---.- Apk DC: ---.- A\n PEC Err:  ---        Flt Cnt: ---       | Ctrl T:   ---.-°C   Mot T: ---.-°C\n Slaves:   --/12      FW: --------       | Throttle: ---%      Brake: ---%\n Fault1:   ----------------              | FOC Id:   ---.- Apk Iq: ---.- Apk\n Fault2:   ----------------              | DriveEn:  ---        CtrlMode: ---\n------------------------------------------+---------------------------------------------\n PRECHARGE                               | IVT (ISABELLE)\n State:    ----------------              | Current:  -------- mA\n AIR+: --- AIR-: --- CHG: --- DIS: ---   | U1: -------- mV  U2: -------- mV\n                                         | U3: -------- mV  Temp: -----.-°C\n PACK OVERVIEW                           | Power: -------- W  Energy: -------- Wh\n Vmax: -.---V   Vmin: -.---V             |\n Tmax: ---.--°C Tmin: ---.--°C           | PEDALS / DASHBOARD\n                                         | APPS1: ----.- APPS2: ----.-\n------------------------------------------+---------------------------------------------\n WHEELS                                  | REAR SENSORS (AQT7)\n FL: --- km/h  T:---.-°C  BrkT:---.-°C  | NTC1: ---.-°C  NTC2: ---.-°C\n FR: --- km/h  T:---.-°C  BrkT:---.-°C  | NTC3: ---.-°C\n RL: --- km/h  T:---.-°C  BrkT:---.-°C  | Susp R: ---.- mm  Susp L: ---.- mm\n RR: --- km/h  T:---.-°C  BrkT:---.-°C  | IGN: ---  R2D: ---\n------------------------------------------+---------------------------------------------\n",
               "textType": "literal",
               "longMode": "WRAP",
               "recolor": false
@@ -4341,46 +4087,245 @@
             }
           },
           "groupIndex": 0
-        },
-        {
-          "objID": "d0c004d5-4d8a-488a-b738-cd13467fedde",
-          "type": "CallActionActionComponent",
-          "left": 354,
-          "top": -190,
-          "width": 165,
-          "height": 24,
-          "customInputs": [],
-          "customOutputs": [],
-          "action": "screen_changer_action",
-          "userPropertyValues": {
-            "objID": "33271791-4e4f-4a04-e5c3-96187508003f",
-            "values": {}
-          }
-        },
-        {
-          "objID": "3064189a-e9d3-4065-b826-8ab6622add75",
-          "type": "StartActionComponent",
-          "left": 210,
-          "top": -190,
-          "width": 87,
-          "height": 24,
-          "customInputs": [],
-          "customOutputs": []
         }
       ],
-      "connectionLines": [
-        {
-          "objID": "f02312e4-077e-42cd-b616-b4001e8cce0c",
-          "source": "3064189a-e9d3-4065-b826-8ab6622add75",
-          "output": "@seqout",
-          "target": "d0c004d5-4d8a-488a-b738-cd13467fedde",
-          "input": "@seqin"
-        }
-      ],
+      "connectionLines": [],
       "localVariables": [],
       "componentGroups": [],
       "userProperties": [],
       "name": "Debug",
+      "left": 0,
+      "top": 0,
+      "width": 800,
+      "height": 480,
+      "isUsedAsUserWidget": false,
+      "createAtStart": true,
+      "deleteOnScreenUnload": false
+    },
+    {
+      "objID": "35331414-aa25-4ec1-be2d-d54a497b85a7",
+      "components": [
+        {
+          "objID": "335091c4-e83f-4beb-a770-b8bcef044c64",
+          "type": "LVGLScreenWidget",
+          "left": 0,
+          "top": 0,
+          "width": 800,
+          "height": 480,
+          "customInputs": [],
+          "customOutputs": [],
+          "style": {
+            "objID": "fb43a54e-664c-4278-c5ca-31aa86630a6d",
+            "useStyle": "default",
+            "conditionalStyles": [],
+            "childStyles": []
+          },
+          "timeline": [],
+          "eventHandlers": [],
+          "leftUnit": "px",
+          "topUnit": "px",
+          "widthUnit": "px",
+          "heightUnit": "px",
+          "children": [
+            {
+              "objID": "0961f028-367b-4c08-c36a-9ef78905bc80",
+              "type": "LVGLLabelWidget",
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "ef55e207-e979-44d1-8698-4471e9531631",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "debugText",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "2ac7530f-ee5f-459a-a285-e3b5c22dee41",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 800,
+                      "height": 480,
+                      "text_align": "LEFT",
+                      "text_font": "orbitron_bold_15",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400"
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": " AUTONOMOUS DEBUG  1/2                                                     \n ACU                                     | DV DYNAMICS\n ACU State:  ---------  AS: --------     | Spd Act: --- km/h   Spd Tgt: --- km/h\n ASSI:       ---------  Mission: ---     | Str Act: ---.-°     Str Tgt: ---.-°\n ASMS: ---  IGN: ---  EMERGENCY: ---     | Brk Act: ---%       Brk Tgt: ---%\n Emerg Cause: ------------------         | Mot Act: ---%       Mot Tgt: ---%\n CPU Temp: ---°C                         | Acc Lon: ---.--- m/s2\n                                         | Acc Lat: ---.--- m/s2\n JETSON                                  | Yaw:    ---.--- °/s\n AS State: ---  Mission: ---             |\n Temp: ---°C  CPU: ---% GPU: ---%       | DV STATUS\n Emerg Cause: ----------------           | AS: ---  EBS: ---  AMI: ---\n                                         | Steer: ---  EBS Red: ---\n------------------------------------------+---------------------------------------------\n VCU                                     | EBS / ASF PRESSURES\n IGN Man: ---  IGN Auto: ---             | EBS Tank F: ---- bar  R: ---- bar\n R2D Man: ---  R2D Auto: ---             | Brk Press F: ---- bar  R: ---- bar\n Shutdown: ---  State: ---               |\n R2D Raw: ---  IGN Raw: ---              | CUBEMARS STEERING\n HV: ---  BrkF: ---  BrkR: ---          | Pos: -----.-°  Spd: ------ ERPM\n                                         | Curr: ---.- A  Drv T: ---°C  Err: ---\n VCU RPM                                 | Pos Target: ------ °\n RPM Act: -----  RPM Tgt: -----         |    Torque Tgt: -----                                      | SLAM / CONES | Laps: --  Cones: ---  All: ------\n",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
+          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
+          "hiddenFlagType": "literal",
+          "clickableFlag": true,
+          "clickableFlagType": "literal",
+          "checkedStateType": "literal",
+          "disabledStateType": "literal",
+          "states": "",
+          "localStyles": {
+            "objID": "f536df26-52c4-4895-f08c-fd1edb1e461d",
+            "definition": {
+              "MAIN": {
+                "DEFAULT": {
+                  "bg_color": "#000000"
+                }
+              }
+            }
+          },
+          "groupIndex": 0
+        }
+      ],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "Debug Autonomous",
+      "left": 0,
+      "top": 0,
+      "width": 800,
+      "height": 480,
+      "isUsedAsUserWidget": false,
+      "createAtStart": true,
+      "deleteOnScreenUnload": false
+    },
+    {
+      "objID": "7b836a15-8b87-49df-926f-e7ff84bb3584",
+      "components": [
+        {
+          "objID": "9a2c8271-796f-4e62-ca0e-c4e53e1df8e1",
+          "type": "LVGLScreenWidget",
+          "left": 0,
+          "top": 0,
+          "width": 800,
+          "height": 480,
+          "customInputs": [],
+          "customOutputs": [],
+          "style": {
+            "objID": "438b133c-25b0-411d-bb72-bf8fe6059ab6",
+            "useStyle": "default",
+            "conditionalStyles": [],
+            "childStyles": []
+          },
+          "timeline": [],
+          "eventHandlers": [],
+          "leftUnit": "px",
+          "topUnit": "px",
+          "widthUnit": "px",
+          "heightUnit": "px",
+          "children": [
+            {
+              "objID": "e00aa57a-422d-4505-c308-427d3441d00a",
+              "type": "LVGLLabelWidget",
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "9d96a85d-4f0d-4071-f843-9c4774498a3a",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "debugText_2",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "a8380078-8cca-43c6-a8a9-f4cdd5365b13",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 800,
+                      "height": 480,
+                      "text_align": "LEFT",
+                      "text_font": "orbitron_bold_15",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400"
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": " AUTONOMOUS DEBUG 2/2   \n------------------------------------------+---------------------------------------------\n ACQUISITION BOARDS                      | RES (Remote Emergency)\n AQT1 BrkP:---.- bar RES:--- BOTS:---   | Signal: ---\n AQT2 WhlAng:-----.-° AQT3:-----.-°    |\n AQT4 StAng:-----.-° Inertia:--- Emer:---| AQT7 BrkP: ---.- bar\n------------------------------------------+---------------------------------------------\n                                                    \n \n",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
+          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
+          "hiddenFlagType": "literal",
+          "clickableFlag": true,
+          "clickableFlagType": "literal",
+          "checkedStateType": "literal",
+          "disabledStateType": "literal",
+          "states": "",
+          "localStyles": {
+            "objID": "ea9984cd-3b16-42f8-8234-fc08e4810137",
+            "definition": {
+              "MAIN": {
+                "DEFAULT": {
+                  "bg_color": "#000000"
+                }
+              }
+            }
+          },
+          "groupIndex": 0
+        }
+      ],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "Debug Autonomous_1",
       "left": 0,
       "top": 0,
       "width": 800,
@@ -4598,7 +4543,7 @@
       "descent": 4,
       "glyphs": [],
       "lvglRanges": "32-127",
-      "lvglSymbols": "",
+      "lvglSymbols": "|—–_-¯|°│",
       "lvglAdditionalSources": [],
       "lvglGlyphs": {
         "encodings": [

@@ -13,16 +13,18 @@ enum ScreensEnum {
     _SCREEN_ID_FIRST = 1,
     SCREEN_ID_DRIVER_VIEW = 1,
     SCREEN_ID_AUTONOMOUS = 2,
-    SCREEN_ID_DEBUG_AUTONOMOUS = 3,
-    SCREEN_ID_DEBUG = 4,
-    _SCREEN_ID_LAST = 4
+    SCREEN_ID_DEBUG = 3,
+    SCREEN_ID_DEBUG_AUTONOMOUS = 4,
+    SCREEN_ID_DEBUG_AUTONOMOUS_1 = 5,
+    _SCREEN_ID_LAST = 5
 };
 
 typedef struct _objects_t {
     lv_obj_t *driver_view;
     lv_obj_t *autonomous;
-    lv_obj_t *debug_autonomous;
     lv_obj_t *debug;
+    lv_obj_t *debug_autonomous;
+    lv_obj_t *debug_autonomous_1;
     lv_obj_t *ready_label;
     lv_obj_t *middle_container;
     lv_obj_t *temp_motor_container;
@@ -67,9 +69,9 @@ typedef struct _objects_t {
     lv_obj_t *speed_label_1;
     lv_obj_t *km_label_3;
     lv_obj_t *obj6;
-    lv_obj_t *debug_text;
-    lv_obj_t *obj7;
     lv_obj_t *debug_text_1;
+    lv_obj_t *debug_text;
+    lv_obj_t *debug_text_2;
 } objects_t;
 
 extern objects_t objects;
@@ -80,11 +82,14 @@ void tick_screen_driver_view();
 void create_screen_autonomous();
 void tick_screen_autonomous();
 
+void create_screen_debug();
+void tick_screen_debug();
+
 void create_screen_debug_autonomous();
 void tick_screen_debug_autonomous();
 
-void create_screen_debug();
-void tick_screen_debug();
+void create_screen_debug_autonomous_1();
+void tick_screen_debug_autonomous_1();
 
 void tick_screen_by_id(enum ScreensEnum screenId);
 void tick_screen(int screen_index);

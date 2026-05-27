@@ -198,16 +198,18 @@ show_screen_menu() {
     echo "╚════════════════════════════════════════════╝"
     echo "  0) Driver View"
     echo "  1) Autonomous"
-    echo "  2) Debug Autonomous"
-    echo "  3) Debug"
+    echo "  2) Debug"
+    echo "  3) Debug Autonomous 1/2"
+    echo "  4) Debug Autonomous 2/2"
     echo "  b) Back"
     echo ""
-    read -p "Select screen [0-3/b]: " scr
+    read -p "Select screen [0-4/b]: " scr
     case $scr in
         0) publish_screen 0 && echo "✓ Switched to Driver View" ;;
         1) publish_screen 1 && echo "✓ Switched to Autonomous" ;;
-        2) publish_screen 2 && echo "✓ Switched to Debug Autonomous" ;;
-        3) publish_screen 3 && echo "✓ Switched to Debug" ;;
+        2) publish_screen 2 && echo "✓ Switched to Debug" ;;
+        3) publish_screen 3 && echo "✓ Switched to Debug Autonomous 1/2" ;;
+        4) publish_screen 4 && echo "✓ Switched to Debug Autonomous 2/2" ;;
         b|B) return ;;
         *) echo "✗ Invalid option." ;;
     esac

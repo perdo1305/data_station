@@ -183,8 +183,28 @@ class CanSimulatorNode(Node):
             self.get_logger().fatal('Parameter "dbc_path" is empty. Cannot simulate without a DBC file.')
             raise RuntimeError('dbc_path parameter is required for can_simulator')
 
-        self.get_logger().info(f'Loading DBC: {dbc_path}')
-        self._db = cantools.database.load_file(dbc_path)
+        import glob
+        import os
+        self._db = None
+        if os.path.isdir(dbc_path):
+            self.get_logger().info(f'Loading all DBC files from directory: {dbc_path}')
+            dbc_files = sorted(glob.glob(os.path.join(dbc_path, '*.dbc')))
+        else:
+            self.get_logger().info(f'Loading single DBC file: {dbc_path}')
+            dbc_files = [dbc_path]
+
+        for df in dbc_files:
+            try:
+                if self._db is None:
+                    self._db = cantools.database.load_file(df)
+                else:
+                    self._db.add_dbc_file(df)
+                self.get_logger().info(f'  Loaded DBC: {os.path.basename(df)}')
+            except Exception as exc:
+                self.get_logger().error(f'Failed to load DBC file "{df}": {exc}')
+
+        if self._db is None:
+            self._db = cantools.database.Database()
 
         # Filter messages: skip extended frames >0x7FF if they overflow SocketCAN
         # (cantools may include 29-bit IDs > 0x7FF which are valid extended frames)

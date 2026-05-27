@@ -36,17 +36,20 @@ def generate_launch_description():
     )
     dbc_signals_dir = os.path.join(ws_root, 'dbc_signals')
 
-    # Default DBC — autonomous_t26.dbc.
-    # To use a different file, change the argument default or set the env var
-    # DBC_FILE before launching:  DBC_FILE=powertrain_t26.dbc ros2 launch ...
-    dbc_filename = os.environ.get('DBC_FILE', 'autonomous_t26.dbc')
-    resolved_dbc_path = os.path.join(dbc_signals_dir, dbc_filename)
+    # Default DBC — all (loads all DBC files in the directory).
+    # To use a single file: DBC_FILE=powertrain_t26.dbc ros2 launch ...
+    dbc_filename = os.environ.get('DBC_FILE', 'all')
+    
+    if dbc_filename.lower() == 'all':
+        resolved_dbc_path = dbc_signals_dir
+    else:
+        resolved_dbc_path = os.path.join(dbc_signals_dir, dbc_filename)
 
-    if not os.path.isfile(resolved_dbc_path):
+    if not os.path.exists(resolved_dbc_path):
         import warnings
         warnings.warn(
-            f'DBC file not found: {resolved_dbc_path}\n'
-            f'Set DBC_FILE env var or place the file in {dbc_signals_dir}',
+            f'DBC path not found: {resolved_dbc_path}\n'
+            f'Set DBC_FILE env var or place files in {dbc_signals_dir}',
             RuntimeWarning,
         )
 

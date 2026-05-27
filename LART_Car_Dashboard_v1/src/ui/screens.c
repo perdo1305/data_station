@@ -1,5 +1,9 @@
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
 
+#include "ros2subscriber.h"
 #include "screens.h"
 #include "images.h"
 #include "fonts.h"
@@ -8,12 +12,97 @@
 #include "styles.h"
 #include "ui.h"
 
-#include <string.h>
+// Custom recolor text parser for lv_spangroup
+void my_spangroup_set_recolor_text(lv_obj_t *spangroup, const char *text) {
+    if (!spangroup) return;
+    
+    // Clear all existing spans
+    while (lv_spangroup_get_span_count(spangroup) > 0) {
+        lv_span_t *span = lv_spangroup_get_child(spangroup, 0);
+        if (span) {
+            lv_spangroup_delete_span(spangroup, span);
+        }
+    }
+    
+    uint32_t default_color = 0xff9400; // default amber
+    uint32_t active_color = default_color;
+    
+    const char *ptr = text;
+    const char *chunk_start = text;
+    
+    while (*ptr != '\0') {
+        // Check if starting a color tag: #RRGGBB
+        if (ptr[0] == '#' &&
+            isxdigit((unsigned char)ptr[1]) && isxdigit((unsigned char)ptr[2]) &&
+            isxdigit((unsigned char)ptr[3]) && isxdigit((unsigned char)ptr[4]) &&
+            isxdigit((unsigned char)ptr[5]) && isxdigit((unsigned char)ptr[6])) {
+            
+            // First emit previous chunk if any
+            int len = ptr - chunk_start;
+            if (len > 0) {
+                lv_span_t *span = lv_spangroup_new_span(spangroup);
+                char *temp = malloc(len + 1);
+                memcpy(temp, chunk_start, len);
+                temp[len] = '\0';
+                lv_span_set_text(span, temp);
+                free(temp);
+                lv_style_set_text_color(&span->style, lv_color_hex(active_color));
+                lv_style_set_text_font(&span->style, &ui_font_orbitron_bold_15);
+            }
+            
+            // Parse new color
+            char hex[7];
+            memcpy(hex, ptr + 1, 6);
+            hex[6] = '\0';
+            active_color = strtol(hex, NULL, 16);
+            
+            ptr += 7;
+            chunk_start = ptr;
+        }
+        // Check if it's a closing tag: #
+        else if (ptr[0] == '#' && ptr[1] != '\0') {
+            // First emit previous chunk if any
+            int len = ptr - chunk_start;
+            if (len > 0) {
+                lv_span_t *span = lv_spangroup_new_span(spangroup);
+                char *temp = malloc(len + 1);
+                memcpy(temp, chunk_start, len);
+                temp[len] = '\0';
+                lv_span_set_text(span, temp);
+                free(temp);
+                lv_style_set_text_color(&span->style, lv_color_hex(active_color));
+                lv_style_set_text_font(&span->style, &ui_font_orbitron_bold_15);
+            }
+            
+            active_color = default_color;
+            ptr += 1;
+            chunk_start = ptr;
+        }
+        else {
+            ptr++;
+        }
+    }
+    
+    // Emit final chunk if any
+    int len = ptr - chunk_start;
+    if (len > 0) {
+        lv_span_t *span = lv_spangroup_new_span(spangroup);
+        char *temp = malloc(len + 1);
+        memcpy(temp, chunk_start, len);
+        temp[len] = '\0';
+        lv_span_set_text(span, temp);
+        free(temp);
+        lv_style_set_text_color(&span->style, lv_color_hex(active_color));
+        lv_style_set_text_font(&span->style, &ui_font_orbitron_bold_15);
+    }
+    
+    lv_spangroup_refr_mode(spangroup);
+}
 
 objects_t objects;
 
-static const char *screen_names[] = { "Driver View", "Autonomous", "Debug Autonomous", "Debug" };
-static const char *object_names[] = { "driver_view", "autonomous", "debug_autonomous", "debug", "ready_label", "middle_container", "temp_motor_container", "tempmotor_label", "lap_times_container", "laptime_label", "lastlap_label", "obj0", "obj1", "temp_inv_container", "temp_inv_label", "speed_container", "speed_label", "km_label", "brake_acell_presure_container", "brake_presure_bar", "accellerator_presure_bar", "obj2", "hv_bar", "lv_bar", "hv_label", "lv_label", "obj3", "hv_bar_1", "lv_bar_1", "hv_label_1", "lv_label_1", "brake_presure_container", "brake_presure_bar_1", "brake_presure_bar_2", "pneumaticresure_container", "brake_presure_bar_3", "brake_presure_bar_4", "lap_times_container_1", "laptime_label_1", "lastlap_label_1", "obj4", "obj5", "max_speed_container", "km_label_2", "km_label_1", "speed_label_1", "km_label_3", "obj6", "debug_text", "obj7", "debug_text_1" };
+static const char *screen_names[] = { "Driver View", "Autonomous", "Debug", "Debug Autonomous", "Debug Autonomous_1" };
+static const char *object_names[] = { "driver_view", "autonomous", "debug", "debug_autonomous", "debug_autonomous_1", "ready_label", "middle_container", "temp_motor_container", "tempmotor_label", "lap_times_container", "laptime_label", "lastlap_label", "obj0", "obj1", "temp_inv_container", "temp_inv_label", "speed_container", "speed_label", "km_label", "brake_acell_presure_container", "brake_presure_bar", "accellerator_presure_bar", "obj2", "hv_bar", "lv_bar", "hv_label", "lv_label", "obj3", "hv_bar_1", "lv_bar_1", "hv_label_1", "lv_label_1", "brake_presure_container", "brake_presure_bar_1", "brake_presure_bar_2", "pneumaticresure_container", "brake_presure_bar_3", "brake_presure_bar_4", "lap_times_container_1", "laptime_label_1", "lastlap_label_1", "obj4", "obj5", "max_speed_container", "km_label_2", "km_label_1", "speed_label_1", "km_label_3", "obj6", "debug_text_1", "debug_text", "debug_text_2" };
 
 //
 // Event handlers
@@ -171,7 +260,7 @@ void create_screen_driver_view() {
                             add_style_text(obj);
                             lv_obj_set_style_text_color(obj, lv_color_hex(0xff0000), LV_PART_MAIN | LV_STATE_DEFAULT);
                             lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_30, LV_PART_MAIN | LV_STATE_DEFAULT);
-                            lv_label_set_text_static(obj, "+0.8");
+                            lv_label_set_text(obj, "");
                         }
                         {
                             lv_obj_t *obj = lv_label_create(parent_obj);
@@ -291,8 +380,8 @@ void create_screen_driver_view() {
                             lv_obj_set_pos(obj, 18, 8);
                             lv_obj_set_size(obj, 20, 67);
                             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
-                            lv_bar_set_value(obj, 0, LV_ANIM_OFF);
-                            lv_bar_set_start_value(obj, 0, LV_ANIM_OFF);
+                            lv_bar_set_value(obj, 0, LV_ANIM_ON);
+                            lv_bar_set_start_value(obj, 0, LV_ANIM_ON);
                             lv_obj_set_style_radius(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
                             lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_MAIN | LV_STATE_DEFAULT);
                             lv_obj_set_style_radius(obj, 0, LV_PART_INDICATOR | LV_STATE_DEFAULT);
@@ -305,8 +394,8 @@ void create_screen_driver_view() {
                             lv_obj_set_pos(obj, 62, 8);
                             lv_obj_set_size(obj, 20, 67);
                             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
-                            lv_bar_set_value(obj, 0, LV_ANIM_OFF);
-                            lv_bar_set_start_value(obj, 0, LV_ANIM_OFF);
+                            lv_bar_set_value(obj, 0, LV_ANIM_ON);
+                            lv_bar_set_start_value(obj, 0, LV_ANIM_ON);
                             lv_obj_set_style_radius(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
                             lv_obj_set_style_bg_color(obj, lv_color_hex(0x02ff02), LV_PART_MAIN | LV_STATE_DEFAULT);
                             lv_obj_set_style_radius(obj, 0, LV_PART_INDICATOR | LV_STATE_DEFAULT);
@@ -331,8 +420,8 @@ void create_screen_driver_view() {
             lv_obj_set_pos(obj, 734, 106);
             lv_obj_set_size(obj, 53, 314);
             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
-            lv_bar_set_value(obj, 0, LV_ANIM_OFF);
-            lv_bar_set_start_value(obj, 0, LV_ANIM_OFF);
+            lv_bar_set_value(obj, 0, LV_ANIM_ON);
+            lv_bar_set_start_value(obj, 0, LV_ANIM_ON);
             add_style_bar(obj);
             lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_INDICATOR | LV_STATE_DEFAULT);
             lv_obj_set_style_line_width(obj, 10, LV_PART_INDICATOR | LV_STATE_DEFAULT);
@@ -440,6 +529,15 @@ void tick_screen_driver_view() {
         }
     }
     {
+        const char *new_val = evalTextProperty(flowState, 12, 3, "Failed to evaluate Text in Label widget");
+        const char *cur_val = lv_label_get_text(objects.obj1);
+        if (strcmp(new_val, cur_val) != 0) {
+            tick_value_change_obj = objects.obj1;
+            lv_label_set_text(objects.obj1, new_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
         const char *new_val = evalTextProperty(flowState, 15, 3, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.temp_inv_label);
         if (strcmp(new_val, cur_val) != 0) {
@@ -462,7 +560,7 @@ void tick_screen_driver_view() {
         int32_t cur_val = lv_bar_get_value(objects.brake_presure_bar);
         if (new_val != cur_val) {
             tick_value_change_obj = objects.brake_presure_bar;
-            lv_bar_set_value(objects.brake_presure_bar, new_val, LV_ANIM_OFF);
+            lv_bar_set_value(objects.brake_presure_bar, new_val, LV_ANIM_ON);
             tick_value_change_obj = NULL;
         }
     }
@@ -471,7 +569,7 @@ void tick_screen_driver_view() {
         int32_t cur_val = lv_bar_get_value(objects.accellerator_presure_bar);
         if (new_val != cur_val) {
             tick_value_change_obj = objects.accellerator_presure_bar;
-            lv_bar_set_value(objects.accellerator_presure_bar, new_val, LV_ANIM_OFF);
+            lv_bar_set_value(objects.accellerator_presure_bar, new_val, LV_ANIM_ON);
             tick_value_change_obj = NULL;
         }
     }
@@ -480,7 +578,7 @@ void tick_screen_driver_view() {
         int32_t cur_val = lv_bar_get_value(objects.hv_bar);
         if (new_val != cur_val) {
             tick_value_change_obj = objects.hv_bar;
-            lv_bar_set_value(objects.hv_bar, new_val, LV_ANIM_OFF);
+            lv_bar_set_value(objects.hv_bar, new_val, LV_ANIM_ON);
             tick_value_change_obj = NULL;
         }
     }
@@ -535,13 +633,13 @@ void create_screen_autonomous() {
         {
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.obj3 = obj;
-            lv_obj_set_pos(obj, 125, 407);
+            lv_obj_set_pos(obj, 106, 407);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             add_style_text(obj);
             lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_color(obj, lv_color_hex(0x13ff00), LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_40, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_label_set_text_static(obj, "MISSION: {MISSION}");
+            lv_label_set_text(obj, "");
         }
         {
             // hvBar_1
@@ -550,7 +648,7 @@ void create_screen_autonomous() {
             lv_obj_set_pos(obj, 736, 96);
             lv_obj_set_size(obj, 53, 314);
             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
-            lv_bar_set_value(obj, 50, LV_ANIM_OFF);
+            lv_bar_set_value(obj, 0, LV_ANIM_OFF);
             lv_bar_set_start_value(obj, 0, LV_ANIM_OFF);
             add_style_bar(obj);
             lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_INDICATOR | LV_STATE_DEFAULT);
@@ -569,8 +667,9 @@ void create_screen_autonomous() {
             objects.lv_bar_1 = obj;
             lv_obj_set_pos(obj, 13, 98);
             lv_obj_set_size(obj, 53, 314);
+            lv_bar_set_range(obj, 18, 30);
             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
-            lv_bar_set_value(obj, 50, LV_ANIM_ON);
+            lv_bar_set_value(obj, 0, LV_ANIM_ON);
             lv_bar_set_start_value(obj, 0, LV_ANIM_ON);
             add_style_bar(obj);
             lv_obj_set_style_bg_color(obj, lv_color_hex(0x02ff02), LV_PART_INDICATOR | LV_STATE_DEFAULT);
@@ -838,8 +937,8 @@ void create_screen_autonomous() {
             // maxSpeedContainer
             lv_obj_t *obj = lv_obj_create(parent_obj);
             objects.max_speed_container = obj;
-            lv_obj_set_pos(obj, 404, 65);
-            lv_obj_set_size(obj, 320, 143);
+            lv_obj_set_pos(obj, 379, 65);
+            lv_obj_set_size(obj, 345, 143);
             lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_pad_top(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -862,7 +961,7 @@ void create_screen_autonomous() {
                     // kmLabel_1
                     lv_obj_t *obj = lv_label_create(parent_obj);
                     objects.km_label_1 = obj;
-                    lv_obj_set_pos(obj, 215, 72);
+                    lv_obj_set_pos(obj, 230, 72);
                     lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
                     add_style_text(obj);
                     lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_30, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -872,7 +971,7 @@ void create_screen_autonomous() {
                     // speedLabel_1
                     lv_obj_t *obj = lv_label_create(parent_obj);
                     objects.speed_label_1 = obj;
-                    lv_obj_set_pos(obj, -52, 15);
+                    lv_obj_set_pos(obj, -55, 15);
                     lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
                     lv_obj_set_style_text_font(obj, &ui_font_orbiter_bold_100, LV_PART_MAIN | LV_STATE_DEFAULT);
                     lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -902,6 +1001,33 @@ void create_screen_autonomous() {
 void tick_screen_autonomous() {
     void *flowState = getFlowState(0, 1);
     (void)flowState;
+    {
+        const char *new_val = evalTextProperty(flowState, 2, 3, "Failed to evaluate Text in Label widget");
+        const char *cur_val = lv_label_get_text(objects.obj3);
+        if (strcmp(new_val, cur_val) != 0) {
+            tick_value_change_obj = objects.obj3;
+            lv_label_set_text(objects.obj3, new_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        int32_t new_val = evalIntegerProperty(flowState, 3, 3, "Failed to evaluate Value in Bar widget");
+        int32_t cur_val = lv_bar_get_value(objects.hv_bar_1);
+        if (new_val != cur_val) {
+            tick_value_change_obj = objects.hv_bar_1;
+            lv_bar_set_value(objects.hv_bar_1, new_val, LV_ANIM_OFF);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        int32_t new_val = evalIntegerProperty(flowState, 4, 3, "Failed to evaluate Value in Bar widget");
+        int32_t cur_val = lv_bar_get_value(objects.lv_bar_1);
+        if (new_val != cur_val) {
+            tick_value_change_obj = objects.lv_bar_1;
+            lv_bar_set_value(objects.lv_bar_1, new_val, LV_ANIM_ON);
+            tick_value_change_obj = NULL;
+        }
+    }
     {
         const char *new_val = evalTextProperty(flowState, 5, 3, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.hv_label_1);
@@ -940,54 +1066,8 @@ void tick_screen_autonomous() {
     }
 }
 
-void create_screen_debug_autonomous() {
-    void *flowState = getFlowState(0, 2);
-    (void)flowState;
-    lv_obj_t *obj = lv_obj_create(0);
-    objects.debug_autonomous = obj;
-    lv_obj_set_pos(obj, 0, 0);
-    lv_obj_set_size(obj, 800, 480);
-    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    {
-        lv_obj_t *parent_obj = obj;
-        {
-            lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.obj6 = obj;
-            lv_obj_set_pos(obj, 18, 13);
-            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-            lv_obj_set_style_text_color(obj, lv_color_hex(0xff9400), LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_25, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_label_set_text_static(obj, "DEBUG AUTONOMOUS");
-        }
-        {
-            // debugText
-            lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.debug_text = obj;
-            lv_obj_set_pos(obj, 10, 62);
-            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-            add_style_text(obj);
-            lv_obj_set_style_width(obj, 780, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_height(obj, 400, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_font(obj, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_letter_space(obj, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_line_space(obj, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_color(obj, lv_color_hex(0xff9400), LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_label_set_text_static(obj, "[00:42.184] CAN_ID: 0x0A2 | INVERTER_L_STATUS: RUNNING\n[00:42.186] CAN_ID: 0x0A3 | INVERTER_R_STATUS: RUNNING\n[00:42.189] AMS_STATE: AS_READY\n[00:42.192] VCU_STATE: RTD_ACTIVE\n[00:42.195] SENSOR_APPS1: 1.42V | SENSOR_APPS2: 0.71V | DEV: 0.02%\n[00:42.198] SENSOR_BSE: 0.85V | BRAKE_PRES: 12.4 BAR\n[00:42.201] HV_BUS: 584.2V | BATT_CURRENT: -142.8A\n[00:42.204] BATT_TEMP_MAX: 42.1°C | BATT_TEMP_MIN: 38.4°C\n[00:42.207] MOTOR_RPM_L: 8420 | MOTOR_RPM_R: 8418\n[00:42.210] TORQUE_REQ: 45.0 Nm | TORQUE_ACT: 44.8 Nm\n[00:42.215] [DEBUG] TV_RATIO: 1.02 (L: 0.49 | R: 0.51)\n[00:42.220] [WARNING] INV_L_TEMP: 68.4°C (Approach Derating Limit)");
-        }
-    }
-    
-    tick_screen_debug_autonomous();
-}
-
-void tick_screen_debug_autonomous() {
-    void *flowState = getFlowState(0, 2);
-    (void)flowState;
-}
-
 void create_screen_debug() {
-    void *flowState = getFlowState(0, 3);
+    void *flowState = getFlowState(0, 2);
     (void)flowState;
     lv_obj_t *obj = lv_obj_create(0);
     objects.debug = obj;
@@ -998,7 +1078,7 @@ void create_screen_debug() {
         lv_obj_t *parent_obj = obj;
         {
             lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.obj7 = obj;
+            objects.obj6 = obj;
             lv_obj_set_pos(obj, 19, 10);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_obj_set_style_text_color(obj, lv_color_hex(0xff9400), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -1008,19 +1088,13 @@ void create_screen_debug() {
         }
         {
             // debugText_1
-            lv_obj_t *obj = lv_label_create(parent_obj);
+            lv_obj_t *obj = lv_spangroup_create(parent_obj);
             objects.debug_text_1 = obj;
-            lv_obj_set_pos(obj, 10, 49);
-            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-            add_style_text(obj);
-            lv_obj_set_style_width(obj, 780, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_height(obj, 400, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_font(obj, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_letter_space(obj, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_line_space(obj, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_color(obj, lv_color_hex(0xff9400), LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_label_set_text_static(obj, "[00:42.184] CAN_ID: 0x0A2 | INVERTER_L_STATUS: RUNNING\n[00:42.186] CAN_ID: 0x0A3 | INVERTER_R_STATUS: RUNNING\n[00:42.189] AMS_STATE: AS_READY\n[00:42.192] VCU_STATE: RTD_ACTIVE\n[00:42.195] SENSOR_APPS1: 1.42V | SENSOR_APPS2: 0.71V | DEV: 0.02%\n[00:42.198] SENSOR_BSE: 0.85V | BRAKE_PRES: 12.4 BAR\n[00:42.201] HV_BUS: 584.2V | BATT_CURRENT: -142.8A\n[00:42.204] BATT_TEMP_MAX: 42.1°C | BATT_TEMP_MIN: 38.4°C\n[00:42.207] MOTOR_RPM_L: 8420 | MOTOR_RPM_R: 8418\n[00:42.210] TORQUE_REQ: 45.0 Nm | TORQUE_ACT: 44.8 Nm\n[00:42.215] [DEBUG] TV_RATIO: 1.02 (L: 0.49 | R: 0.51)\n[00:42.220] [WARNING] INV_L_TEMP: 68.4°C (Approach Derating Limit)");
+            lv_obj_set_pos(obj, 0, 0);
+            lv_obj_set_size(obj, 800, 480);
+            lv_spangroup_set_mode(obj, LV_SPAN_MODE_FIXED);
+            lv_spangroup_set_align(obj, LV_TEXT_ALIGN_LEFT);
+            my_spangroup_set_recolor_text(obj, " GENERAL DEBUG                                                          \n------------------------------------------+---------------------------------------------\n AMS                                     | INVERTER (HV500)\n State:    --------   SOC: ---.--%       | ERPM:     ------    Duty: ---.--%\n Runtime:  -----s     Fans: ---%         | Vin:      ---- V    Fault: ---\n MCU Vref: -.--V      MCU T: ---°C      | AC Curr:  ---.- Apk DC: ---.- A\n PEC Err:  ---        Flt Cnt: ---       | Ctrl T:   ---.-°C   Mot T: ---.-°C\n Slaves:   --/12      FW: --------       | Throttle: ---%      Brake: ---%\n Fault1:   ----------------              | FOC Id:   ---.- Apk Iq: ---.- Apk\n Fault2:   ----------------              | DriveEn:  ---        CtrlMode: ---\n------------------------------------------+---------------------------------------------\n PRECHARGE                               | IVT (ISABELLE)\n State:    ----------------              | Current:  -------- mA\n AIR+: --- AIR-: --- CHG: --- DIS: ---   | U1: -------- mV  U2: -------- mV\n                                         | U3: -------- mV  Temp: -----.-°C\n PACK OVERVIEW                           | Power: -------- W  Energy: -------- Wh\n Vmax: -.---V   Vmin: -.---V             |\n Tmax: ---.--°C Tmin: ---.--°C           | PEDALS / DASHBOARD\n                                         | APPS1: ----.- APPS2: ----.-\n------------------------------------------+---------------------------------------------\n WHEELS                                  | REAR SENSORS (AQT7)\n FL: --- km/h  T:---.-°C  BrkT:---.-°C  | NTC1: ---.-°C  NTC2: ---.-°C\n FR: --- km/h  T:---.-°C  BrkT:---.-°C  | NTC3: ---.-°C\n RL: --- km/h  T:---.-°C  BrkT:---.-°C  | Susp R: ---.- mm  Susp L: ---.- mm\n RR: --- km/h  T:---.-°C  BrkT:---.-°C  | IGN: ---  R2D: ---\n------------------------------------------+---------------------------------------------");
         }
     }
     
@@ -1028,19 +1102,306 @@ void create_screen_debug() {
 }
 
 void tick_screen_debug() {
+    TelemetryData t;
+    if (!ros2subscriber_get_telemetry(&t)) {
+        return;
+    }
+
+    char buf[4096];
+    
+    // Status strings
+    const char *ams_state_str = (t.ams_state == 1) ? "#00FF00 RUNNING#" : ((t.ams_state == 0) ? "#808080 IDLE#" : "#FF0000 FAULT#");
+    const char *precharge_state_str = (t.precharge_state == 2) ? "#00FF00 DONE#" : 
+                                      ((t.precharge_state == 1) ? "#FFA500 CHG#" : 
+                                      ((t.precharge_state == 0) ? "#808080 OFF#" : "#FF0000 FAULT#"));
+
+    const char *air_pos_str = (t.air_pos == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *air_min_str = (t.air_min == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *ctc_chg_str = (t.ctc_charge == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *ctc_dis_str = (t.ctc_discharge == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+
+    const char *inv_drive_str = (t.inv_drive_en == 1) ? "#00FF00 ENABLED#" : "#808080 DISABLED#";
+    const char *rear_ign_str = (t.rear_ign == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *rear_r2d_str = (t.rear_r2d == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+
+    // Value color mappings
+    const char *soc_color = (t.ams_soc > 30) ? "#00FF00" : ((t.ams_soc > 15) ? "#FFA500" : "#FF0000");
+    const char *pec_color = (t.ams_pec_err == 0) ? "#00FF00" : "#FF0000";
+    const char *fault_color = (t.ams_fault_cnt == 0) ? "#00FF00" : "#FF0000";
+    const char *inv_fault_color = (t.inv_fault == 0) ? "#00FF00" : "#FF0000";
+    const char *tmax_color = (t.t_max < 50.0f) ? "#00FF00" : "#FF0000";
+    const char *vmin_color = (t.v_min > 3.0f) ? "#00FF00" : "#FF0000";
+
+    snprintf(buf, sizeof(buf),
+        " #00BFFF GENERAL DEBUG#\n"
+        "------------------------------------------+---------------------------------------------\n"
+        " #00BFFF AMS#                                     | #00BFFF INVERTER (HV500)#\n"
+        " State:    %-25s      | ERPM:     #FFFFFF %-8.0f# Duty: #FFFFFF %5.1f%%#\n"
+        " SOC:      %s%5.1f%%#                         | Vin:      #FFFFFF %-6.0f# V  Fault: %s%-3.0f#\n"
+        " Runtime:  #FFFFFF %5.0f s#                       | AC Curr:  #FFFFFF %5.1f Apk# DC: #FFFFFF %5.1f A#\n"
+        " MCU Vref: #FFFFFF %4.2f V#  MCU T: #FFFFFF %3.0f°C#      | Ctrl T:   #FFFFFF %5.1f°C#  Mot T:#FFFFFF %5.1f°C#\n"
+        " PEC Err:  %s%3.0f#      Flt Cnt: %s%3.0f#       | Throttle: #FFFFFF %3.0f%%#    Brake:#FFFFFF %3.0f%%#\n"
+        " Slaves:   #FFFFFF %2.0f/12#     FW: #FFFFFF %-8.0f#      | FOC Id:   #FFFFFF %5.1f Apk# Iq:  #FFFFFF %5.1f Apk#\n"
+        " Fault:    %s%-25.0f#      | DriveEn:  %-25s\n"
+        "------------------------------------------+---------------------------------------------\n"
+        " #00BFFF PRECHARGE#                               | #00BFFF IVT (ISABELLE)#\n"
+        " State:    %-25s      | Current:  #FFFFFF %8.0f mA#\n"
+        " AIRpos:   %-15s AIRmin: %-15s | U1: #FFFFFF %7.0f mV#  U2: #FFFFFF %7.0f mV#\n"
+        " CTCchg:   %-15s CTCdis: %-15s | U3: #FFFFFF %7.0f mV#  Temp:#FFFFFF %5.1f°C#\n"
+        "                                          | Power:   #FFFFFF %7.0f W#  Energy:#FFFFFF %7.0f Wh#\n"
+        " #00BFFF PACK OVERVIEW#                           |\n"
+        " Vmax: #FFFFFF %5.3f V#   Vmin: %s%5.3f V#           | #00BFFF PEDALS / DASHBOARD#\n"
+        " Tmax: %s%5.1f°C#  Tmin: #FFFFFF %5.1f°C#           | APPS1:   #FFFFFF %6.1f#  APPS2: #FFFFFF %6.1f#\n"
+        "------------------------------------------+---------------------------------------------\n"
+        " #00BFFF WHEELS#                                  | #00BFFF REAR SENSORS (AQT7)#\n"
+        " FL: #FFFFFF %3.0f km/h# T:#FFFFFF %4.1f°C# BrkT:#FFFFFF %4.1f°C# | NTC1: #FFFFFF %4.1f°C# NTC2: #FFFFFF %4.1f°C#\n"
+        " FR: #FFFFFF %3.0f km/h# T:#FFFFFF %4.1f°C# BrkT:#FFFFFF %4.1f°C# | NTC3: #FFFFFF %4.1f°C#\n"
+        " RL: #FFFFFF %3.0f km/h# T:#FFFFFF %4.1f°C# BrkT:#FFFFFF %4.1f°C# | Susp R:#FFFFFF %5.1f mm# Susp L:#FFFFFF %5.1f mm#\n"
+        " RR: #FFFFFF %3.0f km/h# T:#FFFFFF %4.1f°C# BrkT:#FFFFFF %4.1f°C# | IGN:  %-15s R2D:  %-15s\n"
+        "------------------------------------------+---------------------------------------------\n",
+        ams_state_str, t.inv_erpm, t.inv_duty,
+        soc_color, t.ams_soc, t.inv_vin, inv_fault_color, t.inv_fault,
+        t.ams_runtime, t.inv_ac_curr, t.inv_dc_curr,
+        t.ams_mcu_vref, t.ams_mcu_temp, t.inv_temp_ctrl, t.inv_temp_mot,
+        pec_color, t.ams_pec_err, fault_color, t.ams_fault_cnt, t.inv_throttle, t.inv_brake,
+        t.ams_slaves, t.ams_fw, t.inv_foc_id, t.inv_foc_iq,
+        fault_color, t.ams_fault_cnt, inv_drive_str,
+        precharge_state_str, t.ivt_current,
+        air_pos_str, air_min_str, t.ivt_u1, t.ivt_u2,
+        ctc_chg_str, ctc_dis_str, t.ivt_u3, t.ivt_temp,
+        t.ivt_power, t.ivt_energy,
+        t.v_max, vmin_color, t.v_min,
+        tmax_color, t.t_max, t.t_min, t.apps1, t.apps2,
+        t.spd_fl, t.temp_fl, t.brk_fl, t.ntc1, t.ntc2,
+        t.spd_fr, t.temp_fr, t.brk_fr, t.ntc3,
+        t.spd_rl, t.temp_rl, t.brk_rl, t.susp_r, t.susp_l,
+        t.spd_rr, t.temp_rr, t.brk_rr, rear_ign_str, rear_r2d_str
+    );
+
+    if (objects.debug_text_1) {
+        my_spangroup_set_recolor_text(objects.debug_text_1, buf);
+    }
+}
+
+void create_screen_debug_autonomous() {
     void *flowState = getFlowState(0, 3);
     (void)flowState;
+    lv_obj_t *obj = lv_obj_create(0);
+    objects.debug_autonomous = obj;
+    lv_obj_set_pos(obj, 0, 0);
+    lv_obj_set_size(obj, 800, 480);
+    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    {
+        lv_obj_t *parent_obj = obj;
+        {
+            // debugText
+            lv_obj_t *obj = lv_spangroup_create(parent_obj);
+            objects.debug_text = obj;
+            lv_obj_set_pos(obj, 0, 0);
+            lv_obj_set_size(obj, 800, 480);
+            lv_spangroup_set_mode(obj, LV_SPAN_MODE_FIXED);
+            lv_spangroup_set_align(obj, LV_TEXT_ALIGN_LEFT);
+            my_spangroup_set_recolor_text(obj, " AUTONOMOUS DEBUG  1/2                                                     \n ACU                                     | DV DYNAMICS\n ACU State:  ---------  AS: --------     | Spd Act: --- km/h   Spd Tgt: --- km/h\n ASSI:       ---------  Mission: ---     | Str Act: ---.-°     Str Tgt: ---.-°\n ASMS: ---  IGN: ---  EMERGENCY: ---     | Brk Act: ---%       Brk Tgt: ---%\n Emerg Cause: ------------------         | Mot Act: ---%       Mot Tgt: ---%\n CPU Temp: ---°C                         | Acc Lon: ---.--- m/s2\n                                         | Acc Lat: ---.--- m/s2\n JETSON                                  | Yaw:    ---.--- °/s\n AS State: ---  Mission: ---             |\n Temp: ---°C  CPU: ---% GPU: ---%       | DV STATUS\n Emerg Cause: ----------------           | AS: ---  EBS: ---  AMI: ---\n                                         | Steer: ---  EBS Red: ---\n------------------------------------------+---------------------------------------------\n VCU                                     | EBS / ASF PRESSURES\n IGN Man: ---  IGN Auto: ---             | EBS Tank F: ---- bar  R: ---- bar\n R2D Man: ---  R2D Auto: ---             | Brk Press F: ---- bar  R: ---- bar\n Shutdown: ---  State: ---               |\n R2D Raw: ---  IGN Raw: ---              | CUBEMARS STEERING\n HV: ---  BrkF: ---  BrkR: ---          | Pos: -----.-°  Spd: ------ ERPM\n                                         | Curr: ---.- A  Drv T: ---°C  Err: ---\n VCU RPM                                 | Pos Target: ------ °\n RPM Act: -----  RPM Tgt: -----         |    Torque Tgt: -----                                      | SLAM / CONES | Laps: --  Cones: ---  All: ------");
+        }
+    }
+    
+    tick_screen_debug_autonomous();
+}
+
+void tick_screen_debug_autonomous() {
+    TelemetryData t;
+    if (!ros2subscriber_get_telemetry(&t)) {
+        return;
+    }
+
+    char buf[4096];
+
+    // Status strings
+    const char *acu_state_str = "#FF0000 FAULT#";
+    if (t.acu_state == 0) acu_state_str = "#808080 INIT#";
+    else if (t.acu_state == 1) acu_state_str = "#FFA500 MISS_SEL#";
+    else if (t.acu_state == 2) acu_state_str = "#00BFFF JET_WAIT#";
+    else if (t.acu_state == 3) acu_state_str = "#FFA500 SEQ#";
+    else if (t.acu_state == 4) acu_state_str = "#00FF00 READY#";
+    else if (t.acu_state == 5) acu_state_str = "#00FF00 DRIVING#";
+    else if (t.acu_state == 7) acu_state_str = "#FF0000 EMERG#";
+
+    const char *as_state_str = "#808080 OFF#";
+    if (t.acu_as_state == 2) as_state_str = "#00FF00 READY#";
+    else if (t.acu_as_state == 3) as_state_str = "#00FF00 DRIVING#";
+    else if (t.acu_as_state == 4) as_state_str = "#FF0000 EMERG#";
+    else if (t.acu_as_state == 5) as_state_str = "#00FF00 FINISH#";
+
+    const char *assi_state_str = "#808080 OFF#";
+    if (t.acu_assi_state == 2) assi_state_str = "#00FF00 READY#";
+    else if (t.acu_assi_state == 3) assi_state_str = "#00FF00 DRIVING#";
+    else if (t.acu_assi_state == 4) assi_state_str = "#FF0000 EMERG#";
+    else if (t.acu_assi_state == 5) assi_state_str = "#00FF00 FINISH#";
+
+    const char *acu_emerg_str = "#00FF00 NONE#";
+    if (t.acu_emerg_cause == 1) acu_emerg_str = "#FF0000 SDC_OPEN#";
+    else if (t.acu_emerg_cause == 2) acu_emerg_str = "#FF0000 RES#";
+    else if (t.acu_emerg_cause == 3) acu_emerg_str = "#FF0000 PRESS_CHK#";
+    else if (t.acu_emerg_cause == 4) acu_emerg_str = "#FF0000 VCU_TO#";
+    else if (t.acu_emerg_cause == 5) acu_emerg_str = "#FF0000 JETSON_TO#";
+    else if (t.acu_emerg_cause == 6) acu_emerg_str = "#FF0000 WDT#";
+
+    const char *jet_as_state_str = "#808080 OFF#";
+    if (t.jetson_as_state == 2) jet_as_state_str = "#00FF00 READY#";
+    else if (t.jetson_as_state == 3) jet_as_state_str = "#00FF00 DRIVING#";
+    else if (t.jetson_as_state == 4) jet_as_state_str = "#FF0000 EMERG#";
+    else if (t.jetson_as_state == 5) jet_as_state_str = "#00FF00 FINISH#";
+
+    const char *jet_emerg_str = "#00FF00 NONE#";
+    if (t.jetson_emerg_cause == 1) jet_emerg_str = "#FF0000 SDC_OPEN#";
+    else if (t.jetson_emerg_cause == 2) jet_emerg_str = "#FF0000 RES#";
+    else if (t.jetson_emerg_cause == 3) jet_emerg_str = "#FF0000 STEER_ERR#";
+
+    const char *acu_asms_str = (t.acu_asms == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *acu_ign_str = (t.acu_ign == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *acu_emerg_act_str = (t.acu_emergency == 1) ? "#FF0000 ACTIVE#" : "#00FF00 OK#";
+
+    const char *vcu_ign_man_str = (t.vcu_ign_man == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *vcu_ign_auto_str = (t.vcu_ign_auto == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *vcu_r2d_man_str = (t.vcu_r2d_man == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *vcu_r2d_auto_str = (t.vcu_r2d_auto == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *vcu_shutdown_str = (t.vcu_shutdown == 1) ? "#00FF00 CLOSED#" : "#FF0000 OPEN#";
+    const char *vcu_hv_str = (t.vcu_hv == 1) ? "#FF0000 ACTIVE#" : "#808080 OFF#";
+
+    const char *steer_err_str = (t.steer_err == 0) ? "#00FF00 OK#" : "#FF0000 FAULT#";
+
+    // Pedals/Pressures color mappings
+    const char *ebs_press_color = (t.ebs_tank_f > 10.0f) ? "#00FF00" : "#FF0000";
+
+    snprintf(buf, sizeof(buf),
+        " #00BFFF AUTONOMOUS DEBUG  1/2#\n"
+        "------------------------------------------+---------------------------------------------\n"
+        " #00BFFF ACU#                                     | #00BFFF DV DYNAMICS#\n"
+        " ACU State:  %-25s      | Spd Act:  #FFFFFF %3.1f# km/h  Spd Tgt: #FFFFFF %3.1f# km/h\n"
+        " ASSI:       %-25s      | Str Act:  #FFFFFF %5.1f# °    Str Tgt: #FFFFFF %5.1f# °\n"
+        " ASMS: %-10s IGN: %-10s         | Brk Act:  #FFFFFF %3.0f%%#        Brk Tgt: #FFFFFF %3.0f%%#\n"
+        " EMERGENCY:  %-25s      | Mot Act:  #FFFFFF %3.0f%%#        Mot Tgt: #FFFFFF %3.0f%%#\n"
+        " Emerg Cause:%-25s      | Acc Lon:  #FFFFFF %6.3f# m/s2 Acc Lat:#FFFFFF %6.3f# m/s2\n"
+        " CPU Temp:   #FFFFFF %3.0f°C#                     | Yaw:      #FFFFFF %6.3f# °/s\n"
+        "                                          |\n"
+        " #00BFFF JETSON#                                  | #00BFFF DV STATUS#\n"
+        " AS State:   %-25s      | AS: #FFFFFF %3.0f#  EBS: #FFFFFF %3.0f#  AMI: #FFFFFF %3.0f#\n"
+        " Mission:    #FFFFFF %-25.0f#      | Steer: #FFFFFF %3.0f#  EBS Red: #FFFFFF %3.0f#\n"
+        " Temp: #FFFFFF %3.0f°C#  CPU: #FFFFFF %3.0f%%#  GPU: #FFFFFF %3.0f%%#      |\n"
+        " Emerg Cause:%-25s      | #00BFFF EBS / ASF PRESSURES#\n"
+        "                                          | EBS Tank F: %s%5.1f# bar R: %s%5.1f# bar\n"
+        "------------------------------------------+ Brk Press F: #FFFFFF %5.1f# bar R: #FFFFFF %5.1f# bar\n"
+        " #00BFFF VCU#                                     |\n"
+        " IGN Man: %-10s IGN Auto: %-10s   | #00BFFF CUBEMARS STEERING#\n"
+        " R2D Man: %-10s R2D Auto: %-10s   | Pos: #FFFFFF %5.1f# °   Spd: #FFFFFF %6.0f# ERPM\n"
+        " Shutdown:%-25s      | Curr: #FFFFFF %5.1f# A   Drv T: #FFFFFF %3.0f°C# Err: %s\n"
+        " State:   #FFFFFF %-25.0f#      | Pos Target: #FFFFFF %5.1f# °\n"
+        " HV:      %-25s      | Torque Tgt: #FFFFFF %5.2f# Nm\n"
+        "                                          |\n"
+        " #00BFFF VCU RPM#                                 | #00BFFF SLAM / CONES#\n"
+        " RPM Act: #FFFFFF %-5.0f#       RPM Tgt: #FFFFFF %-5.0f#       | Laps: #FFFFFF %2.0f#  Cones: #FFFFFF %3.0f#  All: #FFFFFF %4.0f#\n"
+        "------------------------------------------+---------------------------------------------\n",
+        acu_state_str, t.dv_spd_act, t.dv_spd_tgt,
+        assi_state_str, t.dv_str_act, t.dv_str_tgt,
+        acu_asms_str, acu_ign_str, t.dv_brk_act, t.dv_brk_tgt,
+        acu_emerg_act_str, t.dv_mot_act, t.dv_mot_tgt,
+        acu_emerg_str, t.dv_acc_lon, t.dv_acc_lat,
+        t.acu_cpu_temp, t.dv_yaw,
+        jet_as_state_str, t.dv_as_status, t.dv_ebs_state, t.dv_ami_state,
+        t.jetson_mission, t.dv_steer_state, t.dv_ebs_red_state,
+        t.jetson_temp, t.jetson_cpu, t.jetson_gpu,
+        jet_emerg_str, ebs_press_color, t.ebs_tank_f, ebs_press_color, t.ebs_tank_r,
+        t.brk_press_f, t.brk_press_r,
+        vcu_ign_man_str, vcu_ign_auto_str,
+        vcu_r2d_man_str, vcu_r2d_auto_str, t.steer_pos, t.steer_spd,
+        vcu_shutdown_str, t.steer_curr, t.steer_temp, steer_err_str,
+        t.vcu_state, t.steer_pos_tgt,
+        vcu_hv_str, t.vcu_torque_tgt,
+        t.vcu_rpm_act, t.vcu_rpm_tgt, t.slam_laps, t.slam_cones, t.slam_all
+    );
+
+    if (objects.debug_text) {
+        my_spangroup_set_recolor_text(objects.debug_text, buf);
+    }
+}
+
+void create_screen_debug_autonomous_1() {
+    void *flowState = getFlowState(0, 4);
+    (void)flowState;
+    lv_obj_t *obj = lv_obj_create(0);
+    objects.debug_autonomous_1 = obj;
+    lv_obj_set_pos(obj, 0, 0);
+    lv_obj_set_size(obj, 800, 480);
+    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    {
+        lv_obj_t *parent_obj = obj;
+        {
+            // debugText_2
+            lv_obj_t *obj = lv_spangroup_create(parent_obj);
+            objects.debug_text_2 = obj;
+            lv_obj_set_pos(obj, 0, 0);
+            lv_obj_set_size(obj, 800, 480);
+            lv_spangroup_set_mode(obj, LV_SPAN_MODE_FIXED);
+            lv_spangroup_set_align(obj, LV_TEXT_ALIGN_LEFT);
+            my_spangroup_set_recolor_text(obj, " AUTONOMOUS DEBUG 2/2   \n------------------------------------------+---------------------------------------------\n ACQUISITION BOARDS                      | RES (Remote Emergency)\n AQT1 BrkP:---.- bar RES:--- BOTS:---   | Signal: ---\n AQT2 WhlAng:-----.-° AQT3:-----.-°    |\n AQT4 StAng:-----.-° Inertia:--- Emer:---| AQT7 BrkP: ---.- bar\n------------------------------------------+---------------------------------------------\n                                                    \n \n");
+        }
+    }
+    
+    tick_screen_debug_autonomous_1();
+}
+
+void tick_screen_debug_autonomous_1() {
+    TelemetryData t;
+    if (!ros2subscriber_get_telemetry(&t)) {
+        return;
+    }
+
+    char buf[2048];
+
+    // Status strings
+    const char *aqt1_res_str = (t.aqt1_res == 1) ? "#FF0000 ACTIVE#" : "#00FF00 OK#";
+    const char *aqt1_bots_str = (t.aqt1_bots == 1) ? "#FF0000 ACTIVE#" : "#00FF00 OK#";
+    const char *aqt4_inertia_str = (t.aqt4_inertia == 1) ? "#FF0000 ACTIVE#" : "#00FF00 OK#";
+    const char *aqt4_emerg_str = (t.aqt4_emer == 1) ? "#FF0000 ACTIVE#" : "#00FF00 OK#";
+
+    snprintf(buf, sizeof(buf),
+        " #00BFFF AUTONOMOUS DEBUG 2/2#   \n"
+        "------------------------------------------+---------------------------------------------\n"
+        " #00BFFF ACQUISITION BOARDS#                      | #00BFFF RES (Remote Emergency)#\n"
+        " AQT1 BrkP:  #FFFFFF %5.1f# bar                   | Signal: #FFFFFF %5.1f#\n"
+        " AQT1 RES:   %-25s      |\n"
+        " AQT1 BOTS:  %-25s      | #00BFFF REAR SENSORS (AQT7)#\n"
+        " AQT2 WhlAng:#FFFFFF %5.1f# °                     | AQT7 BrkP:#FFFFFF %5.1f# bar\n"
+        " AQT3 WhlAng:#FFFFFF %5.1f# °                     |\n"
+        " AQT4 StAng: #FFFFFF %5.1f# °                     |\n"
+        " AQT4 Inertia:%-25s      |\n"
+        " AQT4 Emer:  %-25s      |\n"
+        "------------------------------------------+---------------------------------------------\n",
+        t.aqt1_brkp, t.res_signal,
+        aqt1_res_str,
+        aqt1_bots_str,
+        t.aqt2_whl_ang, t.aqt7_brkp,
+        t.aqt3_whl_ang,
+        t.aqt4_st_ang,
+        aqt4_inertia_str,
+        aqt4_emerg_str
+    );
+
+    if (objects.debug_text_2) {
+        my_spangroup_set_recolor_text(objects.debug_text_2, buf);
+    }
 }
 
 typedef void (*tick_screen_func_t)();
 tick_screen_func_t tick_screen_funcs[] = {
     tick_screen_driver_view,
     tick_screen_autonomous,
-    tick_screen_debug_autonomous,
     tick_screen_debug,
+    tick_screen_debug_autonomous,
+    tick_screen_debug_autonomous_1,
 };
 void tick_screen(int screen_index) {
-    if (screen_index >= 0 && screen_index < 4) {
+    if (screen_index >= 0 && screen_index < 5) {
         tick_screen_funcs[screen_index]();
     }
 }
@@ -1158,6 +1519,7 @@ eez_flow_init_fonts(fonts, sizeof(fonts) / sizeof(ext_font_desc_t));
     // Create screens
     create_screen_driver_view();
     create_screen_autonomous();
-    create_screen_debug_autonomous();
     create_screen_debug();
+    create_screen_debug_autonomous();
+    create_screen_debug_autonomous_1();
 }
