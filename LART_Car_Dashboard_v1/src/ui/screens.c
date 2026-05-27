@@ -1176,6 +1176,16 @@ static void table_draw_event_cb(lv_event_t * e) {
                 label_draw_dsc->color = lv_color_hex(color_val);
             }
         }
+
+        lv_draw_fill_dsc_t * fill_draw_dsc = lv_draw_task_get_fill_dsc(draw_task);
+        if(fill_draw_dsc) {
+            if(row % 2 == 0) {
+                fill_draw_dsc->color = lv_color_hex(0x000000);
+            }
+            else {
+                fill_draw_dsc->color = lv_color_hex(0x1a1a1a);
+            }
+        }
     }
 }
 
@@ -1214,7 +1224,7 @@ static lv_obj_t *create_debug_table(lv_obj_t *parent_obj, uint32_t row_cnt) {
     lv_table_set_column_width(obj, 3, 210);
     
     // Set styles for dark dashboard table
-    lv_obj_set_style_bg_color(obj, lv_color_hex(0x1a1a1a), LV_PART_MAIN);
+    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN);
     lv_obj_set_style_text_color(obj, lv_color_hex(0xffffff), LV_PART_ITEMS);
     lv_obj_set_style_bg_color(obj, lv_color_hex(0x2a2a2a), LV_PART_ITEMS);
     lv_obj_set_style_border_color(obj, lv_color_hex(0x444444), LV_PART_ITEMS);
@@ -2025,13 +2035,13 @@ void tick_screen_debug_autonomous_5() {
     set_cell(table, 5, 0, "AQT1 BrkP:", 0xFFFFFF);
     set_cell_fmt(table, 5, 1, 0xFFFFFF, "%5.1f bar", t.aqt1_brkp);
     set_cell(table, 5, 2, "AQT1 RES:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 3, (t.aqt1_res == 1) ? "ACTIVE" : "OK", (t.aqt1_res == 1) ? 0xFF0000 : 0x00FF00);
+    set_cell(table, 5, 3, (t.aqt1_res == 1) ? "ACTIVE" : "OK", (t.aqt1_res == 1) ? 0xFF0000 : 0x00FF00);
 
     // Row 6
     set_cell(table, 6, 0, "AQT1 BOTS:", 0xFFFFFF);
     set_cell(table, 6, 1, (t.aqt1_bots == 1) ? "ACTIVE" : "OK", (t.aqt1_bots == 1) ? 0xFF0000 : 0x00FF00);
     set_cell(table, 6, 2, "AQT4 Inertia:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 3, (t.aqt4_inertia == 1) ? "ACTIVE" : "OK", (t.aqt4_inertia == 1) ? 0xFF0000 : 0x00FF00);
+    set_cell(table, 6, 3, (t.aqt4_inertia == 1) ? "ACTIVE" : "OK", (t.aqt4_inertia == 1) ? 0xFF0000 : 0x00FF00);
 
     // Row 7
     set_cell(table, 7, 0, "AQT4 Emer:", 0xFFFFFF);
