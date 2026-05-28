@@ -68,7 +68,6 @@ typedef struct _objects_t {
     lv_obj_t *km_label_1;
     lv_obj_t *speed_label_1;
     lv_obj_t *km_label_3;
-    lv_obj_t *obj6;
     lv_obj_t *debug_text_1;
     lv_obj_t *debug_text;
     lv_obj_t *debug_text_2;

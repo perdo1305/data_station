@@ -1077,16 +1077,6 @@ void create_screen_debug() {
     {
         lv_obj_t *parent_obj = obj;
         {
-            lv_obj_t *obj = lv_label_create(parent_obj);
-            objects.obj6 = obj;
-            lv_obj_set_pos(obj, 19, 10);
-            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
-            lv_obj_set_style_text_color(obj, lv_color_hex(0xff9400), LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_25, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_label_set_text_static(obj, "DEBUG");
-        }
-        {
             // debugText_1
             lv_obj_t *obj = lv_spangroup_create(parent_obj);
             objects.debug_text_1 = obj;
