@@ -1,5 +1,10 @@
 #include "ui.h"
 #include "screens.h"
+#include "vars.h"
+#include "ros2subscriber.h"
+#include <cmath>
+#include <cstring>
+#include <cassert>
 
 #include <SDL2/SDL.h>
 
@@ -221,6 +226,63 @@ void init_lvgl() {
 }  // namespace
 
 int main(int argc, char **argv) {
+    if (std::getenv("LART_TEST_MAPPINGS") != nullptr) {
+        init_lvgl();
+        ui_init();
+        
+        std::printf("[TEST] Running telemetry mapping unit tests...\n");
+
+        TelemetryData t = {};
+        t.brk_press_f = 45.2f;
+        t.brk_press_r = 10.0f;
+        t.apps1 = 80.0f;
+        t.apps2 = 78.0f;
+        t.ams_soc = 92.5f;
+        t.ivt_u3 = 24300.0f; // 24.3V
+        t.vcu_r2d_man = 1.0f; // Ready
+        t.dv_spd_act = 55.4f;
+        t.inv_temp_ctrl = 38.2f;
+        t.inv_temp_mot = 62.1f;
+        t.slam_laps = 3.0f;
+        t.acu_mission = 4.0f; // Endurance
+
+        ui_update_telemetry_vars(&t);
+
+        // Assertions
+        auto val_brake = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_BRAKE_PEDAL_PRESSURE);
+        assert(val_brake.getInt() == 45);
+
+        auto val_acc = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_ACCELL_PEDAL_PRESSURE);
+        assert(val_acc.getInt() == 80);
+
+        auto val_soc = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_SOC);
+        assert(val_soc.getInt() == 92);
+
+        auto val_lv = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_LV);
+        assert(std::abs(val_lv.getFloat() - 24.3f) < 0.01f);
+
+        auto val_ready = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_READY);
+        assert(std::strcmp(val_ready.getString(), "READY") == 0);
+
+        auto val_speed = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_SPEED);
+        assert(std::abs(val_speed.getFloat() - 55.4f) < 0.01f);
+
+        auto val_temp_inv = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_TEMP_INV);
+        assert(std::abs(val_temp_inv.getFloat() - 38.2f) < 0.01f);
+
+        auto val_temp_mot = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_TEMP_MOTOR);
+        assert(std::abs(val_temp_mot.getFloat() - 62.1f) < 0.01f);
+
+        auto val_laps = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_LAP_COUNT);
+        assert(val_laps.getInt() == 3);
+
+        auto val_mission = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_MISSION);
+        assert(std::strcmp(val_mission.getString(), "ENDURANCE") == 0);
+
+        std::printf("[TEST] ✓ All telemetry mapping unit tests passed successfully!\n");
+        std::_Exit(0);
+    }
+
     float initial_speed = 0.0f;
     if (argc > 1) {
         initial_speed = static_cast<float>(std::strtod(argv[1], nullptr));

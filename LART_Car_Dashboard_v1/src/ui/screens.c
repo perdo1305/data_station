@@ -503,6 +503,7 @@ void create_screen_driver_view() {
             objects.hv_bar = obj;
             lv_obj_set_pos(obj, 734, 106);
             lv_obj_set_size(obj, 53, 314);
+            lv_bar_set_range(obj, 0, 100);
             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
             lv_bar_set_value(obj, 0, LV_ANIM_ON);
             lv_bar_set_start_value(obj, 0, LV_ANIM_ON);
@@ -523,7 +524,7 @@ void create_screen_driver_view() {
             objects.lv_bar = obj;
             lv_obj_set_pos(obj, 11, 108);
             lv_obj_set_size(obj, 53, 314);
-            lv_bar_set_range(obj, 18, 30);
+            lv_bar_set_range(obj, 20, 28);
             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
             lv_bar_set_value(obj, 0, LV_ANIM_ON);
             lv_bar_set_start_value(obj, 0, LV_ANIM_ON);
@@ -583,6 +584,10 @@ void create_screen_driver_view() {
 }
 
 void tick_screen_driver_view() {
+    TelemetryData t;
+    if (ros2subscriber_get_telemetry(&t)) {
+        ui_update_telemetry_vars(&t);
+    }
     void *flowState = getFlowState(0, 0);
     (void)flowState;
     {
@@ -597,9 +602,11 @@ void tick_screen_driver_view() {
     {
         const char *new_val = evalTextProperty(flowState, 4, 3, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.tempmotor_label);
-        if (strcmp(new_val, cur_val) != 0) {
+        char formatted_val[128];
+        snprintf(formatted_val, sizeof(formatted_val), "%s ºC", new_val);
+        if (strcmp(formatted_val, cur_val) != 0) {
             tick_value_change_obj = objects.tempmotor_label;
-            lv_label_set_text(objects.tempmotor_label, new_val);
+            lv_label_set_text(objects.tempmotor_label, formatted_val);
             tick_value_change_obj = NULL;
         }
     }
@@ -624,9 +631,11 @@ void tick_screen_driver_view() {
     {
         const char *new_val = evalTextProperty(flowState, 15, 3, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.temp_inv_label);
-        if (strcmp(new_val, cur_val) != 0) {
+        char formatted_val[128];
+        snprintf(formatted_val, sizeof(formatted_val), "%s ºC", new_val);
+        if (strcmp(formatted_val, cur_val) != 0) {
             tick_value_change_obj = objects.temp_inv_label;
-            lv_label_set_text(objects.temp_inv_label, new_val);
+            lv_label_set_text(objects.temp_inv_label, formatted_val);
             tick_value_change_obj = NULL;
         }
     }
@@ -731,6 +740,7 @@ void create_screen_autonomous() {
             objects.hv_bar_1 = obj;
             lv_obj_set_pos(obj, 736, 96);
             lv_obj_set_size(obj, 53, 314);
+            lv_bar_set_range(obj, 0, 100);
             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
             lv_bar_set_value(obj, 0, LV_ANIM_OFF);
             lv_bar_set_start_value(obj, 0, LV_ANIM_OFF);
@@ -751,7 +761,7 @@ void create_screen_autonomous() {
             objects.lv_bar_1 = obj;
             lv_obj_set_pos(obj, 13, 98);
             lv_obj_set_size(obj, 53, 314);
-            lv_bar_set_range(obj, 18, 30);
+            lv_bar_set_range(obj, 20, 28);
             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
             lv_bar_set_value(obj, 0, LV_ANIM_ON);
             lv_bar_set_start_value(obj, 0, LV_ANIM_ON);

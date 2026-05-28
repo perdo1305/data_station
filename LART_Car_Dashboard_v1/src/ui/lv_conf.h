@@ -753,8 +753,8 @@
     /*Get the idle percentage. E.g. uint32_t my_get_idle(void);*/
     #define LV_SYSMON_GET_IDLE lv_timer_get_idle
 
-    /*1: Show CPU usage and FPS count
-     * Requires `LV_USE_SYSMON = 1`*/
+    /*1: Show CPU usage and          count
+    * Requires `LV_USE_SYSMON = 1` */
     #define LV_USE_PERF_MONITOR 1
     #if LV_USE_PERF_MONITOR
         #define LV_USE_PERF_MONITOR_POS LV_ALIGN_BOTTOM_RIGHT

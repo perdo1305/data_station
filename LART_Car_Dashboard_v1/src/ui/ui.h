@@ -15,6 +15,7 @@ void ui_init();
 void ui_tick();
 void ui_set_speed(float speed_kph);
 void ui_set_screen_var(int screen_id);
+void ui_update_telemetry_vars(const void *t);
 
 #ifdef __cplusplus
 }
