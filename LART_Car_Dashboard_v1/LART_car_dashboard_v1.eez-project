@@ -347,7 +347,7 @@
             {
               "objID": "6ba689b6-47af-4209-e5b4-58f85215d0f6",
               "action": "changeScreen",
-              "screen": "Debug",
+              "screen": "Debug 1",
               "screenType": "literal",
               "fadeMode": "FADE_IN",
               "fadeModeType": "literal",
@@ -384,7 +384,7 @@
             {
               "objID": "ef2eebd7-1b85-4531-e34b-c7544c371db5",
               "action": "changeScreen",
-              "screen": "Debug Autonomous",
+              "screen": "Debug Autonomous 1",
               "screenType": "literal",
               "fadeMode": "FADE_IN",
               "fadeModeType": "literal",
@@ -3975,7 +3975,7 @@
               },
               "timeline": [],
               "eventHandlers": [],
-              "identifier": "debugText_1",
+              "identifier": "general_debugText_1",
               "leftUnit": "px",
               "topUnit": "px",
               "widthUnit": "content",
@@ -4000,7 +4000,7 @@
                       "width": 800,
                       "height": 480,
                       "text_align": "LEFT",
-                      "text_font": "orbitron_bold_15",
+                      "text_font": "orbitron_25",
                       "text_letter_space": 1,
                       "text_line_space": 2,
                       "text_color": "#ff9400",
@@ -4011,7 +4011,7 @@
               },
               "group": "",
               "groupIndex": 0,
-              "text": " GENERAL DEBUG                                                          \n------------------------------------------+---------------------------------------------\n AMS                                     | INVERTER (HV500)\n State:    --------   SOC: ---.--%       | ERPM:     ------    Duty: ---.--%\n Runtime:  -----s     Fans: ---%         | Vin:      ---- V    Fault: ---\n MCU Vref: -.--V      MCU T: ---°C      | AC Curr:  ---.- Apk DC: ---.- A\n PEC Err:  ---        Flt Cnt: ---       | Ctrl T:   ---.-°C   Mot T: ---.-°C\n Slaves:   --/12      FW: --------       | Throttle: ---%      Brake: ---%\n Fault1:   ----------------              | FOC Id:   ---.- Apk Iq: ---.- Apk\n Fault2:   ----------------              | DriveEn:  ---        CtrlMode: ---\n------------------------------------------+---------------------------------------------\n PRECHARGE                               | IVT (ISABELLE)\n State:    ----------------              | Current:  -------- mA\n AIR+: --- AIR-: --- CHG: --- DIS: ---   | U1: -------- mV  U2: -------- mV\n                                         | U3: -------- mV  Temp: -----.-°C\n PACK OVERVIEW                           | Power: -------- W  Energy: -------- Wh\n Vmax: -.---V   Vmin: -.---V             |\n Tmax: ---.--°C Tmin: ---.--°C           | PEDALS / DASHBOARD\n                                         | APPS1: ----.- APPS2: ----.-\n------------------------------------------+---------------------------------------------\n WHEELS                                  | REAR SENSORS (AQT7)\n FL: --- km/h  T:---.-°C  BrkT:---.-°C  | NTC1: ---.-°C  NTC2: ---.-°C\n FR: --- km/h  T:---.-°C  BrkT:---.-°C  | NTC3: ---.-°C\n RL: --- km/h  T:---.-°C  BrkT:---.-°C  | Susp R: ---.- mm  Susp L: ---.- mm\n RR: --- km/h  T:---.-°C  BrkT:---.-°C  | IGN: ---  R2D: ---\n------------------------------------------+---------------------------------------------\n",
+              "text": " GENERAL DEBUG 1/5\n",
               "textType": "literal",
               "longMode": "WRAP",
               "recolor": false
@@ -4041,7 +4041,475 @@
       "localVariables": [],
       "componentGroups": [],
       "userProperties": [],
-      "name": "Debug",
+      "name": "Debug 1",
+      "left": 0,
+      "top": 0,
+      "width": 800,
+      "height": 480,
+      "isUsedAsUserWidget": false,
+      "createAtStart": true,
+      "deleteOnScreenUnload": false
+    },
+    {
+      "objID": "2cea0f54-3eb8-4f6b-8cb0-004abc3361b2",
+      "components": [
+        {
+          "objID": "a1f24dfa-b5f2-4605-b1bd-5f8dfa74fdc5",
+          "type": "LVGLScreenWidget",
+          "left": 0,
+          "top": 0,
+          "width": 800,
+          "height": 480,
+          "customInputs": [],
+          "customOutputs": [],
+          "style": {
+            "objID": "7cc53e78-09a6-4aef-c6a6-bca8658d1765",
+            "useStyle": "default",
+            "conditionalStyles": [],
+            "childStyles": []
+          },
+          "timeline": [],
+          "eventHandlers": [],
+          "leftUnit": "px",
+          "topUnit": "px",
+          "widthUnit": "px",
+          "heightUnit": "px",
+          "children": [
+            {
+              "objID": "14e1abad-99a6-4ae0-8940-df2e14a0ca4c",
+              "type": "LVGLLabelWidget",
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "5ca32247-4ed5-460e-fa73-06c5f85d36f4",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "general_debugText_2",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "1c0beb98-30c9-4e90-aabf-c8415e56ae43",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 800,
+                      "height": 480,
+                      "text_align": "LEFT",
+                      "text_font": "orbitron_25",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400",
+                      "length": 0
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": " GENERAL DEBUG  2",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
+          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
+          "hiddenFlagType": "literal",
+          "clickableFlag": true,
+          "clickableFlagType": "literal",
+          "checkedStateType": "literal",
+          "disabledStateType": "literal",
+          "states": "",
+          "localStyles": {
+            "objID": "3c642be4-7b45-4a2a-f2a5-e815bba7d357",
+            "definition": {
+              "MAIN": {
+                "DEFAULT": {
+                  "bg_color": "#000000"
+                }
+              }
+            }
+          },
+          "groupIndex": 0
+        }
+      ],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "Debug_Inverter 2",
+      "left": 0,
+      "top": 0,
+      "width": 800,
+      "height": 480,
+      "isUsedAsUserWidget": false,
+      "createAtStart": true,
+      "deleteOnScreenUnload": false
+    },
+    {
+      "objID": "fd08a665-d77a-44a9-b52a-2f09758e2041",
+      "components": [
+        {
+          "objID": "f2b38795-c20f-41fd-fc1d-af1d89c9656b",
+          "type": "LVGLScreenWidget",
+          "left": 0,
+          "top": 0,
+          "width": 800,
+          "height": 480,
+          "customInputs": [],
+          "customOutputs": [],
+          "style": {
+            "objID": "7fe8f13e-d12e-46c8-ae8d-00d5f42bfdc4",
+            "useStyle": "default",
+            "conditionalStyles": [],
+            "childStyles": []
+          },
+          "timeline": [],
+          "eventHandlers": [],
+          "leftUnit": "px",
+          "topUnit": "px",
+          "widthUnit": "px",
+          "heightUnit": "px",
+          "children": [
+            {
+              "objID": "b254bc56-d0fa-4b66-c011-297f4d15a50e",
+              "type": "LVGLLabelWidget",
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "57aeceb3-dcbb-439b-ca66-ac383d75c8db",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "general_debugText_3",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "629252f8-f622-4d24-ebf5-aa574a5e24e8",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 800,
+                      "height": 480,
+                      "text_align": "LEFT",
+                      "text_font": "orbitron_25",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400",
+                      "length": 0
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": " GENERAL DEBUG  3",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
+          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
+          "hiddenFlagType": "literal",
+          "clickableFlag": true,
+          "clickableFlagType": "literal",
+          "checkedStateType": "literal",
+          "disabledStateType": "literal",
+          "states": "",
+          "localStyles": {
+            "objID": "4fa9572c-7d4b-484e-8dae-773c5f548e71",
+            "definition": {
+              "MAIN": {
+                "DEFAULT": {
+                  "bg_color": "#000000"
+                }
+              }
+            }
+          },
+          "groupIndex": 0
+        }
+      ],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "Debug_3",
+      "left": 0,
+      "top": 0,
+      "width": 800,
+      "height": 480,
+      "isUsedAsUserWidget": false,
+      "createAtStart": true,
+      "deleteOnScreenUnload": false
+    },
+    {
+      "objID": "7aa7be96-32ec-47a9-c482-d4d20bd8a5c7",
+      "components": [
+        {
+          "objID": "f8e719dc-e6b5-42b5-eede-6b39f5f8ca84",
+          "type": "LVGLScreenWidget",
+          "left": 0,
+          "top": 0,
+          "width": 800,
+          "height": 480,
+          "customInputs": [],
+          "customOutputs": [],
+          "style": {
+            "objID": "3643d18c-523c-4e19-a2dd-2ffd8be747f7",
+            "useStyle": "default",
+            "conditionalStyles": [],
+            "childStyles": []
+          },
+          "timeline": [],
+          "eventHandlers": [],
+          "leftUnit": "px",
+          "topUnit": "px",
+          "widthUnit": "px",
+          "heightUnit": "px",
+          "children": [
+            {
+              "objID": "9cefd70c-694e-4504-af12-1eec8100a65f",
+              "type": "LVGLLabelWidget",
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "80da6a39-6495-49e1-99d7-16195f9a1a0d",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "general_debugText_4",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "7d3388d6-2030-44f9-891b-be0b15351e44",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 800,
+                      "height": 480,
+                      "text_align": "LEFT",
+                      "text_font": "orbitron_25",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400",
+                      "length": 0
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": " GENERAL DEBUG 4",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
+          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
+          "hiddenFlagType": "literal",
+          "clickableFlag": true,
+          "clickableFlagType": "literal",
+          "checkedStateType": "literal",
+          "disabledStateType": "literal",
+          "states": "",
+          "localStyles": {
+            "objID": "8d382f12-8dfc-4918-e2d5-099c7d5daa60",
+            "definition": {
+              "MAIN": {
+                "DEFAULT": {
+                  "bg_color": "#000000"
+                }
+              }
+            }
+          },
+          "groupIndex": 0
+        }
+      ],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "Debug_Wheels 4",
+      "left": 0,
+      "top": 0,
+      "width": 800,
+      "height": 480,
+      "isUsedAsUserWidget": false,
+      "createAtStart": true,
+      "deleteOnScreenUnload": false
+    },
+    {
+      "objID": "ae69d5fb-6135-4953-f67c-43afb7870e52",
+      "components": [
+        {
+          "objID": "d9b03fe1-553e-41fb-ccd7-354398a5c34c",
+          "type": "LVGLScreenWidget",
+          "left": 0,
+          "top": 0,
+          "width": 800,
+          "height": 480,
+          "customInputs": [],
+          "customOutputs": [],
+          "style": {
+            "objID": "0dafd1ec-20fd-422c-89ad-b947252d56ff",
+            "useStyle": "default",
+            "conditionalStyles": [],
+            "childStyles": []
+          },
+          "timeline": [],
+          "eventHandlers": [],
+          "leftUnit": "px",
+          "topUnit": "px",
+          "widthUnit": "px",
+          "heightUnit": "px",
+          "children": [
+            {
+              "objID": "76e0491c-555b-444c-95a4-361af099e1cd",
+              "type": "LVGLLabelWidget",
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "69fcfd03-9189-4efb-cf47-6c8d13c8a2fe",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "general_debugText_5",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "6b0c4bd1-3880-4672-a6ce-71e702a3a4b3",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 800,
+                      "height": 480,
+                      "text_align": "LEFT",
+                      "text_font": "orbitron_25",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400",
+                      "length": 0
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": " GENERAL DEBUG  5",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
+          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
+          "hiddenFlagType": "literal",
+          "clickableFlag": true,
+          "clickableFlagType": "literal",
+          "checkedStateType": "literal",
+          "disabledStateType": "literal",
+          "states": "",
+          "localStyles": {
+            "objID": "09ceca6d-a1d0-483a-e2c4-6ea5544fd76e",
+            "definition": {
+              "MAIN": {
+                "DEFAULT": {
+                  "bg_color": "#000000"
+                }
+              }
+            }
+          },
+          "groupIndex": 0
+        }
+      ],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "Debug 5",
       "left": 0,
       "top": 0,
       "width": 800,
@@ -4092,7 +4560,7 @@
               },
               "timeline": [],
               "eventHandlers": [],
-              "identifier": "debugText",
+              "identifier": "autonomous_debugText_1",
               "leftUnit": "px",
               "topUnit": "px",
               "widthUnit": "content",
@@ -4117,7 +4585,7 @@
                       "width": 800,
                       "height": 480,
                       "text_align": "LEFT",
-                      "text_font": "orbitron_bold_15",
+                      "text_font": "orbitron_25",
                       "text_letter_space": 1,
                       "text_line_space": 2,
                       "text_color": "#ff9400"
@@ -4127,7 +4595,7 @@
               },
               "group": "",
               "groupIndex": 0,
-              "text": " AUTONOMOUS DEBUG  1/2                                                     \n ACU                                     | DV DYNAMICS\n ACU State:  ---------  AS: --------     | Spd Act: --- km/h   Spd Tgt: --- km/h\n ASSI:       ---------  Mission: ---     | Str Act: ---.-°     Str Tgt: ---.-°\n ASMS: ---  IGN: ---  EMERGENCY: ---     | Brk Act: ---%       Brk Tgt: ---%\n Emerg Cause: ------------------         | Mot Act: ---%       Mot Tgt: ---%\n CPU Temp: ---°C                         | Acc Lon: ---.--- m/s2\n                                         | Acc Lat: ---.--- m/s2\n JETSON                                  | Yaw:    ---.--- °/s\n AS State: ---  Mission: ---             |\n Temp: ---°C  CPU: ---% GPU: ---%       | DV STATUS\n Emerg Cause: ----------------           | AS: ---  EBS: ---  AMI: ---\n                                         | Steer: ---  EBS Red: ---\n------------------------------------------+---------------------------------------------\n VCU                                     | EBS / ASF PRESSURES\n IGN Man: ---  IGN Auto: ---             | EBS Tank F: ---- bar  R: ---- bar\n R2D Man: ---  R2D Auto: ---             | Brk Press F: ---- bar  R: ---- bar\n Shutdown: ---  State: ---               |\n R2D Raw: ---  IGN Raw: ---              | CUBEMARS STEERING\n HV: ---  BrkF: ---  BrkR: ---          | Pos: -----.-°  Spd: ------ ERPM\n                                         | Curr: ---.- A  Drv T: ---°C  Err: ---\n VCU RPM                                 | Pos Target: ------ °\n RPM Act: -----  RPM Tgt: -----         |    Torque Tgt: -----                                      | SLAM / CONES | Laps: --  Cones: ---  All: ------\n",
+              "text": " AUTONOMOUS DEBUG  1\n",
               "textType": "literal",
               "longMode": "WRAP",
               "recolor": false
@@ -4157,7 +4625,7 @@
       "localVariables": [],
       "componentGroups": [],
       "userProperties": [],
-      "name": "Debug Autonomous",
+      "name": "Debug Autonomous 1",
       "left": 0,
       "top": 0,
       "width": 800,
@@ -4208,7 +4676,7 @@
               },
               "timeline": [],
               "eventHandlers": [],
-              "identifier": "debugText_2",
+              "identifier": "autonomous_debugText_2",
               "leftUnit": "px",
               "topUnit": "px",
               "widthUnit": "content",
@@ -4233,7 +4701,7 @@
                       "width": 800,
                       "height": 480,
                       "text_align": "LEFT",
-                      "text_font": "orbitron_bold_15",
+                      "text_font": "orbitron_25",
                       "text_letter_space": 1,
                       "text_line_space": 2,
                       "text_color": "#ff9400"
@@ -4243,7 +4711,7 @@
               },
               "group": "",
               "groupIndex": 0,
-              "text": " AUTONOMOUS DEBUG 2/2   \n------------------------------------------+---------------------------------------------\n ACQUISITION BOARDS                      | RES (Remote Emergency)\n AQT1 BrkP:---.- bar RES:--- BOTS:---   | Signal: ---\n AQT2 WhlAng:-----.-° AQT3:-----.-°    |\n AQT4 StAng:-----.-° Inertia:--- Emer:---| AQT7 BrkP: ---.- bar\n------------------------------------------+---------------------------------------------\n                                                    \n \n",
+              "text": " AUTONOMOUS DEBUG 2\n \n",
               "textType": "literal",
               "longMode": "WRAP",
               "recolor": false
@@ -4273,7 +4741,355 @@
       "localVariables": [],
       "componentGroups": [],
       "userProperties": [],
-      "name": "Debug Autonomous_1",
+      "name": "Debug Autonomous 2",
+      "left": 0,
+      "top": 0,
+      "width": 800,
+      "height": 480,
+      "isUsedAsUserWidget": false,
+      "createAtStart": true,
+      "deleteOnScreenUnload": false
+    },
+    {
+      "objID": "a5c52b5b-e451-4326-967e-a161f9a69b05",
+      "components": [
+        {
+          "objID": "a1e08280-8f91-4de0-cace-22511b2a95eb",
+          "type": "LVGLScreenWidget",
+          "left": 0,
+          "top": 0,
+          "width": 800,
+          "height": 480,
+          "customInputs": [],
+          "customOutputs": [],
+          "style": {
+            "objID": "d160c91d-1acd-44fc-9335-43d9f85511e2",
+            "useStyle": "default",
+            "conditionalStyles": [],
+            "childStyles": []
+          },
+          "timeline": [],
+          "eventHandlers": [],
+          "leftUnit": "px",
+          "topUnit": "px",
+          "widthUnit": "px",
+          "heightUnit": "px",
+          "children": [
+            {
+              "objID": "30f7335c-0807-4737-ca0a-f17fb46c299d",
+              "type": "LVGLLabelWidget",
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "dbcb3bdb-9274-4180-d216-373481690b27",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "autonomous_debugText_3",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "8c42cfa8-d5f4-4f73-bd2e-2701c09055b9",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 800,
+                      "height": 480,
+                      "text_align": "LEFT",
+                      "text_font": "orbitron_25",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400"
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": " AUTONOMOUS DEBUG 3\n \n",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
+          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
+          "hiddenFlagType": "literal",
+          "clickableFlag": true,
+          "clickableFlagType": "literal",
+          "checkedStateType": "literal",
+          "disabledStateType": "literal",
+          "states": "",
+          "localStyles": {
+            "objID": "b43deaa0-7a5f-400d-d2de-ef57ce7a436e",
+            "definition": {
+              "MAIN": {
+                "DEFAULT": {
+                  "bg_color": "#000000"
+                }
+              }
+            }
+          },
+          "groupIndex": 0
+        }
+      ],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "Debug Autonomous 3",
+      "left": 0,
+      "top": 0,
+      "width": 800,
+      "height": 480,
+      "isUsedAsUserWidget": false,
+      "createAtStart": true,
+      "deleteOnScreenUnload": false
+    },
+    {
+      "objID": "56ca2506-3371-4654-9e9b-6905927ec00d",
+      "components": [
+        {
+          "objID": "d977c4fa-1a36-4fcf-9568-5dd53bbb6190",
+          "type": "LVGLScreenWidget",
+          "left": 0,
+          "top": 0,
+          "width": 800,
+          "height": 480,
+          "customInputs": [],
+          "customOutputs": [],
+          "style": {
+            "objID": "285f584d-39c8-4694-af51-b6bf3499cfb4",
+            "useStyle": "default",
+            "conditionalStyles": [],
+            "childStyles": []
+          },
+          "timeline": [],
+          "eventHandlers": [],
+          "leftUnit": "px",
+          "topUnit": "px",
+          "widthUnit": "px",
+          "heightUnit": "px",
+          "children": [
+            {
+              "objID": "29558765-e000-46cc-85a9-a5f85eb04cc6",
+              "type": "LVGLLabelWidget",
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "6944ca41-0a7c-4f99-e811-3720589be74a",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "autonomous_debugText_4",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "8f7a4265-f43d-45e2-ba49-5c50242f18c1",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 800,
+                      "height": 480,
+                      "text_align": "LEFT",
+                      "text_font": "orbitron_25",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400"
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": " AUTONOMOUS DEBUG 4\n\n",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
+          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
+          "hiddenFlagType": "literal",
+          "clickableFlag": true,
+          "clickableFlagType": "literal",
+          "checkedStateType": "literal",
+          "disabledStateType": "literal",
+          "states": "",
+          "localStyles": {
+            "objID": "ad73d634-27fc-4ae9-98e3-5e07e58badbf",
+            "definition": {
+              "MAIN": {
+                "DEFAULT": {
+                  "bg_color": "#000000"
+                }
+              }
+            }
+          },
+          "groupIndex": 0
+        }
+      ],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "Debug Autonomous 4",
+      "left": 0,
+      "top": 0,
+      "width": 800,
+      "height": 480,
+      "isUsedAsUserWidget": false,
+      "createAtStart": true,
+      "deleteOnScreenUnload": false
+    },
+    {
+      "objID": "9eee85d9-2eee-4d9e-cf8c-04535aee68ae",
+      "components": [
+        {
+          "objID": "7f08f7e3-1cdd-4406-c708-b4670255f5aa",
+          "type": "LVGLScreenWidget",
+          "left": 0,
+          "top": 0,
+          "width": 800,
+          "height": 480,
+          "customInputs": [],
+          "customOutputs": [],
+          "style": {
+            "objID": "d260fc88-83cf-40b6-d76c-a89780d62c66",
+            "useStyle": "default",
+            "conditionalStyles": [],
+            "childStyles": []
+          },
+          "timeline": [],
+          "eventHandlers": [],
+          "leftUnit": "px",
+          "topUnit": "px",
+          "widthUnit": "px",
+          "heightUnit": "px",
+          "children": [
+            {
+              "objID": "5732ed7c-011f-4390-a5a2-6b7d52a2a76e",
+              "type": "LVGLLabelWidget",
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "ab041bac-f3de-4c84-8993-c50eed75e721",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "autonomous_debugText_5",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "21b7ea66-52b5-4e95-a0ad-a62c30930ee6",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 800,
+                      "height": 480,
+                      "text_align": "LEFT",
+                      "text_font": "orbitron_25",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400"
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": " AUTONOMOUS DEBUG 5\n\n",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
+          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
+          "hiddenFlagType": "literal",
+          "clickableFlag": true,
+          "clickableFlagType": "literal",
+          "checkedStateType": "literal",
+          "disabledStateType": "literal",
+          "states": "",
+          "localStyles": {
+            "objID": "3e565a36-c2c3-4137-8392-af55e2e4e42e",
+            "definition": {
+              "MAIN": {
+                "DEFAULT": {
+                  "bg_color": "#000000"
+                }
+              }
+            }
+          },
+          "groupIndex": 0
+        }
+      ],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "Debug Autonomous 5",
       "left": 0,
       "top": 0,
       "width": 800,
@@ -4590,6 +5406,35 @@
         "symbols": ""
       },
       "embeddedFontFileIndex": 0
+    },
+    {
+      "objID": "b138fc70-2568-4fc9-ac2e-fd393ff41022",
+      "name": "orbitron_25",
+      "renderingEngine": "LVGL",
+      "source": {
+        "objID": "c66192ae-7f7b-4dd4-88e2-5f69a8fe0c86",
+        "filePath": "fonts/Orbitron-Regular.ttf",
+        "size": 25
+      },
+      "bpp": 4,
+      "threshold": 128,
+      "height": 28,
+      "ascent": 22,
+      "descent": 6,
+      "glyphs": [],
+      "lvglRanges": "32-127",
+      "lvglSymbols": "|—–_-¯|°│",
+      "lvglAdditionalSources": [],
+      "lvglGlyphs": {
+        "encodings": [
+          {
+            "from": 32,
+            "to": 127
+          }
+        ],
+        "symbols": ""
+      },
+      "embeddedFontFileIndex": 5
     }
   ],
   "bitmaps": [

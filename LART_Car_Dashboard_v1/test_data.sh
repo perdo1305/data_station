@@ -192,27 +192,43 @@ publish_screen() {
 }
 
 show_screen_menu() {
-    echo ""
-    echo "╔════════════════════════════════════════════╗"
-    echo "║  Change Screen (ROS /dashboard/set_screen) ║"
-    echo "╚════════════════════════════════════════════╝"
-    echo "  0) Driver View"
-    echo "  1) Autonomous"
-    echo "  2) Debug"
-    echo "  3) Debug Autonomous 1/2"
-    echo "  4) Debug Autonomous 2/2"
-    echo "  b) Back"
-    echo ""
-    read -p "Select screen [0-4/b]: " scr
-    case $scr in
-        0) publish_screen 0 && echo "✓ Switched to Driver View" ;;
-        1) publish_screen 1 && echo "✓ Switched to Autonomous" ;;
-        2) publish_screen 2 && echo "✓ Switched to Debug" ;;
-        3) publish_screen 3 && echo "✓ Switched to Debug Autonomous 1/2" ;;
-        4) publish_screen 4 && echo "✓ Switched to Debug Autonomous 2/2" ;;
-        b|B) return ;;
-        *) echo "✗ Invalid option." ;;
-    esac
+    while true; do
+        echo ""
+        echo "╔════════════════════════════════════════════╗"
+        echo "║  Change Screen (ROS /dashboard/set_screen) ║"
+        echo "╚════════════════════════════════════════════╝"
+        echo "  0) Driver View"
+        echo "  1) Autonomous"
+        echo "  2) Debug 1"
+        echo "  3) Debug Inverter 2"
+        echo "  4) Debug 3"
+        echo "  5) Debug Wheels 4"
+        echo "  6) Debug 5"
+        echo "  7) Debug Autonomous 1"
+        echo "  8) Debug Autonomous 2"
+        echo "  9) Debug Autonomous 3"
+        echo "  10) Debug Autonomous 4"
+        echo "  11) Debug Autonomous 5"
+        echo "  b) Back"
+        echo ""
+        read -p "Select screen [0-11/b]: " scr
+        case $scr in
+            0) publish_screen 0 && echo "✓ Switched to Driver View" ;;
+            1) publish_screen 1 && echo "✓ Switched to Autonomous" ;;
+            2) publish_screen 2 && echo "✓ Switched to Debug 1" ;;
+            3) publish_screen 3 && echo "✓ Switched to Debug Inverter 2" ;;
+            4) publish_screen 4 && echo "✓ Switched to Debug 3" ;;
+            5) publish_screen 5 && echo "✓ Switched to Debug Wheels 4" ;;
+            6) publish_screen 6 && echo "✓ Switched to Debug 5" ;;
+            7) publish_screen 7 && echo "✓ Switched to Debug Autonomous 1" ;;
+            8) publish_screen 8 && echo "✓ Switched to Debug Autonomous 2" ;;
+            9) publish_screen 9 && echo "✓ Switched to Debug Autonomous 3" ;;
+            10) publish_screen 10 && echo "✓ Switched to Debug Autonomous 4" ;;
+            11) publish_screen 11 && echo "✓ Switched to Debug Autonomous 5" ;;
+            b|B) return ;;
+            *) echo "✗ Invalid option." ;;
+        esac
+    done
 }
 
 show_help() {
@@ -237,7 +253,7 @@ Test Scenarios:
   6. Random    - Random speeds for 10 seconds
   7. Custom    - Publish a single custom speed
   8. Screen    - Change dashboard screen via ROS topic
-                 0=Driver View, 1=Autonomous, 2=Debug Autonomous, 3=Debug
+                 0=Driver View, 1=Autonomous, 2-6=Debug 1-5, 7-11=Debug Autonomous 1-5
 
 Prerequisites:
   - Docker containers must be running: make compose-up
@@ -271,24 +287,23 @@ while true; do
     read -p "Select option [0-9]: " choice
     
     case $choice in
-        1) test_idle ;;
-        2) test_city ;;
-        3) test_highway ;;
-        4) test_acceleration ;;
-        5) test_deceleration ;;
-        6) test_random ;;
-        7) test_custom ;;
+        1) test_idle; echo ""; read -p "Press Enter to continue..." ;;
+        2) test_city; echo ""; read -p "Press Enter to continue..." ;;
+        3) test_highway; echo ""; read -p "Press Enter to continue..." ;;
+        4) test_acceleration; echo ""; read -p "Press Enter to continue..." ;;
+        5) test_deceleration; echo ""; read -p "Press Enter to continue..." ;;
+        6) test_random; echo ""; read -p "Press Enter to continue..." ;;
+        7) test_custom; echo ""; read -p "Press Enter to continue..." ;;
         8) show_screen_menu ;;
-        9) show_help ;;
+        9) show_help; echo ""; read -p "Press Enter to continue..." ;;
         0) 
             echo "Goodbye!"
             exit 0
             ;;
         *)
             echo "✗ Invalid option. Please select 0-9."
+            echo ""
+            read -p "Press Enter to continue..."
             ;;
     esac
-    
-    echo ""
-    read -p "Press Enter to continue..."
 done

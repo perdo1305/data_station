@@ -15,6 +15,7 @@ extern const lv_font_t ui_font_orbitron_bold_15;
 extern const lv_font_t ui_font_orbitron_15;
 extern const lv_font_t ui_font_orbitron_bold_25;
 extern const lv_font_t ui_font_orbitron_bold_40;
+extern const lv_font_t ui_font_orbitron_25;
 
 #ifndef EXT_FONT_DESC_T
 #define EXT_FONT_DESC_T
