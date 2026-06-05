@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <stdarg.h>
 
 #include "ros2subscriber.h"
 #include "screens.h"
@@ -72,7 +71,7 @@ void my_spangroup_set_recolor_text_font(lv_obj_t *spangroup, const char *text, c
                 lv_span_set_text(span, temp);
                 free(temp);
                 lv_style_set_text_color(&span->style, lv_color_hex(active_color));
-                lv_style_set_text_font(&span->style, font);
+                lv_style_set_text_font(&span->style, &ui_font_orbitron_bold_15);
             }
             
             active_color = default_color;
@@ -94,99 +93,16 @@ void my_spangroup_set_recolor_text_font(lv_obj_t *spangroup, const char *text, c
         lv_span_set_text(span, temp);
         free(temp);
         lv_style_set_text_color(&span->style, lv_color_hex(active_color));
-        lv_style_set_text_font(&span->style, font);
+        lv_style_set_text_font(&span->style, &ui_font_orbitron_bold_15);
     }
     
     lv_spangroup_refr_mode(spangroup);
 }
 
-void my_spangroup_set_recolor_text(lv_obj_t *spangroup, const char *text) {
-    my_spangroup_set_recolor_text_font(spangroup, text, &ui_font_orbitron_bold_15);
-}
-
 objects_t objects;
 
-static const char *screen_names[] = { 
-    "Driver View", 
-    "Autonomous", 
-    "Debug 1", 
-    "Debug_Inverter 2", 
-    "Debug_3", 
-    "Debug_Wheels 4", 
-    "Debug 5", 
-    "Debug Autonomous 1", 
-    "Debug Autonomous 2", 
-    "Debug Autonomous 3", 
-    "Debug Autonomous 4", 
-    "Debug Autonomous 5" 
-};
-static const char *object_names[] = {
-    "driver_view",
-    "autonomous",
-    "debug_1",
-    "debug_inverter_2",
-    "debug_3",
-    "debug_wheels_4",
-    "debug_5",
-    "debug_autonomous_1",
-    "debug_autonomous_2",
-    "debug_autonomous_3",
-    "debug_autonomous_4",
-    "debug_autonomous_5",
-    "ready_label",
-    "middle_container",
-    "temp_motor_container",
-    "tempmotor_label",
-    "lap_times_container",
-    "laptime_label",
-    "lastlap_label",
-    "obj0",
-    "obj1",
-    "temp_inv_container",
-    "temp_inv_label",
-    "speed_container",
-    "speed_label",
-    "km_label",
-    "brake_acell_presure_container",
-    "brake_presure_bar",
-    "accellerator_presure_bar",
-    "obj2",
-    "hv_bar",
-    "lv_bar",
-    "hv_label",
-    "lv_label",
-    "obj3",
-    "hv_bar_1",
-    "lv_bar_1",
-    "hv_label_1",
-    "lv_label_1",
-    "brake_presure_container",
-    "brake_presure_bar_1",
-    "brake_presure_bar_2",
-    "pneumaticresure_container",
-    "brake_presure_bar_3",
-    "brake_presure_bar_4",
-    "lap_times_container_1",
-    "laptime_label_1",
-    "lastlap_label_1",
-    "obj4",
-    "obj5",
-    "max_speed_container",
-    "km_label_2",
-    "km_label_1",
-    "speed_label_1",
-    "km_label_3",
-    "general_debug_text_1",
-    "general_debug_text_2",
-    "general_debug_text_3",
-    "general_debug_text_4",
-    "general_debug_text_5",
-    "autonomous_debug_text_1",
-    "autonomous_debug_text_2",
-    "autonomous_debug_text_3",
-    "autonomous_debug_text_4",
-    "autonomous_debug_text_5"
-};
+static const char *screen_names[] = { "Driver View", "Autonomous", "Debug", "Debug Autonomous", "Debug Autonomous_1" };
+static const char *object_names[] = { "driver_view", "autonomous", "debug", "debug_autonomous", "debug_autonomous_1", "ready_label", "middle_container", "temp_motor_container", "tempmotor_label", "lap_times_container", "laptime_label", "lastlap_label", "obj0", "obj1", "temp_inv_container", "temp_inv_label", "speed_container", "speed_label", "km_label", "brake_acell_presure_container", "brake_presure_bar", "accellerator_presure_bar", "obj2", "hv_bar", "lv_bar", "hv_label", "lv_label", "obj3", "hv_bar_1", "lv_bar_1", "hv_label_1", "lv_label_1", "brake_presure_container", "brake_presure_bar_1", "brake_presure_bar_2", "pneumaticresure_container", "brake_presure_bar_3", "brake_presure_bar_4", "lap_times_container_1", "laptime_label_1", "lastlap_label_1", "obj4", "obj5", "max_speed_container", "km_label_2", "km_label_1", "speed_label_1", "km_label_3", "obj6", "debug_text_1", "debug_text", "debug_text_2" };
 
 //
 // Event handlers
@@ -503,7 +419,6 @@ void create_screen_driver_view() {
             objects.hv_bar = obj;
             lv_obj_set_pos(obj, 734, 106);
             lv_obj_set_size(obj, 53, 314);
-            lv_bar_set_range(obj, 0, 100);
             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
             lv_bar_set_value(obj, 0, LV_ANIM_ON);
             lv_bar_set_start_value(obj, 0, LV_ANIM_ON);
@@ -524,7 +439,7 @@ void create_screen_driver_view() {
             objects.lv_bar = obj;
             lv_obj_set_pos(obj, 11, 108);
             lv_obj_set_size(obj, 53, 314);
-            lv_bar_set_range(obj, 20, 28);
+            lv_bar_set_range(obj, 18, 30);
             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
             lv_bar_set_value(obj, 0, LV_ANIM_ON);
             lv_bar_set_start_value(obj, 0, LV_ANIM_ON);
@@ -584,10 +499,6 @@ void create_screen_driver_view() {
 }
 
 void tick_screen_driver_view() {
-    TelemetryData t;
-    if (ros2subscriber_get_telemetry(&t)) {
-        ui_update_telemetry_vars(&t);
-    }
     void *flowState = getFlowState(0, 0);
     (void)flowState;
     {
@@ -602,11 +513,9 @@ void tick_screen_driver_view() {
     {
         const char *new_val = evalTextProperty(flowState, 4, 3, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.tempmotor_label);
-        char formatted_val[128];
-        snprintf(formatted_val, sizeof(formatted_val), "%s ºC", new_val);
-        if (strcmp(formatted_val, cur_val) != 0) {
+        if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.tempmotor_label;
-            lv_label_set_text(objects.tempmotor_label, formatted_val);
+            lv_label_set_text(objects.tempmotor_label, new_val);
             tick_value_change_obj = NULL;
         }
     }
@@ -631,11 +540,9 @@ void tick_screen_driver_view() {
     {
         const char *new_val = evalTextProperty(flowState, 15, 3, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.temp_inv_label);
-        char formatted_val[128];
-        snprintf(formatted_val, sizeof(formatted_val), "%s ºC", new_val);
-        if (strcmp(formatted_val, cur_val) != 0) {
+        if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.temp_inv_label;
-            lv_label_set_text(objects.temp_inv_label, formatted_val);
+            lv_label_set_text(objects.temp_inv_label, new_val);
             tick_value_change_obj = NULL;
         }
     }
@@ -740,7 +647,6 @@ void create_screen_autonomous() {
             objects.hv_bar_1 = obj;
             lv_obj_set_pos(obj, 736, 96);
             lv_obj_set_size(obj, 53, 314);
-            lv_bar_set_range(obj, 0, 100);
             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
             lv_bar_set_value(obj, 0, LV_ANIM_OFF);
             lv_bar_set_start_value(obj, 0, LV_ANIM_OFF);
@@ -761,7 +667,7 @@ void create_screen_autonomous() {
             objects.lv_bar_1 = obj;
             lv_obj_set_pos(obj, 13, 98);
             lv_obj_set_size(obj, 53, 314);
-            lv_bar_set_range(obj, 20, 28);
+            lv_bar_set_range(obj, 18, 30);
             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
             lv_bar_set_value(obj, 0, LV_ANIM_ON);
             lv_bar_set_start_value(obj, 0, LV_ANIM_ON);
@@ -1160,502 +1066,267 @@ void tick_screen_autonomous() {
     }
 }
 
-static void table_draw_event_cb(lv_event_t * e) {
-    lv_draw_task_t * draw_task = lv_event_get_draw_task(e);
-    if (!draw_task) return;
-    lv_draw_dsc_base_t * base_dsc = draw_task->draw_dsc;
-    if (!base_dsc) return;
-
-    if(base_dsc->part == LV_PART_ITEMS) {
-        lv_obj_t * obj = lv_event_get_current_target(e);
-        if(!obj) return;
-        if(lv_obj_get_class(obj) != &lv_table_class) return;
-
-        uint16_t row = base_dsc->id1;
-        uint16_t col = base_dsc->id2;
-        
-        uint32_t row_cnt = lv_table_get_row_count(obj);
-        uint32_t col_cnt = lv_table_get_column_count(obj);
-        if(row >= row_cnt || col >= col_cnt) return;
-
-        uint32_t *color_ptr = (uint32_t *)lv_table_get_cell_user_data(obj, row, col);
-        if(color_ptr != NULL) {
-            uint32_t color_val = *color_ptr;
-            lv_draw_label_dsc_t * label_draw_dsc = lv_draw_task_get_label_dsc(draw_task);
-            if(label_draw_dsc) {
-                label_draw_dsc->color = lv_color_hex(color_val);
-            }
-        }
-
-        lv_draw_fill_dsc_t * fill_draw_dsc = lv_draw_task_get_fill_dsc(draw_task);
-        if(fill_draw_dsc) {
-            if(row % 2 == 0) {
-                fill_draw_dsc->color = lv_color_hex(0x000000);
-            }
-            else {
-                fill_draw_dsc->color = lv_color_hex(0x1a1a1a);
-            }
-        }
-    }
-}
-
-static void set_cell(lv_obj_t *table, uint16_t row, uint16_t col, const char *txt, uint32_t color) {
-    lv_table_set_cell_value(table, row, col, txt);
-    uint32_t *color_ptr = (uint32_t *)lv_table_get_cell_user_data(table, row, col);
-    if (color_ptr) {
-        *color_ptr = color;
-    } else {
-        color_ptr = lv_malloc(sizeof(uint32_t));
-        if (color_ptr) {
-            *color_ptr = color;
-            lv_table_set_cell_user_data(table, row, col, color_ptr);
-        }
-    }
-}
-
-static void set_cell_fmt(lv_obj_t *table, uint16_t row, uint16_t col, uint32_t color, const char *fmt, ...) {
-    char buf[256];
-    va_list args;
-    va_start(args, fmt);
-    vsnprintf(buf, sizeof(buf), fmt, args);
-    va_end(args);
-    set_cell(table, row, col, buf, color);
-}
-
-static lv_obj_t *create_debug_table(lv_obj_t *parent_obj, uint32_t row_cnt) {
-    lv_obj_t *obj = lv_table_create(parent_obj);
-    lv_obj_set_pos(obj, 0, 0);
-    lv_obj_set_size(obj, 800, 480);
-    lv_table_set_column_count(obj, 4);
-    lv_table_set_row_count(obj, row_cnt);
-    lv_table_set_column_width(obj, 0, 190);
-    lv_table_set_column_width(obj, 1, 210);
-    lv_table_set_column_width(obj, 2, 190);
-    lv_table_set_column_width(obj, 3, 210);
-    
-    // Set styles for dark dashboard table
-    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN);
-    lv_obj_set_style_text_color(obj, lv_color_hex(0xffffff), LV_PART_ITEMS);
-    lv_obj_set_style_bg_color(obj, lv_color_hex(0x2a2a2a), LV_PART_ITEMS);
-    lv_obj_set_style_border_color(obj, lv_color_hex(0x444444), LV_PART_ITEMS);
-    lv_obj_set_style_border_width(obj, 1, LV_PART_ITEMS);
-    
-    // Decrease row height by adjusting padding
-    lv_obj_set_style_pad_top(obj, 2, LV_PART_ITEMS);
-    lv_obj_set_style_pad_bottom(obj, 2, LV_PART_ITEMS);
-    lv_obj_set_style_pad_left(obj, 8, LV_PART_ITEMS);
-    lv_obj_set_style_pad_right(obj, 8, LV_PART_ITEMS);
-    
-    // Set font
-    lv_obj_set_style_text_font(obj, &ui_font_orbitron_25, LV_PART_ITEMS);
-
-    // Add custom color and alignment draw event callback
-    lv_obj_add_event_cb(obj, table_draw_event_cb, LV_EVENT_DRAW_TASK_ADDED, NULL);
-    lv_obj_add_flag(obj, LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS);
-    return obj;
-}
-
-void create_screen_debug_1() {
+void create_screen_debug() {
     void *flowState = getFlowState(0, 2);
     (void)flowState;
     lv_obj_t *obj = lv_obj_create(0);
-    objects.debug_1 = obj;
+    objects.debug = obj;
     lv_obj_set_pos(obj, 0, 0);
     lv_obj_set_size(obj, 800, 480);
     lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     {
-        objects.general_debug_text_1 = create_debug_table(obj, 13);
+        lv_obj_t *parent_obj = obj;
+        {
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            objects.obj6 = obj;
+            lv_obj_set_pos(obj, 19, 10);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            lv_obj_set_style_text_color(obj, lv_color_hex(0xff9400), LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_25, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_label_set_text_static(obj, "DEBUG");
+        }
+        {
+            // debugText_1
+            lv_obj_t *obj = lv_spangroup_create(parent_obj);
+            objects.debug_text_1 = obj;
+            lv_obj_set_pos(obj, 0, 0);
+            lv_obj_set_size(obj, 800, 480);
+            lv_spangroup_set_mode(obj, LV_SPAN_MODE_FIXED);
+            lv_spangroup_set_align(obj, LV_TEXT_ALIGN_LEFT);
+            my_spangroup_set_recolor_text(obj, " GENERAL DEBUG                                                          \n------------------------------------------+---------------------------------------------\n AMS                                     | INVERTER (HV500)\n State:    --------   SOC: ---.--%       | ERPM:     ------    Duty: ---.--%\n Runtime:  -----s     Fans: ---%         | Vin:      ---- V    Fault: ---\n MCU Vref: -.--V      MCU T: ---°C      | AC Curr:  ---.- Apk DC: ---.- A\n PEC Err:  ---        Flt Cnt: ---       | Ctrl T:   ---.-°C   Mot T: ---.-°C\n Slaves:   --/12      FW: --------       | Throttle: ---%      Brake: ---%\n Fault1:   ----------------              | FOC Id:   ---.- Apk Iq: ---.- Apk\n Fault2:   ----------------              | DriveEn:  ---        CtrlMode: ---\n------------------------------------------+---------------------------------------------\n PRECHARGE                               | IVT (ISABELLE)\n State:    ----------------              | Current:  -------- mA\n AIR+: --- AIR-: --- CHG: --- DIS: ---   | U1: -------- mV  U2: -------- mV\n                                         | U3: -------- mV  Temp: -----.-°C\n PACK OVERVIEW                           | Power: -------- W  Energy: -------- Wh\n Vmax: -.---V   Vmin: -.---V             |\n Tmax: ---.--°C Tmin: ---.--°C           | PEDALS / DASHBOARD\n                                         | APPS1: ----.- APPS2: ----.-\n------------------------------------------+---------------------------------------------\n WHEELS                                  | REAR SENSORS (AQT7)\n FL: --- km/h  T:---.-°C  BrkT:---.-°C  | NTC1: ---.-°C  NTC2: ---.-°C\n FR: --- km/h  T:---.-°C  BrkT:---.-°C  | NTC3: ---.-°C\n RL: --- km/h  T:---.-°C  BrkT:---.-°C  | Susp R: ---.- mm  Susp L: ---.- mm\n RR: --- km/h  T:---.-°C  BrkT:---.-°C  | IGN: ---  R2D: ---\n------------------------------------------+---------------------------------------------");
+        }
     }
-    tick_screen_debug_1();
+    
+    tick_screen_debug();
 }
 
-void tick_screen_debug_1() {
+void tick_screen_debug() {
     TelemetryData t;
     if (!ros2subscriber_get_telemetry(&t)) {
         return;
     }
-    lv_obj_t *table = objects.general_debug_text_1;
-    if (!table) return;
 
-    // Header
-    set_cell(table, 0, 0, "AMS / PRECHARGE / PACK (1/5)", 0x00BFFF);
-    lv_table_add_cell_ctrl(table, 0, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
+    char buf[4096];
+    
+    // Status strings
+    const char *ams_state_str = (t.ams_state == 1) ? "#00FF00 RUNNING#" : ((t.ams_state == 0) ? "#808080 IDLE#" : "#FF0000 FAULT#");
+    const char *precharge_state_str = (t.precharge_state == 2) ? "#00FF00 DONE#" : 
+                                      ((t.precharge_state == 1) ? "#FFA500 CHG#" : 
+                                      ((t.precharge_state == 0) ? "#808080 OFF#" : "#FF0000 FAULT#"));
 
-    // Row 1
-    const char *ams_state_str = "FAULT";
-    uint32_t ams_state_color = 0xFF0000;
-    if (t.ams_state == 0) { ams_state_str = "IDLE"; ams_state_color = 0x808080; }
-    else if (t.ams_state == 1) { ams_state_str = "RUNNING"; ams_state_color = 0x00FF00; }
-    set_cell(table, 1, 0, "AMS State:", 0xFFFFFF);
-    set_cell(table, 1, 1, ams_state_str, ams_state_color);
+    const char *air_pos_str = (t.air_pos == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *air_min_str = (t.air_min == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *ctc_chg_str = (t.ctc_charge == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *ctc_dis_str = (t.ctc_discharge == 1) ? "#00FF00 ON#" : "#808080 OFF#";
 
-    uint32_t soc_color = (t.ams_soc > 30) ? 0x00FF00 : ((t.ams_soc > 15) ? 0xFFA500 : 0xFF0000);
-    set_cell(table, 1, 2, "SOC:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 3, soc_color, "%5.1f%%", t.ams_soc);
+    const char *inv_drive_str = (t.inv_drive_en == 1) ? "#00FF00 ENABLED#" : "#808080 DISABLED#";
+    const char *rear_ign_str = (t.rear_ign == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *rear_r2d_str = (t.rear_r2d == 1) ? "#00FF00 ON#" : "#808080 OFF#";
 
-    // Row 2
-    set_cell(table, 2, 0, "Runtime:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%5.0f s", t.ams_runtime);
-    set_cell(table, 2, 2, "Fans:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 3, 0xFFFFFF, "%3.0f%%", t.ams_fans);
+    // Value color mappings
+    const char *soc_color = (t.ams_soc > 30) ? "#00FF00" : ((t.ams_soc > 15) ? "#FFA500" : "#FF0000");
+    const char *pec_color = (t.ams_pec_err == 0) ? "#00FF00" : "#FF0000";
+    const char *fault_color = (t.ams_fault_cnt == 0) ? "#00FF00" : "#FF0000";
+    const char *inv_fault_color = (t.inv_fault == 0) ? "#00FF00" : "#FF0000";
+    const char *tmax_color = (t.t_max < 50.0f) ? "#00FF00" : "#FF0000";
+    const char *vmin_color = (t.v_min > 3.0f) ? "#00FF00" : "#FF0000";
 
-    // Row 3
-    set_cell(table, 3, 0, "MCU Vref:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%4.2f V", t.ams_mcu_vref);
-    set_cell(table, 3, 2, "MCU T:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%3.0f C", t.ams_mcu_temp);
+    snprintf(buf, sizeof(buf),
+        " #00BFFF GENERAL DEBUG#\n"
+        "------------------------------------------+---------------------------------------------\n"
+        " #00BFFF AMS#                                     | #00BFFF INVERTER (HV500)#\n"
+        " State:    %-25s      | ERPM:     #FFFFFF %-8.0f# Duty: #FFFFFF %5.1f%%#\n"
+        " SOC:      %s%5.1f%%#                         | Vin:      #FFFFFF %-6.0f# V  Fault: %s%-3.0f#\n"
+        " Runtime:  #FFFFFF %5.0f s#                       | AC Curr:  #FFFFFF %5.1f Apk# DC: #FFFFFF %5.1f A#\n"
+        " MCU Vref: #FFFFFF %4.2f V#  MCU T: #FFFFFF %3.0f°C#      | Ctrl T:   #FFFFFF %5.1f°C#  Mot T:#FFFFFF %5.1f°C#\n"
+        " PEC Err:  %s%3.0f#      Flt Cnt: %s%3.0f#       | Throttle: #FFFFFF %3.0f%%#    Brake:#FFFFFF %3.0f%%#\n"
+        " Slaves:   #FFFFFF %2.0f/12#     FW: #FFFFFF %-8.0f#      | FOC Id:   #FFFFFF %5.1f Apk# Iq:  #FFFFFF %5.1f Apk#\n"
+        " Fault:    %s%-25.0f#      | DriveEn:  %-25s\n"
+        "------------------------------------------+---------------------------------------------\n"
+        " #00BFFF PRECHARGE#                               | #00BFFF IVT (ISABELLE)#\n"
+        " State:    %-25s      | Current:  #FFFFFF %8.0f mA#\n"
+        " AIRpos:   %-15s AIRmin: %-15s | U1: #FFFFFF %7.0f mV#  U2: #FFFFFF %7.0f mV#\n"
+        " CTCchg:   %-15s CTCdis: %-15s | U3: #FFFFFF %7.0f mV#  Temp:#FFFFFF %5.1f°C#\n"
+        "                                          | Power:   #FFFFFF %7.0f W#  Energy:#FFFFFF %7.0f Wh#\n"
+        " #00BFFF PACK OVERVIEW#                           |\n"
+        " Vmax: #FFFFFF %5.3f V#   Vmin: %s%5.3f V#           | #00BFFF PEDALS / DASHBOARD#\n"
+        " Tmax: %s%5.1f°C#  Tmin: #FFFFFF %5.1f°C#           | APPS1:   #FFFFFF %6.1f#  APPS2: #FFFFFF %6.1f#\n"
+        "------------------------------------------+---------------------------------------------\n"
+        " #00BFFF WHEELS#                                  | #00BFFF REAR SENSORS (AQT7)#\n"
+        " FL: #FFFFFF %3.0f km/h# T:#FFFFFF %4.1f°C# BrkT:#FFFFFF %4.1f°C# | NTC1: #FFFFFF %4.1f°C# NTC2: #FFFFFF %4.1f°C#\n"
+        " FR: #FFFFFF %3.0f km/h# T:#FFFFFF %4.1f°C# BrkT:#FFFFFF %4.1f°C# | NTC3: #FFFFFF %4.1f°C#\n"
+        " RL: #FFFFFF %3.0f km/h# T:#FFFFFF %4.1f°C# BrkT:#FFFFFF %4.1f°C# | Susp R:#FFFFFF %5.1f mm# Susp L:#FFFFFF %5.1f mm#\n"
+        " RR: #FFFFFF %3.0f km/h# T:#FFFFFF %4.1f°C# BrkT:#FFFFFF %4.1f°C# | IGN:  %-15s R2D:  %-15s\n"
+        "------------------------------------------+---------------------------------------------\n",
+        ams_state_str, t.inv_erpm, t.inv_duty,
+        soc_color, t.ams_soc, t.inv_vin, inv_fault_color, t.inv_fault,
+        t.ams_runtime, t.inv_ac_curr, t.inv_dc_curr,
+        t.ams_mcu_vref, t.ams_mcu_temp, t.inv_temp_ctrl, t.inv_temp_mot,
+        pec_color, t.ams_pec_err, fault_color, t.ams_fault_cnt, t.inv_throttle, t.inv_brake,
+        t.ams_slaves, t.ams_fw, t.inv_foc_id, t.inv_foc_iq,
+        fault_color, t.ams_fault_cnt, inv_drive_str,
+        precharge_state_str, t.ivt_current,
+        air_pos_str, air_min_str, t.ivt_u1, t.ivt_u2,
+        ctc_chg_str, ctc_dis_str, t.ivt_u3, t.ivt_temp,
+        t.ivt_power, t.ivt_energy,
+        t.v_max, vmin_color, t.v_min,
+        tmax_color, t.t_max, t.t_min, t.apps1, t.apps2,
+        t.spd_fl, t.temp_fl, t.brk_fl, t.ntc1, t.ntc2,
+        t.spd_fr, t.temp_fr, t.brk_fr, t.ntc3,
+        t.spd_rl, t.temp_rl, t.brk_rl, t.susp_r, t.susp_l,
+        t.spd_rr, t.temp_rr, t.brk_rr, rear_ign_str, rear_r2d_str
+    );
 
-    // Row 4
-    uint32_t pec_color = (t.ams_pec_err == 0) ? 0x00FF00 : 0xFF0000;
-    set_cell(table, 4, 0, "PEC Err:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 1, pec_color, "%3.0f", t.ams_pec_err);
-
-    uint32_t fault_color = (t.ams_fault_cnt == 0) ? 0x00FF00 : 0xFF0000;
-    set_cell(table, 4, 2, "Flt Cnt:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 3, fault_color, "%3.0f", t.ams_fault_cnt);
-
-    // Row 5
-    set_cell(table, 5, 0, "Slaves:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%2.0f/12", t.ams_slaves);
-    set_cell(table, 5, 2, "FW:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%-8.0f", t.ams_fw);
-
-    // Row 6: Header Precharge
-    set_cell(table, 6, 0, "PRECHARGE", 0x00BFFF);
-    lv_table_add_cell_ctrl(table, 6, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 6, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 6, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-
-    // Row 7
-    const char *precharge_state_str = "FAULT";
-    uint32_t precharge_state_color = 0xFF0000;
-    if (t.precharge_state == 0) { precharge_state_str = "OFF"; precharge_state_color = 0x808080; }
-    else if (t.precharge_state == 1) { precharge_state_str = "CHG"; precharge_state_color = 0xFFA500; }
-    else if (t.precharge_state == 2) { precharge_state_str = "DONE"; precharge_state_color = 0x00FF00; }
-    set_cell(table, 7, 0, "Precharge:", 0xFFFFFF);
-    set_cell(table, 7, 1, precharge_state_str, precharge_state_color);
-    set_cell(table, 7, 2, "", 0xFFFFFF);
-    set_cell(table, 7, 3, "", 0xFFFFFF);
-
-    // Row 8
-    set_cell(table, 8, 0, "AIR+:", 0xFFFFFF);
-    set_cell(table, 8, 1, (t.air_pos == 1) ? "ON" : "OFF", (t.air_pos == 1) ? 0x00FF00 : 0x808080);
-    set_cell(table, 8, 2, "AIR-:", 0xFFFFFF);
-    set_cell(table, 8, 3, (t.air_min == 1) ? "ON" : "OFF", (t.air_min == 1) ? 0x00FF00 : 0x808080);
-
-    // Row 9
-    set_cell(table, 9, 0, "CHG:", 0xFFFFFF);
-    set_cell(table, 9, 1, (t.ctc_charge == 1) ? "ON" : "OFF", (t.ctc_charge == 1) ? 0x00FF00 : 0x808080);
-    set_cell(table, 9, 2, "DIS:", 0xFFFFFF);
-    set_cell(table, 9, 3, (t.ctc_discharge == 1) ? "ON" : "OFF", (t.ctc_discharge == 1) ? 0x00FF00 : 0x808080);
-
-    // Row 10: Header Pack
-    set_cell(table, 10, 0, "PACK VOLTAGE & TEMP", 0x00BFFF);
-    lv_table_add_cell_ctrl(table, 10, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 10, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 10, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-
-    // Row 11
-    set_cell(table, 11, 0, "Vmax:", 0xFFFFFF);
-    set_cell_fmt(table, 11, 1, 0xFFFFFF, "%5.3f V", t.v_max);
-    set_cell(table, 11, 2, "Vmin:", 0xFFFFFF);
-    set_cell_fmt(table, 11, 3, (t.v_min > 3.0f) ? 0x00FF00 : 0xFF0000, "%5.3f V", t.v_min);
-
-    // Row 12
-    set_cell(table, 12, 0, "Tmax:", 0xFFFFFF);
-    set_cell_fmt(table, 12, 1, (t.t_max < 50.0f) ? 0x00FF00 : 0xFF0000, "%5.1f C", t.t_max);
-    set_cell(table, 12, 2, "Tmin:", 0xFFFFFF);
-    set_cell_fmt(table, 12, 3, 0xFFFFFF, "%5.1f C", t.t_min);
+    if (objects.debug_text_1) {
+        my_spangroup_set_recolor_text(objects.debug_text_1, buf);
+    }
 }
 
-void create_screen_debug_inverter_2() {
+void create_screen_debug_autonomous() {
     void *flowState = getFlowState(0, 3);
     (void)flowState;
     lv_obj_t *obj = lv_obj_create(0);
-    objects.debug_inverter_2 = obj;
+    objects.debug_autonomous = obj;
     lv_obj_set_pos(obj, 0, 0);
     lv_obj_set_size(obj, 800, 480);
     lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     {
-        objects.general_debug_text_2 = create_debug_table(obj, 8);
+        lv_obj_t *parent_obj = obj;
+        {
+            // debugText
+            lv_obj_t *obj = lv_spangroup_create(parent_obj);
+            objects.debug_text = obj;
+            lv_obj_set_pos(obj, 0, 0);
+            lv_obj_set_size(obj, 800, 480);
+            lv_spangroup_set_mode(obj, LV_SPAN_MODE_FIXED);
+            lv_spangroup_set_align(obj, LV_TEXT_ALIGN_LEFT);
+            my_spangroup_set_recolor_text(obj, " AUTONOMOUS DEBUG  1/2                                                     \n ACU                                     | DV DYNAMICS\n ACU State:  ---------  AS: --------     | Spd Act: --- km/h   Spd Tgt: --- km/h\n ASSI:       ---------  Mission: ---     | Str Act: ---.-°     Str Tgt: ---.-°\n ASMS: ---  IGN: ---  EMERGENCY: ---     | Brk Act: ---%       Brk Tgt: ---%\n Emerg Cause: ------------------         | Mot Act: ---%       Mot Tgt: ---%\n CPU Temp: ---°C                         | Acc Lon: ---.--- m/s2\n                                         | Acc Lat: ---.--- m/s2\n JETSON                                  | Yaw:    ---.--- °/s\n AS State: ---  Mission: ---             |\n Temp: ---°C  CPU: ---% GPU: ---%       | DV STATUS\n Emerg Cause: ----------------           | AS: ---  EBS: ---  AMI: ---\n                                         | Steer: ---  EBS Red: ---\n------------------------------------------+---------------------------------------------\n VCU                                     | EBS / ASF PRESSURES\n IGN Man: ---  IGN Auto: ---             | EBS Tank F: ---- bar  R: ---- bar\n R2D Man: ---  R2D Auto: ---             | Brk Press F: ---- bar  R: ---- bar\n Shutdown: ---  State: ---               |\n R2D Raw: ---  IGN Raw: ---              | CUBEMARS STEERING\n HV: ---  BrkF: ---  BrkR: ---          | Pos: -----.-°  Spd: ------ ERPM\n                                         | Curr: ---.- A  Drv T: ---°C  Err: ---\n VCU RPM                                 | Pos Target: ------ °\n RPM Act: -----  RPM Tgt: -----         |    Torque Tgt: -----                                      | SLAM / CONES | Laps: --  Cones: ---  All: ------");
+        }
     }
-    tick_screen_debug_inverter_2();
+    
+    tick_screen_debug_autonomous();
 }
 
-void tick_screen_debug_inverter_2() {
+void tick_screen_debug_autonomous() {
     TelemetryData t;
     if (!ros2subscriber_get_telemetry(&t)) {
         return;
     }
-    lv_obj_t *table = objects.general_debug_text_2;
-    if (!table) return;
 
-    // Header
-    set_cell(table, 0, 0, "INVERTER DTI (2/5)", 0x00BFFF);
-    lv_table_add_cell_ctrl(table, 0, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
+    char buf[4096];
 
-    // Row 1
-    set_cell(table, 1, 0, "ERPM:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%-8.0f", t.inv_erpm);
-    set_cell(table, 1, 2, "Duty:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 3, 0xFFFFFF, "%5.1f%%", t.inv_duty);
+    // Status strings
+    const char *acu_state_str = "#FF0000 FAULT#";
+    if (t.acu_state == 0) acu_state_str = "#808080 INIT#";
+    else if (t.acu_state == 1) acu_state_str = "#FFA500 MISS_SEL#";
+    else if (t.acu_state == 2) acu_state_str = "#00BFFF JET_WAIT#";
+    else if (t.acu_state == 3) acu_state_str = "#FFA500 SEQ#";
+    else if (t.acu_state == 4) acu_state_str = "#00FF00 READY#";
+    else if (t.acu_state == 5) acu_state_str = "#00FF00 DRIVING#";
+    else if (t.acu_state == 7) acu_state_str = "#FF0000 EMERG#";
 
-    // Row 2
-    set_cell(table, 2, 0, "Vin:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%-6.0f V", t.inv_vin);
-    set_cell(table, 2, 2, "Fault:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 3, (t.inv_fault == 0) ? 0x00FF00 : 0xFF0000, "%-3.0f", t.inv_fault);
+    const char *as_state_str = "#808080 OFF#";
+    if (t.acu_as_state == 2) as_state_str = "#00FF00 READY#";
+    else if (t.acu_as_state == 3) as_state_str = "#00FF00 DRIVING#";
+    else if (t.acu_as_state == 4) as_state_str = "#FF0000 EMERG#";
+    else if (t.acu_as_state == 5) as_state_str = "#00FF00 FINISH#";
 
-    // Row 3
-    set_cell(table, 3, 0, "AC Curr:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%5.1f Apk", t.inv_ac_curr);
-    set_cell(table, 3, 2, "DC Curr:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%5.1f A", t.inv_dc_curr);
+    const char *assi_state_str = "#808080 OFF#";
+    if (t.acu_assi_state == 2) assi_state_str = "#00FF00 READY#";
+    else if (t.acu_assi_state == 3) assi_state_str = "#00FF00 DRIVING#";
+    else if (t.acu_assi_state == 4) assi_state_str = "#FF0000 EMERG#";
+    else if (t.acu_assi_state == 5) assi_state_str = "#00FF00 FINISH#";
 
-    // Row 4
-    set_cell(table, 4, 0, "Ctrl T:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%5.1f C", t.inv_temp_ctrl);
-    set_cell(table, 4, 2, "Mot T:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 3, 0xFFFFFF, "%5.1f C", t.inv_temp_mot);
+    const char *acu_emerg_str = "#00FF00 NONE#";
+    if (t.acu_emerg_cause == 1) acu_emerg_str = "#FF0000 SDC_OPEN#";
+    else if (t.acu_emerg_cause == 2) acu_emerg_str = "#FF0000 RES#";
+    else if (t.acu_emerg_cause == 3) acu_emerg_str = "#FF0000 PRESS_CHK#";
+    else if (t.acu_emerg_cause == 4) acu_emerg_str = "#FF0000 VCU_TO#";
+    else if (t.acu_emerg_cause == 5) acu_emerg_str = "#FF0000 JETSON_TO#";
+    else if (t.acu_emerg_cause == 6) acu_emerg_str = "#FF0000 WDT#";
 
-    // Row 5
-    set_cell(table, 5, 0, "Throttle:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%3.0f%%", t.inv_throttle);
-    set_cell(table, 5, 2, "Brake:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%3.0f%%", t.inv_brake);
+    const char *jet_as_state_str = "#808080 OFF#";
+    if (t.jetson_as_state == 2) jet_as_state_str = "#00FF00 READY#";
+    else if (t.jetson_as_state == 3) jet_as_state_str = "#00FF00 DRIVING#";
+    else if (t.jetson_as_state == 4) jet_as_state_str = "#FF0000 EMERG#";
+    else if (t.jetson_as_state == 5) jet_as_state_str = "#00FF00 FINISH#";
 
-    // Row 6
-    set_cell(table, 6, 0, "FOC Id:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 1, 0xFFFFFF, "%5.1f Apk", t.inv_foc_id);
-    set_cell(table, 6, 2, "FOC Iq:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 3, 0xFFFFFF, "%5.1f Apk", t.inv_foc_iq);
+    const char *jet_emerg_str = "#00FF00 NONE#";
+    if (t.jetson_emerg_cause == 1) jet_emerg_str = "#FF0000 SDC_OPEN#";
+    else if (t.jetson_emerg_cause == 2) jet_emerg_str = "#FF0000 RES#";
+    else if (t.jetson_emerg_cause == 3) jet_emerg_str = "#FF0000 STEER_ERR#";
 
-    // Row 7
-    set_cell(table, 7, 0, "DriveEn:", 0xFFFFFF);
-    set_cell(table, 7, 1, (t.inv_drive_en == 1) ? "ENABLED" : "DISABLED", (t.inv_drive_en == 1) ? 0x00FF00 : 0x808080);
-    set_cell(table, 7, 2, "", 0xFFFFFF);
-    set_cell(table, 7, 3, "", 0xFFFFFF);
-}
+    const char *acu_asms_str = (t.acu_asms == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *acu_ign_str = (t.acu_ign == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *acu_emerg_act_str = (t.acu_emergency == 1) ? "#FF0000 ACTIVE#" : "#00FF00 OK#";
 
-void create_screen_debug_3() {
-    void *flowState = getFlowState(0, 4);
-    (void)flowState;
-    lv_obj_t *obj = lv_obj_create(0);
-    objects.debug_3 = obj;
-    lv_obj_set_pos(obj, 0, 0);
-    lv_obj_set_size(obj, 800, 480);
-    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    {
-        objects.general_debug_text_3 = create_debug_table(obj, 11);
+    const char *vcu_ign_man_str = (t.vcu_ign_man == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *vcu_ign_auto_str = (t.vcu_ign_auto == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *vcu_r2d_man_str = (t.vcu_r2d_man == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *vcu_r2d_auto_str = (t.vcu_r2d_auto == 1) ? "#00FF00 ON#" : "#808080 OFF#";
+    const char *vcu_shutdown_str = (t.vcu_shutdown == 1) ? "#00FF00 CLOSED#" : "#FF0000 OPEN#";
+    const char *vcu_hv_str = (t.vcu_hv == 1) ? "#FF0000 ACTIVE#" : "#808080 OFF#";
+
+    const char *steer_err_str = (t.steer_err == 0) ? "#00FF00 OK#" : "#FF0000 FAULT#";
+
+    // Pedals/Pressures color mappings
+    const char *ebs_press_color = (t.ebs_tank_f > 10.0f) ? "#00FF00" : "#FF0000";
+
+    snprintf(buf, sizeof(buf),
+        " #00BFFF AUTONOMOUS DEBUG  1/2#\n"
+        "------------------------------------------+---------------------------------------------\n"
+        " #00BFFF ACU#                                     | #00BFFF DV DYNAMICS#\n"
+        " ACU State:  %-25s      | Spd Act:  #FFFFFF %3.1f# km/h  Spd Tgt: #FFFFFF %3.1f# km/h\n"
+        " ASSI:       %-25s      | Str Act:  #FFFFFF %5.1f# °    Str Tgt: #FFFFFF %5.1f# °\n"
+        " ASMS: %-10s IGN: %-10s         | Brk Act:  #FFFFFF %3.0f%%#        Brk Tgt: #FFFFFF %3.0f%%#\n"
+        " EMERGENCY:  %-25s      | Mot Act:  #FFFFFF %3.0f%%#        Mot Tgt: #FFFFFF %3.0f%%#\n"
+        " Emerg Cause:%-25s      | Acc Lon:  #FFFFFF %6.3f# m/s2 Acc Lat:#FFFFFF %6.3f# m/s2\n"
+        " CPU Temp:   #FFFFFF %3.0f°C#                     | Yaw:      #FFFFFF %6.3f# °/s\n"
+        "                                          |\n"
+        " #00BFFF JETSON#                                  | #00BFFF DV STATUS#\n"
+        " AS State:   %-25s      | AS: #FFFFFF %3.0f#  EBS: #FFFFFF %3.0f#  AMI: #FFFFFF %3.0f#\n"
+        " Mission:    #FFFFFF %-25.0f#      | Steer: #FFFFFF %3.0f#  EBS Red: #FFFFFF %3.0f#\n"
+        " Temp: #FFFFFF %3.0f°C#  CPU: #FFFFFF %3.0f%%#  GPU: #FFFFFF %3.0f%%#      |\n"
+        " Emerg Cause:%-25s      | #00BFFF EBS / ASF PRESSURES#\n"
+        "                                          | EBS Tank F: %s%5.1f# bar R: %s%5.1f# bar\n"
+        "------------------------------------------+ Brk Press F: #FFFFFF %5.1f# bar R: #FFFFFF %5.1f# bar\n"
+        " #00BFFF VCU#                                     |\n"
+        " IGN Man: %-10s IGN Auto: %-10s   | #00BFFF CUBEMARS STEERING#\n"
+        " R2D Man: %-10s R2D Auto: %-10s   | Pos: #FFFFFF %5.1f# °   Spd: #FFFFFF %6.0f# ERPM\n"
+        " Shutdown:%-25s      | Curr: #FFFFFF %5.1f# A   Drv T: #FFFFFF %3.0f°C# Err: %s\n"
+        " State:   #FFFFFF %-25.0f#      | Pos Target: #FFFFFF %5.1f# °\n"
+        " HV:      %-25s      | Torque Tgt: #FFFFFF %5.2f# Nm\n"
+        "                                          |\n"
+        " #00BFFF VCU RPM#                                 | #00BFFF SLAM / CONES#\n"
+        " RPM Act: #FFFFFF %-5.0f#       RPM Tgt: #FFFFFF %-5.0f#       | Laps: #FFFFFF %2.0f#  Cones: #FFFFFF %3.0f#  All: #FFFFFF %4.0f#\n"
+        "------------------------------------------+---------------------------------------------\n",
+        acu_state_str, t.dv_spd_act, t.dv_spd_tgt,
+        assi_state_str, t.dv_str_act, t.dv_str_tgt,
+        acu_asms_str, acu_ign_str, t.dv_brk_act, t.dv_brk_tgt,
+        acu_emerg_act_str, t.dv_mot_act, t.dv_mot_tgt,
+        acu_emerg_str, t.dv_acc_lon, t.dv_acc_lat,
+        t.acu_cpu_temp, t.dv_yaw,
+        jet_as_state_str, t.dv_as_status, t.dv_ebs_state, t.dv_ami_state,
+        t.jetson_mission, t.dv_steer_state, t.dv_ebs_red_state,
+        t.jetson_temp, t.jetson_cpu, t.jetson_gpu,
+        jet_emerg_str, ebs_press_color, t.ebs_tank_f, ebs_press_color, t.ebs_tank_r,
+        t.brk_press_f, t.brk_press_r,
+        vcu_ign_man_str, vcu_ign_auto_str,
+        vcu_r2d_man_str, vcu_r2d_auto_str, t.steer_pos, t.steer_spd,
+        vcu_shutdown_str, t.steer_curr, t.steer_temp, steer_err_str,
+        t.vcu_state, t.steer_pos_tgt,
+        vcu_hv_str, t.vcu_torque_tgt,
+        t.vcu_rpm_act, t.vcu_rpm_tgt, t.slam_laps, t.slam_cones, t.slam_all
+    );
+
+    if (objects.debug_text) {
+        my_spangroup_set_recolor_text(objects.debug_text, buf);
     }
-    tick_screen_debug_3();
-}
-
-void tick_screen_debug_3() {
-    TelemetryData t;
-    if (!ros2subscriber_get_telemetry(&t)) {
-        return;
-    }
-    lv_obj_t *table = objects.general_debug_text_3;
-    if (!table) return;
-
-    // Header
-    set_cell(table, 0, 0, "IVT / PEDALS / REAR SENSORS (3/5)", 0x00BFFF);
-    lv_table_add_cell_ctrl(table, 0, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-
-    // Row 1
-    set_cell(table, 1, 0, "Current:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%8.0f mA", t.ivt_current);
-    set_cell(table, 1, 2, "Temp:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 3, 0xFFFFFF, "%5.1f C", t.ivt_temp);
-
-    // Row 2
-    set_cell(table, 2, 0, "U1:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%7.0f mV", t.ivt_u1);
-    set_cell(table, 2, 2, "U2:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 3, 0xFFFFFF, "%7.0f mV", t.ivt_u2);
-
-    // Row 3
-    set_cell(table, 3, 0, "U3:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%7.0f mV", t.ivt_u3);
-    set_cell(table, 3, 2, "Power:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%7.0f W", t.ivt_power);
-
-    // Row 4
-    set_cell(table, 4, 0, "Energy:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%7.0f Wh", t.ivt_energy);
-    set_cell(table, 4, 2, "", 0xFFFFFF);
-    set_cell(table, 4, 3, "", 0xFFFFFF);
-
-    // Row 5: Header Pedals & Rear Sensors
-    set_cell(table, 5, 0, "PEDALS & REAR SENSORS", 0x00BFFF);
-    lv_table_add_cell_ctrl(table, 5, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 5, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 5, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-
-    // Row 6
-    set_cell(table, 6, 0, "APPS1:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 1, 0xFFFFFF, "%6.1f", t.apps1);
-    set_cell(table, 6, 2, "APPS2:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 3, 0xFFFFFF, "%6.1f", t.apps2);
-
-    // Row 7
-    set_cell(table, 7, 0, "NTC1:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 1, 0xFFFFFF, "%4.1f C", t.ntc1);
-    set_cell(table, 7, 2, "NTC2:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 3, 0xFFFFFF, "%4.1f C", t.ntc2);
-
-    // Row 8
-    set_cell(table, 8, 0, "NTC3:", 0xFFFFFF);
-    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%4.1f C", t.ntc3);
-    set_cell(table, 8, 2, "", 0xFFFFFF);
-    set_cell(table, 8, 3, "", 0xFFFFFF);
-
-    // Row 9
-    set_cell(table, 9, 0, "Susp R:", 0xFFFFFF);
-    set_cell_fmt(table, 9, 1, 0xFFFFFF, "%5.1f mm", t.susp_r);
-    set_cell(table, 9, 2, "Susp L:", 0xFFFFFF);
-    set_cell_fmt(table, 9, 3, 0xFFFFFF, "%5.1f mm", t.susp_l);
-
-    // Row 10
-    set_cell(table, 10, 0, "IGN:", 0xFFFFFF);
-    set_cell(table, 10, 1, (t.rear_ign == 1) ? "ON" : "OFF", (t.rear_ign == 1) ? 0x00FF00 : 0x808080);
-    set_cell(table, 10, 2, "R2D:", 0xFFFFFF);
-    set_cell(table, 10, 3, (t.rear_r2d == 1) ? "ON" : "OFF", (t.rear_r2d == 1) ? 0x00FF00 : 0x808080);
-}
-
-void create_screen_debug_wheels_4() {
-    void *flowState = getFlowState(0, 5);
-    (void)flowState;
-    lv_obj_t *obj = lv_obj_create(0);
-    objects.debug_wheels_4 = obj;
-    lv_obj_set_pos(obj, 0, 0);
-    lv_obj_set_size(obj, 800, 480);
-    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    {
-        objects.general_debug_text_4 = create_debug_table(obj, 9);
-    }
-    tick_screen_debug_wheels_4();
-}
-
-void tick_screen_debug_wheels_4() {
-    TelemetryData t;
-    if (!ros2subscriber_get_telemetry(&t)) {
-        return;
-    }
-    lv_obj_t *table = objects.general_debug_text_4;
-    if (!table) return;
-
-    // Header
-    set_cell(table, 0, 0, "WHEELS STATUS (4/5)", 0x00BFFF);
-    lv_table_add_cell_ctrl(table, 0, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-
-    // Row 1: FL Wheel
-    set_cell(table, 1, 0, "FL Speed:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%3.0f km/h", t.spd_fl);
-    set_cell(table, 1, 2, "FL Temp:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 3, 0xFFFFFF, "%4.1f C", t.temp_fl);
-
-    // Row 2: FL Brake T
-    set_cell(table, 2, 0, "FL BrkT:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%4.1f C", t.brk_fl);
-    set_cell(table, 2, 2, "", 0xFFFFFF);
-    set_cell(table, 2, 3, "", 0xFFFFFF);
-
-    // Row 3: FR Wheel
-    set_cell(table, 3, 0, "FR Speed:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%3.0f km/h", t.spd_fr);
-    set_cell(table, 3, 2, "FR Temp:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%4.1f C", t.temp_fr);
-
-    // Row 4: FR Brake T
-    set_cell(table, 4, 0, "FR BrkT:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%4.1f C", t.brk_fr);
-    set_cell(table, 4, 2, "", 0xFFFFFF);
-    set_cell(table, 4, 3, "", 0xFFFFFF);
-
-    // Row 5: RL Wheel
-    set_cell(table, 5, 0, "RL Speed:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%3.0f km/h", t.spd_rl);
-    set_cell(table, 5, 2, "RL Temp:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%4.1f C", t.temp_rl);
-
-    // Row 6: RL Brake T
-    set_cell(table, 6, 0, "RL BrkT:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 1, 0xFFFFFF, "%4.1f C", t.brk_rl);
-    set_cell(table, 6, 2, "", 0xFFFFFF);
-    set_cell(table, 6, 3, "", 0xFFFFFF);
-
-    // Row 7: RR Wheel
-    set_cell(table, 7, 0, "RR Speed:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 1, 0xFFFFFF, "%3.0f km/h", t.spd_rr);
-    set_cell(table, 7, 2, "RR Temp:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 3, 0xFFFFFF, "%4.1f C", t.temp_rr);
-
-    // Row 8: RR Brake T
-    set_cell(table, 8, 0, "RR BrkT:", 0xFFFFFF);
-    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%4.1f C", t.brk_rr);
-    set_cell(table, 8, 2, "", 0xFFFFFF);
-    set_cell(table, 8, 3, "", 0xFFFFFF);
-}
-
-void create_screen_debug_5() {
-    void *flowState = getFlowState(0, 6);
-    (void)flowState;
-    lv_obj_t *obj = lv_obj_create(0);
-    objects.debug_5 = obj;
-    lv_obj_set_pos(obj, 0, 0);
-    lv_obj_set_size(obj, 800, 480);
-    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    {
-        objects.general_debug_text_5 = create_debug_table(obj, 4);
-    }
-    tick_screen_debug_5();
-}
-
-void tick_screen_debug_5() {
-    TelemetryData t;
-    if (!ros2subscriber_get_telemetry(&t)) {
-        return;
-    }
-    lv_obj_t *table = objects.general_debug_text_5;
-    if (!table) return;
-
-    // Header
-    set_cell(table, 0, 0, "GENERAL STATUS (5/5)", 0x00BFFF);
-    lv_table_add_cell_ctrl(table, 0, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-
-    // Row 1
-    set_cell(table, 1, 0, "System Status:", 0xFFFFFF);
-    set_cell(table, 1, 1, "OK", 0x00FF00);
-    set_cell(table, 1, 2, "Domain ID:", 0xFFFFFF);
-    set_cell(table, 1, 3, "0", 0xFFFFFF);
-
-    // Row 2
-    set_cell(table, 2, 0, "ROS2 Node:", 0xFFFFFF);
-    set_cell(table, 2, 1, "ACTIVE", 0x00FF00);
-    set_cell(table, 2, 2, "AMS Flt Count:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 3, (t.ams_fault_cnt == 0) ? 0x00FF00 : 0xFF0000, "%.0f", t.ams_fault_cnt);
-
-    // Row 3
-    set_cell(table, 3, 0, "Inverter Flt:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 1, (t.inv_fault == 0) ? 0x00FF00 : 0xFF0000, "%.0f", t.inv_fault);
-    set_cell(table, 3, 2, "", 0xFFFFFF);
-    set_cell(table, 3, 3, "", 0xFFFFFF);
 }
 
 void create_screen_debug_autonomous_1() {
-    void *flowState = getFlowState(0, 7);
+    void *flowState = getFlowState(0, 4);
     (void)flowState;
     lv_obj_t *obj = lv_obj_create(0);
     objects.debug_autonomous_1 = obj;
@@ -1663,8 +1334,19 @@ void create_screen_debug_autonomous_1() {
     lv_obj_set_size(obj, 800, 480);
     lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     {
-        objects.autonomous_debug_text_1 = create_debug_table(obj, 9);
+        lv_obj_t *parent_obj = obj;
+        {
+            // debugText_2
+            lv_obj_t *obj = lv_spangroup_create(parent_obj);
+            objects.debug_text_2 = obj;
+            lv_obj_set_pos(obj, 0, 0);
+            lv_obj_set_size(obj, 800, 480);
+            lv_spangroup_set_mode(obj, LV_SPAN_MODE_FIXED);
+            lv_spangroup_set_align(obj, LV_TEXT_ALIGN_LEFT);
+            my_spangroup_set_recolor_text(obj, " AUTONOMOUS DEBUG 2/2   \n------------------------------------------+---------------------------------------------\n ACQUISITION BOARDS                      | RES (Remote Emergency)\n AQT1 BrkP:---.- bar RES:--- BOTS:---   | Signal: ---\n AQT2 WhlAng:-----.-° AQT3:-----.-°    |\n AQT4 StAng:-----.-° Inertia:--- Emer:---| AQT7 BrkP: ---.- bar\n------------------------------------------+---------------------------------------------\n                                                    \n \n");
+        }
     }
+    
     tick_screen_debug_autonomous_1();
 }
 
@@ -1673,422 +1355,53 @@ void tick_screen_debug_autonomous_1() {
     if (!ros2subscriber_get_telemetry(&t)) {
         return;
     }
-    lv_obj_t *table = objects.autonomous_debug_text_1;
-    if (!table) return;
 
-    // Header
-    set_cell(table, 0, 0, "ACU & JETSON STATUS (1/5)", 0x00BFFF);
-    lv_table_add_cell_ctrl(table, 0, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
+    char buf[2048];
 
-    // Row 1
-    const char *acu_state_str = "FAULT";
-    uint32_t acu_state_color = 0xFF0000;
-    if (t.acu_state == 0) { acu_state_str = "INIT"; acu_state_color = 0x808080; }
-    else if (t.acu_state == 1) { acu_state_str = "MISS_SEL"; acu_state_color = 0xFFA500; }
-    else if (t.acu_state == 2) { acu_state_str = "JET_WAIT"; acu_state_color = 0x00BFFF; }
-    else if (t.acu_state == 3) { acu_state_str = "SEQ"; acu_state_color = 0xFFA500; }
-    else if (t.acu_state == 4) { acu_state_str = "READY"; acu_state_color = 0x00FF00; }
-    else if (t.acu_state == 5) { acu_state_str = "DRIVING"; acu_state_color = 0x00FF00; }
-    else if (t.acu_state == 7) { acu_state_str = "EMERG"; acu_state_color = 0xFF0000; }
-    set_cell(table, 1, 0, "ACU State:", 0xFFFFFF);
-    set_cell(table, 1, 1, acu_state_str, acu_state_color);
+    // Status strings
+    const char *aqt1_res_str = (t.aqt1_res == 1) ? "#FF0000 ACTIVE#" : "#00FF00 OK#";
+    const char *aqt1_bots_str = (t.aqt1_bots == 1) ? "#FF0000 ACTIVE#" : "#00FF00 OK#";
+    const char *aqt4_inertia_str = (t.aqt4_inertia == 1) ? "#FF0000 ACTIVE#" : "#00FF00 OK#";
+    const char *aqt4_emerg_str = (t.aqt4_emer == 1) ? "#FF0000 ACTIVE#" : "#00FF00 OK#";
 
-    const char *assi_state_str = "OFF";
-    uint32_t assi_state_color = 0x808080;
-    if (t.acu_assi_state == 2) { assi_state_str = "READY"; assi_state_color = 0x00FF00; }
-    else if (t.acu_assi_state == 3) { assi_state_str = "DRIVING"; assi_state_color = 0x00FF00; }
-    else if (t.acu_assi_state == 4) { assi_state_str = "EMERG"; assi_state_color = 0xFF0000; }
-    else if (t.acu_assi_state == 5) { assi_state_str = "FINISH"; assi_state_color = 0x00FF00; }
-    set_cell(table, 1, 2, "ASSI:", 0xFFFFFF);
-    set_cell(table, 1, 3, assi_state_str, assi_state_color);
+    snprintf(buf, sizeof(buf),
+        " #00BFFF AUTONOMOUS DEBUG 2/2#   \n"
+        "------------------------------------------+---------------------------------------------\n"
+        " #00BFFF ACQUISITION BOARDS#                      | #00BFFF RES (Remote Emergency)#\n"
+        " AQT1 BrkP:  #FFFFFF %5.1f# bar                   | Signal: #FFFFFF %5.1f#\n"
+        " AQT1 RES:   %-25s      |\n"
+        " AQT1 BOTS:  %-25s      | #00BFFF REAR SENSORS (AQT7)#\n"
+        " AQT2 WhlAng:#FFFFFF %5.1f# °                     | AQT7 BrkP:#FFFFFF %5.1f# bar\n"
+        " AQT3 WhlAng:#FFFFFF %5.1f# °                     |\n"
+        " AQT4 StAng: #FFFFFF %5.1f# °                     |\n"
+        " AQT4 Inertia:%-25s      |\n"
+        " AQT4 Emer:  %-25s      |\n"
+        "------------------------------------------+---------------------------------------------\n",
+        t.aqt1_brkp, t.res_signal,
+        aqt1_res_str,
+        aqt1_bots_str,
+        t.aqt2_whl_ang, t.aqt7_brkp,
+        t.aqt3_whl_ang,
+        t.aqt4_st_ang,
+        aqt4_inertia_str,
+        aqt4_emerg_str
+    );
 
-    // Row 2
-    set_cell(table, 2, 0, "ASMS:", 0xFFFFFF);
-    set_cell(table, 2, 1, (t.acu_asms == 1) ? "ON" : "OFF", (t.acu_asms == 1) ? 0x00FF00 : 0x808080);
-    set_cell(table, 2, 2, "IGN:", 0xFFFFFF);
-    set_cell(table, 2, 3, (t.acu_ign == 1) ? "ON" : "OFF", (t.acu_ign == 1) ? 0x00FF00 : 0x808080);
-
-    // Row 3
-    set_cell(table, 3, 0, "EMERGENCY:", 0xFFFFFF);
-    set_cell(table, 3, 1, (t.acu_emergency == 1) ? "ACTIVE" : "OK", (t.acu_emergency == 1) ? 0xFF0000 : 0x00FF00);
-
-    const char *acu_emerg_str = "NONE";
-    uint32_t acu_emerg_color = 0x00FF00;
-    if (t.acu_emerg_cause == 1) { acu_emerg_str = "SDC_OPEN"; acu_emerg_color = 0xFF0000; }
-    else if (t.acu_emerg_cause == 2) { acu_emerg_str = "RES"; acu_emerg_color = 0xFF0000; }
-    else if (t.acu_emerg_cause == 3) { acu_emerg_str = "PRESS_CHK"; acu_emerg_color = 0xFF0000; }
-    else if (t.acu_emerg_cause == 4) { acu_emerg_str = "VCU_TO"; acu_emerg_color = 0xFF0000; }
-    else if (t.acu_emerg_cause == 5) { acu_emerg_str = "JETSON_TO"; acu_emerg_color = 0xFF0000; }
-    else if (t.acu_emerg_cause == 6) { acu_emerg_str = "WDT"; acu_emerg_color = 0xFF0000; }
-    set_cell(table, 3, 2, "Emer Cause:", 0xFFFFFF);
-    set_cell(table, 3, 3, acu_emerg_str, acu_emerg_color);
-
-    // Row 4
-    set_cell(table, 4, 0, "CPU Temp:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%3.0f C", t.acu_cpu_temp);
-    set_cell(table, 4, 2, "", 0xFFFFFF);
-    set_cell(table, 4, 3, "", 0xFFFFFF);
-
-    // Row 5: Header Jetson
-    set_cell(table, 5, 0, "JETSON STATUS", 0x00BFFF);
-    lv_table_add_cell_ctrl(table, 5, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 5, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 5, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-
-    // Row 6
-    const char *jet_as_state_str = "OFF";
-    uint32_t jet_as_state_color = 0x808080;
-    if (t.jetson_as_state == 2) { jet_as_state_str = "READY"; jet_as_state_color = 0x00FF00; }
-    else if (t.jetson_as_state == 3) { jet_as_state_str = "DRIVING"; jet_as_state_color = 0x00FF00; }
-    else if (t.jetson_as_state == 4) { jet_as_state_str = "EMERG"; jet_as_state_color = 0xFF0000; }
-    else if (t.jetson_as_state == 5) { jet_as_state_str = "FINISH"; jet_as_state_color = 0x00FF00; }
-    set_cell(table, 6, 0, "AS State:", 0xFFFFFF);
-    set_cell(table, 6, 1, jet_as_state_str, jet_as_state_color);
-
-    set_cell(table, 6, 2, "Mission:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 3, 0xFFFFFF, "%-25.0f", t.jetson_mission);
-
-    // Row 7
-    set_cell(table, 7, 0, "Temp:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 1, 0xFFFFFF, "%3.0f C", t.jetson_temp);
-    set_cell(table, 7, 2, "CPU:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 3, 0xFFFFFF, "%3.0f%%", t.jetson_cpu);
-
-    // Row 8
-    set_cell(table, 8, 0, "GPU:", 0xFFFFFF);
-    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%3.0f%%", t.jetson_gpu);
-
-    const char *jet_emerg_str = "NONE";
-    uint32_t jet_emerg_color = 0x00FF00;
-    if (t.jetson_emerg_cause == 1) { jet_emerg_str = "SDC_OPEN"; jet_emerg_color = 0xFF0000; }
-    else if (t.jetson_emerg_cause == 2) { jet_emerg_str = "RES"; jet_emerg_color = 0xFF0000; }
-    else if (t.jetson_emerg_cause == 3) { jet_emerg_str = "STEER_ERR"; jet_emerg_color = 0xFF0000; }
-    set_cell(table, 8, 2, "Emer Cause:", 0xFFFFFF);
-    set_cell(table, 8, 3, jet_emerg_str, jet_emerg_color);
-}
-
-void create_screen_debug_autonomous_2() {
-    void *flowState = getFlowState(0, 8);
-    (void)flowState;
-    lv_obj_t *obj = lv_obj_create(0);
-    objects.debug_autonomous_2 = obj;
-    lv_obj_set_pos(obj, 0, 0);
-    lv_obj_set_size(obj, 800, 480);
-    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    {
-        objects.autonomous_debug_text_2 = create_debug_table(obj, 6);
+    if (objects.debug_text_2) {
+        my_spangroup_set_recolor_text(objects.debug_text_2, buf);
     }
-    tick_screen_debug_autonomous_2();
-}
-
-void tick_screen_debug_autonomous_2() {
-    TelemetryData t;
-    if (!ros2subscriber_get_telemetry(&t)) {
-        return;
-    }
-    lv_obj_t *table = objects.autonomous_debug_text_2;
-    if (!table) return;
-
-    // Header
-    set_cell(table, 0, 0, "VCU CONTROL STATUS (2/5)", 0x00BFFF);
-    lv_table_add_cell_ctrl(table, 0, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-
-    // Row 1
-    set_cell(table, 1, 0, "IGN Man:", 0xFFFFFF);
-    set_cell(table, 1, 1, (t.vcu_ign_man == 1) ? "ON" : "OFF", (t.vcu_ign_man == 1) ? 0x00FF00 : 0x808080);
-    set_cell(table, 1, 2, "IGN Auto:", 0xFFFFFF);
-    set_cell(table, 1, 3, (t.vcu_ign_auto == 1) ? "ON" : "OFF", (t.vcu_ign_auto == 1) ? 0x00FF00 : 0x808080);
-
-    // Row 2
-    set_cell(table, 2, 0, "R2D Man:", 0xFFFFFF);
-    set_cell(table, 2, 1, (t.vcu_r2d_man == 1) ? "ON" : "OFF", (t.vcu_r2d_man == 1) ? 0x00FF00 : 0x808080);
-    set_cell(table, 2, 2, "R2D Auto:", 0xFFFFFF);
-    set_cell(table, 2, 3, (t.vcu_r2d_auto == 1) ? "ON" : "OFF", (t.vcu_r2d_auto == 1) ? 0x00FF00 : 0x808080);
-
-    // Row 3
-    set_cell(table, 3, 0, "Shutdown:", 0xFFFFFF);
-    set_cell(table, 3, 1, (t.vcu_shutdown == 1) ? "CLOSED" : "OPEN", (t.vcu_shutdown == 1) ? 0x00FF00 : 0xFF0000);
-    set_cell(table, 3, 2, "State:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%-25.0f", t.vcu_state);
-
-    // Row 4
-    set_cell(table, 4, 0, "HV:", 0xFFFFFF);
-    set_cell(table, 4, 1, (t.vcu_hv == 1) ? "ACTIVE" : "OFF", (t.vcu_hv == 1) ? 0xFF0000 : 0x808080);
-    set_cell(table, 4, 2, "", 0xFFFFFF);
-    set_cell(table, 4, 3, "", 0xFFFFFF);
-
-    // Row 5
-    set_cell(table, 5, 0, "RPM Act:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%-5.0f", t.vcu_rpm_act);
-    set_cell(table, 5, 2, "RPM Tgt:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%-5.0f", t.vcu_rpm_tgt);
-}
-
-void create_screen_debug_autonomous_3() {
-    void *flowState = getFlowState(0, 9);
-    (void)flowState;
-    lv_obj_t *obj = lv_obj_create(0);
-    objects.debug_autonomous_3 = obj;
-    lv_obj_set_pos(obj, 0, 0);
-    lv_obj_set_size(obj, 800, 480);
-    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    {
-        objects.autonomous_debug_text_3 = create_debug_table(obj, 11);
-    }
-    tick_screen_debug_autonomous_3();
-}
-
-void tick_screen_debug_autonomous_3() {
-    TelemetryData t;
-    if (!ros2subscriber_get_telemetry(&t)) {
-        return;
-    }
-    lv_obj_t *table = objects.autonomous_debug_text_3;
-    if (!table) return;
-
-    // Header
-    set_cell(table, 0, 0, "DV DYNAMICS & STATUS (3/5)", 0x00BFFF);
-    lv_table_add_cell_ctrl(table, 0, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-
-    // Row 1
-    set_cell(table, 1, 0, "Spd Act:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%3.1f km/h", t.dv_spd_act);
-    set_cell(table, 1, 2, "Spd Tgt:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 3, 0xFFFFFF, "%3.1f km/h", t.dv_spd_tgt);
-
-    // Row 2
-    set_cell(table, 2, 0, "Str Act:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%5.1f", t.dv_str_act);
-    set_cell(table, 2, 2, "Str Tgt:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 3, 0xFFFFFF, "%5.1f", t.dv_str_tgt);
-
-    // Row 3
-    set_cell(table, 3, 0, "Brk Act:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%3.0f%%", t.dv_brk_act);
-    set_cell(table, 3, 2, "Brk Tgt:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%3.0f%%", t.dv_brk_tgt);
-
-    // Row 4
-    set_cell(table, 4, 0, "Mot Act:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%3.0f%%", t.dv_mot_act);
-    set_cell(table, 4, 2, "Mot Tgt:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 3, 0xFFFFFF, "%3.0f%%", t.dv_mot_tgt);
-
-    // Row 5
-    set_cell(table, 5, 0, "Acc Lon:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%6.3f m/s2", t.dv_acc_lon);
-    set_cell(table, 5, 2, "Acc Lat:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%6.3f m/s2", t.dv_acc_lat);
-
-    // Row 6
-    set_cell(table, 6, 0, "Yaw:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 1, 0xFFFFFF, "%6.3f /s", t.dv_yaw);
-    set_cell(table, 6, 2, "", 0xFFFFFF);
-    set_cell(table, 6, 3, "", 0xFFFFFF);
-
-    // Row 7: Header Statuses
-    set_cell(table, 7, 0, "STATUSES", 0x00BFFF);
-    lv_table_add_cell_ctrl(table, 7, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 7, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 7, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-
-    // Row 8
-    set_cell(table, 8, 0, "AS:", 0xFFFFFF);
-    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%3.0f", t.dv_as_status);
-    set_cell(table, 8, 2, "EBS:", 0xFFFFFF);
-    set_cell_fmt(table, 8, 3, 0xFFFFFF, "%3.0f", t.dv_ebs_state);
-
-    // Row 9
-    set_cell(table, 9, 0, "AMI:", 0xFFFFFF);
-    set_cell_fmt(table, 9, 1, 0xFFFFFF, "%3.0f", t.dv_ami_state);
-    set_cell(table, 9, 2, "Steer:", 0xFFFFFF);
-    set_cell_fmt(table, 9, 3, 0xFFFFFF, "%3.0f", t.dv_steer_state);
-
-    // Row 10
-    set_cell(table, 10, 0, "EBS Red:", 0xFFFFFF);
-    set_cell_fmt(table, 10, 1, 0xFFFFFF, "%3.0f", t.dv_ebs_red_state);
-    set_cell(table, 10, 2, "", 0xFFFFFF);
-    set_cell(table, 10, 3, "", 0xFFFFFF);
-}
-
-void create_screen_debug_autonomous_4() {
-    void *flowState = getFlowState(0, 10);
-    (void)flowState;
-    lv_obj_t *obj = lv_obj_create(0);
-    objects.debug_autonomous_4 = obj;
-    lv_obj_set_pos(obj, 0, 0);
-    lv_obj_set_size(obj, 800, 480);
-    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    {
-        objects.autonomous_debug_text_4 = create_debug_table(obj, 8);
-    }
-    tick_screen_debug_autonomous_4();
-}
-
-void tick_screen_debug_autonomous_4() {
-    TelemetryData t;
-    if (!ros2subscriber_get_telemetry(&t)) {
-        return;
-    }
-    lv_obj_t *table = objects.autonomous_debug_text_4;
-    if (!table) return;
-
-    // Header
-    set_cell(table, 0, 0, "PRESSURES & STEERING (4/5)", 0x00BFFF);
-    lv_table_add_cell_ctrl(table, 0, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-
-    // Row 1
-    uint32_t ebs_press_color = (t.ebs_tank_f > 10.0f) ? 0x00FF00 : 0xFF0000;
-    set_cell(table, 1, 0, "EBS Tank F:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 1, ebs_press_color, "%5.1f bar", t.ebs_tank_f);
-    set_cell(table, 1, 2, "EBS Tank R:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 3, ebs_press_color, "%5.1f bar", t.ebs_tank_r);
-
-    // Row 2
-    set_cell(table, 2, 0, "Brk Press F:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%5.1f bar", t.brk_press_f);
-    set_cell(table, 2, 2, "Brk Press R:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 3, 0xFFFFFF, "%5.1f bar", t.brk_press_r);
-
-    // Row 3: Header Steering Motor
-    set_cell(table, 3, 0, "STEERING MOTOR", 0x00BFFF);
-    lv_table_add_cell_ctrl(table, 3, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 3, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 3, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-
-    // Row 4
-    set_cell(table, 4, 0, "Pos:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%5.1f", t.steer_pos);
-    set_cell(table, 4, 2, "Spd:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 3, 0xFFFFFF, "%6.0f ERPM", t.steer_spd);
-
-    // Row 5
-    set_cell(table, 5, 0, "Curr:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%5.1f A", t.steer_curr);
-    set_cell(table, 5, 2, "Drv T:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%3.0f C", t.steer_temp);
-
-    // Row 6
-    set_cell(table, 6, 0, "Err:", 0xFFFFFF);
-    set_cell(table, 6, 1, (t.steer_err == 0) ? "OK" : "FAULT", (t.steer_err == 0) ? 0x00FF00 : 0xFF0000);
-    set_cell(table, 6, 2, "Pos Target:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 3, 0xFFFFFF, "%5.1f", t.steer_pos_tgt);
-
-    // Row 7
-    set_cell(table, 7, 0, "Torque Tgt:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 1, 0xFFFFFF, "%5.2f Nm", t.vcu_torque_tgt);
-    set_cell(table, 7, 2, "", 0xFFFFFF);
-    set_cell(table, 7, 3, "", 0xFFFFFF);
-}
-
-void create_screen_debug_autonomous_5() {
-    void *flowState = getFlowState(0, 11);
-    (void)flowState;
-    lv_obj_t *obj = lv_obj_create(0);
-    objects.debug_autonomous_5 = obj;
-    lv_obj_set_pos(obj, 0, 0);
-    lv_obj_set_size(obj, 800, 480);
-    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    {
-        objects.autonomous_debug_text_5 = create_debug_table(obj, 10);
-    }
-    tick_screen_debug_autonomous_5();
-}
-
-void tick_screen_debug_autonomous_5() {
-    TelemetryData t;
-    if (!ros2subscriber_get_telemetry(&t)) {
-        return;
-    }
-    lv_obj_t *table = objects.autonomous_debug_text_5;
-    if (!table) return;
-
-    // Header
-    set_cell(table, 0, 0, "SLAM & ACQUISITION STATUS (5/5)", 0x00BFFF);
-    lv_table_add_cell_ctrl(table, 0, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 0, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-
-    // Row 1
-    set_cell(table, 1, 0, "Laps:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%2.0f", t.slam_laps);
-    set_cell(table, 1, 2, "Cones:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 3, 0xFFFFFF, "%3.0f", t.slam_cones);
-
-    // Row 2
-    set_cell(table, 2, 0, "All Cones:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%4.0f", t.slam_all);
-    set_cell(table, 2, 2, "RES Signal:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 3, 0xFFFFFF, "%5.1f", t.res_signal);
-
-    // Row 3
-    set_cell(table, 3, 0, "RES Status:", 0xFFFFFF);
-    set_cell(table, 3, 1, (t.res_signal > 0.0f) ? "OK" : "ESTOP", (t.res_signal > 0.0f) ? 0x00FF00 : 0xFF0000);
-    set_cell(table, 3, 2, "", 0xFFFFFF);
-    set_cell(table, 3, 3, "", 0xFFFFFF);
-
-    // Row 4: Header Acquisition Boards
-    set_cell(table, 4, 0, "ACQUISITION BOARDS", 0x00BFFF);
-    lv_table_add_cell_ctrl(table, 4, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 4, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-    lv_table_add_cell_ctrl(table, 4, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-
-    // Row 5
-    set_cell(table, 5, 0, "AQT1 BrkP:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%5.1f bar", t.aqt1_brkp);
-    set_cell(table, 5, 2, "AQT1 RES:", 0xFFFFFF);
-    set_cell(table, 5, 3, (t.aqt1_res == 1) ? "ACTIVE" : "OK", (t.aqt1_res == 1) ? 0xFF0000 : 0x00FF00);
-
-    // Row 6
-    set_cell(table, 6, 0, "AQT1 BOTS:", 0xFFFFFF);
-    set_cell(table, 6, 1, (t.aqt1_bots == 1) ? "ACTIVE" : "OK", (t.aqt1_bots == 1) ? 0xFF0000 : 0x00FF00);
-    set_cell(table, 6, 2, "AQT4 Inertia:", 0xFFFFFF);
-    set_cell(table, 6, 3, (t.aqt4_inertia == 1) ? "ACTIVE" : "OK", (t.aqt4_inertia == 1) ? 0xFF0000 : 0x00FF00);
-
-    // Row 7
-    set_cell(table, 7, 0, "AQT4 Emer:", 0xFFFFFF);
-    set_cell(table, 7, 1, (t.aqt4_emer == 1) ? "ACTIVE" : "OK", (t.aqt4_emer == 1) ? 0xFF0000 : 0x00FF00);
-    set_cell(table, 7, 2, "AQT7 BrkP:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 3, 0xFFFFFF, "%5.1f bar", t.aqt7_brkp);
-
-    // Row 8
-    set_cell(table, 8, 0, "AQT2 WhlAng:", 0xFFFFFF);
-    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%5.1f", t.aqt2_whl_ang);
-    set_cell(table, 8, 2, "AQT3 WhlAng:", 0xFFFFFF);
-    set_cell_fmt(table, 8, 3, 0xFFFFFF, "%5.1f", t.aqt3_whl_ang);
-
-    // Row 9
-    set_cell(table, 9, 0, "AQT4 StAng:", 0xFFFFFF);
-    set_cell_fmt(table, 9, 1, 0xFFFFFF, "%5.1f", t.aqt4_st_ang);
-    set_cell(table, 9, 2, "", 0xFFFFFF);
-    set_cell(table, 9, 3, "", 0xFFFFFF);
 }
 
 typedef void (*tick_screen_func_t)();
 tick_screen_func_t tick_screen_funcs[] = {
     tick_screen_driver_view,
     tick_screen_autonomous,
-    tick_screen_debug_1,
-    tick_screen_debug_inverter_2,
-    tick_screen_debug_3,
-    tick_screen_debug_wheels_4,
-    tick_screen_debug_5,
+    tick_screen_debug,
+    tick_screen_debug_autonomous,
     tick_screen_debug_autonomous_1,
-    tick_screen_debug_autonomous_2,
-    tick_screen_debug_autonomous_3,
-    tick_screen_debug_autonomous_4,
-    tick_screen_debug_autonomous_5,
 };
 void tick_screen(int screen_index) {
-    if (screen_index >= 0 && screen_index < 12) {
+    if (screen_index >= 0 && screen_index < 5) {
         tick_screen_funcs[screen_index]();
     }
 }
@@ -2118,7 +1431,6 @@ ext_font_desc_t fonts[] = {
     { "orbitron_15", &ui_font_orbitron_15 },
     { "orbitron_bold_25", &ui_font_orbitron_bold_25 },
     { "orbitron_bold_40", &ui_font_orbitron_bold_40 },
-    { "orbitron_25", &ui_font_orbitron_25 },
 #if LV_FONT_MONTSERRAT_8
     { "MONTSERRAT_8", &lv_font_montserrat_8 },
 #endif
@@ -2207,14 +1519,7 @@ eez_flow_init_fonts(fonts, sizeof(fonts) / sizeof(ext_font_desc_t));
     // Create screens
     create_screen_driver_view();
     create_screen_autonomous();
-    create_screen_debug_1();
-    create_screen_debug_inverter_2();
-    create_screen_debug_3();
-    create_screen_debug_wheels_4();
-    create_screen_debug_5();
+    create_screen_debug();
+    create_screen_debug_autonomous();
     create_screen_debug_autonomous_1();
-    create_screen_debug_autonomous_2();
-    create_screen_debug_autonomous_3();
-    create_screen_debug_autonomous_4();
-    create_screen_debug_autonomous_5();
 }
