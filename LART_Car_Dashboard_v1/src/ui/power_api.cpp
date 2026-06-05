@@ -49,8 +49,12 @@ extern "C" void ui_update_telemetry_vars(const void *t_ptr) {
 
     // 4. LV (Low Voltage, Volts)
     float lv_val = t->ivt_u3 / 1000.0f;
-    if (lv_val <= 0.0f) {
-        lv_val = t->ams_mcu_vref > 0.0f ? t->ams_mcu_vref : 24.0f;
+    if (lv_val < 20.0f || lv_val > 28.0f) {
+        if (t->ams_mcu_vref >= 20.0f && t->ams_mcu_vref <= 28.0f) {
+            lv_val = t->ams_mcu_vref;
+        } else {
+            lv_val = 24.0f;
+        }
     }
     eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_LV, eez::FloatValue(lv_val));
 

@@ -137,7 +137,10 @@ def _encodable_range(signal: cantools.db.Signal) -> tuple[float, float]:
 
     # Guard against degenerate ranges
     if enc_max <= enc_min:
-        enc_max = enc_min + abs(scale) if scale else enc_min + 1.0
+        if signal.maximum is not None and signal.minimum is not None and signal.maximum == signal.minimum:
+            pass
+        else:
+            enc_max = enc_min + abs(scale) if scale else enc_min + 1.0
 
     return enc_min, enc_max
 
@@ -149,6 +152,13 @@ def _make_signal_value(signal: cantools.db.Signal, t: float) -> float:
     cantools.encode_message never raises an out-of-range error.
     """
     enc_min, enc_max = _encodable_range(signal)
+    name_lower = signal.name.lower()
+
+    if name_lower == 'ivt_result_u3':
+        # Simulate 20V to 28.8V LV battery in mV (20000 to 28800 mV)
+        soc_lv = max(20.0, 78.0 - 0.06 * t)
+        val = 20000.0 + (soc_lv / 100.0) * (28800.0 - 20000.0)
+        return _clamp(val, enc_min, enc_max)
 
     # 1. Discrete Choice / State Signals
     if getattr(signal, 'choices', None) is not None and len(signal.choices) > 0:
@@ -158,10 +168,11 @@ def _make_signal_value(signal: cantools.db.Signal, t: float) -> float:
         return float(keys[idx])
 
     # 2. Boolean/Discrete Flags
-    name_lower = signal.name.lower()
     unit = (signal.unit or "").strip()
     
-    if signal.length == 1 or any(x in name_lower for x in ['ign', 'r2d', 'button', 'emergency', 'switch', 'res', 'bots', 'enable', 'ok', 'fail', 'error', 'active', 'state', 'status']):
+    boolean_keywords = ['ign', 'r2d', 'button', 'emergency', 'switch', 'bots', 'enable', 'ok', 'fail', 'error', 'active', 'state', 'status']
+    is_boolean = signal.length == 1 or any(x in name_lower for x in boolean_keywords) or ('res' in name_lower and 'result' not in name_lower)
+    if is_boolean:
         if enc_max - enc_min == 1:
             return 1.0 if (int(t * 0.25) % 2 == 0) else 0.0
         elif enc_max - enc_min <= 10:
@@ -423,8 +434,8 @@ class CanSimulatorNode(Node):
             # scaling=True  → values are physical (scale+offset applied automatically).
             # padding=True  → zero-pad frames whose signals don't fill all bytes.
             try:
-                data = self._db.encode_message(
-                    dbc_msg.name, signals, scaling=True, padding=True
+                data = dbc_msg.encode(
+                    signals, scaling=True, padding=True
                 )
             except Exception as exc:
                 self.get_logger().warn(
