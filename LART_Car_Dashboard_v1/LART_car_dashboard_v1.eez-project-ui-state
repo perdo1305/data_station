@@ -1,11 +1,11 @@
 {
   "navigation": {
-    "selectedUserPageObject": "[LART_car_dashboard_v1.eez-project]:/userPages/4",
+    "selectedUserPageObject": "[LART_car_dashboard_v1.eez-project]:/userPages/0",
     "selectedActionObject": "[LART_car_dashboard_v1.eez-project]:/actions/0",
     "selectedGlobalVariableObject": "[LART_car_dashboard_v1.eez-project]:/variables/globalVariables/3",
     "selectedStructureObject": "[LART_car_dashboard_v1.eez-project]:/variables/structures/0",
     "selectedStyleObject": "[LART_car_dashboard_v1.eez-project]:/lvglStyles/styles/1",
-    "selectedFontObject": "[LART_car_dashboard_v1.eez-project]:/fonts/8",
+    "selectedFontObject": "[LART_car_dashboard_v1.eez-project]:/fonts/0",
     "selectedBitmapObject": "[LART_car_dashboard_v1.eez-project]:/bitmaps/0",
     "subnavigationSelectedItems": {
       "variables-tab/sub-navigation/selected-item": "Global"
@@ -214,6 +214,7 @@
               "type": "tabset",
               "id": "EDITORS",
               "weight": 55.628992444385226,
+              "selected": 2,
               "enableDeleteWhenEmpty": false,
               "enableClose": false,
               "children": [
@@ -1262,9 +1263,7 @@
             "0": {
               "0": {}
             },
-            "1": {
-              "$selected": true
-            },
+            "1": {},
             "2": {},
             "3": {
               "0": {}
