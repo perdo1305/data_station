@@ -39,7 +39,7 @@
         {
           "objID": "6f617675-0c02-4cc3-e27d-80b2e83efd39",
           "fileName": "screens.c",
-          "template": "#include <string.h>\n\n#include \"screens.h\"\n#include \"images.h\"\n#include \"fonts.h\"\n#include \"actions.h\"\n#include \"vars.h\"\n#include \"styles.h\"\n#include \"ui.h\"\n\n//${eez-studio LVGL_SCREENS_DEF}\n//${eez-studio LVGL_SCREENS_DEF_EXT}"
+          "template": "#include <string.h>\n#include <stdio.h>\n#include <stdlib.h>\n#include <ctype.h>\n\n#include \"ros2subscriber.h\"\n#include \"screens.h\"\n#include \"images.h\"\n#include \"fonts.h\"\n#include \"actions.h\"\n#include \"vars.h\"\n#include \"styles.h\"\n#include \"ui.h\"\n\n// Custom recolor text parser for lv_spangroup\nvoid my_spangroup_set_recolor_text_font(lv_obj_t *spangroup, const char *text, const lv_font_t *font) {\n    if (!spangroup) return;\n    \n    // Clear all existing spans\n    while (lv_spangroup_get_span_count(spangroup) > 0) {\n        lv_span_t *span = lv_spangroup_get_child(spangroup, 0);\n        if (span) {\n            lv_spangroup_delete_span(spangroup, span);\n        }\n    }\n    \n    uint32_t default_color = 0xff9400; // default amber\n    uint32_t active_color = default_color;\n    \n    const char *ptr = text;\n    const char *chunk_start = text;\n    \n    while (*ptr != '\\0') {\n        // Check if starting a color tag: #RRGGBB\n        if (ptr[0] == '#' &&\n            isxdigit((unsigned char)ptr[1]) && isxdigit((unsigned char)ptr[2]) &&\n            isxdigit((unsigned char)ptr[3]) && isxdigit((unsigned char)ptr[4]) &&\n            isxdigit((unsigned char)ptr[5]) && isxdigit((unsigned char)ptr[6])) {\n            \n            // First emit previous chunk if any\n            int len = ptr - chunk_start;\n            if (len > 0) {\n                lv_span_t *span = lv_spangroup_new_span(spangroup);\n                char *temp = malloc(len + 1);\n                memcpy(temp, chunk_start, len);\n                temp[len] = '\\0';\n                lv_span_set_text(span, temp);\n                free(temp);\n                lv_style_set_text_color(&span->style, lv_color_hex(active_color));\n                lv_style_set_text_font(&span->style, font);\n            }\n            \n            // Parse new color\n            char hex[7];\n            memcpy(hex, ptr + 1, 6);\n            hex[6] = '\\0';\n            active_color = strtol(hex, NULL, 16);\n            \n            ptr += 7;\n            chunk_start = ptr;\n        }\n        // Check if it's a closing tag: #\n        else if (ptr[0] == '#' && ptr[1] != '\\0') {\n            // First emit previous chunk if any\n            int len = ptr - chunk_start;\n            if (len > 0) {\n                lv_span_t *span = lv_spangroup_new_span(spangroup);\n                char *temp = malloc(len + 1);\n                memcpy(temp, chunk_start, len);\n                temp[len] = '\\0';\n                lv_span_set_text(span, temp);\n                free(temp);\n                lv_style_set_text_color(&span->style, lv_color_hex(active_color));\n                lv_style_set_text_font(&span->style, &ui_font_orbitron_bold_15);\n            }\n            \n            active_color = default_color;\n            ptr += 1;\n            chunk_start = ptr;\n        }\n        else {\n            ptr++;\n        }\n    }\n    \n    // Emit final chunk if any\n    int len = ptr - chunk_start;\n    if (len > 0) {\n        lv_span_t *span = lv_spangroup_new_span(spangroup);\n        char *temp = malloc(len + 1);\n        memcpy(temp, chunk_start, len);\n        temp[len] = '\\0';\n        lv_span_set_text(span, temp);\n        free(temp);\n        lv_style_set_text_color(&span->style, lv_color_hex(active_color));\n        lv_style_set_text_font(&span->style, &ui_font_orbitron_bold_15);\n    }\n    \n    lv_spangroup_refr_mode(spangroup);\n}\n\nobjects_t objects;\n\nstatic const char *screen_names[] = { \"Driver View\", \"Autonomous\", \"Debug\", \"Debug Autonomous\", \"Debug Autonomous_1\" };\nstatic const char *object_names[] = { \"driver_view\", \"autonomous\", \"debug\", \"debug_autonomous\", \"debug_autonomous_1\", \"ready_label\", \"middle_container\", \"temp_motor_container\", \"tempmotor_label\", \"lap_times_container\", \"laptime_label\", \"lastlap_label\", \"obj0\", \"obj1\", \"temp_inv_container\", \"temp_inv_label\", \"speed_container\", \"speed_label\", \"km_label\", \"brake_acell_presure_container\", \"brake_presure_bar\", \"accellerator_presure_bar\", \"obj2\", \"hv_bar\", \"lv_bar\", \"hv_label\", \"lv_label\", \"obj3\", \"hv_bar_1\", \"lv_bar_1\", \"hv_label_1\", \"lv_label_1\", \"brake_presure_container\", \"brake_presure_bar_1\", \"brake_presure_bar_2\", \"pneumaticresure_container\", \"brake_presure_bar_3\", \"brake_presure_bar_4\", \"lap_times_container_1\", \"laptime_label_1\", \"lastlap_label_1\", \"obj4\", \"obj5\", \"max_speed_container\", \"km_label_2\", \"km_label_1\", \"speed_label_1\", \"km_label_3\", \"obj6\", \"debug_text_1\", \"debug_text\", \"debug_text_2\" };\n\n//\n// Event handlers\n//\n\nlv_obj_t *tick_value_change_obj;\n\n//\n// Screens\n//\n\nvoid create_screen_driver_view() {\n    void *flowState = getFlowState(0, 0);\n    (void)flowState;\n    lv_obj_t *obj = lv_obj_create(0);\n    objects.driver_view = obj;\n    lv_obj_set_pos(obj, 0, 0);\n    lv_obj_set_size(obj, 800, 480);\n    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);\n    {\n        lv_obj_t *parent_obj = obj;\n        {\n            // readyLabel\n            lv_obj_t *obj = lv_label_create(parent_obj);\n            objects.ready_label = obj;\n            lv_obj_set_pos(obj, 0, 200);\n            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n            add_style_text(obj);\n            lv_obj_set_style_text_color(obj, lv_color_hex(0x3fff00), LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_align(obj, LV_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_50, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_label_set_text(obj, \"\");\n        }\n        {\n            // middleContainer\n            lv_obj_t *obj = lv_obj_create(parent_obj);\n            objects.middle_container = obj;\n            lv_obj_set_pos(obj, 84, 49);\n            lv_obj_set_size(obj, 632, 354);\n            add_style_info_containers(obj);\n            lv_obj_set_style_radius(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_top(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_bottom(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_bg_opa(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_width(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            {\n                lv_obj_t *parent_obj = obj;\n                {\n                    // tempMotorContainer\n                    lv_obj_t *obj = lv_obj_create(parent_obj);\n                    objects.temp_motor_container = obj;\n                    lv_obj_set_pos(obj, 473, 0);\n                    lv_obj_set_size(obj, 155, 88);\n                    add_style_info_containers(obj);\n                    lv_obj_set_style_border_color(obj, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_border_width(obj, 2, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_border_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_radius(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_top(obj, 20, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_bottom(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_bg_opa(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    {\n                        lv_obj_t *parent_obj = obj;\n                        {\n                            // tempmotorLabel\n                            lv_obj_t *obj = lv_label_create(parent_obj);\n                            objects.tempmotor_label = obj;\n                            lv_obj_set_pos(obj, 10, 22);\n                            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                            add_style_text(obj);\n                            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_30, LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_label_set_text(obj, \"\");\n                        }\n                        {\n                            lv_obj_t *obj = lv_label_create(parent_obj);\n                            lv_obj_set_pos(obj, 10, -15);\n                            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                            add_style_text(obj);\n                            lv_label_set_text_static(obj, \"Temp Motor\");\n                        }\n                    }\n                }\n                {\n                    // lapTimesContainer\n                    lv_obj_t *obj = lv_obj_create(parent_obj);\n                    objects.lap_times_container = obj;\n                    lv_obj_set_pos(obj, 123, 235);\n                    lv_obj_set_size(obj, 387, 103);\n                    add_style_info_containers(obj);\n                    lv_obj_set_style_border_color(obj, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_border_width(obj, 2, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_border_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_radius(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_top(obj, 20, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_bottom(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_bg_opa(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    {\n                        lv_obj_t *parent_obj = obj;\n                        {\n                            // laptimeLabel\n                            lv_obj_t *obj = lv_label_create(parent_obj);\n                            objects.laptime_label = obj;\n                            lv_obj_set_pos(obj, 6, 9);\n                            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                            add_style_text(obj);\n                            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_25, LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_label_set_text_static(obj, \"00:00.000\");\n                        }\n                        {\n                            lv_obj_t *obj = lv_label_create(parent_obj);\n                            lv_obj_set_pos(obj, 6, -14);\n                            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                            add_style_text(obj);\n                            lv_label_set_text_static(obj, \"Lap Times\");\n                        }\n                        {\n                            // lastlapLabel\n                            lv_obj_t *obj = lv_label_create(parent_obj);\n                            objects.lastlap_label = obj;\n                            lv_obj_set_pos(obj, 5, 42);\n                            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                            add_style_text(obj);\n                            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_25, LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_obj_set_style_text_color(obj, lv_color_hex(0xfff500), LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_label_set_text_static(obj, \"00:00.000\");\n                        }\n                        {\n                            lv_obj_t *obj = lv_label_create(parent_obj);\n                            objects.obj0 = obj;\n                            lv_obj_set_pos(obj, 329, 11);\n                            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                            add_style_text(obj);\n                            lv_obj_set_style_text_color(obj, lv_color_hex(0xfefefe), LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_50, LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_label_set_text(obj, \"\");\n                        }\n                        {\n                            lv_obj_t *obj = lv_label_create(parent_obj);\n                            lv_obj_set_pos(obj, 235, -14);\n                            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                            add_style_text(obj);\n                            lv_label_set_text_static(obj, \"Diff\");\n                        }\n                        {\n                            lv_obj_t *obj = lv_label_create(parent_obj);\n                            objects.obj1 = obj;\n                            lv_obj_set_pos(obj, 220, 21);\n                            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                            add_style_text(obj);\n                            lv_obj_set_style_text_color(obj, lv_color_hex(0xff0000), LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_30, LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_label_set_text(obj, \"\");\n                        }\n                        {\n                            lv_obj_t *obj = lv_label_create(parent_obj);\n                            lv_obj_set_pos(obj, 317, -15);\n                            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                            add_style_text(obj);\n                            lv_label_set_text_static(obj, \"Lap\");\n                        }\n                    }\n                }\n                {\n                    // tempInvContainer\n                    lv_obj_t *obj = lv_obj_create(parent_obj);\n                    objects.temp_inv_container = obj;\n                    lv_obj_set_pos(obj, 0, 5);\n                    lv_obj_set_size(obj, 155, 88);\n                    add_style_info_containers(obj);\n                    lv_obj_set_style_border_color(obj, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_border_width(obj, 2, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_border_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_radius(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_top(obj, 20, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_bottom(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_bg_opa(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    {\n                        lv_obj_t *parent_obj = obj;\n                        {\n                            // tempInvLabel\n                            lv_obj_t *obj = lv_label_create(parent_obj);\n                            objects.temp_inv_label = obj;\n                            lv_obj_set_pos(obj, 11, 20);\n                            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                            add_style_text(obj);\n                            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_30, LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_label_set_text(obj, \"\");\n                        }\n                        {\n                            lv_obj_t *obj = lv_label_create(parent_obj);\n                            lv_obj_set_pos(obj, 20, -15);\n                            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                            add_style_text(obj);\n                            lv_label_set_text_static(obj, \"Temp INV\");\n                        }\n                    }\n                }\n                {\n                    // speedContainer\n                    lv_obj_t *obj = lv_obj_create(parent_obj);\n                    objects.speed_container = obj;\n                    lv_obj_set_pos(obj, 141, 98);\n                    lv_obj_set_size(obj, 351, 118);\n                    lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_top(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_bottom(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_bg_opa(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_border_width(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_radius(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    {\n                        lv_obj_t *parent_obj = obj;\n                        {\n                            // speedLabel\n                            lv_obj_t *obj = lv_label_create(parent_obj);\n                            objects.speed_label = obj;\n                            lv_obj_set_pos(obj, -47, 6);\n                            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                            lv_obj_set_style_text_font(obj, &ui_font_orbiter_bold_100, LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_obj_set_style_bg_color(obj, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_obj_set_style_text_color(obj, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_obj_set_style_align(obj, LV_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_label_set_text(obj, \"\");\n                        }\n                        {\n                            // kmLabel\n                            lv_obj_t *obj = lv_label_create(parent_obj);\n                            objects.km_label = obj;\n                            lv_obj_set_pos(obj, 253, 64);\n                            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                            add_style_text(obj);\n                            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_30, LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_label_set_text_static(obj, \"Km/h\");\n                        }\n                    }\n                }\n                {\n                    // brakeAcellPresureContainer\n                    lv_obj_t *obj = lv_obj_create(parent_obj);\n                    objects.brake_acell_presure_container = obj;\n                    lv_obj_set_pos(obj, 530, 235);\n                    lv_obj_set_size(obj, 102, 103);\n                    add_style_info_containers(obj);\n                    lv_obj_set_style_border_color(obj, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_border_width(obj, 2, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_border_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_radius(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_top(obj, 20, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_pad_bottom(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_bg_opa(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    {\n                        lv_obj_t *parent_obj = obj;\n                        {\n                            lv_obj_t *obj = lv_label_create(parent_obj);\n                            lv_obj_set_pos(obj, 11, -15);\n                            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                            add_style_text(obj);\n                            lv_label_set_text_static(obj, \"Pedals\");\n                        }\n                        {\n                            // brakePresureBar\n                            lv_obj_t *obj = lv_bar_create(parent_obj);\n                            objects.brake_presure_bar = obj;\n                            lv_obj_set_pos(obj, 18, 8);\n                            lv_obj_set_size(obj, 20, 67);\n                            lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);\n                            lv_bar_set_value(obj, 0, LV_ANIM_ON);\n                            lv_bar_set_start_value(obj, 0, LV_ANIM_ON);\n                            lv_obj_set_style_radius(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_obj_set_style_radius(obj, 0, LV_PART_INDICATOR | LV_STATE_DEFAULT);\n                            lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_INDICATOR | LV_STATE_DEFAULT);\n                        }\n                        {\n                            // accelleratorPresureBar\n                            lv_obj_t *obj = lv_bar_create(parent_obj);\n                            objects.accellerator_presure_bar = obj;\n                            lv_obj_set_pos(obj, 62, 8);\n                            lv_obj_set_size(obj, 20, 67);\n                            lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);\n                            lv_bar_set_value(obj, 0, LV_ANIM_ON);\n                            lv_bar_set_start_value(obj, 0, LV_ANIM_ON);\n                            lv_obj_set_style_radius(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_obj_set_style_bg_color(obj, lv_color_hex(0x02ff02), LV_PART_MAIN | LV_STATE_DEFAULT);\n                            lv_obj_set_style_radius(obj, 0, LV_PART_INDICATOR | LV_STATE_DEFAULT);\n                            lv_obj_set_style_bg_color(obj, lv_color_hex(0x02ff02), LV_PART_INDICATOR | LV_STATE_DEFAULT);\n                        }\n                    }\n                }\n            }\n        }\n        {\n            lv_obj_t *obj = lv_led_create(parent_obj);\n            objects.obj2 = obj;\n            lv_obj_set_pos(obj, 120, 8);\n            lv_obj_set_size(obj, 32, 32);\n            lv_led_set_color(obj, lv_color_hex(0x29ff00));\n            lv_led_set_brightness(obj, 255);\n        }\n        {\n            // hvBar\n            lv_obj_t *obj = lv_bar_create(parent_obj);\n            objects.hv_bar = obj;\n            lv_obj_set_pos(obj, 734, 106);\n            lv_obj_set_size(obj, 53, 314);\n            lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);\n            lv_bar_set_value(obj, 0, LV_ANIM_ON);\n            lv_bar_set_start_value(obj, 0, LV_ANIM_ON);\n            add_style_bar(obj);\n            lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_INDICATOR | LV_STATE_DEFAULT);\n            lv_obj_set_style_line_width(obj, 10, LV_PART_INDICATOR | LV_STATE_DEFAULT);\n            lv_obj_set_style_radius(obj, 0, LV_PART_INDICATOR | LV_STATE_DEFAULT);\n            lv_obj_set_style_bg_opa(obj, 52, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_radius(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_color(obj, lv_color_hex(0xfb0000), LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_width(obj, 3, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_MAIN | LV_STATE_DEFAULT);\n        }\n        {\n            // lvBar\n            lv_obj_t *obj = lv_bar_create(parent_obj);\n            objects.lv_bar = obj;\n            lv_obj_set_pos(obj, 11, 108);\n            lv_obj_set_size(obj, 53, 314);\n            lv_bar_set_range(obj, 18, 30);\n            lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);\n            lv_bar_set_value(obj, 0, LV_ANIM_ON);\n            lv_bar_set_start_value(obj, 0, LV_ANIM_ON);\n            add_style_bar(obj);\n            lv_obj_set_style_bg_color(obj, lv_color_hex(0x02ff02), LV_PART_INDICATOR | LV_STATE_DEFAULT);\n            lv_obj_set_style_bg_opa(obj, 255, LV_PART_INDICATOR | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_color(obj, lv_color_hex(0x02ff02), LV_PART_INDICATOR | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_opa(obj, 255, LV_PART_INDICATOR | LV_STATE_DEFAULT);\n            lv_obj_set_style_bg_opa(obj, 52, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_bg_color(obj, lv_color_hex(0x02ff02), LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_color(obj, lv_color_hex(0x02ff02), LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_width(obj, 3, LV_PART_MAIN | LV_STATE_DEFAULT);\n        }\n        {\n            // hvLabel\n            lv_obj_t *obj = lv_label_create(parent_obj);\n            objects.hv_label = obj;\n            lv_obj_set_pos(obj, 733, 436);\n            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n            add_style_text(obj);\n            lv_label_set_text(obj, \"\");\n        }\n        {\n            // lvLabel\n            lv_obj_t *obj = lv_label_create(parent_obj);\n            objects.lv_label = obj;\n            lv_obj_set_pos(obj, 9, 436);\n            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n            add_style_text(obj);\n            lv_label_set_text(obj, \"\");\n        }\n        {\n            lv_obj_t *obj = lv_label_create(parent_obj);\n            lv_obj_set_pos(obj, 736, 73);\n            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n            add_style_text(obj);\n            lv_label_set_text_static(obj, \"SOC\");\n        }\n        {\n            lv_obj_t *obj = lv_label_create(parent_obj);\n            lv_obj_set_pos(obj, 22, 75);\n            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n            add_style_text(obj);\n            lv_label_set_text_static(obj, \"LV\");\n        }\n        {\n            lv_obj_t *obj = lv_label_create(parent_obj);\n            lv_obj_set_pos(obj, 11, 17);\n            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n            add_style_text(obj);\n            lv_label_set_text_static(obj, \"STATUS\");\n        }\n    }\n    \n    tick_screen_driver_view();\n}\n\nvoid tick_screen_driver_view() {\n    void *flowState = getFlowState(0, 0);\n    (void)flowState;\n    {\n        const char *new_val = evalTextProperty(flowState, 0, 3, \"Failed to evaluate Text in Label widget\");\n        const char *cur_val = lv_label_get_text(objects.ready_label);\n        if (strcmp(new_val, cur_val) != 0) {\n            tick_value_change_obj = objects.ready_label;\n            lv_label_set_text(objects.ready_label, new_val);\n            tick_value_change_obj = NULL;\n        }\n    }\n    {\n        const char *new_val = evalTextProperty(flowState, 4, 3, \"Failed to evaluate Text in Label widget\");\n        const char *cur_val = lv_label_get_text(objects.tempmotor_label);\n        if (strcmp(new_val, cur_val) != 0) {\n            tick_value_change_obj = objects.tempmotor_label;\n            lv_label_set_text(objects.tempmotor_label, new_val);\n            tick_value_change_obj = NULL;\n        }\n    }\n    {\n        const char *new_val = evalTextProperty(flowState, 10, 3, \"Failed to evaluate Text in Label widget\");\n        const char *cur_val = lv_label_get_text(objects.obj0);\n        if (strcmp(new_val, cur_val) != 0) {\n            tick_value_change_obj = objects.obj0;\n            lv_label_set_text(objects.obj0, new_val);\n            tick_value_change_obj = NULL;\n        }\n    }\n    {\n        const char *new_val = evalTextProperty(flowState, 12, 3, \"Failed to evaluate Text in Label widget\");\n        const char *cur_val = lv_label_get_text(objects.obj1);\n        if (strcmp(new_val, cur_val) != 0) {\n            tick_value_change_obj = objects.obj1;\n            lv_label_set_text(objects.obj1, new_val);\n            tick_value_change_obj = NULL;\n        }\n    }\n    {\n        const char *new_val = evalTextProperty(flowState, 15, 3, \"Failed to evaluate Text in Label widget\");\n        const char *cur_val = lv_label_get_text(objects.temp_inv_label);\n        if (strcmp(new_val, cur_val) != 0) {\n            tick_value_change_obj = objects.temp_inv_label;\n            lv_label_set_text(objects.temp_inv_label, new_val);\n            tick_value_change_obj = NULL;\n        }\n    }\n    {\n        const char *new_val = evalTextProperty(flowState, 18, 3, \"Failed to evaluate Text in Label widget\");\n        const char *cur_val = lv_label_get_text(objects.speed_label);\n        if (strcmp(new_val, cur_val) != 0) {\n            tick_value_change_obj = objects.speed_label;\n            lv_label_set_text(objects.speed_label, new_val);\n            tick_value_change_obj = NULL;\n        }\n    }\n    {\n        int32_t new_val = evalIntegerProperty(flowState, 22, 3, \"Failed to evaluate Value in Bar widget\");\n        int32_t cur_val = lv_bar_get_value(objects.brake_presure_bar);\n        if (new_val != cur_val) {\n            tick_value_change_obj = objects.brake_presure_bar;\n            lv_bar_set_value(objects.brake_presure_bar, new_val, LV_ANIM_ON);\n            tick_value_change_obj = NULL;\n        }\n    }\n    {\n        int32_t new_val = evalIntegerProperty(flowState, 23, 3, \"Failed to evaluate Value in Bar widget\");\n        int32_t cur_val = lv_bar_get_value(objects.accellerator_presure_bar);\n        if (new_val != cur_val) {\n            tick_value_change_obj = objects.accellerator_presure_bar;\n            lv_bar_set_value(objects.accellerator_presure_bar, new_val, LV_ANIM_ON);\n            tick_value_change_obj = NULL;\n        }\n    }\n    {\n        int32_t new_val = evalIntegerProperty(flowState, 25, 3, \"Failed to evaluate Value in Bar widget\");\n        int32_t cur_val = lv_bar_get_value(objects.hv_bar);\n        if (new_val != cur_val) {\n            tick_value_change_obj = objects.hv_bar;\n            lv_bar_set_value(objects.hv_bar, new_val, LV_ANIM_ON);\n            tick_value_change_obj = NULL;\n        }\n    }\n    {\n        int32_t new_val = evalIntegerProperty(flowState, 26, 3, \"Failed to evaluate Value in Bar widget\");\n        int32_t cur_val = lv_bar_get_value(objects.lv_bar);\n        if (new_val != cur_val) {\n            tick_value_change_obj = objects.lv_bar;\n            lv_bar_set_value(objects.lv_bar, new_val, LV_ANIM_ON);\n            tick_value_change_obj = NULL;\n        }\n    }\n    {\n        const char *new_val = evalTextProperty(flowState, 27, 3, \"Failed to evaluate Text in Label widget\");\n        const char *cur_val = lv_label_get_text(objects.hv_label);\n        if (strcmp(new_val, cur_val) != 0) {\n            tick_value_change_obj = objects.hv_label;\n            lv_label_set_text(objects.hv_label, new_val);\n            tick_value_change_obj = NULL;\n        }\n    }\n    {\n        const char *new_val = evalTextProperty(flowState, 28, 3, \"Failed to evaluate Text in Label widget\");\n        const char *cur_val = lv_label_get_text(objects.lv_label);\n        if (strcmp(new_val, cur_val) != 0) {\n            tick_value_change_obj = objects.lv_label;\n            lv_label_set_text(objects.lv_label, new_val);\n            tick_value_change_obj = NULL;\n        }\n    }\n}\n\nvoid create_screen_autonomous() {\n    void *flowState = getFlowState(0, 1);\n    (void)flowState;\n    lv_obj_t *obj = lv_obj_create(0);\n    objects.autonomous = obj;\n    lv_obj_set_pos(obj, 0, 0);\n    lv_obj_set_size(obj, 800, 480);\n    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);\n    lv_obj_set_style_text_color(obj, lv_color_hex(0xff9400), LV_PART_MAIN | LV_STATE_DEFAULT);\n    {\n        lv_obj_t *parent_obj = obj;\n        {\n            lv_obj_t *obj = lv_label_create(parent_obj);\n            lv_obj_set_pos(obj, 70, 10);\n            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n            add_style_text(obj);\n            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_50, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_label_set_text_static(obj, \"AUTONOMOUS DRIVING\");\n        }\n        {\n            lv_obj_t *obj = lv_label_create(parent_obj);\n            objects.obj3 = obj;\n            lv_obj_set_pos(obj, 106, 407);\n            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n            add_style_text(obj);\n            lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_text_color(obj, lv_color_hex(0x13ff00), LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_40, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_label_set_text(obj, \"\");\n        }\n        {\n            // hvBar_1\n            lv_obj_t *obj = lv_bar_create(parent_obj);\n            objects.hv_bar_1 = obj;\n            lv_obj_set_pos(obj, 736, 96);\n            lv_obj_set_size(obj, 53, 314);\n            lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);\n            lv_bar_set_value(obj, 0, LV_ANIM_OFF);\n            lv_bar_set_start_value(obj, 0, LV_ANIM_OFF);\n            add_style_bar(obj);\n            lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_INDICATOR | LV_STATE_DEFAULT);\n            lv_obj_set_style_line_width(obj, 10, LV_PART_INDICATOR | LV_STATE_DEFAULT);\n            lv_obj_set_style_radius(obj, 0, LV_PART_INDICATOR | LV_STATE_DEFAULT);\n            lv_obj_set_style_bg_opa(obj, 52, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_radius(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_color(obj, lv_color_hex(0xfb0000), LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_width(obj, 3, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_MAIN | LV_STATE_DEFAULT);\n        }\n        {\n            // lvBar_1\n            lv_obj_t *obj = lv_bar_create(parent_obj);\n            objects.lv_bar_1 = obj;\n            lv_obj_set_pos(obj, 13, 98);\n            lv_obj_set_size(obj, 53, 314);\n            lv_bar_set_range(obj, 18, 30);\n            lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);\n            lv_bar_set_value(obj, 0, LV_ANIM_ON);\n            lv_bar_set_start_value(obj, 0, LV_ANIM_ON);\n            add_style_bar(obj);\n            lv_obj_set_style_bg_color(obj, lv_color_hex(0x02ff02), LV_PART_INDICATOR | LV_STATE_DEFAULT);\n            lv_obj_set_style_bg_opa(obj, 255, LV_PART_INDICATOR | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_color(obj, lv_color_hex(0x02ff02), LV_PART_INDICATOR | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_opa(obj, 255, LV_PART_INDICATOR | LV_STATE_DEFAULT);\n            lv_obj_set_style_bg_opa(obj, 52, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_bg_color(obj, lv_color_hex(0x02ff02), LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_color(obj, lv_color_hex(0x02ff02), LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_width(obj, 3, LV_PART_MAIN | LV_STATE_DEFAULT);\n        }\n        {\n            // hvLabel_1\n            lv_obj_t *obj = lv_label_create(parent_obj);\n            objects.hv_label_1 = obj;\n            lv_obj_set_pos(obj, 738, 424);\n            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n            add_style_text(obj);\n            lv_label_set_text(obj, \"\");\n        }\n        {\n            // lvLabel_1\n            lv_obj_t *obj = lv_label_create(parent_obj);\n            objects.lv_label_1 = obj;\n            lv_obj_set_pos(obj, 11, 426);\n            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n            add_style_text(obj);\n            lv_label_set_text(obj, \"\");\n        }\n        {\n            lv_obj_t *obj = lv_label_create(parent_obj);\n            lv_obj_set_pos(obj, 738, 63);\n            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n            add_style_text(obj);\n            lv_label_set_text_static(obj, \"SOC\");\n        }\n        {\n            lv_obj_t *obj = lv_label_create(parent_obj);\n            lv_obj_set_pos(obj, 24, 65);\n            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n            add_style_text(obj);\n            lv_label_set_text_static(obj, \"LV\");\n        }\n        {\n            // brakePresureContainer\n            lv_obj_t *obj = lv_obj_create(parent_obj);\n            objects.brake_presure_container = obj;\n            lv_obj_set_pos(obj, 97, 90);\n            lv_obj_set_size(obj, 93, 154);\n            add_style_info_containers(obj);\n            lv_obj_set_style_border_color(obj, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_width(obj, 2, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_radius(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_top(obj, 20, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_bottom(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_bg_opa(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            {\n                lv_obj_t *parent_obj = obj;\n                {\n                    lv_obj_t *obj = lv_label_create(parent_obj);\n                    lv_obj_set_pos(obj, 4, -16);\n                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                    add_style_text(obj);\n                    lv_label_set_text_static(obj, \"BRK\\nPRESS\");\n                }\n                {\n                    // brakePresureBar_1\n                    lv_obj_t *obj = lv_bar_create(parent_obj);\n                    objects.brake_presure_bar_1 = obj;\n                    lv_obj_set_pos(obj, 16, 25);\n                    lv_obj_set_size(obj, 20, 81);\n                    lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);\n                    lv_bar_set_value(obj, 67, LV_ANIM_OFF);\n                    lv_bar_set_start_value(obj, 0, LV_ANIM_OFF);\n                    lv_obj_set_style_radius(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_radius(obj, 0, LV_PART_INDICATOR | LV_STATE_DEFAULT);\n                    lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_INDICATOR | LV_STATE_DEFAULT);\n                }\n                {\n                    // brakePresureBar_2\n                    lv_obj_t *obj = lv_bar_create(parent_obj);\n                    objects.brake_presure_bar_2 = obj;\n                    lv_obj_set_pos(obj, 57, 25);\n                    lv_obj_set_size(obj, 20, 81);\n                    lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);\n                    lv_bar_set_value(obj, 67, LV_ANIM_OFF);\n                    lv_bar_set_start_value(obj, 0, LV_ANIM_OFF);\n                    lv_obj_set_style_radius(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_radius(obj, 0, LV_PART_INDICATOR | LV_STATE_DEFAULT);\n                    lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_INDICATOR | LV_STATE_DEFAULT);\n                }\n                {\n                    lv_obj_t *obj = lv_label_create(parent_obj);\n                    lv_obj_set_pos(obj, 14, 106);\n                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                    add_style_text(obj);\n                    lv_label_set_text_static(obj, \"10\");\n                }\n                {\n                    lv_obj_t *obj = lv_label_create(parent_obj);\n                    lv_obj_set_pos(obj, 54, 106);\n                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                    add_style_text(obj);\n                    lv_label_set_text_static(obj, \"10\");\n                }\n            }\n        }\n        {\n            // pneumaticresureContainer\n            lv_obj_t *obj = lv_obj_create(parent_obj);\n            objects.pneumaticresure_container = obj;\n            lv_obj_set_pos(obj, 219, 90);\n            lv_obj_set_size(obj, 93, 154);\n            add_style_info_containers(obj);\n            lv_obj_set_style_border_color(obj, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_width(obj, 2, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_radius(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_top(obj, 20, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_bottom(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_bg_opa(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            {\n                lv_obj_t *parent_obj = obj;\n                {\n                    lv_obj_t *obj = lv_label_create(parent_obj);\n                    lv_obj_set_pos(obj, 3, -16);\n                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                    add_style_text(obj);\n                    lv_label_set_text_static(obj, \"PNEUM\\nPRESS\");\n                }\n                {\n                    // brakePresureBar_3\n                    lv_obj_t *obj = lv_bar_create(parent_obj);\n                    objects.brake_presure_bar_3 = obj;\n                    lv_obj_set_pos(obj, 16, 25);\n                    lv_obj_set_size(obj, 20, 81);\n                    lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);\n                    lv_bar_set_value(obj, 67, LV_ANIM_OFF);\n                    lv_bar_set_start_value(obj, 0, LV_ANIM_OFF);\n                    lv_obj_set_style_radius(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_radius(obj, 0, LV_PART_INDICATOR | LV_STATE_DEFAULT);\n                    lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_INDICATOR | LV_STATE_DEFAULT);\n                }\n                {\n                    // brakePresureBar_4\n                    lv_obj_t *obj = lv_bar_create(parent_obj);\n                    objects.brake_presure_bar_4 = obj;\n                    lv_obj_set_pos(obj, 57, 25);\n                    lv_obj_set_size(obj, 20, 81);\n                    lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);\n                    lv_bar_set_value(obj, 67, LV_ANIM_OFF);\n                    lv_bar_set_start_value(obj, 0, LV_ANIM_OFF);\n                    lv_obj_set_style_radius(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_radius(obj, 0, LV_PART_INDICATOR | LV_STATE_DEFAULT);\n                    lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_INDICATOR | LV_STATE_DEFAULT);\n                }\n                {\n                    lv_obj_t *obj = lv_label_create(parent_obj);\n                    lv_obj_set_pos(obj, 14, 106);\n                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                    add_style_text(obj);\n                    lv_label_set_text_static(obj, \"10\");\n                }\n                {\n                    lv_obj_t *obj = lv_label_create(parent_obj);\n                    lv_obj_set_pos(obj, 54, 106);\n                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                    add_style_text(obj);\n                    lv_label_set_text_static(obj, \"10\");\n                }\n            }\n        }\n        {\n            // lapTimesContainer_1\n            lv_obj_t *obj = lv_obj_create(parent_obj);\n            objects.lap_times_container_1 = obj;\n            lv_obj_set_pos(obj, 410, 208);\n            lv_obj_set_size(obj, 314, 103);\n            add_style_info_containers(obj);\n            lv_obj_set_style_border_color(obj, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_width(obj, 2, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_radius(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_top(obj, 20, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_bottom(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_bg_opa(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            {\n                lv_obj_t *parent_obj = obj;\n                {\n                    // laptimeLabel_1\n                    lv_obj_t *obj = lv_label_create(parent_obj);\n                    objects.laptime_label_1 = obj;\n                    lv_obj_set_pos(obj, 7, 11);\n                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                    add_style_text(obj);\n                    lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_25, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_label_set_text_static(obj, \"00:00.000\");\n                }\n                {\n                    lv_obj_t *obj = lv_label_create(parent_obj);\n                    lv_obj_set_pos(obj, 6, -14);\n                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                    add_style_text(obj);\n                    lv_label_set_text_static(obj, \"Lap Times\");\n                }\n                {\n                    // lastlapLabel_1\n                    lv_obj_t *obj = lv_label_create(parent_obj);\n                    objects.lastlap_label_1 = obj;\n                    lv_obj_set_pos(obj, 5, 42);\n                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                    add_style_text(obj);\n                    lv_obj_set_style_text_color(obj, lv_color_hex(0xfff500), LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_25, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_label_set_text_static(obj, \"00:00.000\");\n                }\n                {\n                    lv_obj_t *obj = lv_label_create(parent_obj);\n                    objects.obj4 = obj;\n                    lv_obj_set_pos(obj, 265, 18);\n                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                    add_style_text(obj);\n                    lv_obj_set_style_text_color(obj, lv_color_hex(0xfefefe), LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_50, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_label_set_text_static(obj, \"1\");\n                }\n                {\n                    lv_obj_t *obj = lv_label_create(parent_obj);\n                    lv_obj_set_pos(obj, 197, -14);\n                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                    add_style_text(obj);\n                    lv_label_set_text_static(obj, \"Diff\");\n                }\n                {\n                    lv_obj_t *obj = lv_label_create(parent_obj);\n                    objects.obj5 = obj;\n                    lv_obj_set_pos(obj, 197, 14);\n                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                    add_style_text(obj);\n                    lv_obj_set_style_text_color(obj, lv_color_hex(0xff0000), LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_label_set_text_static(obj, \"+0.8\");\n                }\n                {\n                    lv_obj_t *obj = lv_label_create(parent_obj);\n                    lv_obj_set_pos(obj, 253, -14);\n                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                    add_style_text(obj);\n                    lv_label_set_text_static(obj, \"Lap\");\n                }\n            }\n        }\n        {\n            // maxSpeedContainer\n            lv_obj_t *obj = lv_obj_create(parent_obj);\n            objects.max_speed_container = obj;\n            lv_obj_set_pos(obj, 379, 65);\n            lv_obj_set_size(obj, 345, 143);\n            lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_top(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_pad_bottom(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_bg_opa(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_border_width(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_radius(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);\n            {\n                lv_obj_t *parent_obj = obj;\n                {\n                    // kmLabel_2\n                    lv_obj_t *obj = lv_label_create(parent_obj);\n                    objects.km_label_2 = obj;\n                    lv_obj_set_pos(obj, 22, 6);\n                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                    add_style_text(obj);\n                    lv_label_set_text_static(obj, \"Max speed\");\n                }\n                {\n                    // kmLabel_1\n                    lv_obj_t *obj = lv_label_create(parent_obj);\n                    objects.km_label_1 = obj;\n                    lv_obj_set_pos(obj, 230, 72);\n                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                    add_style_text(obj);\n                    lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_30, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_label_set_text_static(obj, \"Km/h\");\n                }\n                {\n                    // speedLabel_1\n                    lv_obj_t *obj = lv_label_create(parent_obj);\n                    objects.speed_label_1 = obj;\n                    lv_obj_set_pos(obj, -55, 15);\n                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n                    lv_obj_set_style_text_font(obj, &ui_font_orbiter_bold_100, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_bg_color(obj, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_text_color(obj, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_obj_set_style_align(obj, LV_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);\n                    lv_label_set_text(obj, \"\");\n                }\n            }\n        }\n        {\n            // kmLabel_3\n            lv_obj_t *obj = lv_label_create(parent_obj);\n            objects.km_label_3 = obj;\n            lv_obj_set_pos(obj, 106, 268);\n            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n            add_style_text(obj);\n            lv_obj_set_style_text_color(obj, lv_color_hex(0xf7ff00), LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_30, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_label_set_text(obj, \"\");\n        }\n    }\n    \n    tick_screen_autonomous();\n}\n\nvoid tick_screen_autonomous() {\n    void *flowState = getFlowState(0, 1);\n    (void)flowState;\n    {\n        const char *new_val = evalTextProperty(flowState, 2, 3, \"Failed to evaluate Text in Label widget\");\n        const char *cur_val = lv_label_get_text(objects.obj3);\n        if (strcmp(new_val, cur_val) != 0) {\n            tick_value_change_obj = objects.obj3;\n            lv_label_set_text(objects.obj3, new_val);\n            tick_value_change_obj = NULL;\n        }\n    }\n    {\n        int32_t new_val = evalIntegerProperty(flowState, 3, 3, \"Failed to evaluate Value in Bar widget\");\n        int32_t cur_val = lv_bar_get_value(objects.hv_bar_1);\n        if (new_val != cur_val) {\n            tick_value_change_obj = objects.hv_bar_1;\n            lv_bar_set_value(objects.hv_bar_1, new_val, LV_ANIM_OFF);\n            tick_value_change_obj = NULL;\n        }\n    }\n    {\n        int32_t new_val = evalIntegerProperty(flowState, 4, 3, \"Failed to evaluate Value in Bar widget\");\n        int32_t cur_val = lv_bar_get_value(objects.lv_bar_1);\n        if (new_val != cur_val) {\n            tick_value_change_obj = objects.lv_bar_1;\n            lv_bar_set_value(objects.lv_bar_1, new_val, LV_ANIM_ON);\n            tick_value_change_obj = NULL;\n        }\n    }\n    {\n        const char *new_val = evalTextProperty(flowState, 5, 3, \"Failed to evaluate Text in Label widget\");\n        const char *cur_val = lv_label_get_text(objects.hv_label_1);\n        if (strcmp(new_val, cur_val) != 0) {\n            tick_value_change_obj = objects.hv_label_1;\n            lv_label_set_text(objects.hv_label_1, new_val);\n            tick_value_change_obj = NULL;\n        }\n    }\n    {\n        const char *new_val = evalTextProperty(flowState, 6, 3, \"Failed to evaluate Text in Label widget\");\n        const char *cur_val = lv_label_get_text(objects.lv_label_1);\n        if (strcmp(new_val, cur_val) != 0) {\n            tick_value_change_obj = objects.lv_label_1;\n            lv_label_set_text(objects.lv_label_1, new_val);\n            tick_value_change_obj = NULL;\n        }\n    }\n    {\n        const char *new_val = evalTextProperty(flowState, 32, 3, \"Failed to evaluate Text in Label widget\");\n        const char *cur_val = lv_label_get_text(objects.speed_label_1);\n        if (strcmp(new_val, cur_val) != 0) {\n            tick_value_change_obj = objects.speed_label_1;\n            lv_label_set_text(objects.speed_label_1, new_val);\n            tick_value_change_obj = NULL;\n        }\n    }\n    {\n        const char *new_val = evalTextProperty(flowState, 33, 3, \"Failed to evaluate Text in Label widget\");\n        const char *cur_val = lv_label_get_text(objects.km_label_3);\n        if (strcmp(new_val, cur_val) != 0) {\n            tick_value_change_obj = objects.km_label_3;\n            lv_label_set_text(objects.km_label_3, new_val);\n            tick_value_change_obj = NULL;\n        }\n    }\n}\n\nvoid create_screen_debug() {\n    void *flowState = getFlowState(0, 2);\n    (void)flowState;\n    lv_obj_t *obj = lv_obj_create(0);\n    objects.debug = obj;\n    lv_obj_set_pos(obj, 0, 0);\n    lv_obj_set_size(obj, 800, 480);\n    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);\n    {\n        lv_obj_t *parent_obj = obj;\n        {\n            lv_obj_t *obj = lv_label_create(parent_obj);\n            objects.obj6 = obj;\n            lv_obj_set_pos(obj, 19, 10);\n            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);\n            lv_obj_set_style_text_color(obj, lv_color_hex(0xff9400), LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_text_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_25, LV_PART_MAIN | LV_STATE_DEFAULT);\n            lv_label_set_text_static(obj, \"DEBUG\");\n        }\n        {\n            // debugText_1\n            lv_obj_t *obj = lv_spangroup_create(parent_obj);\n            objects.debug_text_1 = obj;\n            lv_obj_set_pos(obj, 0, 0);\n            lv_obj_set_size(obj, 800, 480);\n            lv_spangroup_set_mode(obj, LV_SPAN_MODE_FIXED);\n            lv_spangroup_set_align(obj, LV_TEXT_ALIGN_LEFT);\n            my_spangroup_set_recolor_text(obj, \" GENERAL DEBUG                                                          \\n------------------------------------------+---------------------------------------------\\n AMS                                     | INVERTER (HV500)\\n State:    --------   SOC: ---.--%       | ERPM:     ------    Duty: ---.--%\\n Runtime:  -----s     Fans: ---%         | Vin:      ---- V    Fault: ---\\n MCU Vref: -.--V      MCU T: ---°C      | AC Curr:  ---.- Apk DC: ---.- A\\n PEC Err:  ---        Flt Cnt: ---       | Ctrl T:   ---.-°C   Mot T: ---.-°C\\n Slaves:   --/12      FW: --------       | Throttle: ---%      Brake: ---%\\n Fault1:   ----------------              | FOC Id:   ---.- Apk Iq: ---.- Apk\\n Fault2:   ----------------              | DriveEn:  ---        CtrlMode: ---\\n------------------------------------------+---------------------------------------------\\n PRECHARGE                               | IVT (ISABELLE)\\n State:    ----------------              | Current:  -------- mA\\n AIR+: --- AIR-: --- CHG: --- DIS: ---   | U1: -------- mV  U2: -------- mV\\n                                         | U3: -------- mV  Temp: -----.-°C\\n PACK OVERVIEW                           | Power: -------- W  Energy: -------- Wh\\n Vmax: -.---V   Vmin: -.---V             |\\n Tmax: ---.--°C Tmin: ---.--°C           | PEDALS / DASHBOARD\\n                                         | APPS1: ----.- APPS2: ----.-\\n------------------------------------------+---------------------------------------------\\n WHEELS                                  | REAR SENSORS (AQT7)\\n FL: --- km/h  T:---.-°C  BrkT:---.-°C  | NTC1: ---.-°C  NTC2: ---.-°C\\n FR: --- km/h  T:---.-°C  BrkT:---.-°C  | NTC3: ---.-°C\\n RL: --- km/h  T:---.-°C  BrkT:---.-°C  | Susp R: ---.- mm  Susp L: ---.- mm\\n RR: --- km/h  T:---.-°C  BrkT:---.-°C  | IGN: ---  R2D: ---\\n------------------------------------------+---------------------------------------------\");\n        }\n    }\n    \n    tick_screen_debug();\n}\n\nvoid tick_screen_debug() {\n    TelemetryData t;\n    if (!ros2subscriber_get_telemetry(&t)) {\n        return;\n    }\n\n    char buf[4096];\n    \n    // Status strings\n    const char *ams_state_str = (t.ams_state == 1) ? \"#00FF00 RUNNING#\" : ((t.ams_state == 0) ? \"#808080 IDLE#\" : \"#FF0000 FAULT#\");\n    const char *precharge_state_str = (t.precharge_state == 2) ? \"#00FF00 DONE#\" : \n                                      ((t.precharge_state == 1) ? \"#FFA500 CHG#\" : \n                                      ((t.precharge_state == 0) ? \"#808080 OFF#\" : \"#FF0000 FAULT#\"));\n\n    const char *air_pos_str = (t.air_pos == 1) ? \"#00FF00 ON#\" : \"#808080 OFF#\";\n    const char *air_min_str = (t.air_min == 1) ? \"#00FF00 ON#\" : \"#808080 OFF#\";\n    const char *ctc_chg_str = (t.ctc_charge == 1) ? \"#00FF00 ON#\" : \"#808080 OFF#\";\n    const char *ctc_dis_str = (t.ctc_discharge == 1) ? \"#00FF00 ON#\" : \"#808080 OFF#\";\n\n    const char *inv_drive_str = (t.inv_drive_en == 1) ? \"#00FF00 ENABLED#\" : \"#808080 DISABLED#\";\n    const char *rear_ign_str = (t.rear_ign == 1) ? \"#00FF00 ON#\" : \"#808080 OFF#\";\n    const char *rear_r2d_str = (t.rear_r2d == 1) ? \"#00FF00 ON#\" : \"#808080 OFF#\";\n\n    // Value color mappings\n    const char *soc_color = (t.ams_soc > 30) ? \"#00FF00\" : ((t.ams_soc > 15) ? \"#FFA500\" : \"#FF0000\");\n    const char *pec_color = (t.ams_pec_err == 0) ? \"#00FF00\" : \"#FF0000\";\n    const char *fault_color = (t.ams_fault_cnt == 0) ? \"#00FF00\" : \"#FF0000\";\n    const char *inv_fault_color = (t.inv_fault == 0) ? \"#00FF00\" : \"#FF0000\";\n    const char *tmax_color = (t.t_max < 50.0f) ? \"#00FF00\" : \"#FF0000\";\n    const char *vmin_color = (t.v_min > 3.0f) ? \"#00FF00\" : \"#FF0000\";\n\n    snprintf(buf, sizeof(buf),\n        \" #00BFFF GENERAL DEBUG#\\n\"\n        \"------------------------------------------+---------------------------------------------\\n\"\n        \" #00BFFF AMS#                                     | #00BFFF INVERTER (HV500)#\\n\"\n        \" State:    %-25s      | ERPM:     #FFFFFF %-8.0f# Duty: #FFFFFF %5.1f%%#\\n\"\n        \" SOC:      %s%5.1f%%#                         | Vin:      #FFFFFF %-6.0f# V  Fault: %s%-3.0f#\\n\"\n        \" Runtime:  #FFFFFF %5.0f s#                       | AC Curr:  #FFFFFF %5.1f Apk# DC: #FFFFFF %5.1f A#\\n\"\n        \" MCU Vref: #FFFFFF %4.2f V#  MCU T: #FFFFFF %3.0f°C#      | Ctrl T:   #FFFFFF %5.1f°C#  Mot T:#FFFFFF %5.1f°C#\\n\"\n        \" PEC Err:  %s%3.0f#      Flt Cnt: %s%3.0f#       | Throttle: #FFFFFF %3.0f%%#    Brake:#FFFFFF %3.0f%%#\\n\"\n        \" Slaves:   #FFFFFF %2.0f/12#     FW: #FFFFFF %-8.0f#      | FOC Id:   #FFFFFF %5.1f Apk# Iq:  #FFFFFF %5.1f Apk#\\n\"\n        \" Fault:    %s%-25.0f#      | DriveEn:  %-25s\\n\"\n        \"------------------------------------------+---------------------------------------------\\n\"\n        \" #00BFFF PRECHARGE#                               | #00BFFF IVT (ISABELLE)#\\n\"\n        \" State:    %-25s      | Current:  #FFFFFF %8.0f mA#\\n\"\n        \" AIRpos:   %-15s AIRmin: %-15s | U1: #FFFFFF %7.0f mV#  U2: #FFFFFF %7.0f mV#\\n\"\n        \" CTCchg:   %-15s CTCdis: %-15s | U3: #FFFFFF %7.0f mV#  Temp:#FFFFFF %5.1f°C#\\n\"\n        \"                                          | Power:   #FFFFFF %7.0f W#  Energy:#FFFFFF %7.0f Wh#\\n\"\n        \" #00BFFF PACK OVERVIEW#                           |\\n\"\n        \" Vmax: #FFFFFF %5.3f V#   Vmin: %s%5.3f V#           | #00BFFF PEDALS / DASHBOARD#\\n\"\n        \" Tmax: %s%5.1f°C#  Tmin: #FFFFFF %5.1f°C#           | APPS1:   #FFFFFF %6.1f#  APPS2: #FFFFFF %6.1f#\\n\"\n        \"------------------------------------------+---------------------------------------------\\n\"\n        \" #00BFFF WHEELS#                                  | #00BFFF REAR SENSORS (AQT7)#\\n\"\n        \" FL: #FFFFFF %3.0f km/h# T:#FFFFFF %4.1f°C# BrkT:#FFFFFF %4.1f°C# | NTC1: #FFFFFF %4.1f°C# NTC2: #FFFFFF %4.1f°C#\\n\"\n        \" FR: #FFFFFF %3.0f km/h# T:#FFFFFF %4.1f°C# BrkT:#FFFFFF %4.1f°C# | NTC3: #FFFFFF %4.1f°C#\\n\"\n        \" RL: #FFFFFF %3.0f km/h# T:#FFFFFF %4.1f°C# BrkT:#FFFFFF %4.1f°C# | Susp R:#FFFFFF %5.1f mm# Susp L:#FFFFFF %5.1f mm#\\n\"\n        \" RR: #FFFFFF %3.0f km/h# T:#FFFFFF %4.1f°C# BrkT:#FFFFFF %4.1f°C# | IGN:  %-15s R2D:  %-15s\\n\"\n        \"------------------------------------------+---------------------------------------------\\n\",\n        ams_state_str, t.inv_erpm, t.inv_duty,\n        soc_color, t.ams_soc, t.inv_vin, inv_fault_color, t.inv_fault,\n        t.ams_runtime, t.inv_ac_curr, t.inv_dc_curr,\n        t.ams_mcu_vref, t.ams_mcu_temp, t.inv_temp_ctrl, t.inv_temp_mot,\n        pec_color, t.ams_pec_err, fault_color, t.ams_fault_cnt, t.inv_throttle, t.inv_brake,\n        t.ams_slaves, t.ams_fw, t.inv_foc_id, t.inv_foc_iq,\n        fault_color, t.ams_fault_cnt, inv_drive_str,\n        precharge_state_str, t.ivt_current,\n        air_pos_str, air_min_str, t.ivt_u1, t.ivt_u2,\n        ctc_chg_str, ctc_dis_str, t.ivt_u3, t.ivt_temp,\n        t.ivt_power, t.ivt_energy,\n        t.v_max, vmin_color, t.v_min,\n        tmax_color, t.t_max, t.t_min, t.apps1, t.apps2,\n        t.spd_fl, t.temp_fl, t.brk_fl, t.ntc1, t.ntc2,\n        t.spd_fr, t.temp_fr, t.brk_fr, t.ntc3,\n        t.spd_rl, t.temp_rl, t.brk_rl, t.susp_r, t.susp_l,\n        t.spd_rr, t.temp_rr, t.brk_rr, rear_ign_str, rear_r2d_str\n    );\n\n    if (objects.debug_text_1) {\n        my_spangroup_set_recolor_text(objects.debug_text_1, buf);\n    }\n}\n\nvoid create_screen_debug_autonomous() {\n    void *flowState = getFlowState(0, 3);\n    (void)flowState;\n    lv_obj_t *obj = lv_obj_create(0);\n    objects.debug_autonomous = obj;\n    lv_obj_set_pos(obj, 0, 0);\n    lv_obj_set_size(obj, 800, 480);\n    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);\n    {\n        lv_obj_t *parent_obj = obj;\n        {\n            // debugText\n            lv_obj_t *obj = lv_spangroup_create(parent_obj);\n            objects.debug_text = obj;\n            lv_obj_set_pos(obj, 0, 0);\n            lv_obj_set_size(obj, 800, 480);\n            lv_spangroup_set_mode(obj, LV_SPAN_MODE_FIXED);\n            lv_spangroup_set_align(obj, LV_TEXT_ALIGN_LEFT);\n            my_spangroup_set_recolor_text(obj, \" AUTONOMOUS DEBUG  1/2                                                     \\n ACU                                     | DV DYNAMICS\\n ACU State:  ---------  AS: --------     | Spd Act: --- km/h   Spd Tgt: --- km/h\\n ASSI:       ---------  Mission: ---     | Str Act: ---.-°     Str Tgt: ---.-°\\n ASMS: ---  IGN: ---  EMERGENCY: ---     | Brk Act: ---%       Brk Tgt: ---%\\n Emerg Cause: ------------------         | Mot Act: ---%       Mot Tgt: ---%\\n CPU Temp: ---°C                         | Acc Lon: ---.--- m/s2\\n                                         | Acc Lat: ---.--- m/s2\\n JETSON                                  | Yaw:    ---.--- °/s\\n AS State: ---  Mission: ---             |\\n Temp: ---°C  CPU: ---% GPU: ---%       | DV STATUS\\n Emerg Cause: ----------------           | AS: ---  EBS: ---  AMI: ---\\n                                         | Steer: ---  EBS Red: ---\\n------------------------------------------+---------------------------------------------\\n VCU                                     | EBS / ASF PRESSURES\\n IGN Man: ---  IGN Auto: ---             | EBS Tank F: ---- bar  R: ---- bar\\n R2D Man: ---  R2D Auto: ---             | Brk Press F: ---- bar  R: ---- bar\\n Shutdown: ---  State: ---               |\\n R2D Raw: ---  IGN Raw: ---              | CUBEMARS STEERING\\n HV: ---  BrkF: ---  BrkR: ---          | Pos: -----.-°  Spd: ------ ERPM\\n                                         | Curr: ---.- A  Drv T: ---°C  Err: ---\\n VCU RPM                                 | Pos Target: ------ °\\n RPM Act: -----  RPM Tgt: -----         |    Torque Tgt: -----                                      | SLAM / CONES | Laps: --  Cones: ---  All: ------\");\n        }\n    }\n    \n    tick_screen_debug_autonomous();\n}\n\nvoid tick_screen_debug_autonomous() {\n    TelemetryData t;\n    if (!ros2subscriber_get_telemetry(&t)) {\n        return;\n    }\n\n    char buf[4096];\n\n    // Status strings\n    const char *acu_state_str = \"#FF0000 FAULT#\";\n    if (t.acu_state == 0) acu_state_str = \"#808080 INIT#\";\n    else if (t.acu_state == 1) acu_state_str = \"#FFA500 MISS_SEL#\";\n    else if (t.acu_state == 2) acu_state_str = \"#00BFFF JET_WAIT#\";\n    else if (t.acu_state == 3) acu_state_str = \"#FFA500 SEQ#\";\n    else if (t.acu_state == 4) acu_state_str = \"#00FF00 READY#\";\n    else if (t.acu_state == 5) acu_state_str = \"#00FF00 DRIVING#\";\n    else if (t.acu_state == 7) acu_state_str = \"#FF0000 EMERG#\";\n\n    const char *as_state_str = \"#808080 OFF#\";\n    if (t.acu_as_state == 2) as_state_str = \"#00FF00 READY#\";\n    else if (t.acu_as_state == 3) as_state_str = \"#00FF00 DRIVING#\";\n    else if (t.acu_as_state == 4) as_state_str = \"#FF0000 EMERG#\";\n    else if (t.acu_as_state == 5) as_state_str = \"#00FF00 FINISH#\";\n\n    const char *assi_state_str = \"#808080 OFF#\";\n    if (t.acu_assi_state == 2) assi_state_str = \"#00FF00 READY#\";\n    else if (t.acu_assi_state == 3) assi_state_str = \"#00FF00 DRIVING#\";\n    else if (t.acu_assi_state == 4) assi_state_str = \"#FF0000 EMERG#\";\n    else if (t.acu_assi_state == 5) assi_state_str = \"#00FF00 FINISH#\";\n\n    const char *acu_emerg_str = \"#00FF00 NONE#\";\n    if (t.acu_emerg_cause == 1) acu_emerg_str = \"#FF0000 SDC_OPEN#\";\n    else if (t.acu_emerg_cause == 2) acu_emerg_str = \"#FF0000 RES#\";\n    else if (t.acu_emerg_cause == 3) acu_emerg_str = \"#FF0000 PRESS_CHK#\";\n    else if (t.acu_emerg_cause == 4) acu_emerg_str = \"#FF0000 VCU_TO#\";\n    else if (t.acu_emerg_cause == 5) acu_emerg_str = \"#FF0000 JETSON_TO#\";\n    else if (t.acu_emerg_cause == 6) acu_emerg_str = \"#FF0000 WDT#\";\n\n    const char *jet_as_state_str = \"#808080 OFF#\";\n    if (t.jetson_as_state == 2) jet_as_state_str = \"#00FF00 READY#\";\n    else if (t.jetson_as_state == 3) jet_as_state_str = \"#00FF00 DRIVING#\";\n    else if (t.jetson_as_state == 4) jet_as_state_str = \"#FF0000 EMERG#\";\n    else if (t.jetson_as_state == 5) jet_as_state_str = \"#00FF00 FINISH#\";\n\n    const char *jet_emerg_str = \"#00FF00 NONE#\";\n    if (t.jetson_emerg_cause == 1) jet_emerg_str = \"#FF0000 SDC_OPEN#\";\n    else if (t.jetson_emerg_cause == 2) jet_emerg_str = \"#FF0000 RES#\";\n    else if (t.jetson_emerg_cause == 3) jet_emerg_str = \"#FF0000 STEER_ERR#\";\n\n    const char *acu_asms_str = (t.acu_asms == 1) ? \"#00FF00 ON#\" : \"#808080 OFF#\";\n    const char *acu_ign_str = (t.acu_ign == 1) ? \"#00FF00 ON#\" : \"#808080 OFF#\";\n    const char *acu_emerg_act_str = (t.acu_emergency == 1) ? \"#FF0000 ACTIVE#\" : \"#00FF00 OK#\";\n\n    const char *vcu_ign_man_str = (t.vcu_ign_man == 1) ? \"#00FF00 ON#\" : \"#808080 OFF#\";\n    const char *vcu_ign_auto_str = (t.vcu_ign_auto == 1) ? \"#00FF00 ON#\" : \"#808080 OFF#\";\n    const char *vcu_r2d_man_str = (t.vcu_r2d_man == 1) ? \"#00FF00 ON#\" : \"#808080 OFF#\";\n    const char *vcu_r2d_auto_str = (t.vcu_r2d_auto == 1) ? \"#00FF00 ON#\" : \"#808080 OFF#\";\n    const char *vcu_shutdown_str = (t.vcu_shutdown == 1) ? \"#00FF00 CLOSED#\" : \"#FF0000 OPEN#\";\n    const char *vcu_hv_str = (t.vcu_hv == 1) ? \"#FF0000 ACTIVE#\" : \"#808080 OFF#\";\n\n    const char *steer_err_str = (t.steer_err == 0) ? \"#00FF00 OK#\" : \"#FF0000 FAULT#\";\n\n    // Pedals/Pressures color mappings\n    const char *ebs_press_color = (t.ebs_tank_f > 10.0f) ? \"#00FF00\" : \"#FF0000\";\n\n    snprintf(buf, sizeof(buf),\n        \" #00BFFF AUTONOMOUS DEBUG  1/2#\\n\"\n        \"------------------------------------------+---------------------------------------------\\n\"\n        \" #00BFFF ACU#                                     | #00BFFF DV DYNAMICS#\\n\"\n        \" ACU State:  %-25s      | Spd Act:  #FFFFFF %3.1f# km/h  Spd Tgt: #FFFFFF %3.1f# km/h\\n\"\n        \" ASSI:       %-25s      | Str Act:  #FFFFFF %5.1f# °    Str Tgt: #FFFFFF %5.1f# °\\n\"\n        \" ASMS: %-10s IGN: %-10s         | Brk Act:  #FFFFFF %3.0f%%#        Brk Tgt: #FFFFFF %3.0f%%#\\n\"\n        \" EMERGENCY:  %-25s      | Mot Act:  #FFFFFF %3.0f%%#        Mot Tgt: #FFFFFF %3.0f%%#\\n\"\n        \" Emerg Cause:%-25s      | Acc Lon:  #FFFFFF %6.3f# m/s2 Acc Lat:#FFFFFF %6.3f# m/s2\\n\"\n        \" CPU Temp:   #FFFFFF %3.0f°C#                     | Yaw:      #FFFFFF %6.3f# °/s\\n\"\n        \"                                          |\\n\"\n        \" #00BFFF JETSON#                                  | #00BFFF DV STATUS#\\n\"\n        \" AS State:   %-25s      | AS: #FFFFFF %3.0f#  EBS: #FFFFFF %3.0f#  AMI: #FFFFFF %3.0f#\\n\"\n        \" Mission:    #FFFFFF %-25.0f#      | Steer: #FFFFFF %3.0f#  EBS Red: #FFFFFF %3.0f#\\n\"\n        \" Temp: #FFFFFF %3.0f°C#  CPU: #FFFFFF %3.0f%%#  GPU: #FFFFFF %3.0f%%#      |\\n\"\n        \" Emerg Cause:%-25s      | #00BFFF EBS / ASF PRESSURES#\\n\"\n        \"                                          | EBS Tank F: %s%5.1f# bar R: %s%5.1f# bar\\n\"\n        \"------------------------------------------+ Brk Press F: #FFFFFF %5.1f# bar R: #FFFFFF %5.1f# bar\\n\"\n        \" #00BFFF VCU#                                     |\\n\"\n        \" IGN Man: %-10s IGN Auto: %-10s   | #00BFFF CUBEMARS STEERING#\\n\"\n        \" R2D Man: %-10s R2D Auto: %-10s   | Pos: #FFFFFF %5.1f# °   Spd: #FFFFFF %6.0f# ERPM\\n\"\n        \" Shutdown:%-25s      | Curr: #FFFFFF %5.1f# A   Drv T: #FFFFFF %3.0f°C# Err: %s\\n\"\n        \" State:   #FFFFFF %-25.0f#      | Pos Target: #FFFFFF %5.1f# °\\n\"\n        \" HV:      %-25s      | Torque Tgt: #FFFFFF %5.2f# Nm\\n\"\n        \"                                          |\\n\"\n        \" #00BFFF VCU RPM#                                 | #00BFFF SLAM / CONES#\\n\"\n        \" RPM Act: #FFFFFF %-5.0f#       RPM Tgt: #FFFFFF %-5.0f#       | Laps: #FFFFFF %2.0f#  Cones: #FFFFFF %3.0f#  All: #FFFFFF %4.0f#\\n\"\n        \"------------------------------------------+---------------------------------------------\\n\",\n        acu_state_str, t.dv_spd_act, t.dv_spd_tgt,\n        assi_state_str, t.dv_str_act, t.dv_str_tgt,\n        acu_asms_str, acu_ign_str, t.dv_brk_act, t.dv_brk_tgt,\n        acu_emerg_act_str, t.dv_mot_act, t.dv_mot_tgt,\n        acu_emerg_str, t.dv_acc_lon, t.dv_acc_lat,\n        t.acu_cpu_temp, t.dv_yaw,\n        jet_as_state_str, t.dv_as_status, t.dv_ebs_state, t.dv_ami_state,\n        t.jetson_mission, t.dv_steer_state, t.dv_ebs_red_state,\n        t.jetson_temp, t.jetson_cpu, t.jetson_gpu,\n        jet_emerg_str, ebs_press_color, t.ebs_tank_f, ebs_press_color, t.ebs_tank_r,\n        t.brk_press_f, t.brk_press_r,\n        vcu_ign_man_str, vcu_ign_auto_str,\n        vcu_r2d_man_str, vcu_r2d_auto_str, t.steer_pos, t.steer_spd,\n        vcu_shutdown_str, t.steer_curr, t.steer_temp, steer_err_str,\n        t.vcu_state, t.steer_pos_tgt,\n        vcu_hv_str, t.vcu_torque_tgt,\n        t.vcu_rpm_act, t.vcu_rpm_tgt, t.slam_laps, t.slam_cones, t.slam_all\n    );\n\n    if (objects.debug_text) {\n        my_spangroup_set_recolor_text(objects.debug_text, buf);\n    }\n}\n\nvoid create_screen_debug_autonomous_1() {\n    void *flowState = getFlowState(0, 4);\n    (void)flowState;\n    lv_obj_t *obj = lv_obj_create(0);\n    objects.debug_autonomous_1 = obj;\n    lv_obj_set_pos(obj, 0, 0);\n    lv_obj_set_size(obj, 800, 480);\n    lv_obj_set_style_bg_color(obj, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);\n    {\n        lv_obj_t *parent_obj = obj;\n        {\n            // debugText_2\n            lv_obj_t *obj = lv_spangroup_create(parent_obj);\n            objects.debug_text_2 = obj;\n            lv_obj_set_pos(obj, 0, 0);\n            lv_obj_set_size(obj, 800, 480);\n            lv_spangroup_set_mode(obj, LV_SPAN_MODE_FIXED);\n            lv_spangroup_set_align(obj, LV_TEXT_ALIGN_LEFT);\n            my_spangroup_set_recolor_text(obj, \" AUTONOMOUS DEBUG 2/2   \\n------------------------------------------+---------------------------------------------\\n ACQUISITION BOARDS                      | RES (Remote Emergency)\\n AQT1 BrkP:---.- bar RES:--- BOTS:---   | Signal: ---\\n AQT2 WhlAng:-----.-° AQT3:-----.-°    |\\n AQT4 StAng:-----.-° Inertia:--- Emer:---| AQT7 BrkP: ---.- bar\\n------------------------------------------+---------------------------------------------\\n                                                    \\n \\n\");\n        }\n    }\n    \n    tick_screen_debug_autonomous_1();\n}\n\nvoid tick_screen_debug_autonomous_1() {\n    TelemetryData t;\n    if (!ros2subscriber_get_telemetry(&t)) {\n        return;\n    }\n\n    char buf[2048];\n\n    // Status strings\n    const char *aqt1_res_str = (t.aqt1_res == 1) ? \"#FF0000 ACTIVE#\" : \"#00FF00 OK#\";\n    const char *aqt1_bots_str = (t.aqt1_bots == 1) ? \"#FF0000 ACTIVE#\" : \"#00FF00 OK#\";\n    const char *aqt4_inertia_str = (t.aqt4_inertia == 1) ? \"#FF0000 ACTIVE#\" : \"#00FF00 OK#\";\n    const char *aqt4_emerg_str = (t.aqt4_emer == 1) ? \"#FF0000 ACTIVE#\" : \"#00FF00 OK#\";\n\n    snprintf(buf, sizeof(buf),\n        \" #00BFFF AUTONOMOUS DEBUG 2/2#   \\n\"\n        \"------------------------------------------+---------------------------------------------\\n\"\n        \" #00BFFF ACQUISITION BOARDS#                      | #00BFFF RES (Remote Emergency)#\\n\"\n        \" AQT1 BrkP:  #FFFFFF %5.1f# bar                   | Signal: #FFFFFF %5.1f#\\n\"\n        \" AQT1 RES:   %-25s      |\\n\"\n        \" AQT1 BOTS:  %-25s      | #00BFFF REAR SENSORS (AQT7)#\\n\"\n        \" AQT2 WhlAng:#FFFFFF %5.1f# °                     | AQT7 BrkP:#FFFFFF %5.1f# bar\\n\"\n        \" AQT3 WhlAng:#FFFFFF %5.1f# °                     |\\n\"\n        \" AQT4 StAng: #FFFFFF %5.1f# °                     |\\n\"\n        \" AQT4 Inertia:%-25s      |\\n\"\n        \" AQT4 Emer:  %-25s      |\\n\"\n        \"------------------------------------------+---------------------------------------------\\n\",\n        t.aqt1_brkp, t.res_signal,\n        aqt1_res_str,\n        aqt1_bots_str,\n        t.aqt2_whl_ang, t.aqt7_brkp,\n        t.aqt3_whl_ang,\n        t.aqt4_st_ang,\n        aqt4_inertia_str,\n        aqt4_emerg_str\n    );\n\n    if (objects.debug_text_2) {\n        my_spangroup_set_recolor_text(objects.debug_text_2, buf);\n    }\n}\n\ntypedef void (*tick_screen_func_t)();\ntick_screen_func_t tick_screen_funcs[] = {\n    tick_screen_driver_view,\n    tick_screen_autonomous,\n    tick_screen_debug,\n    tick_screen_debug_autonomous,\n    tick_screen_debug_autonomous_1,\n};\nvoid tick_screen(int screen_index) {\n    if (screen_index >= 0 && screen_index < 5) {\n        tick_screen_funcs[screen_index]();\n    }\n}\nvoid tick_screen_by_id(enum ScreensEnum screenId) {\n    tick_screen(screenId - 1);\n}\n\n//\n// Styles\n//\n\nstatic const char *style_names[] = { \"info_containers\", \"text\", \"bar\" };\n\nextern void add_style(lv_obj_t *obj, int32_t styleIndex);\nextern void remove_style(lv_obj_t *obj, int32_t styleIndex);\n\n//\n// Fonts\n//\n\next_font_desc_t fonts[] = {\n    { \"orbitron_bold_20\", &ui_font_orbitron_bold_20 },\n    { \"ORBITER_BOLD_100\", &ui_font_orbiter_bold_100 },\n    { \"orbitron_bold_30\", &ui_font_orbitron_bold_30 },\n    { \"orbitron_bold_50\", &ui_font_orbitron_bold_50 },\n    { \"orbitron_bold_15\", &ui_font_orbitron_bold_15 },\n    { \"orbitron_15\", &ui_font_orbitron_15 },\n    { \"orbitron_bold_25\", &ui_font_orbitron_bold_25 },\n    { \"orbitron_bold_40\", &ui_font_orbitron_bold_40 },\n#if LV_FONT_MONTSERRAT_8\n    { \"MONTSERRAT_8\", &lv_font_montserrat_8 },\n#endif\n#if LV_FONT_MONTSERRAT_10\n    { \"MONTSERRAT_10\", &lv_font_montserrat_10 },\n#endif\n#if LV_FONT_MONTSERRAT_12\n    { \"MONTSERRAT_12\", &lv_font_montserrat_12 },\n#endif\n#if LV_FONT_MONTSERRAT_14\n    { \"MONTSERRAT_14\", &lv_font_montserrat_14 },\n#endif\n#if LV_FONT_MONTSERRAT_16\n    { \"MONTSERRAT_16\", &lv_font_montserrat_16 },\n#endif\n#if LV_FONT_MONTSERRAT_18\n    { \"MONTSERRAT_18\", &lv_font_montserrat_18 },\n#endif\n#if LV_FONT_MONTSERRAT_20\n    { \"MONTSERRAT_20\", &lv_font_montserrat_20 },\n#endif\n#if LV_FONT_MONTSERRAT_22\n    { \"MONTSERRAT_22\", &lv_font_montserrat_22 },\n#endif\n#if LV_FONT_MONTSERRAT_24\n    { \"MONTSERRAT_24\", &lv_font_montserrat_24 },\n#endif\n#if LV_FONT_MONTSERRAT_26\n    { \"MONTSERRAT_26\", &lv_font_montserrat_26 },\n#endif\n#if LV_FONT_MONTSERRAT_28\n    { \"MONTSERRAT_28\", &lv_font_montserrat_28 },\n#endif\n#if LV_FONT_MONTSERRAT_30\n    { \"MONTSERRAT_30\", &lv_font_montserrat_30 },\n#endif\n#if LV_FONT_MONTSERRAT_32\n    { \"MONTSERRAT_32\", &lv_font_montserrat_32 },\n#endif\n#if LV_FONT_MONTSERRAT_34\n    { \"MONTSERRAT_34\", &lv_font_montserrat_34 },\n#endif\n#if LV_FONT_MONTSERRAT_36\n    { \"MONTSERRAT_36\", &lv_font_montserrat_36 },\n#endif\n#if LV_FONT_MONTSERRAT_38\n    { \"MONTSERRAT_38\", &lv_font_montserrat_38 },\n#endif\n#if LV_FONT_MONTSERRAT_40\n    { \"MONTSERRAT_40\", &lv_font_montserrat_40 },\n#endif\n#if LV_FONT_MONTSERRAT_42\n    { \"MONTSERRAT_42\", &lv_font_montserrat_42 },\n#endif\n#if LV_FONT_MONTSERRAT_44\n    { \"MONTSERRAT_44\", &lv_font_montserrat_44 },\n#endif\n#if LV_FONT_MONTSERRAT_46\n    { \"MONTSERRAT_46\", &lv_font_montserrat_46 },\n#endif\n#if LV_FONT_MONTSERRAT_48\n    { \"MONTSERRAT_48\", &lv_font_montserrat_48 },\n#endif\n};\n\n//\n//\n//\n\nvoid create_screens() {\n    // Initialize styles\n    eez_flow_init_styles(add_style, remove_style);\n    eez_flow_init_style_names(style_names, sizeof(style_names) / sizeof(const char *));\n\neez_flow_init_fonts(fonts, sizeof(fonts) / sizeof(ext_font_desc_t));\n\n// Set default LVGL theme\n    lv_display_t *dispp = lv_display_get_default();\n    lv_theme_t *theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), false, LV_FONT_DEFAULT);\n    lv_display_set_theme(dispp, theme);\n    \n    // Initialize screens\n    eez_flow_init_screen_names(screen_names, sizeof(screen_names) / sizeof(const char *));\n    eez_flow_init_object_names(object_names, sizeof(object_names) / sizeof(const char *));\n    \n    // Create screens\n    create_screen_driver_view();\n    create_screen_autonomous();\n    create_screen_debug();\n    create_screen_debug_autonomous();\n    create_screen_debug_autonomous_1();\n}"
         },
         {
           "objID": "63fd23b2-9f4a-4e98-e3ca-990d35cae87a",
@@ -84,27 +84,12 @@
         {
           "objID": "d05c0814-03ab-4c21-cef9-684513ff2adc",
           "fileName": "ui.h",
-          "template": "#ifndef EEZ_LVGL_UI_GUI_H\n#define EEZ_LVGL_UI_GUI_H\n\n//${eez-studio LVGL_INCLUDE}\n\n//${eez-studio EEZ_FOR_LVGL_CHECK}\n\n#if defined(EEZ_FOR_LVGL)\n#include <eez/flow/lvgl_api.h>\n#endif\n\n#if !defined(EEZ_FOR_LVGL)\n#include \"screens.h\"\n#endif\n\n#ifdef __cplusplus\nextern \"C\" {\n#endif\n\n//${eez-studio GUI_ASSETS_DECL}\n\nvoid ui_init();\nvoid ui_tick();\nvoid ui_set_speed(float speed_kph);\nvoid ui_set_screen_var(int screen_id);\n\n#if !defined(EEZ_FOR_LVGL)\nvoid loadScreen(enum ScreensEnum screenId);\n#endif\n\n#ifdef __cplusplus\n}\n#endif\n\n#endif // EEZ_LVGL_UI_GUI_H"
+          "template": "#ifndef EEZ_LVGL_UI_GUI_H\n#define EEZ_LVGL_UI_GUI_H\n\n//${eez-studio LVGL_INCLUDE}\n\n//${eez-studio EEZ_FOR_LVGL_CHECK}\n\n#if defined(EEZ_FOR_LVGL)\n#include <eez/flow/lvgl_api.h>\n#endif\n\n#if !defined(EEZ_FOR_LVGL)\n#include \"screens.h\"\n#endif\n\n#ifdef __cplusplus\nextern \"C\" {\n#endif\n\n//${eez-studio GUI_ASSETS_DECL}\n\nvoid ui_init();\nvoid ui_tick();\nvoid ui_set_speed(float speed_kph);\nvoid ui_set_screen_var(int screen_id);\nvoid ui_update_telemetry_vars(const void *t);\n\n#if !defined(EEZ_FOR_LVGL)\nvoid loadScreen(enum ScreensEnum screenId);\n#endif\n\n#ifdef __cplusplus\n}\n#endif\n\n#endif // EEZ_LVGL_UI_GUI_H"
         },
         {
           "objID": "084926f1-634e-4671-9fc3-cc34c950eba7",
           "fileName": "ui.c",
-          "template": "#if defined(EEZ_FOR_LVGL)\n#include <eez/core/vars.h>\n#endif\n\n#include \"ui.h\"\n#include \"screens.h\"\n#include \"images.h\"\n#include \"actions.h\"\n#include \"vars.h\"\n#include \"stdio.h\"\n\n\n#include \"ros2subscriber.h\"\n\n\n\n//${eez-studio GUI_ASSETS_DEF}\n\n//${eez-studio LVGL_NATIVE_VARS_TABLE_DEF}\n\n//${eez-studio LVGL_ACTIONS_ARRAY_DEF}\n\n#if defined(EEZ_FOR_LVGL)\n\n\nvoid ui_init() {\n    eez_flow_init(assets, sizeof(assets), (lv_obj_t **)&objects, sizeof(objects), images, sizeof(images), actions);\n    if (ros2subscriber_init() != 0) {\n        ui_set_speed(0.0f);\n        return;\n    }\n\n    ui_set_speed(0.0f);\n}\n\n// Screen change names for logging (1-based EEZ-Flow IDs)\nstatic const char *ui_screen_name(int eez_id) {\n    static const char *names[] = { \"?\", \"Driver View\", \"Autonomous\", \"Debug Autonomous\", \"Debug\" };\n    if (eez_id >= 1 && eez_id <= 4) return names[eez_id];\n    return \"?\";\n}\n\n// Pending screen change (1-based EEZ-Flow ID, 0 = no pending change).\n// Set by ui_set_screen(), consumed at the top of the next ui_tick()\n// BEFORE eez_flow_tick() runs, preventing state corruption and crashes.\nstatic int g_pending_screen_id = 0;\n\nvoid ui_tick() {\n    // Apply any pending screen change FIRST, before eez_flow_tick().\n    if (g_pending_screen_id != 0) {\n        int16_t current = eez_flow_get_current_screen(); // 1-based\n        int target = g_pending_screen_id;\n        g_pending_screen_id = 0;\n\n        if (target >= _SCREEN_ID_FIRST && target <= _SCREEN_ID_LAST && target != current) {\n            printf(\"[ui_tick] Screen change: %d (%s) -> %d (%s)\\n\",\n                current, ui_screen_name(current),\n                target,  ui_screen_name(target));\n            eez_flow_set_screen((int16_t)target, LV_SCR_LOAD_ANIM_NONE, 0, 0);\n        }\n    }\n\n    // Update speed from ROS\n    float speed_kph;\n    if (ros2subscriber_spin_some() == 0 && ros2subscriber_get_latest_speed(&speed_kph)) {\n        ui_set_speed(speed_kph);\n    }\n\n    eez_flow_tick();\n    tick_screen(g_currentScreen);\n\n    // Queue any screen change request received this tick.\n    // It will be applied at the top of the NEXT tick, before eez_flow_tick().\n    int screen_id;\n    if (ros2subscriber_get_screen_change_request(&screen_id)) {\n        ui_set_screen(screen_id);\n    }\n}\n\nvoid ui_setup_timers(void) {\n    // No LVGL timers required for ROS2 subscriber mode.\n}\n\n// Cleanup on shutdown\nvoid ui_fini(void) {\n    ros2subscriber_fini();\n}\n\n// Request a screen change by ROS2 0-based ID (0=Driver View, 1=Autonomous, 2=Debug Autonomous, 3=Debug).\n// Converts to EEZ-Flow's 1-based ID and queues it for the next tick.\nvoid ui_set_screen(int screen_id) {\n    if (screen_id >= 0 && screen_id <= 3) {\n        g_pending_screen_id = screen_id + 1; // 0-based -> 1-based EEZ-Flow ID\n        printf(\"[ui_set_screen] Queued screen: ROS2 id=%d (%s) -> eez_id=%d\\n\",\n               screen_id, ui_screen_name(screen_id + 1), screen_id + 1);\n    } else {\n        printf(\"[ui_set_screen] Ignoring invalid screen_id: %d\\n\", screen_id);\n    }\n}\n\n#endif\n"
-        },
-        {
-          "objID": "a40698a8-cea3-4c3e-b73f-dca45f315fd8",
-          "fileName": "CMakeLists.txt",
-          "template": "cmake_minimum_required(VERSION 3.8)\nproject(speed_subscriber LANGUAGES C CXX)\n\n# Compiler flags\nif(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES \"Clang\")\n    add_compile_options(-Wall -Wextra -Wpedantic)\nendif()\n\n# ROS 2 (required)\nfind_package(ament_cmake QUIET)\nfind_package(PkgConfig REQUIRED)\nfind_package(Threads REQUIRED)\n\nif(ament_cmake_FOUND)\n    find_package(rclcpp REQUIRED)\n    find_package(std_msgs REQUIRED)\nendif()\n\n# Optional: subscribe to /vehicle/dashboard_state if lart_msgs is available\nfind_package(lart_msgs QUIET)\n\n# Desktop UI runner dependency (requires SDL2 development package for headers + pkg-config file)\npkg_check_modules(SDL2 QUIET IMPORTED_TARGET sdl2)\n\nfile(GLOB_RECURSE LVGL_SOURCES CONFIGURE_DEPENDS\n    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src/*.c\n)\n\n# ============================================================================\n# CREATE ROS2 SUBSCRIBER LIBRARY\n# ============================================================================\n\nadd_library(ros2subscriber STATIC\n    ros2subscriber.cpp\n)\n\ntarget_compile_features(ros2subscriber PUBLIC cxx_std_17)\n\ntarget_include_directories(ros2subscriber PUBLIC\n    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>\n    $<INSTALL_INTERFACE:include/${PROJECT_NAME}>\n)\n\ntarget_link_libraries(ros2subscriber Threads::Threads)\nif(ament_cmake_FOUND)\n    target_compile_definitions(ros2subscriber PRIVATE LART_UI_HAVE_RCLCPP=1)\n    ament_target_dependencies(ros2subscriber rclcpp std_msgs)\nendif()\nif(lart_msgs_FOUND)\n    target_compile_definitions(ros2subscriber PRIVATE LART_HAVE_DASHBOARD_STATE_MSG=1)\n    if(ament_cmake_FOUND)\n        ament_target_dependencies(ros2subscriber lart_msgs)\n    endif()\n    message(STATUS \"ROS2 subscriber: lart_msgs detected (DashboardState supported)\")\nelse()\n    message(STATUS \"ROS2 subscriber: lart_msgs not found (Float32 speed topic only)\")\nendif()\n\n# Installation targets\ninstall(TARGETS ros2subscriber\n    ARCHIVE DESTINATION lib\n    LIBRARY DESTINATION lib\n    RUNTIME DESTINATION bin\n)\ninstall(FILES ros2subscriber.h DESTINATION include/${PROJECT_NAME})\n\nif(SDL2_FOUND AND LVGL_SOURCES)\n    add_library(lvgl STATIC ${LVGL_SOURCES})\n    target_compile_features(lvgl PUBLIC c_std_99)\n    target_include_directories(lvgl PUBLIC\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src\n        ${CMAKE_CURRENT_SOURCE_DIR}\n    )\n    target_compile_definitions(lvgl PUBLIC LV_CONF_INCLUDE_SIMPLE=1 LV_FONT_FMT_TXT_LARGE=1)\n\n    set(UI_SOURCES\n        eez-flow.cpp\n        images.c\n        screen_api.cpp\n        screens.c\n        speed_api.cpp\n        styles.c\n        ui.c\n        fonts/ui_font_orbiter_bold_100.c\n        fonts/ui_font_orbitron_15.c\n        fonts/ui_font_orbitron_bold_15.c\n        fonts/ui_font_orbitron_bold_20.c\n        fonts/ui_font_orbitron_bold_25.c\n        fonts/ui_font_orbitron_bold_30.c\n        fonts/ui_font_orbitron_bold_40.c\n        fonts/ui_font_orbitron_bold_50.c\n        images/ui_image_lart_logo.c\n        ui_runner.cpp\n    )\n\n    add_executable(ui_runner ${UI_SOURCES})\n\n    target_compile_features(ui_runner PUBLIC cxx_std_17)\n    target_include_directories(ui_runner PRIVATE\n        ${CMAKE_CURRENT_SOURCE_DIR}\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl\n        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src\n    )\n    target_compile_definitions(ui_runner PRIVATE LV_CONF_INCLUDE_SIMPLE=1 LV_FONT_FMT_TXT_LARGE=1)\n    target_link_libraries(ui_runner\n        lvgl\n        ros2subscriber\n        PkgConfig::SDL2\n        Threads::Threads\n    )\n    if(ament_cmake_FOUND)\n        ament_target_dependencies(ui_runner rclcpp std_msgs)\n    endif()\n    if(lart_msgs_FOUND)\n        if(ament_cmake_FOUND)\n            ament_target_dependencies(ui_runner lart_msgs)\n        endif()\n    endif()\nelse()\n    message(STATUS \"Desktop UI runner disabled: SDL2 (libsdl2-dev) or LVGL sources not available\")\nendif()\n\nif(ament_cmake_FOUND)\n    ament_package()\nendif()"
-        },
-        {
-          "objID": "5d5ceb45-7278-44e0-bf56-250aaf12c7fc",
-          "fileName": "ros2subscriber.cpp",
-          "template": "#include \"ros2subscriber.h\"\n\n#include <atomic>\n#include <chrono>\n#include <cstdlib>\n#include <cstring>\n#include <strings.h>\n#include <memory>\n\n#ifndef LART_UI_HAVE_RCLCPP\n#define LART_UI_HAVE_RCLCPP 0\n#endif\n\n#if defined(__GNUC__) || defined(__clang__)\n#define LART_WEAK __attribute__((weak))\n#else\n#define LART_WEAK\n#endif\n\n#if LART_UI_HAVE_RCLCPP\n\n#include <rclcpp/rclcpp.hpp>\n#include <rclcpp/executors/single_threaded_executor.hpp>\n#include <std_msgs/msg/float32.hpp>\n#include <std_msgs/msg/int32.hpp>\n\n#if !defined(LART_HAVE_DASHBOARD_STATE_MSG)\n#if defined(__has_include)\n#if __has_include(<lart_msgs/msg/dashboard_state.hpp>)\n#define LART_HAVE_DASHBOARD_STATE_MSG 1\n#else\n#define LART_HAVE_DASHBOARD_STATE_MSG 0\n#endif\n#else\n#define LART_HAVE_DASHBOARD_STATE_MSG 0\n#endif\n#endif\n\n#if LART_HAVE_DASHBOARD_STATE_MSG\n#include <lart_msgs/msg/dashboard_state.hpp>\n#endif\n\nnamespace {\nconstexpr const char *DEFAULT_SPEED_TOPIC = \"/vehicle/speed_kph\";\nconstexpr const char *DEFAULT_DASHBOARD_STATE_TOPIC = \"/vehicle/dashboard_state\";\nconstexpr const char *DEFAULT_SET_SCREEN_TOPIC = \"/dashboard/set_screen\";\n\nstd::atomic<int> g_is_initialized(0);\nstd::atomic<int> g_has_speed(0);\nstd::atomic<float> g_latest_speed_kph(0.0f);\nstd::atomic<int> g_screen_change_requested(0);\nstd::atomic<int> g_requested_screen_id(0);\n\nbool g_did_init_rclcpp = false;\nstd::shared_ptr<rclcpp::Node> g_node;\nstd::shared_ptr<rclcpp::executors::SingleThreadedExecutor> g_exec;\nrclcpp::SubscriptionBase::SharedPtr g_sub;\nrclcpp::SubscriptionBase::SharedPtr g_sub_screen;\n\nbool env_is_true(const char *name, bool default_value) {\n    const char *value = std::getenv(name);\n    if (value == nullptr || *value == '\\0') {\n        return default_value;\n    }\n    return std::strcmp(value, \"1\") == 0 || strcasecmp(value, \"true\") == 0 || strcasecmp(value, \"yes\") == 0;\n}\n\nconst char *env_or_default(const char *name, const char *fallback) {\n    const char *value = std::getenv(name);\n    if (value == nullptr || *value == '\\0') {\n        return fallback;\n    }\n    return value;\n}\n}  // namespace\n\nLART_WEAK int ros2subscriber_init(void) {\n    if (g_is_initialized.load()) {\n        return 0;\n    }\n\n    if (!rclcpp::ok()) {\n        g_did_init_rclcpp = true;\n        int argc = 0;\n        char **argv = nullptr;\n        rclcpp::init(argc, argv);\n    }\n\n    g_node = std::make_shared<rclcpp::Node>(\"lart_dashboard_listener\");\n    g_exec = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();\n    g_exec->add_node(g_node);\n\n    const char *topic = env_or_default(\"LART_ROS2_SPEED_TOPIC\", DEFAULT_SPEED_TOPIC);\n\n    auto callback = [](const std_msgs::msg::Float32::SharedPtr msg) {\n        if (msg) {\n            g_latest_speed_kph.store(msg->data);\n            g_has_speed.store(1);\n        }\n    };\n\n    g_sub = g_node->create_subscription<std_msgs::msg::Float32>(topic, rclcpp::QoS(10), callback);\n\n    // Screen change subscription\n    const char *screen_topic = env_or_default(\"LART_ROS2_SET_SCREEN_TOPIC\", DEFAULT_SET_SCREEN_TOPIC);\n\n    auto screen_callback = [](const std_msgs::msg::Int32::SharedPtr msg) {\n        if (msg) {\n            int id = msg->data;\n            // Valid 0-based screen range: 0=Driver, 1=Autonomous, 2=Debug Autonomous, 3=Debug\n            if (id < 0 || id > 3) {\n                return;  // Ignore out-of-range IDs silently\n            }\n            g_requested_screen_id.store(id);\n            g_screen_change_requested.store(1);\n        }\n    };\n\n    g_sub_screen = g_node->create_subscription<std_msgs::msg::Int32>(screen_topic, rclcpp::QoS(10), screen_callback);\n\n    g_is_initialized.store(1);\n    g_has_speed.store(0);\n    g_screen_change_requested.store(0);\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_spin_some(void) {\n    if (!g_is_initialized.load() || !g_exec) {\n        return 1;\n    }\n\n    try {\n        g_exec->spin_some();\n    } catch (...) {\n    }\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_get_latest_speed(float *speed_kph) {\n    if (!g_is_initialized.load() || !g_has_speed.load() || speed_kph == nullptr) {\n        return 0;\n    }\n\n    *speed_kph = g_latest_speed_kph.load();\n    return 1;\n}\n\nLART_WEAK int ros2subscriber_get_screen_change_request(int *screen_id) {\n    if (!g_is_initialized.load() || !g_screen_change_requested.load() || screen_id == nullptr) {\n        return 0;\n    }\n\n    *screen_id = g_requested_screen_id.load();\n    g_screen_change_requested.store(0);\n    return 1;\n}\n\nLART_WEAK void ros2subscriber_fini(void) {\n    if (!g_is_initialized.load()) {\n        return;\n    }\n\n    try {\n        if (g_exec) {\n            g_exec->cancel();\n        }\n    } catch (...) {\n    }\n\n    g_sub.reset();\n    g_sub_screen.reset();\n\n    if (g_exec && g_node) {\n        try {\n            g_exec->remove_node(g_node);\n        } catch (...) {\n        }\n    }\n\n    g_node.reset();\n    g_exec.reset();\n\n    if (g_did_init_rclcpp && rclcpp::ok()) {\n        try {\n            rclcpp::shutdown();\n        } catch (...) {\n        }\n    }\n    g_did_init_rclcpp = false;\n\n    g_is_initialized.store(0);\n    g_has_speed.store(0);\n    g_latest_speed_kph.store(0.0f);\n    g_screen_change_requested.store(0);\n    g_requested_screen_id.store(0);\n}\n\n#else\n\nLART_WEAK int ros2subscriber_init(void) {\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_spin_some(void) {\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_get_latest_speed(float *speed_kph) {\n    if (speed_kph != nullptr) {\n        *speed_kph = 0.0f;\n    }\n    return 0;\n}\n\nLART_WEAK int ros2subscriber_get_screen_change_request(int *screen_id) {\n    (void)screen_id;\n    return 0;\n}\n\nLART_WEAK void ros2subscriber_fini(void) {\n}\n\n#endif"
-        },
-        {
-          "objID": "c7507690-dd2c-41a6-b733-cff533746e67",
-          "fileName": "ros2subscriber.h",
-          "template": "#ifndef LART_ROS2SUBSCRIBER_H\n#define LART_ROS2SUBSCRIBER_H\n\n#ifdef __cplusplus\nextern \"C\" {\n#endif\n\nint ros2subscriber_init(void);\nint ros2subscriber_spin_some(void);\nint ros2subscriber_get_latest_speed(float *speed_kph);\nint ros2subscriber_get_screen_change_request(int *screen_id);\nvoid ros2subscriber_fini(void);\n\n#ifdef __cplusplus\n}\n#endif\n\n#endif"
+          "template": "#if defined(EEZ_FOR_LVGL)\n#include <eez/core/vars.h>\n#endif\n\n#include \"ui.h\"\n#include \"screens.h\"\n#include \"images.h\"\n#include \"actions.h\"\n#include \"vars.h\"\n#include \"stdio.h\"\n\n\n#include \"ros2subscriber.h\"\n\n\n\n//${eez-studio GUI_ASSETS_DEF}\n\n//${eez-studio LVGL_NATIVE_VARS_TABLE_DEF}\n\n//${eez-studio LVGL_ACTIONS_ARRAY_DEF}\n\n#if defined(EEZ_FOR_LVGL)\n\n\nvoid ui_init() {\n    eez_flow_init(assets, sizeof(assets), (lv_obj_t **)&objects, sizeof(objects), images, sizeof(images), actions);\n    \n    if (ros2subscriber_init() != 0) {\n        ui_set_speed(0.0f);\n        return;\n    }\n\n    ui_set_speed(0.0f);\n}\n\n// Screen change names for logging (1-based EEZ-Flow IDs)\nstatic const char *ui_screen_name(int eez_id) {\n    static const char *names[] = { \n        \"?\", \n        \"Driver View\", \n        \"Autonomous\", \n        \"Debug 1\", \n        \"Debug Inverter 2\", \n        \"Debug 3\", \n        \"Debug Wheels 4\", \n        \"Debug 5\", \n        \"Debug Autonomous 1\", \n        \"Debug Autonomous 2\", \n        \"Debug Autonomous 3\", \n        \"Debug Autonomous 4\", \n        \"Debug Autonomous 5\" \n    };\n    if (eez_id >= 1 && eez_id <= 12) return names[eez_id];\n    return \"?\";\n}\n\n// Pending screen change (1-based EEZ-Flow ID, 0 = no pending change).\n// Set by ui_set_screen(), consumed at the top of the next ui_tick()\n// BEFORE eez_flow_tick() runs, preventing state corruption and crashes.\nstatic int g_pending_screen_id = 0;\n\nvoid ui_set_screen(int screen_id);\n\nvoid ui_tick() {\n    // Apply any pending screen change FIRST, before eez_flow_tick().\n    if (g_pending_screen_id != 0) {\n        int16_t current = eez_flow_get_current_screen(); // 1-based\n        int target = g_pending_screen_id;\n        g_pending_screen_id = 0;\n\n        if (target >= _SCREEN_ID_FIRST && target <= _SCREEN_ID_LAST && target != current) {\n            printf(\"[ui_tick] Screen change: %d (%s) -> %d (%s)\\n\",\n                current, ui_screen_name(current),\n                target,  ui_screen_name(target));\n            eez_flow_set_screen((int16_t)target, LV_SCR_LOAD_ANIM_NONE, 0, 0);\n        }\n    }\n\n    // Update speed from ROS\n    float speed_kph;\n    if (ros2subscriber_spin_some() == 0 && ros2subscriber_get_latest_speed(&speed_kph)) {\n        ui_set_speed(speed_kph);\n    }\n\n    eez_flow_tick();\n    tick_screen(g_currentScreen);\n\n    // Queue any screen change request received this tick.\n    // It will be applied at the top of the NEXT tick, before eez_flow_tick().\n    int screen_id;\n    if (ros2subscriber_get_screen_change_request(&screen_id)) {\n        ui_set_screen(screen_id);\n    }\n}\n\nvoid ui_setup_timers(void) {\n    // No LVGL timers required for ROS2 subscriber mode.\n}\n\n// Cleanup on shutdown\nvoid ui_fini(void) {\n    ros2subscriber_fini();\n}\n\n// Request a screen change by ROS2 0-based ID (0=Driver View, 1=Autonomous, 2-6=Debug 1-5, 7-11=Debug Autonomous 1-5).\n// Converts to EEZ-Flow's 1-based ID and queues it for the next tick.\nvoid ui_set_screen(int screen_id) {\n    if (screen_id >= 0 && screen_id <= 11) {\n        g_pending_screen_id = screen_id + 1; // 0-based -> 1-based EEZ-Flow ID\n        printf(\"[ui_set_screen] Queued screen: ROS2 id=%d (%s) -> eez_id=%d\\n\",\n               screen_id, ui_screen_name(screen_id + 1), screen_id + 1);\n    } else {\n        printf(\"[ui_set_screen] Ignoring invalid screen_id: %d\\n\", screen_id);\n    }\n}\n\n#endif\n"
         }
       ],
       "destinationFolder": "src\\ui",
@@ -126,23 +111,23 @@
     "globalVariables": [
       {
         "objID": "fa882709-5537-4ba7-c56f-985a1c6de14e",
-        "name": "brake_pressure",
-        "type": "float",
-        "defaultValue": "0",
+        "name": "brake_pedal_pressure",
+        "type": "integer",
+        "defaultValue": "20",
         "persistent": false,
         "native": false
       },
       {
         "objID": "d28a4165-7ad7-47b1-9da1-1ec6013b7823",
-        "name": "accell_pressure",
-        "type": "float",
+        "name": "accell_pedal_pressure",
+        "type": "integer",
         "defaultValue": "0",
         "persistent": false,
         "native": false
       },
       {
         "objID": "0fa29e0e-ae15-4a8b-8c19-807f71a06aad",
-        "name": "hv",
+        "name": "soc",
         "type": "integer",
         "defaultValue": "0",
         "persistent": false,
@@ -208,6 +193,36 @@
         "name": "screen_changer_var",
         "type": "integer",
         "defaultValue": "1",
+        "persistent": false
+      },
+      {
+        "objID": "145db213-343d-4831-95e4-b2efcebdf7e1",
+        "name": "lap_count",
+        "type": "integer",
+        "defaultValue": "0",
+        "persistent": false
+      },
+      {
+        "objID": "17138e19-e644-4fd9-e139-11b8a5d139cb",
+        "name": "mission",
+        "type": "string",
+        "size": null,
+        "defaultValue": "\"\"",
+        "persistent": false
+      },
+      {
+        "objID": "3f814067-5769-4f88-f01c-7e0f3a28c7dd",
+        "name": "time_diff",
+        "type": "float",
+        "defaultValue": "0",
+        "persistent": false
+      },
+      {
+        "objID": "be3ee398-c7c3-4f53-a831-70e1ffe733f5",
+        "name": "last_lap_time",
+        "type": "string",
+        "size": null,
+        "defaultValue": "\"\"",
         "persistent": false
       }
     ],
@@ -332,7 +347,7 @@
             {
               "objID": "6ba689b6-47af-4209-e5b4-58f85215d0f6",
               "action": "changeScreen",
-              "screen": "Debug",
+              "screen": "Debug 1",
               "screenType": "literal",
               "fadeMode": "FADE_IN",
               "fadeModeType": "literal",
@@ -369,7 +384,7 @@
             {
               "objID": "ef2eebd7-1b85-4531-e34b-c7544c371db5",
               "action": "changeScreen",
-              "screen": "Debug Autonomous",
+              "screen": "Debug Autonomous 1",
               "screenType": "literal",
               "fadeMode": "FADE_IN",
               "fadeModeType": "literal",
@@ -911,9 +926,9 @@
                     {
                       "objID": "8c9000a3-dbab-4f24-d3a6-4c079c7d2118",
                       "type": "LVGLLabelWidget",
-                      "left": 329,
+                      "left": 313,
                       "top": 11,
-                      "width": 20,
+                      "width": 312,
                       "height": 53,
                       "customInputs": [],
                       "customOutputs": [],
@@ -954,8 +969,8 @@
                       },
                       "group": "",
                       "groupIndex": 0,
-                      "text": "1",
-                      "textType": "literal",
+                      "text": "lap_count",
+                      "textType": "expression",
                       "longMode": "WRAP",
                       "recolor": false
                     },
@@ -1007,7 +1022,7 @@
                       "type": "LVGLLabelWidget",
                       "left": 220,
                       "top": 21,
-                      "width": 70,
+                      "width": 166,
                       "height": 33,
                       "customInputs": [],
                       "customOutputs": [],
@@ -1048,8 +1063,8 @@
                       },
                       "group": "",
                       "groupIndex": 0,
-                      "text": "+0.8",
-                      "textType": "literal",
+                      "text": "time_diff",
+                      "textType": "expression",
                       "longMode": "WRAP",
                       "recolor": false
                     },
@@ -1570,11 +1585,12 @@
                       "max": 100,
                       "maxType": "literal",
                       "mode": "RANGE",
-                      "value": "brake_pressure",
+                      "value": "brake_pedal_pressure",
                       "valueType": "expression",
+                      "previewValue": "20",
                       "valueStart": 0,
                       "valueStartType": "literal",
-                      "enableAnimation": false
+                      "enableAnimation": true
                     },
                     {
                       "objID": "9b38af54-3a35-4080-8f7d-73c4ba3c39ce",
@@ -1635,11 +1651,12 @@
                       "max": 100,
                       "maxType": "literal",
                       "mode": "RANGE",
-                      "value": "accell_pressure",
+                      "value": "accell_pedal_pressure",
                       "valueType": "expression",
+                      "previewValue": "0",
                       "valueStart": 0,
                       "valueStartType": "literal",
-                      "enableAnimation": false
+                      "enableAnimation": true
                     }
                   ],
                   "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
@@ -1818,12 +1835,12 @@
               "max": 100,
               "maxType": "literal",
               "mode": "RANGE",
-              "value": 50,
-              "valueType": "literal",
-              "previewValue": "50",
+              "value": "soc",
+              "valueType": "expression",
+              "previewValue": "",
               "valueStart": 0,
               "valueStartType": "literal",
-              "enableAnimation": false
+              "enableAnimation": true
             },
             {
               "objID": "7781856b-b90b-4aac-9258-e9b17c1c6fa6",
@@ -1890,9 +1907,9 @@
               "max": 30,
               "maxType": "literal",
               "mode": "RANGE",
-              "value": 25,
-              "valueType": "literal",
-              "previewValue": "24.0",
+              "value": "lv",
+              "valueType": "expression",
+              "previewValue": "",
               "valueStart": 0,
               "valueStartType": "literal",
               "enableAnimation": true
@@ -1937,7 +1954,7 @@
               },
               "group": "",
               "groupIndex": 0,
-              "text": "hv+\" %\"",
+              "text": "soc+\" %\"",
               "textType": "expression",
               "longMode": "WRAP",
               "recolor": false,
@@ -2140,42 +2157,9 @@
             }
           },
           "groupIndex": 0
-        },
-        {
-          "objID": "278d55f5-0d7c-4144-ba5d-ef83a639a95d",
-          "type": "CallActionActionComponent",
-          "left": 195,
-          "top": -246,
-          "width": 165,
-          "height": 24,
-          "customInputs": [],
-          "customOutputs": [],
-          "action": "screen_changer_action",
-          "userPropertyValues": {
-            "objID": "ae25f8d1-b0cd-4ef9-d84c-0af25a65581b",
-            "values": {}
-          }
-        },
-        {
-          "objID": "7b28947e-870d-40b9-b051-fcf2a3db9a41",
-          "type": "StartActionComponent",
-          "left": 51,
-          "top": -246,
-          "width": 87,
-          "height": 24,
-          "customInputs": [],
-          "customOutputs": []
         }
       ],
-      "connectionLines": [
-        {
-          "objID": "5e4f7c81-9230-40b4-a978-8eae42f638ad",
-          "source": "7b28947e-870d-40b9-b051-fcf2a3db9a41",
-          "output": "@seqout",
-          "target": "278d55f5-0d7c-4144-ba5d-ef83a639a95d",
-          "input": "@seqin"
-        }
-      ],
+      "connectionLines": [],
       "localVariables": [],
       "componentGroups": [],
       "userProperties": [],
@@ -2266,9 +2250,9 @@
             {
               "objID": "b8622d6b-30cf-4061-fd9b-dd460289bd60",
               "type": "LVGLLabelWidget",
-              "left": 125,
+              "left": 106,
               "top": 407,
-              "width": 420,
+              "width": 438,
               "height": 42,
               "customInputs": [],
               "customOutputs": [],
@@ -2310,8 +2294,8 @@
               },
               "group": "",
               "groupIndex": 0,
-              "text": "MISSION: {MISSION}",
-              "textType": "literal",
+              "text": "\"MISSION:\"+mission",
+              "textType": "expression",
               "longMode": "WRAP",
               "recolor": false
             },
@@ -2379,8 +2363,8 @@
               "max": 100,
               "maxType": "literal",
               "mode": "RANGE",
-              "value": 50,
-              "valueType": "literal",
+              "value": "soc",
+              "valueType": "expression",
               "valueStart": 0,
               "valueStartType": "literal",
               "enableAnimation": false
@@ -2444,13 +2428,13 @@
               },
               "group": "",
               "groupIndex": 0,
-              "min": 0,
+              "min": 18,
               "minType": "literal",
-              "max": 100,
+              "max": 30,
               "maxType": "literal",
               "mode": "RANGE",
-              "value": 50,
-              "valueType": "literal",
+              "value": "lv",
+              "valueType": "expression",
               "valueStart": 0,
               "valueStartType": "literal",
               "enableAnimation": true
@@ -2494,7 +2478,7 @@
               },
               "group": "",
               "groupIndex": 0,
-              "text": "hv",
+              "text": "soc+\"%\"",
               "textType": "expression",
               "longMode": "WRAP",
               "recolor": false,
@@ -2539,7 +2523,7 @@
               },
               "group": "",
               "groupIndex": 0,
-              "text": "lv",
+              "text": "lv+\"V\"",
               "textType": "expression",
               "longMode": "WRAP",
               "recolor": false,
@@ -3664,9 +3648,9 @@
             {
               "objID": "fc815b11-da25-4b19-f818-bec30d52e9f1",
               "type": "LVGLContainerWidget",
-              "left": 404,
+              "left": 379,
               "top": 65,
-              "width": 320,
+              "width": 345,
               "height": 143,
               "customInputs": [],
               "customOutputs": [],
@@ -3731,7 +3715,7 @@
                 {
                   "objID": "50f57761-09bd-49fa-ad65-e840fea550f8",
                   "type": "LVGLLabelWidget",
-                  "left": 215,
+                  "left": 230,
                   "top": 72,
                   "width": 89,
                   "height": 33,
@@ -3782,7 +3766,7 @@
                 {
                   "objID": "1c53885f-13f1-481c-cb1e-952b20df8d1b",
                   "type": "LVGLLabelWidget",
-                  "left": -52,
+                  "left": -55,
                   "top": 15,
                   "width": 205,
                   "height": 106,
@@ -3934,246 +3918,13 @@
             }
           },
           "groupIndex": 0
-        },
-        {
-          "objID": "5a7dc5d5-a546-4d34-d1a2-7a76f8b84182",
-          "type": "CallActionActionComponent",
-          "left": 328,
-          "top": -201,
-          "width": 165,
-          "height": 24,
-          "customInputs": [],
-          "customOutputs": [],
-          "action": "screen_changer_action",
-          "userPropertyValues": {
-            "objID": "45ccc538-ea1c-4221-d335-e07427b49742",
-            "values": {}
-          }
-        },
-        {
-          "objID": "158bb59d-09d5-49a3-e0f4-19e3979cb167",
-          "type": "StartActionComponent",
-          "left": 184,
-          "top": -201,
-          "width": 87,
-          "height": 24,
-          "customInputs": [],
-          "customOutputs": []
         }
       ],
-      "connectionLines": [
-        {
-          "objID": "f350b2e8-b08e-4a37-8881-9740d34be78c",
-          "source": "158bb59d-09d5-49a3-e0f4-19e3979cb167",
-          "output": "@seqout",
-          "target": "5a7dc5d5-a546-4d34-d1a2-7a76f8b84182",
-          "input": "@seqin"
-        }
-      ],
+      "connectionLines": [],
       "localVariables": [],
       "componentGroups": [],
       "userProperties": [],
       "name": "Autonomous",
-      "left": 0,
-      "top": 0,
-      "width": 800,
-      "height": 480,
-      "isUsedAsUserWidget": false,
-      "createAtStart": true,
-      "deleteOnScreenUnload": false
-    },
-    {
-      "objID": "35331414-aa25-4ec1-be2d-d54a497b85a7",
-      "components": [
-        {
-          "objID": "335091c4-e83f-4beb-a770-b8bcef044c64",
-          "type": "LVGLScreenWidget",
-          "left": 0,
-          "top": 0,
-          "width": 800,
-          "height": 480,
-          "customInputs": [],
-          "customOutputs": [],
-          "style": {
-            "objID": "fb43a54e-664c-4278-c5ca-31aa86630a6d",
-            "useStyle": "default",
-            "conditionalStyles": [],
-            "childStyles": []
-          },
-          "timeline": [],
-          "eventHandlers": [],
-          "leftUnit": "px",
-          "topUnit": "px",
-          "widthUnit": "px",
-          "heightUnit": "px",
-          "children": [
-            {
-              "objID": "edce6662-80ee-40df-e2fd-fa8d35a3d1e7",
-              "type": "LVGLLabelWidget",
-              "left": 18,
-              "top": 13,
-              "width": 321,
-              "height": 28,
-              "customInputs": [],
-              "customOutputs": [],
-              "style": {
-                "objID": "e065bed8-f00b-48cd-fa16-4dece92ec8a2",
-                "useStyle": "default",
-                "conditionalStyles": [],
-                "childStyles": []
-              },
-              "timeline": [],
-              "eventHandlers": [],
-              "leftUnit": "px",
-              "topUnit": "px",
-              "widthUnit": "content",
-              "heightUnit": "content",
-              "children": [],
-              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
-              "clickableFlagType": "literal",
-              "flagScrollbarMode": "",
-              "flagScrollDirection": "",
-              "scrollSnapX": "",
-              "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledStateType": "literal",
-              "states": "",
-              "localStyles": {
-                "objID": "008a6bbb-fd2c-4726-d5e1-cb7345384d1f",
-                "definition": {
-                  "MAIN": {
-                    "DEFAULT": {
-                      "text_color": "#ff9400",
-                      "text_opa": 255,
-                      "text_font": "orbitron_bold_25"
-                    }
-                  }
-                }
-              },
-              "group": "",
-              "groupIndex": 0,
-              "text": "DEBUG AUTONOMOUS",
-              "textType": "literal",
-              "longMode": "WRAP",
-              "recolor": false
-            },
-            {
-              "objID": "0961f028-367b-4c08-c36a-9ef78905bc80",
-              "type": "LVGLLabelWidget",
-              "left": 10,
-              "top": 62,
-              "width": 780,
-              "height": 400,
-              "customInputs": [],
-              "customOutputs": [],
-              "style": {
-                "objID": "ef55e207-e979-44d1-8698-4471e9531631",
-                "useStyle": "default",
-                "conditionalStyles": [],
-                "childStyles": []
-              },
-              "timeline": [],
-              "eventHandlers": [],
-              "identifier": "debugText",
-              "leftUnit": "px",
-              "topUnit": "px",
-              "widthUnit": "content",
-              "heightUnit": "content",
-              "children": [],
-              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
-              "clickableFlagType": "literal",
-              "flagScrollbarMode": "",
-              "flagScrollDirection": "",
-              "scrollSnapX": "",
-              "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledStateType": "literal",
-              "states": "",
-              "useStyle": "text",
-              "localStyles": {
-                "objID": "2ac7530f-ee5f-459a-a285-e3b5c22dee41",
-                "definition": {
-                  "MAIN": {
-                    "DEFAULT": {
-                      "width": 780,
-                      "height": 400,
-                      "text_align": "LEFT",
-                      "text_font": "MONTSERRAT_20",
-                      "text_letter_space": 1,
-                      "text_line_space": 2,
-                      "text_color": "#ff9400"
-                    }
-                  }
-                }
-              },
-              "group": "",
-              "groupIndex": 0,
-              "text": "[00:42.184] CAN_ID: 0x0A2 | INVERTER_L_STATUS: RUNNING\n[00:42.186] CAN_ID: 0x0A3 | INVERTER_R_STATUS: RUNNING\n[00:42.189] AMS_STATE: AS_READY\n[00:42.192] VCU_STATE: RTD_ACTIVE\n[00:42.195] SENSOR_APPS1: 1.42V | SENSOR_APPS2: 0.71V | DEV: 0.02%\n[00:42.198] SENSOR_BSE: 0.85V | BRAKE_PRES: 12.4 BAR\n[00:42.201] HV_BUS: 584.2V | BATT_CURRENT: -142.8A\n[00:42.204] BATT_TEMP_MAX: 42.1°C | BATT_TEMP_MIN: 38.4°C\n[00:42.207] MOTOR_RPM_L: 8420 | MOTOR_RPM_R: 8418\n[00:42.210] TORQUE_REQ: 45.0 Nm | TORQUE_ACT: 44.8 Nm\n[00:42.215] [DEBUG] TV_RATIO: 1.02 (L: 0.49 | R: 0.51)\n[00:42.220] [WARNING] INV_L_TEMP: 68.4°C (Approach Derating Limit)",
-              "textType": "literal",
-              "longMode": "WRAP",
-              "recolor": false
-            }
-          ],
-          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
-          "hiddenFlagType": "literal",
-          "clickableFlag": true,
-          "clickableFlagType": "literal",
-          "checkedStateType": "literal",
-          "disabledStateType": "literal",
-          "states": "",
-          "localStyles": {
-            "objID": "f536df26-52c4-4895-f08c-fd1edb1e461d",
-            "definition": {
-              "MAIN": {
-                "DEFAULT": {
-                  "bg_color": "#000000"
-                }
-              }
-            }
-          },
-          "groupIndex": 0
-        },
-        {
-          "objID": "145beced-4a57-4e02-897e-742106cbf83f",
-          "type": "CallActionActionComponent",
-          "left": 370,
-          "top": -270,
-          "width": 165,
-          "height": 24,
-          "customInputs": [],
-          "customOutputs": [],
-          "action": "screen_changer_action",
-          "userPropertyValues": {
-            "objID": "477f96de-e137-4ffe-a136-69feecd5a7bb",
-            "values": {}
-          }
-        },
-        {
-          "objID": "89182451-6d39-41fe-9ccf-ae5d2fd8f1b7",
-          "type": "StartActionComponent",
-          "left": 226,
-          "top": -270,
-          "width": 87,
-          "height": 24,
-          "customInputs": [],
-          "customOutputs": []
-        }
-      ],
-      "connectionLines": [
-        {
-          "objID": "73e91cec-2297-4d61-c1e7-e76ea5cebc35",
-          "source": "89182451-6d39-41fe-9ccf-ae5d2fd8f1b7",
-          "output": "@seqout",
-          "target": "145beced-4a57-4e02-897e-742106cbf83f",
-          "input": "@seqin"
-        }
-      ],
-      "localVariables": [],
-      "componentGroups": [],
-      "userProperties": [],
-      "name": "Debug Autonomous",
       "left": 0,
       "top": 0,
       "width": 800,
@@ -4208,63 +3959,12 @@
           "heightUnit": "px",
           "children": [
             {
-              "objID": "dcfd40ce-13c6-4d41-d923-700cc5c40d5f",
-              "type": "LVGLLabelWidget",
-              "left": 19,
-              "top": 10,
-              "width": 103,
-              "height": 28,
-              "customInputs": [],
-              "customOutputs": [],
-              "style": {
-                "objID": "4f4115e4-1e79-402e-d456-27eb73931dbd",
-                "useStyle": "default",
-                "conditionalStyles": [],
-                "childStyles": []
-              },
-              "timeline": [],
-              "eventHandlers": [],
-              "leftUnit": "px",
-              "topUnit": "px",
-              "widthUnit": "content",
-              "heightUnit": "content",
-              "children": [],
-              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
-              "hiddenFlagType": "literal",
-              "clickableFlagType": "literal",
-              "flagScrollbarMode": "",
-              "flagScrollDirection": "",
-              "scrollSnapX": "",
-              "scrollSnapY": "",
-              "checkedStateType": "literal",
-              "disabledStateType": "literal",
-              "states": "",
-              "localStyles": {
-                "objID": "11ed3ab4-1ed7-4c24-88ce-03cb4d0c373c",
-                "definition": {
-                  "MAIN": {
-                    "DEFAULT": {
-                      "text_color": "#ff9400",
-                      "text_opa": 255,
-                      "text_font": "orbitron_bold_25"
-                    }
-                  }
-                }
-              },
-              "group": "",
-              "groupIndex": 0,
-              "text": "DEBUG",
-              "textType": "literal",
-              "longMode": "WRAP",
-              "recolor": false
-            },
-            {
               "objID": "2a85b825-c3fe-4cb9-dab2-0366a91208dd",
               "type": "LVGLLabelWidget",
-              "left": 10,
-              "top": 49,
-              "width": 780,
-              "height": 400,
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
               "customInputs": [],
               "customOutputs": [],
               "style": {
@@ -4275,7 +3975,7 @@
               },
               "timeline": [],
               "eventHandlers": [],
-              "identifier": "debugText_1",
+              "identifier": "general_debugText_1",
               "leftUnit": "px",
               "topUnit": "px",
               "widthUnit": "content",
@@ -4297,20 +3997,21 @@
                 "definition": {
                   "MAIN": {
                     "DEFAULT": {
-                      "width": 780,
-                      "height": 400,
+                      "width": 800,
+                      "height": 480,
                       "text_align": "LEFT",
-                      "text_font": "MONTSERRAT_20",
+                      "text_font": "orbitron_25",
                       "text_letter_space": 1,
                       "text_line_space": 2,
-                      "text_color": "#ff9400"
+                      "text_color": "#ff9400",
+                      "length": 0
                     }
                   }
                 }
               },
               "group": "",
               "groupIndex": 0,
-              "text": "[00:42.184] CAN_ID: 0x0A2 | INVERTER_L_STATUS: RUNNING\n[00:42.186] CAN_ID: 0x0A3 | INVERTER_R_STATUS: RUNNING\n[00:42.189] AMS_STATE: AS_READY\n[00:42.192] VCU_STATE: RTD_ACTIVE\n[00:42.195] SENSOR_APPS1: 1.42V | SENSOR_APPS2: 0.71V | DEV: 0.02%\n[00:42.198] SENSOR_BSE: 0.85V | BRAKE_PRES: 12.4 BAR\n[00:42.201] HV_BUS: 584.2V | BATT_CURRENT: -142.8A\n[00:42.204] BATT_TEMP_MAX: 42.1°C | BATT_TEMP_MIN: 38.4°C\n[00:42.207] MOTOR_RPM_L: 8420 | MOTOR_RPM_R: 8418\n[00:42.210] TORQUE_REQ: 45.0 Nm | TORQUE_ACT: 44.8 Nm\n[00:42.215] [DEBUG] TV_RATIO: 1.02 (L: 0.49 | R: 0.51)\n[00:42.220] [WARNING] INV_L_TEMP: 68.4°C (Approach Derating Limit)",
+              "text": " GENERAL DEBUG 1/5\n",
               "textType": "literal",
               "longMode": "WRAP",
               "recolor": false
@@ -4334,46 +4035,1061 @@
             }
           },
           "groupIndex": 0
-        },
-        {
-          "objID": "d0c004d5-4d8a-488a-b738-cd13467fedde",
-          "type": "CallActionActionComponent",
-          "left": 354,
-          "top": -190,
-          "width": 165,
-          "height": 24,
-          "customInputs": [],
-          "customOutputs": [],
-          "action": "screen_changer_action",
-          "userPropertyValues": {
-            "objID": "33271791-4e4f-4a04-e5c3-96187508003f",
-            "values": {}
-          }
-        },
-        {
-          "objID": "3064189a-e9d3-4065-b826-8ab6622add75",
-          "type": "StartActionComponent",
-          "left": 210,
-          "top": -190,
-          "width": 87,
-          "height": 24,
-          "customInputs": [],
-          "customOutputs": []
         }
       ],
-      "connectionLines": [
-        {
-          "objID": "f02312e4-077e-42cd-b616-b4001e8cce0c",
-          "source": "3064189a-e9d3-4065-b826-8ab6622add75",
-          "output": "@seqout",
-          "target": "d0c004d5-4d8a-488a-b738-cd13467fedde",
-          "input": "@seqin"
-        }
-      ],
+      "connectionLines": [],
       "localVariables": [],
       "componentGroups": [],
       "userProperties": [],
-      "name": "Debug",
+      "name": "Debug 1",
+      "left": 0,
+      "top": 0,
+      "width": 800,
+      "height": 480,
+      "isUsedAsUserWidget": false,
+      "createAtStart": true,
+      "deleteOnScreenUnload": false
+    },
+    {
+      "objID": "2cea0f54-3eb8-4f6b-8cb0-004abc3361b2",
+      "components": [
+        {
+          "objID": "a1f24dfa-b5f2-4605-b1bd-5f8dfa74fdc5",
+          "type": "LVGLScreenWidget",
+          "left": 0,
+          "top": 0,
+          "width": 800,
+          "height": 480,
+          "customInputs": [],
+          "customOutputs": [],
+          "style": {
+            "objID": "7cc53e78-09a6-4aef-c6a6-bca8658d1765",
+            "useStyle": "default",
+            "conditionalStyles": [],
+            "childStyles": []
+          },
+          "timeline": [],
+          "eventHandlers": [],
+          "leftUnit": "px",
+          "topUnit": "px",
+          "widthUnit": "px",
+          "heightUnit": "px",
+          "children": [
+            {
+              "objID": "14e1abad-99a6-4ae0-8940-df2e14a0ca4c",
+              "type": "LVGLLabelWidget",
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "5ca32247-4ed5-460e-fa73-06c5f85d36f4",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "general_debugText_2",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "1c0beb98-30c9-4e90-aabf-c8415e56ae43",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 800,
+                      "height": 480,
+                      "text_align": "LEFT",
+                      "text_font": "orbitron_25",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400",
+                      "length": 0
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": " GENERAL DEBUG  2",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
+          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
+          "hiddenFlagType": "literal",
+          "clickableFlag": true,
+          "clickableFlagType": "literal",
+          "checkedStateType": "literal",
+          "disabledStateType": "literal",
+          "states": "",
+          "localStyles": {
+            "objID": "3c642be4-7b45-4a2a-f2a5-e815bba7d357",
+            "definition": {
+              "MAIN": {
+                "DEFAULT": {
+                  "bg_color": "#000000"
+                }
+              }
+            }
+          },
+          "groupIndex": 0
+        }
+      ],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "Debug_Inverter 2",
+      "left": 0,
+      "top": 0,
+      "width": 800,
+      "height": 480,
+      "isUsedAsUserWidget": false,
+      "createAtStart": true,
+      "deleteOnScreenUnload": false
+    },
+    {
+      "objID": "fd08a665-d77a-44a9-b52a-2f09758e2041",
+      "components": [
+        {
+          "objID": "f2b38795-c20f-41fd-fc1d-af1d89c9656b",
+          "type": "LVGLScreenWidget",
+          "left": 0,
+          "top": 0,
+          "width": 800,
+          "height": 480,
+          "customInputs": [],
+          "customOutputs": [],
+          "style": {
+            "objID": "7fe8f13e-d12e-46c8-ae8d-00d5f42bfdc4",
+            "useStyle": "default",
+            "conditionalStyles": [],
+            "childStyles": []
+          },
+          "timeline": [],
+          "eventHandlers": [],
+          "leftUnit": "px",
+          "topUnit": "px",
+          "widthUnit": "px",
+          "heightUnit": "px",
+          "children": [
+            {
+              "objID": "b254bc56-d0fa-4b66-c011-297f4d15a50e",
+              "type": "LVGLLabelWidget",
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "57aeceb3-dcbb-439b-ca66-ac383d75c8db",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "general_debugText_3",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "629252f8-f622-4d24-ebf5-aa574a5e24e8",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 800,
+                      "height": 480,
+                      "text_align": "LEFT",
+                      "text_font": "orbitron_25",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400",
+                      "length": 0
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": " GENERAL DEBUG  3",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
+          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
+          "hiddenFlagType": "literal",
+          "clickableFlag": true,
+          "clickableFlagType": "literal",
+          "checkedStateType": "literal",
+          "disabledStateType": "literal",
+          "states": "",
+          "localStyles": {
+            "objID": "4fa9572c-7d4b-484e-8dae-773c5f548e71",
+            "definition": {
+              "MAIN": {
+                "DEFAULT": {
+                  "bg_color": "#000000"
+                }
+              }
+            }
+          },
+          "groupIndex": 0
+        }
+      ],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "Debug_3",
+      "left": 0,
+      "top": 0,
+      "width": 800,
+      "height": 480,
+      "isUsedAsUserWidget": false,
+      "createAtStart": true,
+      "deleteOnScreenUnload": false
+    },
+    {
+      "objID": "7aa7be96-32ec-47a9-c482-d4d20bd8a5c7",
+      "components": [
+        {
+          "objID": "f8e719dc-e6b5-42b5-eede-6b39f5f8ca84",
+          "type": "LVGLScreenWidget",
+          "left": 0,
+          "top": 0,
+          "width": 800,
+          "height": 480,
+          "customInputs": [],
+          "customOutputs": [],
+          "style": {
+            "objID": "3643d18c-523c-4e19-a2dd-2ffd8be747f7",
+            "useStyle": "default",
+            "conditionalStyles": [],
+            "childStyles": []
+          },
+          "timeline": [],
+          "eventHandlers": [],
+          "leftUnit": "px",
+          "topUnit": "px",
+          "widthUnit": "px",
+          "heightUnit": "px",
+          "children": [
+            {
+              "objID": "9cefd70c-694e-4504-af12-1eec8100a65f",
+              "type": "LVGLLabelWidget",
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "80da6a39-6495-49e1-99d7-16195f9a1a0d",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "general_debugText_4",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "7d3388d6-2030-44f9-891b-be0b15351e44",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 800,
+                      "height": 480,
+                      "text_align": "LEFT",
+                      "text_font": "orbitron_25",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400",
+                      "length": 0
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": " GENERAL DEBUG 4",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
+          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
+          "hiddenFlagType": "literal",
+          "clickableFlag": true,
+          "clickableFlagType": "literal",
+          "checkedStateType": "literal",
+          "disabledStateType": "literal",
+          "states": "",
+          "localStyles": {
+            "objID": "8d382f12-8dfc-4918-e2d5-099c7d5daa60",
+            "definition": {
+              "MAIN": {
+                "DEFAULT": {
+                  "bg_color": "#000000"
+                }
+              }
+            }
+          },
+          "groupIndex": 0
+        }
+      ],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "Debug_Wheels 4",
+      "left": 0,
+      "top": 0,
+      "width": 800,
+      "height": 480,
+      "isUsedAsUserWidget": false,
+      "createAtStart": true,
+      "deleteOnScreenUnload": false
+    },
+    {
+      "objID": "ae69d5fb-6135-4953-f67c-43afb7870e52",
+      "components": [
+        {
+          "objID": "d9b03fe1-553e-41fb-ccd7-354398a5c34c",
+          "type": "LVGLScreenWidget",
+          "left": 0,
+          "top": 0,
+          "width": 800,
+          "height": 480,
+          "customInputs": [],
+          "customOutputs": [],
+          "style": {
+            "objID": "0dafd1ec-20fd-422c-89ad-b947252d56ff",
+            "useStyle": "default",
+            "conditionalStyles": [],
+            "childStyles": []
+          },
+          "timeline": [],
+          "eventHandlers": [],
+          "leftUnit": "px",
+          "topUnit": "px",
+          "widthUnit": "px",
+          "heightUnit": "px",
+          "children": [
+            {
+              "objID": "76e0491c-555b-444c-95a4-361af099e1cd",
+              "type": "LVGLLabelWidget",
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "69fcfd03-9189-4efb-cf47-6c8d13c8a2fe",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "general_debugText_5",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "6b0c4bd1-3880-4672-a6ce-71e702a3a4b3",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 800,
+                      "height": 480,
+                      "text_align": "LEFT",
+                      "text_font": "orbitron_25",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400",
+                      "length": 0
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": " GENERAL DEBUG  5",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
+          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
+          "hiddenFlagType": "literal",
+          "clickableFlag": true,
+          "clickableFlagType": "literal",
+          "checkedStateType": "literal",
+          "disabledStateType": "literal",
+          "states": "",
+          "localStyles": {
+            "objID": "09ceca6d-a1d0-483a-e2c4-6ea5544fd76e",
+            "definition": {
+              "MAIN": {
+                "DEFAULT": {
+                  "bg_color": "#000000"
+                }
+              }
+            }
+          },
+          "groupIndex": 0
+        }
+      ],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "Debug 5",
+      "left": 0,
+      "top": 0,
+      "width": 800,
+      "height": 480,
+      "isUsedAsUserWidget": false,
+      "createAtStart": true,
+      "deleteOnScreenUnload": false
+    },
+    {
+      "objID": "35331414-aa25-4ec1-be2d-d54a497b85a7",
+      "components": [
+        {
+          "objID": "335091c4-e83f-4beb-a770-b8bcef044c64",
+          "type": "LVGLScreenWidget",
+          "left": 0,
+          "top": 0,
+          "width": 800,
+          "height": 480,
+          "customInputs": [],
+          "customOutputs": [],
+          "style": {
+            "objID": "fb43a54e-664c-4278-c5ca-31aa86630a6d",
+            "useStyle": "default",
+            "conditionalStyles": [],
+            "childStyles": []
+          },
+          "timeline": [],
+          "eventHandlers": [],
+          "leftUnit": "px",
+          "topUnit": "px",
+          "widthUnit": "px",
+          "heightUnit": "px",
+          "children": [
+            {
+              "objID": "0961f028-367b-4c08-c36a-9ef78905bc80",
+              "type": "LVGLLabelWidget",
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "ef55e207-e979-44d1-8698-4471e9531631",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "autonomous_debugText_1",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "2ac7530f-ee5f-459a-a285-e3b5c22dee41",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 800,
+                      "height": 480,
+                      "text_align": "LEFT",
+                      "text_font": "orbitron_25",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400"
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": " AUTONOMOUS DEBUG  1\n",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
+          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
+          "hiddenFlagType": "literal",
+          "clickableFlag": true,
+          "clickableFlagType": "literal",
+          "checkedStateType": "literal",
+          "disabledStateType": "literal",
+          "states": "",
+          "localStyles": {
+            "objID": "f536df26-52c4-4895-f08c-fd1edb1e461d",
+            "definition": {
+              "MAIN": {
+                "DEFAULT": {
+                  "bg_color": "#000000"
+                }
+              }
+            }
+          },
+          "groupIndex": 0
+        }
+      ],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "Debug Autonomous 1",
+      "left": 0,
+      "top": 0,
+      "width": 800,
+      "height": 480,
+      "isUsedAsUserWidget": false,
+      "createAtStart": true,
+      "deleteOnScreenUnload": false
+    },
+    {
+      "objID": "7b836a15-8b87-49df-926f-e7ff84bb3584",
+      "components": [
+        {
+          "objID": "9a2c8271-796f-4e62-ca0e-c4e53e1df8e1",
+          "type": "LVGLScreenWidget",
+          "left": 0,
+          "top": 0,
+          "width": 800,
+          "height": 480,
+          "customInputs": [],
+          "customOutputs": [],
+          "style": {
+            "objID": "438b133c-25b0-411d-bb72-bf8fe6059ab6",
+            "useStyle": "default",
+            "conditionalStyles": [],
+            "childStyles": []
+          },
+          "timeline": [],
+          "eventHandlers": [],
+          "leftUnit": "px",
+          "topUnit": "px",
+          "widthUnit": "px",
+          "heightUnit": "px",
+          "children": [
+            {
+              "objID": "e00aa57a-422d-4505-c308-427d3441d00a",
+              "type": "LVGLLabelWidget",
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "9d96a85d-4f0d-4071-f843-9c4774498a3a",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "autonomous_debugText_2",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "a8380078-8cca-43c6-a8a9-f4cdd5365b13",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 800,
+                      "height": 480,
+                      "text_align": "LEFT",
+                      "text_font": "orbitron_25",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400"
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": " AUTONOMOUS DEBUG 2\n \n",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
+          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
+          "hiddenFlagType": "literal",
+          "clickableFlag": true,
+          "clickableFlagType": "literal",
+          "checkedStateType": "literal",
+          "disabledStateType": "literal",
+          "states": "",
+          "localStyles": {
+            "objID": "ea9984cd-3b16-42f8-8234-fc08e4810137",
+            "definition": {
+              "MAIN": {
+                "DEFAULT": {
+                  "bg_color": "#000000"
+                }
+              }
+            }
+          },
+          "groupIndex": 0
+        }
+      ],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "Debug Autonomous 2",
+      "left": 0,
+      "top": 0,
+      "width": 800,
+      "height": 480,
+      "isUsedAsUserWidget": false,
+      "createAtStart": true,
+      "deleteOnScreenUnload": false
+    },
+    {
+      "objID": "a5c52b5b-e451-4326-967e-a161f9a69b05",
+      "components": [
+        {
+          "objID": "a1e08280-8f91-4de0-cace-22511b2a95eb",
+          "type": "LVGLScreenWidget",
+          "left": 0,
+          "top": 0,
+          "width": 800,
+          "height": 480,
+          "customInputs": [],
+          "customOutputs": [],
+          "style": {
+            "objID": "d160c91d-1acd-44fc-9335-43d9f85511e2",
+            "useStyle": "default",
+            "conditionalStyles": [],
+            "childStyles": []
+          },
+          "timeline": [],
+          "eventHandlers": [],
+          "leftUnit": "px",
+          "topUnit": "px",
+          "widthUnit": "px",
+          "heightUnit": "px",
+          "children": [
+            {
+              "objID": "30f7335c-0807-4737-ca0a-f17fb46c299d",
+              "type": "LVGLLabelWidget",
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "dbcb3bdb-9274-4180-d216-373481690b27",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "autonomous_debugText_3",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "8c42cfa8-d5f4-4f73-bd2e-2701c09055b9",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 800,
+                      "height": 480,
+                      "text_align": "LEFT",
+                      "text_font": "orbitron_25",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400"
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": " AUTONOMOUS DEBUG 3\n \n",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
+          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
+          "hiddenFlagType": "literal",
+          "clickableFlag": true,
+          "clickableFlagType": "literal",
+          "checkedStateType": "literal",
+          "disabledStateType": "literal",
+          "states": "",
+          "localStyles": {
+            "objID": "b43deaa0-7a5f-400d-d2de-ef57ce7a436e",
+            "definition": {
+              "MAIN": {
+                "DEFAULT": {
+                  "bg_color": "#000000"
+                }
+              }
+            }
+          },
+          "groupIndex": 0
+        }
+      ],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "Debug Autonomous 3",
+      "left": 0,
+      "top": 0,
+      "width": 800,
+      "height": 480,
+      "isUsedAsUserWidget": false,
+      "createAtStart": true,
+      "deleteOnScreenUnload": false
+    },
+    {
+      "objID": "56ca2506-3371-4654-9e9b-6905927ec00d",
+      "components": [
+        {
+          "objID": "d977c4fa-1a36-4fcf-9568-5dd53bbb6190",
+          "type": "LVGLScreenWidget",
+          "left": 0,
+          "top": 0,
+          "width": 800,
+          "height": 480,
+          "customInputs": [],
+          "customOutputs": [],
+          "style": {
+            "objID": "285f584d-39c8-4694-af51-b6bf3499cfb4",
+            "useStyle": "default",
+            "conditionalStyles": [],
+            "childStyles": []
+          },
+          "timeline": [],
+          "eventHandlers": [],
+          "leftUnit": "px",
+          "topUnit": "px",
+          "widthUnit": "px",
+          "heightUnit": "px",
+          "children": [
+            {
+              "objID": "29558765-e000-46cc-85a9-a5f85eb04cc6",
+              "type": "LVGLLabelWidget",
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "6944ca41-0a7c-4f99-e811-3720589be74a",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "autonomous_debugText_4",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "8f7a4265-f43d-45e2-ba49-5c50242f18c1",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 800,
+                      "height": 480,
+                      "text_align": "LEFT",
+                      "text_font": "orbitron_25",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400"
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": " AUTONOMOUS DEBUG 4\n\n",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
+          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
+          "hiddenFlagType": "literal",
+          "clickableFlag": true,
+          "clickableFlagType": "literal",
+          "checkedStateType": "literal",
+          "disabledStateType": "literal",
+          "states": "",
+          "localStyles": {
+            "objID": "ad73d634-27fc-4ae9-98e3-5e07e58badbf",
+            "definition": {
+              "MAIN": {
+                "DEFAULT": {
+                  "bg_color": "#000000"
+                }
+              }
+            }
+          },
+          "groupIndex": 0
+        }
+      ],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "Debug Autonomous 4",
+      "left": 0,
+      "top": 0,
+      "width": 800,
+      "height": 480,
+      "isUsedAsUserWidget": false,
+      "createAtStart": true,
+      "deleteOnScreenUnload": false
+    },
+    {
+      "objID": "9eee85d9-2eee-4d9e-cf8c-04535aee68ae",
+      "components": [
+        {
+          "objID": "7f08f7e3-1cdd-4406-c708-b4670255f5aa",
+          "type": "LVGLScreenWidget",
+          "left": 0,
+          "top": 0,
+          "width": 800,
+          "height": 480,
+          "customInputs": [],
+          "customOutputs": [],
+          "style": {
+            "objID": "d260fc88-83cf-40b6-d76c-a89780d62c66",
+            "useStyle": "default",
+            "conditionalStyles": [],
+            "childStyles": []
+          },
+          "timeline": [],
+          "eventHandlers": [],
+          "leftUnit": "px",
+          "topUnit": "px",
+          "widthUnit": "px",
+          "heightUnit": "px",
+          "children": [
+            {
+              "objID": "5732ed7c-011f-4390-a5a2-6b7d52a2a76e",
+              "type": "LVGLLabelWidget",
+              "left": 0,
+              "top": 0,
+              "width": 800,
+              "height": 480,
+              "customInputs": [],
+              "customOutputs": [],
+              "style": {
+                "objID": "ab041bac-f3de-4c84-8993-c50eed75e721",
+                "useStyle": "default",
+                "conditionalStyles": [],
+                "childStyles": []
+              },
+              "timeline": [],
+              "eventHandlers": [],
+              "identifier": "autonomous_debugText_5",
+              "leftUnit": "px",
+              "topUnit": "px",
+              "widthUnit": "content",
+              "heightUnit": "content",
+              "children": [],
+              "widgetFlags": "CLICK_FOCUSABLE|GESTURE_BUBBLE|PRESS_LOCK|SCROLLABLE|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_WITH_ARROW|SNAPPABLE",
+              "hiddenFlagType": "literal",
+              "clickableFlagType": "literal",
+              "flagScrollbarMode": "",
+              "flagScrollDirection": "",
+              "scrollSnapX": "",
+              "scrollSnapY": "",
+              "checkedStateType": "literal",
+              "disabledStateType": "literal",
+              "states": "",
+              "useStyle": "text",
+              "localStyles": {
+                "objID": "21b7ea66-52b5-4e95-a0ad-a62c30930ee6",
+                "definition": {
+                  "MAIN": {
+                    "DEFAULT": {
+                      "width": 800,
+                      "height": 480,
+                      "text_align": "LEFT",
+                      "text_font": "orbitron_25",
+                      "text_letter_space": 1,
+                      "text_line_space": 2,
+                      "text_color": "#ff9400"
+                    }
+                  }
+                }
+              },
+              "group": "",
+              "groupIndex": 0,
+              "text": " AUTONOMOUS DEBUG 5\n\n",
+              "textType": "literal",
+              "longMode": "WRAP",
+              "recolor": false
+            }
+          ],
+          "widgetFlags": "CLICKABLE|PRESS_LOCK|CLICK_FOCUSABLE|GESTURE_BUBBLE|SNAPPABLE|SCROLLABLE|SCROLL_ELASTIC|SCROLL_MOMENTUM|SCROLL_CHAIN_HOR|SCROLL_CHAIN_VER",
+          "hiddenFlagType": "literal",
+          "clickableFlag": true,
+          "clickableFlagType": "literal",
+          "checkedStateType": "literal",
+          "disabledStateType": "literal",
+          "states": "",
+          "localStyles": {
+            "objID": "3e565a36-c2c3-4137-8392-af55e2e4e42e",
+            "definition": {
+              "MAIN": {
+                "DEFAULT": {
+                  "bg_color": "#000000"
+                }
+              }
+            }
+          },
+          "groupIndex": 0
+        }
+      ],
+      "connectionLines": [],
+      "localVariables": [],
+      "componentGroups": [],
+      "userProperties": [],
+      "name": "Debug Autonomous 5",
       "left": 0,
       "top": 0,
       "width": 800,
@@ -4476,7 +5192,7 @@
       "descent": 5,
       "glyphs": [],
       "lvglRanges": "32-127",
-      "lvglSymbols": "°",
+      "lvglSymbols": "|—–_-¯|°│",
       "lvglAdditionalSources": [],
       "lvglGlyphs": {
         "encodings": [
@@ -4504,7 +5220,7 @@
       "descent": 23,
       "glyphs": [],
       "lvglRanges": "32-127",
-      "lvglSymbols": "°",
+      "lvglSymbols": "|—–_-¯|°│",
       "lvglAdditionalSources": [],
       "lvglGlyphs": {
         "encodings": [
@@ -4533,7 +5249,7 @@
       "descent": 7,
       "glyphs": [],
       "lvglRanges": "32-127",
-      "lvglSymbols": "°",
+      "lvglSymbols": "|—–_-¯|°│",
       "lvglAdditionalSources": [],
       "lvglGlyphs": {
         "encodings": [
@@ -4562,7 +5278,7 @@
       "descent": 11,
       "glyphs": [],
       "lvglRanges": "32-127",
-      "lvglSymbols": "°",
+      "lvglSymbols": "|—–_-¯|°│",
       "lvglAdditionalSources": [],
       "lvglGlyphs": {
         "encodings": [
@@ -4591,7 +5307,7 @@
       "descent": 4,
       "glyphs": [],
       "lvglRanges": "32-127",
-      "lvglSymbols": "",
+      "lvglSymbols": "|—–_-¯|°│",
       "lvglAdditionalSources": [],
       "lvglGlyphs": {
         "encodings": [
@@ -4621,7 +5337,7 @@
       "descent": 4,
       "glyphs": [],
       "lvglRanges": "32-127",
-      "lvglSymbols": "",
+      "lvglSymbols": "|—–_-¯|°│",
       "lvglAdditionalSources": [],
       "lvglGlyphs": {
         "encodings": [
@@ -4649,7 +5365,7 @@
       "descent": 6,
       "glyphs": [],
       "lvglRanges": "32-127",
-      "lvglSymbols": "",
+      "lvglSymbols": "|—–_-¯|°│",
       "lvglAdditionalSources": [],
       "lvglGlyphs": {
         "encodings": [
@@ -4678,7 +5394,7 @@
       "descent": 9,
       "glyphs": [],
       "lvglRanges": "32-127",
-      "lvglSymbols": "",
+      "lvglSymbols": "|—–_-¯|°│",
       "lvglAdditionalSources": [],
       "lvglGlyphs": {
         "encodings": [
@@ -4690,6 +5406,35 @@
         "symbols": ""
       },
       "embeddedFontFileIndex": 0
+    },
+    {
+      "objID": "b138fc70-2568-4fc9-ac2e-fd393ff41022",
+      "name": "orbitron_25",
+      "renderingEngine": "LVGL",
+      "source": {
+        "objID": "c66192ae-7f7b-4dd4-88e2-5f69a8fe0c86",
+        "filePath": "fonts/Orbitron-Regular.ttf",
+        "size": 25
+      },
+      "bpp": 4,
+      "threshold": 128,
+      "height": 28,
+      "ascent": 22,
+      "descent": 6,
+      "glyphs": [],
+      "lvglRanges": "32-127",
+      "lvglSymbols": "|—–_-¯|°│",
+      "lvglAdditionalSources": [],
+      "lvglGlyphs": {
+        "encodings": [
+          {
+            "from": 32,
+            "to": 127
+          }
+        ],
+        "symbols": ""
+      },
+      "embeddedFontFileIndex": 5
     }
   ],
   "bitmaps": [

@@ -29,6 +29,14 @@ def generate_launch_description():
             output='screen',
             emulate_tty=True,
         ),
+        Node(
+            package='lart_bringup',
+            executable='dashboard_state_bridge',
+            name='dashboard_state_bridge',
+            parameters=[config],
+            output='screen',
+            emulate_tty=True,
+        ),
         # input_handler with sim_mode=true — no GPIO, no events (keyboard/mouse
         # events from the pygame window can be added to ui_app.py for testing)
         Node(

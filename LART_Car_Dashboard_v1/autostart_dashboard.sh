@@ -3,8 +3,20 @@
 
 PROJECT_DIR="/home/lart2026/GIT/data_station/LART_Car_Dashboard_v1"
 
-# Log output for debugging
-exec > /home/lart2026/dashboard_boot.log 2>&1
+# Log output for debugging with timestamps
+LOG_FILE="/home/lart2026/dashboard_boot.log"
+if [ ! -t 1 ]; then
+    # Non-interactive: redirect everything to log file with timestamps
+    exec > >(while IFS= read -r line; do echo "$(date '+[%Y-%m-%d %H:%M:%S]') $line"; done >> "$LOG_FILE") 2>&1
+else
+    # Interactive: show in terminal and write to log file, both with timestamps
+    exec 3>&1
+    exec > >(while IFS= read -r line; do
+        formatted="$(date '+[%Y-%m-%d %H:%M:%S]') $line"
+        echo "$formatted" >&3
+        echo "$formatted" >> "$LOG_FILE"
+    done) 2>&1
+fi
 
 echo "Starting LART Dashboard at $(date)"
 

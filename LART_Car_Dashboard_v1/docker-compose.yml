@@ -99,6 +99,59 @@ services:
     tty: true
     ipc: host
 
+  # ── CAN Bridge / DBC Simulation stack ──────────────────────────────────────
+  # Mounts the data_station workspace (../../data_station relative to this file)
+  # and runs can_simulator + can_bridge with autonomous_t26.dbc.
+  # Publishes decoded signals on /can/dbc/<msg>/<signal> topics visible to all
+  # containers on lart-ros2-network.
+  #
+  # The data_station path is resolved via ${DATA_STATION_PATH} (default: ../..
+  # relative to this file, i.e. /home/$USER/dev/data_station).
+  # Override from the host:  DATA_STATION_PATH=/path/to/data_station docker compose up can_bridge
+  #
+  # Usage:
+  #   docker compose up can_bridge            # start only the CAN stack
+  #   docker compose logs -f can_bridge       # follow logs
+  #   docker exec -it lart-can-bridge \
+  #     bash -lc "ros2 topic list | grep /can/dbc"
+  #   docker exec -it lart-can-bridge \
+  #     bash -lc "ros2 topic echo /can/dbc/acu/ign std_msgs/msg/Float32"
+  can_bridge:
+    image: lart-dashboard-ros2
+    container_name: lart-can-bridge
+    hostname: can_bridge
+    environment:
+      <<: *common-environment
+      DATA_STATION_WS: /root/data_station_ws
+    volumes:
+      - ${DATA_STATION_PATH:-..}:/root/data_station_ws:ro
+    cap_add:
+      - NET_ADMIN   # needed for ip link / vcan
+    command: |
+      bash -c "
+        source /root/.bashrc &&
+        echo '=== Installing cantools ===' &&
+        pip install --break-system-packages --ignore-installed 'cantools>=39.0' &&
+        python3 -c 'import cantools; print("cantools", cantools.__version__, "ready")' &&
+        echo '=== Setting up virtual CAN (vcan0) ===' &&
+        modprobe vcan 2>/dev/null || true &&
+        ip link add vcan0 type vcan 2>/dev/null || true &&
+        ip link set vcan0 up &&
+        echo 'vcan0 is UP' &&
+        echo '=== Building data_station ROS packages ===' &&
+        mkdir -p /root/ds_build/build /root/ds_build/install /root/ds_build/log &&
+        cd /tmp && COLCON_LOG_PATH=/root/ds_build/log colcon build --build-base /root/ds_build/build --install-base /root/ds_build/install --base-paths /root/data_station_ws/src --packages-select lart_msgs lart_bringup sim &&
+        source /root/ds_build/install/setup.bash &&
+        echo '=== Launching DBC simulation stack ===' &&
+        ros2 launch lart_bringup dbc_sim.launch.py
+      "
+    networks:
+      - lart-ros2-network
+    stdin_open: true
+    tty: true
+    ipc: host
+
+
 networks:
   lart-ros2-network:
     driver: bridge

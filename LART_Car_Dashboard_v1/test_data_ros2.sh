@@ -1,11 +1,9 @@
 #!/bin/bash
-# Test Data Generator for LART Dashboard ROS 2
-# Publishes sample speed data to test the topic communication
+# Test Data Generator for LART Dashboard ROS 2 (Local / Pure ROS 2 Version)
+# Publishes sample speed data directly using local ROS 2 environment
 
 set -e
 
-CONTAINER_NAME="lart-dashboard-publisher"
-SCREEN_CONTAINER_NAME="lart-dashboard-screen-changer"
 TOPIC_PREFIX="/vehicle"
 SCREEN_TOPIC="/dashboard/set_screen"
 SPEED_VALUES=(10 20 30 40 50 60 70 80 90 100)
@@ -13,18 +11,38 @@ SEND_DELAY_NORMAL=0
 SEND_DELAY_FAST=0
 
 echo "╔════════════════════════════════════════════════════════════╗"
-echo "║  LART Dashboard - ROS 2 Test Data Generator                ║"
+echo "║  LART Dashboard - ROS 2 Test Data Generator (Local)        ║"
 echo "╚════════════════════════════════════════════════════════════╝"
 echo ""
 
-# Check if container is running
-if ! docker ps -q --filter "name=$CONTAINER_NAME" | grep -q .; then
-    echo "✗ Publisher container is not running!"
-    echo "  Start it with: make compose-up"
+# Source ROS 2 if not already available
+if ! command -v ros2 &> /dev/null; then
+    echo "ROS 2 command not found, trying to source setup files..."
+    if [ -f "/opt/ros/jazzy/setup.bash" ]; then
+        echo "Sourcing /opt/ros/jazzy/setup.bash"
+        source /opt/ros/jazzy/setup.bash
+    elif [ -f "$HOME/ros2_jazzy/install/local_setup.bash" ]; then
+        echo "Sourcing $HOME/ros2_jazzy/install/local_setup.bash"
+        source "$HOME/ros2_jazzy/install/local_setup.bash"
+    fi
+fi
+
+# Source workspace setup if not already sourced
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+if [ -f "$SCRIPT_DIR/install/setup.bash" ]; then
+    echo "Sourcing local workspace: $SCRIPT_DIR/install/setup.bash"
+    source "$SCRIPT_DIR/install/setup.bash"
+elif [ -f "$SCRIPT_DIR/../install/setup.bash" ]; then
+    echo "Sourcing local workspace: $SCRIPT_DIR/../install/setup.bash"
+    source "$SCRIPT_DIR/../install/setup.bash"
+fi
+
+if ! command -v ros2 &> /dev/null; then
+    echo "✗ ROS 2 is not found! Please source ROS 2 first."
     exit 1
 fi
 
-echo "✓ Publisher container is running: $CONTAINER_NAME"
+echo "✓ ROS 2 environment is ready."
 echo ""
 
 rand_int() {
@@ -57,31 +75,25 @@ publish_speed_batch() {
         return 0
     fi
 
-    if ! docker exec "$CONTAINER_NAME" bash -lc '
-        source /opt/ros/jazzy/setup.bash &&
-        source /root/lart_ws/install/setup.bash &&
-        delay="$1s"
-        shift
+    local delay_sec="$delay"
+    for speed_kph in "$@"; do
+        if [ "$speed_kph" -lt 0 ]; then
+            speed_kph=0
+        fi
+        if [ "$speed_kph" -gt 120 ]; then
+            speed_kph=120
+        fi
 
-        for speed_kph in "$@"; do
-            if [ "$speed_kph" -lt 0 ]; then
-                speed_kph=0
-            fi
-            if [ "$speed_kph" -gt 120 ]; then
-                speed_kph=120
-            fi
+        echo "Publishing: speed_kph=$speed_kph km/h"
+        if ! ros2 topic pub -1 /vehicle/speed_kph std_msgs/msg/Float32 "{data: $speed_kph}"; then
+            echo "✗ Failed to publish test data to $TOPIC_PREFIX/speed_kph"
+            return 1
+        fi
 
-            ros2 topic pub -1 /vehicle/speed_kph std_msgs/msg/Float32 "{data: $speed_kph}"
-
-            if [ "$delay" != "0" ]; then
-                sleep "$delay"
-            fi
-        done
-    ' bash "$delay" "$@"; then
-        echo "✗ Failed to publish test data to $TOPIC_PREFIX/speed_kph"
-        echo "  Check container logs with: make logs-pub"
-        return 1
-    fi
+        if [ "$delay_sec" != "0" ]; then
+            sleep "$delay_sec"
+        fi
+    done
 }
 
 publish_test_data() {
@@ -95,10 +107,9 @@ publish_test_data() {
         speed_kph=120
     fi
 
-    echo "Publishing: speed_kph=$speed_kph km/h"
-
     publish_speed_batch 0 "$speed_kph"
 }
+
 # Menu
 show_menu() {
     echo "Select test scenario:"
@@ -177,18 +188,10 @@ publish_screen() {
     local screen_id=$1
     echo "Publishing screen change: id=$screen_id to $SCREEN_TOPIC..."
 
-    # Try screen_changer container first, fall back to publisher
-    local container="$SCREEN_CONTAINER_NAME"
-    if ! docker ps -q --filter "name=$container" | grep -q .; then
-        echo "  (screen_changer container not running, using publisher instead)"
-        container="$CONTAINER_NAME"
+    if ! ros2 topic pub -1 $SCREEN_TOPIC std_msgs/msg/Int32 "{data: ${screen_id}}"; then
+        echo "✗ Failed to publish screen change to $SCREEN_TOPIC"
+        return 1
     fi
-
-    docker exec "$container" bash -lc "
-        source /opt/ros/jazzy/setup.bash &&
-        source /root/lart_ws/install/setup.bash 2>/dev/null || true &&
-        ros2 topic pub -1 $SCREEN_TOPIC std_msgs/msg/Int32 '{data: ${screen_id}}'
-    "
 }
 
 show_screen_menu() {
@@ -234,11 +237,11 @@ show_screen_menu() {
 show_help() {
     cat << EOF
 ╔════════════════════════════════════════════════════════════╗
-║  Test Data Generator - Help                                ║
+║  Test Data Generator (Local ROS 2) - Help                  ║
 ╚════════════════════════════════════════════════════════════╝
 
 This script helps test the ROS 2 topic communication by publishing
-sample speed data to dashboard topics.
+sample speed data to dashboard topics locally.
 
 Publishing to:
     - $TOPIC_PREFIX/speed_kph (std_msgs/Float32)
@@ -256,20 +259,18 @@ Test Scenarios:
                  0=Driver View, 1=Autonomous, 2-6=Debug 1-5, 7-11=Debug Autonomous 1-5
 
 Prerequisites:
-  - Docker containers must be running: make compose-up
-  - Containers need network connectivity
+  - ROS 2 Jazzy must be installed and sourced.
+  - Local workspace should be built and sourced.
 
 Monitoring:
-  - View publisher logs:    make logs-pub
-  - Check all topics:       make shell
+  - Check all topics:       ros2 topic list
                             ros2 topic echo /vehicle/speed_kph
                             ros2 topic echo /dashboard/set_screen
 
 Example workflow:
-  1. make compose-up        # Start containers
-  2. ./test_data.sh         # Run this script
-  3. make compose-logs      # View results
-  4. make compose-down      # Stop when done
+  1. source /opt/ros/jazzy/setup.bash
+  2. source install/setup.bash
+  3. ./test_data_ros2.sh
 
 Speed Values:
   - 0 km/h    : Idle

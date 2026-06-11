@@ -1,0 +1,167 @@
+VERSION " "
+
+
+NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+BU_: JETSON VCU ACU RES DYN_F DYN_R FSG_DATA_LOGGER AK10_9 Aquisition_Board1 Aquisition_Board2 Aquisition_Board3 Aquisition_Board4 Aquisition_Board7
+
+
+BO_ 81 ACU: 8 ACU
+ SG_ IGN : 24|1@1+ (1,0) [0|1] ""  JETSON
+ SG_ ASMS : 23|1@1+ (1,0) [0|1] ""  JETSON
+ SG_ EMERGENCY : 22|1@1+ (1,0) [0|1] ""  JETSON
+ SG_ AS_STATE : 19|3@1+ (1,0) [0|0] ""  JETSON
+ SG_ ACU_STATE : 4|4@1+ (1,0) [0|0] ""  JETSON
+ SG_ ASSI_STATE : 0|4@1+ (1,0) [0|0] ""  JETSON
+ SG_ ACU_CPU_TEMP : 8|8@1+ (1,0) [0|255] "�"  JETSON
+ SG_ Mission_select : 16|3@1+ (1,0) [0|0] ""  JETSON
+ SG_ EMERGENCY_cause : 25|7@1+ (1,0) [0|0] ""  JETSON
+
+BO_ 2147494248 CubeMars_Feedback: 8 AK10_9
+ SG_ Position : 0|16@1- (0.1,0) [-3200|3200] "deg"  JETSON
+ SG_ Speed_RPM : 16|16@1- (1890,0) [-320000|320000] "ERPM"  JETSON
+ SG_ Current : 32|16@1- (0.01,0) [-60|60] "A"  JETSON
+ SG_ Driver_Temp : 48|8@1- (1,0) [-20|127] "degC"  JETSON
+ SG_ Error_Code : 56|8@1+ (1,0) [0|255] ""  JETSON
+
+BO_ 2147484776 CubeMars_position_loop: 4 JETSON
+ SG_ POSITION : 7|32@0- (1000,0) [0|0] "�"  AK10_9
+
+BO_ 1808 AQT1: 3 Aquisition_Board1
+ SG_ BRK_PRESS : 0|16@1+ (0.1,0) [0|0] "bar"  ACU
+ SG_ RES : 16|1@1+ (1,0) [0|0] ""  JETSON
+ SG_ BOTS : 17|1@1+ (1,0) [0|0] ""  JETSON
+
+BO_ 1824 AQT2: 2 Aquisition_Board2
+ SG_ WHEEL_ANGLE : 0|16@1- (0.1,0) [0|0] "�"  JETSON
+
+BO_ 1840 AQT3: 2 Aquisition_Board3
+ SG_ WHEEL_ANGLE : 0|16@1- (0.1,0) [0|0] "�"  JETSON
+
+BO_ 1856 AQT4: 3 Aquisition_Board4
+ SG_ ST_ANGLE : 0|16@1- (0.1,0) [0|0] "�"  JETSON
+ SG_ INERTIA : 16|1@1+ (1,0) [0|0] ""  JETSON
+ SG_ EMER_BUTTON : 17|1@1+ (1,0) [0|0] ""  JETSON
+
+BO_ 1904 AQT7: 2 Aquisition_Board7
+ SG_ BRK_PRESS : 0|16@1+ (0.1,0) [0|0] "bar"  ACU
+
+BO_ 1536 VCU_IGN_R2D: 8 VCU
+ SG_ ignition_manual : 0|8@1+ (1,0) [0|0] ""  ACU
+ SG_ r2d_manual : 8|8@1+ (1,0) [0|0] ""  ACU
+ SG_ ignition_auto : 16|8@1+ (1,0) [0|0] ""  ACU
+ SG_ r2d_auto : 24|8@1+ (1,0) [0|0] ""  ACU
+ SG_ shutdown_signal : 32|8@1+ (1,0) [0|0] ""  ACU
+ SG_ vcu_state : 40|8@1+ (1,0) [0|0] ""  ACU
+ SG_ R2D_button_raw : 48|8@1+ (1,0) [0|0] ""  ACU
+ SG_ Ignition_switch_raw : 56|8@1+ (1,0) [0|0] ""  ACU
+
+BO_ 1280 DV_dynamics_1: 8 JETSON
+ SG_ Speed_actual : 0|8@1+ (1,0) [0|255] "km/h"  FSG_DATA_LOGGER
+ SG_ Speed_target : 8|8@1+ (1,0) [0|255] "km/h"  FSG_DATA_LOGGER
+ SG_ Steering_angle_actual : 16|8@1- (0.5,0) [-64|63.5] "�"  FSG_DATA_LOGGER
+ SG_ Steering_angle_target : 24|8@1- (0.5,0) [-64|63.5] "�"  FSG_DATA_LOGGER
+ SG_ Brake_hydr_actual : 32|8@1+ (1,0) [0|100] "%"  FSG_DATA_LOGGER
+ SG_ Brake_hydr_target : 40|8@1+ (1,0) [0|100] "%"  FSG_DATA_LOGGER
+ SG_ Motor_moment_actual : 48|8@1- (1,0) [-128|127] "%"  FSG_DATA_LOGGER
+ SG_ Motor_moment_target : 56|8@1- (1,0) [-128|127] "%"  FSG_DATA_LOGGER
+
+BO_ 1281 DV_dynamics_2: 8 JETSON
+ SG_ Acceleration_longitudinal : 0|16@1- (0.001953125,0) [0|0] "m/s2"  FSG_DATA_LOGGER
+ SG_ Acceleration_lateral : 16|16@1- (0.001953125,0) [0|0] "m/s2"  FSG_DATA_LOGGER
+ SG_ Yaw_rate : 32|16@1- (0.0078125,0) [0|0] "�/s"  FSG_DATA_LOGGER
+
+BO_ 129 VCU_HV: 3 VCU
+ SG_ HV : 0|8@1+ (1,0) [0|0] ""  ACU
+ SG_ Brake_pressure_Front : 8|8@1+ (1,0) [0|0] ""  ACU
+ SG_ Brake_pressure_Rear : 16|8@1+ (1,0) [0|0] ""  ACU
+
+BO_ 1282 DV_status: 8 ACU
+ SG_ AS_status : 0|3@1+ (1,0) [0|7] ""  FSG_DATA_LOGGER
+ SG_ ASB_EBS_state : 3|2@1+ (1,0) [0|3] ""  FSG_DATA_LOGGER
+ SG_ AMI_state : 5|3@1+ (1,0) [0|7] ""  FSG_DATA_LOGGER
+ SG_ Steering_state : 8|1@1+ (1,0) [0|1] ""  FSG_DATA_LOGGER
+ SG_ ASB_redundancy_state : 9|2@1+ (1,0) [0|3] ""  FSG_DATA_LOGGER
+ SG_ Lap_counter : 11|4@1+ (1,0) [0|15] ""  FSG_DATA_LOGGER
+ SG_ Cones_count_actual : 15|8@1+ (1,0) [0|255] ""  FSG_DATA_LOGGER
+ SG_ Cones_count_all : 23|17@1+ (1,0) [0|131071] ""  FSG_DATA_LOGGER
+
+BO_ 1297 ASF_SIGNALS: 4 ACU
+ SG_ EBS_Pressure_Tank_Front : 0|8@1+ (10,0) [0|0] "bar"  FSG_DATA_LOGGER
+ SG_ EBS_Pressure_Tank_Rear : 8|8@1+ (10,0) [0|0] "bar"  FSG_DATA_LOGGER
+ SG_ Brake_Pressure_Front : 16|8@1+ (10,0) [0|0] "bar"  FSG_DATA_LOGGER
+ SG_ Brake_Pressure_Rear : 24|8@1+ (10,0) [0|0] "bar"  FSG_DATA_LOGGER
+
+BO_ 1289 VCU_RPM: 2 VCU
+ SG_ rpm_actual : 0|16@1- (1,0) [0|6000] "RPM"  JETSON
+
+BO_ 1178 VCU_TORQUE_TARGET: 2 JETSON
+ SG_ torque_target : 0|16@1- (1,0) [-100|100] "RPM"  VCU
+
+BO_ 1177 VCU_RPM_TARGET: 2 JETSON
+ SG_ rpm_target : 0|16@1- (1,0) [0|6000] "RPM"  VCU
+
+BO_ 97 JETSON: 5 JETSON
+ SG_ AS_STATE : 0|4@1+ (1,0) [0|5] ""  ACU
+ SG_ AS_MISSION : 4|4@1+ (1,0) [0|7] ""  ACU
+ SG_ TEMPERATURE : 8|8@1+ (1,0) [0|100] ""  ACU
+ SG_ CPU : 16|8@1+ (1,0) [0|100] ""  ACU
+ SG_ GPU : 24|8@1+ (1,0) [0|100] ""  ACU
+ SG_ EMERGENCY_CAUSE : 32|8@1+ (1,0) [0|0] ""  ACU
+
+BO_ 401 RES: 8 RES
+ SG_ SIGNAL : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1285 SLAM_STATS_CAN: 4 JETSON
+ SG_ Lap_counter : 0|4@1+ (1,0) [0|0] ""  ACU
+ SG_ Cones_count_actual : 4|8@1+ (1,0) [0|0] ""  ACU
+ SG_ Cones_count_all : 12|17@1+ (1,0) [0|0] ""  ACU
+
+
+
+CM_ BU_ AK10_9 "Atuador direcao";
+CM_ SG_ 81 ACU_STATE "";
+CM_ BO_ 2147494248 "";
+VAL_ 81 IGN 0 "OFF" 1 "ON" ;
+VAL_ 81 ASMS 0 "OFF" 1 "ON" ;
+VAL_ 81 EMERGENCY 0 "OFF" 1 "ON" ;
+VAL_ 81 AS_STATE 1 "OFF" 2 "READY" 3 "DRIVING" 4 "EMERGENCY" 5 "FINISH" ;
+VAL_ 81 ACU_STATE 0 "INIT" 1 "MISSION_SELECT" 2 "JETSON_WAITING" 3 "INIT_SEQUENCE" 4 "READY" 5 "DRIVING" 6 "EBS_ERROR" 7 "EMERGENCY" 8 "FINISHED" 9 "MANUAL" ;
+VAL_ 81 ASSI_STATE 1 "OFF" 2 "READY" 3 "DRIVING" 4 "EMERGENCY" 5 "FINISH" ;
+VAL_ 81 EMERGENCY_cause 0 "None" 1 "SDC_OPEN" 2 "RES" 3 "Pressure_checks" 4 "VCU_timeout" 5 "Jetson_timeout" 6 "ACU_WDT_TRIGGERED" 7 "dir_actuator_timeout" 8 "CAN_Dynamics_Pressure_timeout" ;
+VAL_ 1282 AS_status 1 "AS_status_off" 2 "AS_status_ready" 3 "AS_status_driving" 4 "AS_status_emergency" 5 "AS_status_finished" ;
+VAL_ 1282 ASB_EBS_state 1 "ASB_EBS_state_deactivated" 2 "ASB_EBS_state_initial_checkup_passed" 3 "ASB_EBS_state_activated" ;
+VAL_ 1282 AMI_state 1 "AMI_state_acceleration" 2 "AMI_state_skidpad" 3 "AMI_state_trackdrive" 4 "AMI_state_braketest" 5 "AMI_state_inspection" 6 "AMI_state_autocross" ;
+VAL_ 1282 ASB_redundancy_state 1 "ASB_redundancy_state_deactivated" 2 "ASB_redundancy_state_engaged" 3 "ASB_redundancy_state_initial_checkup_passed" ;
+VAL_ 97 EMERGENCY_CAUSE 0 "None" 1 "ACU" 2 "ZED" 3 "Steering" 4 "Planner" 5 "SLAM" 6 "P-Puma" 7 "IMU" ;
+

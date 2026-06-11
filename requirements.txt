@@ -11,6 +11,9 @@
 # CAN bus interface (required on car; safe to install anywhere)
 python-can>=4.0
 
+# DBC file parser — signal decoding and CAN frame encoding/decoding
+cantools>=39.0
+
 # GPIO — buttons and rotary encoders (required on car)
 # On Raspberry Pi OS Bookworm: apt install python3-gpiod is preferred
 # On other systems / if apt package is unavailable:

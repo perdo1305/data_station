@@ -38,8 +38,9 @@ show_menu() {
     echo "5) Open shell in publisher container"
     echo "6) Check ROS 2 topics"
     echo "7) Stop containers"
-    echo "8) Clean everything"
-    echo "9) Exit"
+    echo "8) Restart display container only"
+    echo "9) Clean everything"
+    echo "10) Exit"
     echo ""
 }
 
@@ -106,6 +107,14 @@ stop_containers() {
     echo -e "${GREEN}✓ Containers stopped${NC}"
 }
 
+restart_display() {
+    echo -e "${GREEN}Restarting display container...${NC}"
+    xhost +local:root >/dev/null 2>&1 || true
+    docker compose restart display 2>/dev/null || {
+        echo -e "${YELLOW}Display container may not be running. Start it first with option 2${NC}"
+    }
+}
+
 clean_everything() {
     echo -e "${YELLOW}This will remove containers, images, and networks.${NC}"
     read -p "Continue? (y/N) " -n 1 -r
@@ -122,7 +131,7 @@ clean_everything() {
 # Main loop
 while true; do
     show_menu
-    read -p "Enter your choice [1-9]: " choice
+    read -p "Enter your choice [1-10]: " choice
     
     case $choice in
         1)
@@ -147,14 +156,17 @@ while true; do
             stop_containers
             ;;
         8)
-            clean_everything
+            restart_display
             ;;
         9)
+            clean_everything
+            ;;
+        10)
             echo -e "${GREEN}Goodbye!${NC}"
             exit 0
             ;;
         *)
-            echo -e "${YELLOW}Invalid option. Please select 1-9.${NC}"
+            echo -e "${YELLOW}Invalid option. Please select 1-10.${NC}"
             ;;
     esac
 done

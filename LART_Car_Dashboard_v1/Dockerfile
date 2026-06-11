@@ -8,8 +8,9 @@ ENV PYTHONUNBUFFERED=1
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     python3-pip \
-    python3-can \
     can-utils \
+    iproute2 \
+    kmod \
     git \
     build-essential \
     pkg-config \
@@ -41,6 +42,7 @@ RUN apt-get update && \
 # Install Python dependencies
 RUN pip install --break-system-packages \
     python-can>=4.0 \
+    cantools>=39.0 \
     gpiod>=2.0 \
     adafruit-circuitpython-neopixel>=6.0 \
     adafruit-blinka>=8.0 \

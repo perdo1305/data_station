@@ -79,11 +79,13 @@ if(SDL2_FOUND AND LVGL_SOURCES)
         images.c
         screen_api.cpp
         screens.c
+        power_api.cpp
         speed_api.cpp
         styles.c
         ui.c
         fonts/ui_font_orbiter_bold_100.c
         fonts/ui_font_orbitron_15.c
+        fonts/ui_font_orbitron_25.c
         fonts/ui_font_orbitron_bold_15.c
         fonts/ui_font_orbitron_bold_20.c
         fonts/ui_font_orbitron_bold_25.c
