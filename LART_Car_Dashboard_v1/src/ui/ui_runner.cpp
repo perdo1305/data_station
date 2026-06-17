@@ -44,13 +44,6 @@ lv_display_t *g_display = nullptr;
 
 lv_obj_t *g_can_log_label = nullptr;
 
-uint32_t color_to_argb(lv_color_t color) {
-    return 0xFF000000u
-        | (static_cast<uint32_t>(color.red) << 16)
-        | (static_cast<uint32_t>(color.green) << 8)
-        | static_cast<uint32_t>(color.blue);
-}
-
 void present_frame() {
     if (!g_framebuffer_dirty) {
         return;
@@ -226,6 +219,8 @@ void init_lvgl() {
 }
 
 }  // namespace
+
+LV_FONT_DECLARE(ui_font_orbitron_15);
 
 int main(int argc, char **argv) {
     if (std::getenv("LART_TEST_MAPPINGS") != nullptr) {

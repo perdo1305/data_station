@@ -1,6 +1,8 @@
 #ifndef LART_ROS2SUBSCRIBER_H
 #define LART_ROS2SUBSCRIBER_H
 
+#include <stddef.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

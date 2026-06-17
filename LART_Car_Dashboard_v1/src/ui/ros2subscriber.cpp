@@ -88,14 +88,6 @@ rclcpp::SubscriptionBase::SharedPtr g_sub_hv;
 rclcpp::SubscriptionBase::SharedPtr g_sub_screen;
 rclcpp::SubscriptionBase::SharedPtr g_sub_can_frames;
 
-bool env_is_true(const char *name, bool default_value) {
-    const char *value = std::getenv(name);
-    if (value == nullptr || *value == '\0') {
-        return default_value;
-    }
-    return std::strcmp(value, "1") == 0 || strcasecmp(value, "true") == 0 || strcasecmp(value, "yes") == 0;
-}
-
 const char *env_or_default(const char *name, const char *fallback) {
     const char *value = std::getenv(name);
     if (value == nullptr || *value == '\0') {
