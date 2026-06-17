@@ -228,6 +228,11 @@ def main():
             bus_kwargs['bitrate'] = 1000000
             
         bus = can.interface.Bus(channel=channel, interface=interface_type, **bus_kwargs)
+        
+        # Prevent slcan from blocking indefinitely if CAN TX buffer fills up (e.g. no ACK)
+        if interface_type == 'slcan' and hasattr(bus, 'serialPortOrig'):
+            bus.serialPortOrig.write_timeout = 0.005
+
     except Exception as e:
         print(f"Error: Cannot open {interface_type} bus '{args.interface}': {e}")
         if interface_type == 'socketcan':
