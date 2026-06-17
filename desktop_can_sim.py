@@ -213,10 +213,25 @@ def main():
             msg_mux_valid_ids[m.name] = mux_valid_ids
 
     try:
-        bus = can.interface.Bus(channel=args.interface, interface='socketcan')
+        channel = args.interface
+        interface_type = 'socketcan'
+        bus_kwargs = {}
+        
+        if channel.lower().startswith('tty'):
+            interface_type = 'slcan'
+            if not channel.startswith('/dev/'):
+                # Handle TTYACM0 -> /dev/ttyACM0, ttyACM0 -> /dev/ttyACM0
+                # Find where 'tty' ends
+                tty_part_len = 3
+                if channel.lower().startswith('tty'):
+                    channel = f"/dev/tty{channel[tty_part_len:]}"
+            bus_kwargs['bitrate'] = 1000000
+            
+        bus = can.interface.Bus(channel=channel, interface=interface_type, **bus_kwargs)
     except Exception as e:
-        print(f"Error: Cannot open SocketCAN bus '{args.interface}': {e}")
-        print("Have you brought up the interface? (e.g. 'sudo ip link set can0 up type can bitrate 1000000')")
+        print(f"Error: Cannot open {interface_type} bus '{args.interface}': {e}")
+        if interface_type == 'socketcan':
+            print("Have you brought up the interface? (e.g. 'sudo ip link set can0 up type can bitrate 1000000')")
         sys.exit(1)
 
     print("Started publishing. Press Ctrl+C to stop.")

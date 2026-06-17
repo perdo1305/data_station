@@ -42,6 +42,8 @@ bool g_running = true;
 lv_display_t *g_display = nullptr;
 #endif
 
+lv_obj_t *g_can_log_label = nullptr;
+
 uint32_t color_to_argb(lv_color_t color) {
     return 0xFF000000u
         | (static_cast<uint32_t>(color.red) << 16)
@@ -303,6 +305,12 @@ int main(int argc, char **argv) {
     ui_init();
     ui_set_speed(initial_speed);
 
+    g_can_log_label = lv_label_create(lv_layer_top());
+    lv_obj_align(g_can_log_label, LV_ALIGN_BOTTOM_RIGHT, -5, -5);
+    lv_obj_set_style_text_font(g_can_log_label, &ui_font_orbitron_15, 0);
+    lv_obj_set_style_text_color(g_can_log_label, lv_color_hex(0xA8AFBE), 0);
+    lv_label_set_text(g_can_log_label, "");
+
     uint32_t last_tick_ms = SDL_GetTicks();
 
     while (g_running) {
@@ -318,6 +326,11 @@ int main(int argc, char **argv) {
         const uint32_t now_ms = SDL_GetTicks();
         const uint32_t elapsed_ms = now_ms - last_tick_ms;
         last_tick_ms = now_ms;
+
+        char can_log_buffer[1024];
+        if (ros2subscriber_get_can_log(can_log_buffer, sizeof(can_log_buffer))) {
+            lv_label_set_text(g_can_log_label, can_log_buffer);
+        }
 
         lv_tick_inc(elapsed_ms);
         ui_tick();

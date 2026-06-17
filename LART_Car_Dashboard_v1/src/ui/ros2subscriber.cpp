@@ -43,6 +43,22 @@
 #include <lart_msgs/msg/dashboard_state.hpp>
 #endif
 
+#if !defined(LART_HAVE_CAN_FRAME_MSG)
+#if defined(__has_include)
+#if __has_include(<lart_msgs/msg/can_frame.hpp>)
+#define LART_HAVE_CAN_FRAME_MSG 1
+#else
+#define LART_HAVE_CAN_FRAME_MSG 0
+#endif
+#else
+#define LART_HAVE_CAN_FRAME_MSG 0
+#endif
+#endif
+
+#if LART_HAVE_CAN_FRAME_MSG
+#include <lart_msgs/msg/can_frame.hpp>
+#endif
+
 namespace {
 constexpr const char *DEFAULT_SPEED_TOPIC = "/can/dbc/dv_dynamics_1/speed_actual";
 constexpr const char *DEFAULT_HV_TOPIC = "/can/dbc/vcu_hv/hv";
@@ -61,12 +77,16 @@ std::mutex g_telemetry_mutex;
 TelemetryData g_telemetry;
 std::vector<rclcpp::SubscriptionBase::SharedPtr> g_subs;
 
+std::mutex g_can_log_mutex;
+std::vector<std::string> g_can_log_frames;
+
 bool g_did_init_rclcpp = false;
 std::shared_ptr<rclcpp::Node> g_node;
 std::shared_ptr<rclcpp::executors::SingleThreadedExecutor> g_exec;
 rclcpp::SubscriptionBase::SharedPtr g_sub;
 rclcpp::SubscriptionBase::SharedPtr g_sub_hv;
 rclcpp::SubscriptionBase::SharedPtr g_sub_screen;
+rclcpp::SubscriptionBase::SharedPtr g_sub_can_frames;
 
 bool env_is_true(const char *name, bool default_value) {
     const char *value = std::getenv(name);
@@ -140,6 +160,24 @@ LART_WEAK int ros2subscriber_init(void) {
     };
 
     g_sub_screen = g_node->create_subscription<std_msgs::msg::Int32>(screen_topic, rclcpp::QoS(10), screen_callback);
+
+#if LART_HAVE_CAN_FRAME_MSG
+    auto can_frame_callback = [](const lart_msgs::msg::CanFrame::SharedPtr msg) {
+        if (msg) {
+            std::lock_guard<std::mutex> lock(g_can_log_mutex);
+            char buf[128];
+            int offset = snprintf(buf, sizeof(buf), "0x%03X [%u]", msg->id, (unsigned int)msg->data.size());
+            for (size_t i = 0; i < msg->data.size() && offset < (int)sizeof(buf) - 3; ++i) {
+                offset += snprintf(buf + offset, sizeof(buf) - offset, " %02X", msg->data[i]);
+            }
+            g_can_log_frames.push_back(std::string(buf));
+            if (g_can_log_frames.size() > 8) {
+                g_can_log_frames.erase(g_can_log_frames.begin());
+            }
+        }
+    };
+    g_sub_can_frames = g_node->create_subscription<lart_msgs::msg::CanFrame>("/can/frames", sensor_qos, can_frame_callback);
+#endif
 
     // Setup dynamic high-density telemetry subscriptions
 #define SUB_FLOAT(field, topic_name) \
@@ -369,6 +407,21 @@ LART_WEAK int ros2subscriber_get_telemetry(TelemetryData *out) {
     return 1;
 }
 
+LART_WEAK int ros2subscriber_get_can_log(char *buffer, size_t max_len) {
+    if (!g_is_initialized.load() || buffer == nullptr || max_len == 0) {
+        return 0;
+    }
+    std::lock_guard<std::mutex> lock(g_can_log_mutex);
+    buffer[0] = '\0';
+    for (const auto& line : g_can_log_frames) {
+        if (strlen(buffer) + line.length() + 2 < max_len) {
+            strncat(buffer, line.c_str(), max_len - strlen(buffer) - 1);
+            strncat(buffer, "\n", max_len - strlen(buffer) - 1);
+        }
+    }
+    return 1;
+}
+
 LART_WEAK void ros2subscriber_fini(void) {
     if (!g_is_initialized.load()) {
         return;
@@ -384,7 +437,13 @@ LART_WEAK void ros2subscriber_fini(void) {
     g_sub.reset();
     g_sub_hv.reset();
     g_sub_screen.reset();
+    g_sub_can_frames.reset();
     g_subs.clear();
+
+    {
+        std::lock_guard<std::mutex> lock(g_can_log_mutex);
+        g_can_log_frames.clear();
+    }
 
     if (g_exec && g_node) {
         try {
@@ -445,6 +504,13 @@ LART_WEAK int ros2subscriber_get_screen_change_request(int *screen_id) {
 LART_WEAK int ros2subscriber_get_telemetry(TelemetryData *out) {
     if (out != nullptr) {
         std::memset(out, 0, sizeof(TelemetryData));
+    }
+    return 0;
+}
+
+LART_WEAK int ros2subscriber_get_can_log(char *buffer, size_t max_len) {
+    if (buffer != nullptr && max_len > 0) {
+        buffer[0] = '\0';
     }
     return 0;
 }
