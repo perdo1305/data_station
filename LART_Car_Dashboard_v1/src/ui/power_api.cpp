@@ -113,3 +113,8 @@ extern "C" void ui_update_telemetry_vars(const void *t_ptr) {
     else if (mission_id == 5) mission_str = "TRACKDRIVE";
     eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_MISSION, eez::StringValue(mission_str));
 }
+
+extern "C" const char *ui_get_mission_str() {
+    const char *str = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_MISSION).getString();
+    return str ? str : "";
+}

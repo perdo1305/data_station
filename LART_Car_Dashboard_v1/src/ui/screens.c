@@ -213,12 +213,11 @@ void create_screen_driver_view() {
             // readyLabel
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.ready_label = obj;
-            lv_obj_set_pos(obj, 0, 200);
+            lv_obj_set_pos(obj, 120, 8);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             add_style_text(obj);
             lv_obj_set_style_text_color(obj, lv_color_hex(0x3fff00), LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_align(obj, LV_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
-            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_50, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_30, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_label_set_text(obj, "");
         }
         {
@@ -491,12 +490,15 @@ void create_screen_driver_view() {
             }
         }
         {
-            lv_obj_t *obj = lv_led_create(parent_obj);
+            lv_obj_t *obj = lv_label_create(parent_obj);
             objects.obj2 = obj;
-            lv_obj_set_pos(obj, 120, 8);
-            lv_obj_set_size(obj, 32, 32);
-            lv_led_set_color(obj, lv_color_hex(0x29ff00));
-            lv_led_set_brightness(obj, 255);
+            lv_obj_set_pos(obj, 0, 200);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            add_style_text(obj);
+            lv_obj_set_style_text_color(obj, lv_color_hex(0xf7ff00), LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_align(obj, LV_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_50, LV_PART_MAIN | LV_STATE_DEFAULT);
+            lv_label_set_text(obj, "");
         }
         {
             // hvBar
@@ -697,6 +699,17 @@ void tick_screen_driver_view() {
         if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.lv_label;
             lv_label_set_text(objects.lv_label, new_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        const char *new_val = ui_get_mission_str();
+        char formatted_val[128];
+        snprintf(formatted_val, sizeof(formatted_val), "MISSION: %s", new_val);
+        const char *cur_val = lv_label_get_text(objects.obj2);
+        if (strcmp(formatted_val, cur_val) != 0) {
+            tick_value_change_obj = objects.obj2;
+            lv_label_set_text(objects.obj2, formatted_val);
             tick_value_change_obj = NULL;
         }
     }
