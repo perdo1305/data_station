@@ -228,6 +228,16 @@ LV_FONT_DECLARE(ui_font_orbitron_15);
 int main(int argc, char **argv) {
     if (std::getenv("LART_TEST_MAPPINGS") != nullptr) {
         init_lvgl();
+
+        // Override EEZ-Flow hooks to prevent crashing on flow completion/errors,
+        // and provide logging for any flow errors.
+        eez::flow::stopScriptHook = []() {
+            // No-op
+        };
+        eez::flow::onFlowErrorHook = [](eez::flow::FlowState *, int componentIndex, const char *errorMessage) {
+            std::fprintf(stderr, "[EEZ-Flow Error] Component %d: %s\n", componentIndex, errorMessage);
+        };
+
         ui_init();
         
         std::printf("[TEST] Running telemetry mapping unit tests...\n");
@@ -327,6 +337,16 @@ int main(int argc, char **argv) {
     }
 
     init_lvgl();
+
+    // Override EEZ-Flow hooks to prevent crashing on flow completion/errors,
+    // and provide logging for any flow errors.
+    eez::flow::stopScriptHook = []() {
+        // No-op
+    };
+    eez::flow::onFlowErrorHook = [](eez::flow::FlowState *, int componentIndex, const char *errorMessage) {
+        std::fprintf(stderr, "[EEZ-Flow Error] Component %d: %s\n", componentIndex, errorMessage);
+    };
+
     ui_init();
     ui_set_speed(initial_speed);
 
