@@ -22,8 +22,9 @@ echo "Starting LART Dashboard at $(date)"
 
 # 1. Source ROS 2 Environment
 # This fixes the 'ament_package' and shared library errors
-source /opt/ros/jazzy/setup.bash
-source /home/lart2026/ros2_jazzy/install/setup.bash
+source /opt/ros/jazzy/setup.bash 2>/dev/null || true
+source /home/lart2026/ros2_jazzy/install/setup.bash 2>/dev/null || true
+source /home/lart2026/GIT/data_station/install/setup.bash 2>/dev/null || true
 
 # 2. Export necessary environment variables
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/lart2026/ros2_jazzy/install/lib

@@ -204,16 +204,16 @@ check-ui-deps:
 
 publish-local:
 	@echo "Running local numeric publisher at 20Hz. Ctrl-C to stop"
-	@bash -lc 'source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/install/setup.bash >/dev/null 2>&1 || true; while true; do for value in 0 10 20 30 40 50 60 70 80 90 100; do echo "speed_kph=$$value"; ros2 topic pub --once /vehicle/speed_kph std_msgs/msg/Float32 "{data: $$value}" >/dev/null; done; done'
+	@bash -lc 'source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/../install/setup.bash >/dev/null 2>&1 || true; while true; do for value in 0 10 20 30 40 50 60 70 80 90 100; do echo "speed_kph=$$value"; ros2 topic pub --once /vehicle/speed_kph std_msgs/msg/Float32 "{data: $$value}" >/dev/null; done; done'
 
 listener-local:
 	@echo "Running local listener (dashboard_ui.speed_listener)"
-	@bash -lc 'source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; export PYTHONPATH=$(PROJECT_DIR)/src; python3 -m dashboard_ui.speed_listener'
+	@bash -lc 'source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/../install/setup.bash >/dev/null 2>&1 || true; export PYTHONPATH=$(PROJECT_DIR)/src; python3 -m dashboard_ui.speed_listener'
 
 display-local: check-ui-deps
 	@echo "Building and running UI locally (requires SDL2; ROS2 is optional)"
-	@bash -lc 'set -e; cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; cmake --build $(PROJECT_DIR)/build/ui-build --parallel $$(nproc); UI_BIN="$(PROJECT_DIR)/build/ui-build/ui_runner"; if [[ ! -x "$$UI_BIN" ]]; then echo "ui_runner was not generated. Install libsdl2-dev and ensure LVGL sources exist at $(PROJECT_DIR)/src/ui/third_party/lvgl/src."; exit 2; fi; exec "$$UI_BIN"'
+	@bash -lc 'set -e; source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/../install/setup.bash >/dev/null 2>&1 || true; cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; cmake --build $(PROJECT_DIR)/build/ui-build --parallel $$(nproc); UI_BIN="$(PROJECT_DIR)/build/ui-build/ui_runner"; if [[ ! -x "$$UI_BIN" ]]; then echo "ui_runner was not generated. Install libsdl2-dev and ensure LVGL sources exist at $(PROJECT_DIR)/src/ui/third_party/lvgl/src."; exit 2; fi; exec "$$UI_BIN"'
 
 run-all-local: check-ui-deps
 	@echo "Starting publisher and listener in background; launching display in foreground"
-	@bash -lc 'set -e; source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/install/setup.bash >/dev/null 2>&1 || true; export PYTHONPATH=$(PROJECT_DIR)/src; ros2 topic pub -r 10 /vehicle/speed_kph std_msgs/msg/Float32 "{data: 40.0}" & PUB_PID=$$!; python3 -m dashboard_ui.speed_listener & LIST_PID=$$!; trap "kill $$PUB_PID $$LIST_PID 2>/dev/null || true" EXIT INT TERM; echo "Started publisher $$PUB_PID and listener $$LIST_PID"; cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; cmake --build $(PROJECT_DIR)/build/ui-build --parallel $$(nproc); UI_BIN="$(PROJECT_DIR)/build/ui-build/ui_runner"; if [[ ! -x "$$UI_BIN" ]]; then echo "ui_runner was not generated. Install libsdl2-dev and ensure LVGL sources exist at $(PROJECT_DIR)/src/ui/third_party/lvgl/src."; exit 2; fi; exec "$$UI_BIN"'
+	@bash -lc 'set -e; source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/../install/setup.bash >/dev/null 2>&1 || true; export PYTHONPATH=$(PROJECT_DIR)/src; ros2 topic pub -r 10 /vehicle/speed_kph std_msgs/msg/Float32 "{data: 40.0}" & PUB_PID=$$!; python3 -m dashboard_ui.speed_listener & LIST_PID=$$!; trap "kill $$PUB_PID $$LIST_PID 2>/dev/null || true" EXIT INT TERM; echo "Started publisher $$PUB_PID and listener $$LIST_PID"; cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; cmake --build $(PROJECT_DIR)/build/ui-build --parallel $$(nproc); UI_BIN="$(PROJECT_DIR)/build/ui-build/ui_runner"; if [[ ! -x "$$UI_BIN" ]]; then echo "ui_runner was not generated. Install libsdl2-dev and ensure LVGL sources exist at $(PROJECT_DIR)/src/ui/third_party/lvgl/src."; exit 2; fi; exec "$$UI_BIN"'

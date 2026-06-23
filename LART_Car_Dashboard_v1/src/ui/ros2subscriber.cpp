@@ -159,8 +159,8 @@ LART_WEAK int ros2subscriber_init(void) {
         if (msg) {
             std::lock_guard<std::mutex> lock(g_can_log_mutex);
             char buf[128];
-            int offset = snprintf(buf, sizeof(buf), "0x%03X [%u]", msg->id, (unsigned int)msg->data.size());
-            for (size_t i = 0; i < msg->data.size() && offset < (int)sizeof(buf) - 3; ++i) {
+            int offset = snprintf(buf, sizeof(buf), "0x%03X [%u]", msg->can_id, (unsigned int)msg->dlc);
+            for (size_t i = 0; i < msg->dlc && i < msg->data.size() && offset < (int)sizeof(buf) - 3; ++i) {
                 offset += snprintf(buf + offset, sizeof(buf) - offset, " %02X", msg->data[i]);
             }
             g_can_log_frames.push_back(std::string(buf));
