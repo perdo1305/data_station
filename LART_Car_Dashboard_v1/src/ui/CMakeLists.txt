@@ -125,12 +125,47 @@ else()
 endif()
 
 if(ament_cmake_FOUND)
+    add_executable(can_bridge
+        can_bridge.cpp
+        generated/can_bridge_impl.cpp
+        generated/data_t26.c
+        generated/powertrain_t26.c
+    )
+    target_compile_features(can_bridge PUBLIC cxx_std_17)
+    target_include_directories(can_bridge PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/generated
+    )
+    target_link_libraries(can_bridge Threads::Threads)
+    ament_target_dependencies(can_bridge rclcpp std_msgs)
+    if(lart_msgs_FOUND)
+        ament_target_dependencies(can_bridge lart_msgs)
+    endif()
+    install(TARGETS can_bridge
+        DESTINATION lib/${PROJECT_NAME}
+    )
+
     add_executable(ros2subscriber_test ros2subscriber_test.cpp)
     target_compile_features(ros2subscriber_test PUBLIC cxx_std_17)
     target_link_libraries(ros2subscriber_test ros2subscriber)
     ament_target_dependencies(ros2subscriber_test rclcpp std_msgs)
     if(lart_msgs_FOUND)
         ament_target_dependencies(ros2subscriber_test lart_msgs)
+    endif()
+
+    add_executable(test_can_bridge
+        test_can_bridge.cpp
+        generated/can_bridge_impl.cpp
+        generated/data_t26.c
+        generated/powertrain_t26.c
+    )
+    target_compile_features(test_can_bridge PUBLIC cxx_std_17)
+    target_include_directories(test_can_bridge PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/generated
+    )
+    target_link_libraries(test_can_bridge Threads::Threads)
+    ament_target_dependencies(test_can_bridge rclcpp std_msgs)
+    if(lart_msgs_FOUND)
+        ament_target_dependencies(test_can_bridge lart_msgs)
     endif()
 endif()
 
