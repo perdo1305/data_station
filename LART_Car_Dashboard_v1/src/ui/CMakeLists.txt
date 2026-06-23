@@ -32,6 +32,7 @@ file(GLOB_RECURSE LVGL_SOURCES CONFIGURE_DEPENDS
 
 add_library(ros2subscriber STATIC
     ros2subscriber.cpp
+    dbc_api.cpp
 )
 
 target_compile_features(ros2subscriber PUBLIC cxx_std_17)

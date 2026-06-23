@@ -5,6 +5,7 @@
 #include <stdarg.h>
 
 #include "ros2subscriber.h"
+#include "dbc_api.h"
 #include "screens.h"
 #include "images.h"
 #include "fonts.h"
@@ -584,10 +585,7 @@ void create_screen_driver_view() {
 }
 
 void tick_screen_driver_view() {
-    TelemetryData t;
-    if (ros2subscriber_get_telemetry(&t)) {
-        ui_update_telemetry_vars(&t);
-    }
+    ui_update_telemetry_vars(NULL);
     void *flowState = getFlowState(0, 0);
     (void)flowState;
     {
@@ -739,6 +737,8 @@ void create_screen_autonomous() {
             lv_obj_t *obj = lv_bar_create(parent_obj);
             objects.hv_bar_1 = obj;
             lv_obj_set_pos(obj, 736, 96);
+            lv_obj_set_pos(obj, 106, 407);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_obj_set_size(obj, 53, 314);
             lv_bar_set_range(obj, 0, 100);
             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
@@ -1270,10 +1270,7 @@ void create_screen_debug_1() {
 }
 
 void tick_screen_debug_1() {
-    TelemetryData t;
-    if (!ros2subscriber_get_telemetry(&t)) {
-        return;
-    }
+    
     lv_obj_t *table = objects.general_debug_text_1;
     if (!table) return;
 
@@ -1286,41 +1283,41 @@ void tick_screen_debug_1() {
     // Row 1
     const char *ams_state_str = "FAULT";
     uint32_t ams_state_color = 0xFF0000;
-    if (t.ams_state == 0) { ams_state_str = "IDLE"; ams_state_color = 0x808080; }
-    else if (t.ams_state == 1) { ams_state_str = "RUNNING"; ams_state_color = 0x00FF00; }
+    if (dbc_api.master_msc_id_1.master_state == 0) { ams_state_str = "IDLE"; ams_state_color = 0x808080; }
+    else if (dbc_api.master_msc_id_1.master_state == 1) { ams_state_str = "RUNNING"; ams_state_color = 0x00FF00; }
     set_cell(table, 1, 0, "AMS State:", 0xFFFFFF);
     set_cell(table, 1, 1, ams_state_str, ams_state_color);
 
-    uint32_t soc_color = (t.ams_soc > 30) ? 0x00FF00 : ((t.ams_soc > 15) ? 0xFFA500 : 0xFF0000);
+    uint32_t soc_color = (dbc_api.master_soc_accumulator.soc_float > 30) ? 0x00FF00 : ((dbc_api.master_soc_accumulator.soc_float > 15) ? 0xFFA500 : 0xFF0000);
     set_cell(table, 1, 2, "SOC:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 3, soc_color, "%5.1f%%", t.ams_soc);
+    set_cell_fmt(table, 1, 3, soc_color, "%5.1f%%", dbc_api.master_soc_accumulator.soc_float);
 
     // Row 2
     set_cell(table, 2, 0, "Runtime:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%5.0f s", t.ams_runtime);
+    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%5.0f s", dbc_api.master_msc_id_1.ams_current_draw);
     set_cell(table, 2, 2, "Fans:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 3, 0xFFFFFF, "%3.0f%%", t.ams_fans);
+    set_cell_fmt(table, 2, 3, 0xFFFFFF, "%3.0f%%", dbc_api.master_msc_id_1.master_fan_pwm);
 
     // Row 3
     set_cell(table, 3, 0, "MCU Vref:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%4.2f V", t.ams_mcu_vref);
+    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%4.2f V", dbc_api.master_msc_id_1.mcu_vref);
     set_cell(table, 3, 2, "MCU T:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%3.0f C", t.ams_mcu_temp);
+    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%3.0f C", dbc_api.master_msc_id_1.mcu_temperature);
 
     // Row 4
-    uint32_t pec_color = (t.ams_pec_err == 0) ? 0x00FF00 : 0xFF0000;
+    uint32_t pec_color = (dbc_api.master_msc_id_1.adbms_pec_error == 0) ? 0x00FF00 : 0xFF0000;
     set_cell(table, 4, 0, "PEC Err:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 1, pec_color, "%3.0f", t.ams_pec_err);
+    set_cell_fmt(table, 4, 1, pec_color, "%3.0f", dbc_api.master_msc_id_1.adbms_pec_error);
 
-    uint32_t fault_color = (t.ams_fault_cnt == 0) ? 0x00FF00 : 0xFF0000;
+    uint32_t fault_color = (dbc_api.master_msc_id_1.fault_counter == 0) ? 0x00FF00 : 0xFF0000;
     set_cell(table, 4, 2, "Flt Cnt:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 3, fault_color, "%3.0f", t.ams_fault_cnt);
+    set_cell_fmt(table, 4, 3, fault_color, "%3.0f", dbc_api.master_msc_id_1.fault_counter);
 
     // Row 5
     set_cell(table, 5, 0, "Slaves:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%2.0f/12", t.ams_slaves);
+    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%2.0f/12", dbc_api.master_msc_id_4.slaves_detected);
     set_cell(table, 5, 2, "FW:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%-8.0f", t.ams_fw);
+    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%-8.0f", dbc_api.master_msc_id_1.master_firmware_version);
 
     // Row 6: Header Precharge
     set_cell(table, 6, 0, "PRECHARGE", 0x00BFFF);
@@ -1331,9 +1328,9 @@ void tick_screen_debug_1() {
     // Row 7
     const char *precharge_state_str = "FAULT";
     uint32_t precharge_state_color = 0xFF0000;
-    if (t.precharge_state == 0) { precharge_state_str = "OFF"; precharge_state_color = 0x808080; }
-    else if (t.precharge_state == 1) { precharge_state_str = "CHG"; precharge_state_color = 0xFFA500; }
-    else if (t.precharge_state == 2) { precharge_state_str = "DONE"; precharge_state_color = 0x00FF00; }
+    if (dbc_api.master_precharge_id_1.precharge_state == 0) { precharge_state_str = "OFF"; precharge_state_color = 0x808080; }
+    else if (dbc_api.master_precharge_id_1.precharge_state == 1) { precharge_state_str = "CHG"; precharge_state_color = 0xFFA500; }
+    else if (dbc_api.master_precharge_id_1.precharge_state == 2) { precharge_state_str = "DONE"; precharge_state_color = 0x00FF00; }
     set_cell(table, 7, 0, "Precharge:", 0xFFFFFF);
     set_cell(table, 7, 1, precharge_state_str, precharge_state_color);
     set_cell(table, 7, 2, "", 0xFFFFFF);
@@ -1341,15 +1338,15 @@ void tick_screen_debug_1() {
 
     // Row 8
     set_cell(table, 8, 0, "AIR+:", 0xFFFFFF);
-    set_cell(table, 8, 1, (t.air_pos == 1) ? "ON" : "OFF", (t.air_pos == 1) ? 0x00FF00 : 0x808080);
+    set_cell(table, 8, 1, (dbc_api.master_precharge_id_1.precharge_ctc_air_pos_state == 1) ? "ON" : "OFF", (dbc_api.master_precharge_id_1.precharge_ctc_air_pos_state == 1) ? 0x00FF00 : 0x808080);
     set_cell(table, 8, 2, "AIR-:", 0xFFFFFF);
-    set_cell(table, 8, 3, (t.air_min == 1) ? "ON" : "OFF", (t.air_min == 1) ? 0x00FF00 : 0x808080);
+    set_cell(table, 8, 3, (dbc_api.master_precharge_id_1.precharge_ctc_air_min_state == 1) ? "ON" : "OFF", (dbc_api.master_precharge_id_1.precharge_ctc_air_min_state == 1) ? 0x00FF00 : 0x808080);
 
     // Row 9
     set_cell(table, 9, 0, "CHG:", 0xFFFFFF);
-    set_cell(table, 9, 1, (t.ctc_charge == 1) ? "ON" : "OFF", (t.ctc_charge == 1) ? 0x00FF00 : 0x808080);
+    set_cell(table, 9, 1, (dbc_api.master_precharge_id_1.precharge_ctc_charge_state == 1) ? "ON" : "OFF", (dbc_api.master_precharge_id_1.precharge_ctc_charge_state == 1) ? 0x00FF00 : 0x808080);
     set_cell(table, 9, 2, "DIS:", 0xFFFFFF);
-    set_cell(table, 9, 3, (t.ctc_discharge == 1) ? "ON" : "OFF", (t.ctc_discharge == 1) ? 0x00FF00 : 0x808080);
+    set_cell(table, 9, 3, (dbc_api.master_precharge_id_1.precharge_ctc_discharge_state == 1) ? "ON" : "OFF", (dbc_api.master_precharge_id_1.precharge_ctc_discharge_state == 1) ? 0x00FF00 : 0x808080);
 
     // Row 10: Header Pack
     set_cell(table, 10, 0, "PACK VOLTAGE & TEMP", 0x00BFFF);
@@ -1359,15 +1356,15 @@ void tick_screen_debug_1() {
 
     // Row 11
     set_cell(table, 11, 0, "Vmax:", 0xFFFFFF);
-    set_cell_fmt(table, 11, 1, 0xFFFFFF, "%5.3f V", t.v_max);
+    set_cell_fmt(table, 11, 1, 0xFFFFFF, "%5.3f V", dbc_api.master_msc_id_3.overall_maximum_voltage);
     set_cell(table, 11, 2, "Vmin:", 0xFFFFFF);
-    set_cell_fmt(table, 11, 3, (t.v_min > 3.0f) ? 0x00FF00 : 0xFF0000, "%5.3f V", t.v_min);
+    set_cell_fmt(table, 11, 3, (dbc_api.master_msc_id_3.overall_minimum_voltage > 3.0f) ? 0x00FF00 : 0xFF0000, "%5.3f V", dbc_api.master_msc_id_3.overall_minimum_voltage);
 
     // Row 12
     set_cell(table, 12, 0, "Tmax:", 0xFFFFFF);
-    set_cell_fmt(table, 12, 1, (t.t_max < 50.0f) ? 0x00FF00 : 0xFF0000, "%5.1f C", t.t_max);
+    set_cell_fmt(table, 12, 1, (dbc_api.master_msc_id_3.overall_maximum_temperature < 50.0f) ? 0x00FF00 : 0xFF0000, "%5.1f C", dbc_api.master_msc_id_3.overall_maximum_temperature);
     set_cell(table, 12, 2, "Tmin:", 0xFFFFFF);
-    set_cell_fmt(table, 12, 3, 0xFFFFFF, "%5.1f C", t.t_min);
+    set_cell_fmt(table, 12, 3, 0xFFFFFF, "%5.1f C", dbc_api.master_msc_id_3.overall_minimum_temperature);
 }
 
 void create_screen_debug_inverter_2() {
@@ -1385,10 +1382,7 @@ void create_screen_debug_inverter_2() {
 }
 
 void tick_screen_debug_inverter_2() {
-    TelemetryData t;
-    if (!ros2subscriber_get_telemetry(&t)) {
-        return;
-    }
+    
     lv_obj_t *table = objects.general_debug_text_2;
     if (!table) return;
 
@@ -1400,43 +1394,43 @@ void tick_screen_debug_inverter_2() {
 
     // Row 1
     set_cell(table, 1, 0, "ERPM:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%-8.0f", t.inv_erpm);
+    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%-8.0f", dbc_api.hv500_erpm_duty_voltage.actual_erpm);
     set_cell(table, 1, 2, "Duty:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 3, 0xFFFFFF, "%5.1f%%", t.inv_duty);
+    set_cell_fmt(table, 1, 3, 0xFFFFFF, "%5.1f%%", dbc_api.hv500_erpm_duty_voltage.actual_duty);
 
     // Row 2
     set_cell(table, 2, 0, "Vin:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%-6.0f V", t.inv_vin);
+    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%-6.0f V", dbc_api.hv500_erpm_duty_voltage.actual_inputvoltage);
     set_cell(table, 2, 2, "Fault:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 3, (t.inv_fault == 0) ? 0x00FF00 : 0xFF0000, "%-3.0f", t.inv_fault);
+    set_cell_fmt(table, 2, 3, (dbc_api.hv500_temperatures.actual_faultcode == 0) ? 0x00FF00 : 0xFF0000, "%-3.0f", dbc_api.hv500_temperatures.actual_faultcode);
 
     // Row 3
     set_cell(table, 3, 0, "AC Curr:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%5.1f Apk", t.inv_ac_curr);
+    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%5.1f Apk", dbc_api.hv500_ac_dc_current.actual_accurrent);
     set_cell(table, 3, 2, "DC Curr:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%5.1f A", t.inv_dc_curr);
+    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%5.1f A", dbc_api.hv500_ac_dc_current.actual_dccurrent);
 
     // Row 4
     set_cell(table, 4, 0, "Ctrl T:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%5.1f C", t.inv_temp_ctrl);
+    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%5.1f C", dbc_api.hv500_temperatures.actual_tempcontroller);
     set_cell(table, 4, 2, "Mot T:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 3, 0xFFFFFF, "%5.1f C", t.inv_temp_mot);
+    set_cell_fmt(table, 4, 3, 0xFFFFFF, "%5.1f C", dbc_api.hv500_temperatures.actual_tempmotor);
 
     // Row 5
     set_cell(table, 5, 0, "Throttle:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%3.0f%%", t.inv_throttle);
+    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%3.0f%%", dbc_api.hv500_misc.actual_throttle);
     set_cell(table, 5, 2, "Brake:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%3.0f%%", t.inv_brake);
+    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%3.0f%%", dbc_api.hv500_misc.actual_brake);
 
     // Row 6
     set_cell(table, 6, 0, "FOC Id:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 1, 0xFFFFFF, "%5.1f Apk", t.inv_foc_id);
+    set_cell_fmt(table, 6, 1, 0xFFFFFF, "%5.1f Apk", dbc_api.hv500_foc.actual_foc_id);
     set_cell(table, 6, 2, "FOC Iq:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 3, 0xFFFFFF, "%5.1f Apk", t.inv_foc_iq);
+    set_cell_fmt(table, 6, 3, 0xFFFFFF, "%5.1f Apk", dbc_api.hv500_foc.actual_foc_iq);
 
     // Row 7
     set_cell(table, 7, 0, "DriveEn:", 0xFFFFFF);
-    set_cell(table, 7, 1, (t.inv_drive_en == 1) ? "ENABLED" : "DISABLED", (t.inv_drive_en == 1) ? 0x00FF00 : 0x808080);
+    set_cell(table, 7, 1, (dbc_api.hv500_misc.drive_enable == 1) ? "ENABLED" : "DISABLED", (dbc_api.hv500_misc.drive_enable == 1) ? 0x00FF00 : 0x808080);
     set_cell(table, 7, 2, "", 0xFFFFFF);
     set_cell(table, 7, 3, "", 0xFFFFFF);
 }
@@ -1456,10 +1450,7 @@ void create_screen_debug_3() {
 }
 
 void tick_screen_debug_3() {
-    TelemetryData t;
-    if (!ros2subscriber_get_telemetry(&t)) {
-        return;
-    }
+    
     lv_obj_t *table = objects.general_debug_text_3;
     if (!table) return;
 
@@ -1471,25 +1462,25 @@ void tick_screen_debug_3() {
 
     // Row 1
     set_cell(table, 1, 0, "Current:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%8.0f mA", t.ivt_current);
+    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%8.0f mA", dbc_api.ivt_msg_result_i.ivt_result_i);
     set_cell(table, 1, 2, "Temp:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 3, 0xFFFFFF, "%5.1f C", t.ivt_temp);
+    set_cell_fmt(table, 1, 3, 0xFFFFFF, "%5.1f C", dbc_api.ivt_msg_result_t.ivt_result_t);
 
     // Row 2
     set_cell(table, 2, 0, "U1:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%7.0f mV", t.ivt_u1);
+    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%7.0f mV", dbc_api.ivt_msg_result_u1.ivt_result_u1);
     set_cell(table, 2, 2, "U2:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 3, 0xFFFFFF, "%7.0f mV", t.ivt_u2);
+    set_cell_fmt(table, 2, 3, 0xFFFFFF, "%7.0f mV", dbc_api.ivt_msg_result_u2.ivt_result_u2);
 
     // Row 3
     set_cell(table, 3, 0, "U3:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%7.0f mV", t.ivt_u3);
+    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%7.0f mV", dbc_api.ivt_msg_result_u3.ivt_result_u3);
     set_cell(table, 3, 2, "Power:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%7.0f W", t.ivt_power);
+    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%7.0f W", dbc_api.ivt_msg_result_w.ivt_result_w);
 
     // Row 4
     set_cell(table, 4, 0, "Energy:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%7.0f Wh", t.ivt_energy);
+    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%7.0f Wh", dbc_api.ivt_msg_result_wh.ivt_result_wh);
     set_cell(table, 4, 2, "", 0xFFFFFF);
     set_cell(table, 4, 3, "", 0xFFFFFF);
 
@@ -1501,33 +1492,33 @@ void tick_screen_debug_3() {
 
     // Row 6
     set_cell(table, 6, 0, "APPS1:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 1, 0xFFFFFF, "%6.1f", t.apps1);
+    set_cell_fmt(table, 6, 1, 0xFFFFFF, "%6.1f", dbc_api.pedal_box.apps1);
     set_cell(table, 6, 2, "APPS2:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 3, 0xFFFFFF, "%6.1f", t.apps2);
+    set_cell_fmt(table, 6, 3, 0xFFFFFF, "%6.1f", dbc_api.pedal_box.apps2);
 
     // Row 7
     set_cell(table, 7, 0, "NTC1:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 1, 0xFFFFFF, "%4.1f C", t.ntc1);
+    set_cell_fmt(table, 7, 1, 0xFFFFFF, "%4.1f C", dbc_api.aqt7_1.ntc_1);
     set_cell(table, 7, 2, "NTC2:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 3, 0xFFFFFF, "%4.1f C", t.ntc2);
+    set_cell_fmt(table, 7, 3, 0xFFFFFF, "%4.1f C", dbc_api.aqt7_1.ntc_2);
 
     // Row 8
     set_cell(table, 8, 0, "NTC3:", 0xFFFFFF);
-    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%4.1f C", t.ntc3);
+    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%4.1f C", dbc_api.aqt7_1.ntc_3);
     set_cell(table, 8, 2, "", 0xFFFFFF);
     set_cell(table, 8, 3, "", 0xFFFFFF);
 
     // Row 9
     set_cell(table, 9, 0, "Susp R:", 0xFFFFFF);
-    set_cell_fmt(table, 9, 1, 0xFFFFFF, "%5.1f mm", t.susp_r);
+    set_cell_fmt(table, 9, 1, 0xFFFFFF, "%5.1f mm", dbc_api.aqt7_2.susp_r);
     set_cell(table, 9, 2, "Susp L:", 0xFFFFFF);
-    set_cell_fmt(table, 9, 3, 0xFFFFFF, "%5.1f mm", t.susp_l);
+    set_cell_fmt(table, 9, 3, 0xFFFFFF, "%5.1f mm", dbc_api.aqt7_2.susp_l);
 
     // Row 10
     set_cell(table, 10, 0, "IGN:", 0xFFFFFF);
-    set_cell(table, 10, 1, (t.rear_ign == 1) ? "ON" : "OFF", (t.rear_ign == 1) ? 0x00FF00 : 0x808080);
+    set_cell(table, 10, 1, (dbc_api.rear_wheel_l.ignition == 1) ? "ON" : "OFF", (dbc_api.rear_wheel_l.ignition == 1) ? 0x00FF00 : 0x808080);
     set_cell(table, 10, 2, "R2D:", 0xFFFFFF);
-    set_cell(table, 10, 3, (t.rear_r2d == 1) ? "ON" : "OFF", (t.rear_r2d == 1) ? 0x00FF00 : 0x808080);
+    set_cell(table, 10, 3, (dbc_api.rear_wheel_l.shutdown_circuit == 1) ? "ON" : "OFF", (dbc_api.rear_wheel_l.shutdown_circuit == 1) ? 0x00FF00 : 0x808080);
 }
 
 void create_screen_debug_wheels_4() {
@@ -1545,10 +1536,7 @@ void create_screen_debug_wheels_4() {
 }
 
 void tick_screen_debug_wheels_4() {
-    TelemetryData t;
-    if (!ros2subscriber_get_telemetry(&t)) {
-        return;
-    }
+    
     lv_obj_t *table = objects.general_debug_text_4;
     if (!table) return;
 
@@ -1560,49 +1548,49 @@ void tick_screen_debug_wheels_4() {
 
     // Row 1: FL Wheel
     set_cell(table, 1, 0, "FL Speed:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%3.0f km/h", t.spd_fl);
+    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%3.0f km/h", dbc_api.aqt2.spd_wheel);
     set_cell(table, 1, 2, "FL Temp:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 3, 0xFFFFFF, "%4.1f C", t.temp_fl);
+    set_cell_fmt(table, 1, 3, 0xFFFFFF, "%4.1f C", dbc_api.aqt2.tire_temp);
 
     // Row 2: FL Brake T
     set_cell(table, 2, 0, "FL BrkT:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%4.1f C", t.brk_fl);
+    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%4.1f C", dbc_api.aqt2.brake_temp);
     set_cell(table, 2, 2, "", 0xFFFFFF);
     set_cell(table, 2, 3, "", 0xFFFFFF);
 
     // Row 3: FR Wheel
     set_cell(table, 3, 0, "FR Speed:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%3.0f km/h", t.spd_fr);
+    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%3.0f km/h", dbc_api.aqt3.spd_wheel);
     set_cell(table, 3, 2, "FR Temp:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%4.1f C", t.temp_fr);
+    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%4.1f C", dbc_api.aqt3.tire_temp);
 
     // Row 4: FR Brake T
     set_cell(table, 4, 0, "FR BrkT:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%4.1f C", t.brk_fr);
+    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%4.1f C", dbc_api.aqt3.brake_temp);
     set_cell(table, 4, 2, "", 0xFFFFFF);
     set_cell(table, 4, 3, "", 0xFFFFFF);
 
     // Row 5: RL Wheel
     set_cell(table, 5, 0, "RL Speed:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%3.0f km/h", t.spd_rl);
+    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%3.0f km/h", dbc_api.aqt5.spd_wheel);
     set_cell(table, 5, 2, "RL Temp:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%4.1f C", t.temp_rl);
+    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%4.1f C", dbc_api.aqt5.tire_temp);
 
     // Row 6: RL Brake T
     set_cell(table, 6, 0, "RL BrkT:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 1, 0xFFFFFF, "%4.1f C", t.brk_rl);
+    set_cell_fmt(table, 6, 1, 0xFFFFFF, "%4.1f C", dbc_api.aqt5.brake_temp);
     set_cell(table, 6, 2, "", 0xFFFFFF);
     set_cell(table, 6, 3, "", 0xFFFFFF);
 
     // Row 7: RR Wheel
     set_cell(table, 7, 0, "RR Speed:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 1, 0xFFFFFF, "%3.0f km/h", t.spd_rr);
+    set_cell_fmt(table, 7, 1, 0xFFFFFF, "%3.0f km/h", dbc_api.aqt6.spd_wheel);
     set_cell(table, 7, 2, "RR Temp:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 3, 0xFFFFFF, "%4.1f C", t.temp_rr);
+    set_cell_fmt(table, 7, 3, 0xFFFFFF, "%4.1f C", dbc_api.aqt6.tire_temp);
 
     // Row 8: RR Brake T
     set_cell(table, 8, 0, "RR BrkT:", 0xFFFFFF);
-    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%4.1f C", t.brk_rr);
+    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%4.1f C", dbc_api.aqt6.brake_temp);
     set_cell(table, 8, 2, "", 0xFFFFFF);
     set_cell(table, 8, 3, "", 0xFFFFFF);
 }
@@ -1622,10 +1610,7 @@ void create_screen_debug_5() {
 }
 
 void tick_screen_debug_5() {
-    TelemetryData t;
-    if (!ros2subscriber_get_telemetry(&t)) {
-        return;
-    }
+    
     lv_obj_t *table = objects.general_debug_text_5;
     if (!table) return;
 
@@ -1645,11 +1630,11 @@ void tick_screen_debug_5() {
     set_cell(table, 2, 0, "ROS2 Node:", 0xFFFFFF);
     set_cell(table, 2, 1, "ACTIVE", 0x00FF00);
     set_cell(table, 2, 2, "AMS Flt Count:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 3, (t.ams_fault_cnt == 0) ? 0x00FF00 : 0xFF0000, "%.0f", t.ams_fault_cnt);
+    set_cell_fmt(table, 2, 3, (dbc_api.master_msc_id_1.fault_counter == 0) ? 0x00FF00 : 0xFF0000, "%.0f", dbc_api.master_msc_id_1.fault_counter);
 
     // Row 3
     set_cell(table, 3, 0, "Inverter Flt:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 1, (t.inv_fault == 0) ? 0x00FF00 : 0xFF0000, "%.0f", t.inv_fault);
+    set_cell_fmt(table, 3, 1, (dbc_api.hv500_temperatures.actual_faultcode == 0) ? 0x00FF00 : 0xFF0000, "%.0f", dbc_api.hv500_temperatures.actual_faultcode);
     set_cell(table, 3, 2, "", 0xFFFFFF);
     set_cell(table, 3, 3, "", 0xFFFFFF);
 }
@@ -1669,10 +1654,7 @@ void create_screen_debug_autonomous_1() {
 }
 
 void tick_screen_debug_autonomous_1() {
-    TelemetryData t;
-    if (!ros2subscriber_get_telemetry(&t)) {
-        return;
-    }
+    
     lv_obj_t *table = objects.autonomous_debug_text_1;
     if (!table) return;
 
@@ -1685,49 +1667,49 @@ void tick_screen_debug_autonomous_1() {
     // Row 1
     const char *acu_state_str = "FAULT";
     uint32_t acu_state_color = 0xFF0000;
-    if (t.acu_state == 0) { acu_state_str = "INIT"; acu_state_color = 0x808080; }
-    else if (t.acu_state == 1) { acu_state_str = "MISS_SEL"; acu_state_color = 0xFFA500; }
-    else if (t.acu_state == 2) { acu_state_str = "JET_WAIT"; acu_state_color = 0x00BFFF; }
-    else if (t.acu_state == 3) { acu_state_str = "SEQ"; acu_state_color = 0xFFA500; }
-    else if (t.acu_state == 4) { acu_state_str = "READY"; acu_state_color = 0x00FF00; }
-    else if (t.acu_state == 5) { acu_state_str = "DRIVING"; acu_state_color = 0x00FF00; }
-    else if (t.acu_state == 7) { acu_state_str = "EMERG"; acu_state_color = 0xFF0000; }
+    if (dbc_api.acu.acu_state == 0) { acu_state_str = "INIT"; acu_state_color = 0x808080; }
+    else if (dbc_api.acu.acu_state == 1) { acu_state_str = "MISS_SEL"; acu_state_color = 0xFFA500; }
+    else if (dbc_api.acu.acu_state == 2) { acu_state_str = "JET_WAIT"; acu_state_color = 0x00BFFF; }
+    else if (dbc_api.acu.acu_state == 3) { acu_state_str = "SEQ"; acu_state_color = 0xFFA500; }
+    else if (dbc_api.acu.acu_state == 4) { acu_state_str = "READY"; acu_state_color = 0x00FF00; }
+    else if (dbc_api.acu.acu_state == 5) { acu_state_str = "DRIVING"; acu_state_color = 0x00FF00; }
+    else if (dbc_api.acu.acu_state == 7) { acu_state_str = "EMERG"; acu_state_color = 0xFF0000; }
     set_cell(table, 1, 0, "ACU State:", 0xFFFFFF);
     set_cell(table, 1, 1, acu_state_str, acu_state_color);
 
     const char *assi_state_str = "OFF";
     uint32_t assi_state_color = 0x808080;
-    if (t.acu_assi_state == 2) { assi_state_str = "READY"; assi_state_color = 0x00FF00; }
-    else if (t.acu_assi_state == 3) { assi_state_str = "DRIVING"; assi_state_color = 0x00FF00; }
-    else if (t.acu_assi_state == 4) { assi_state_str = "EMERG"; assi_state_color = 0xFF0000; }
-    else if (t.acu_assi_state == 5) { assi_state_str = "FINISH"; assi_state_color = 0x00FF00; }
+    if (dbc_api.acu.assi_state == 2) { assi_state_str = "READY"; assi_state_color = 0x00FF00; }
+    else if (dbc_api.acu.assi_state == 3) { assi_state_str = "DRIVING"; assi_state_color = 0x00FF00; }
+    else if (dbc_api.acu.assi_state == 4) { assi_state_str = "EMERG"; assi_state_color = 0xFF0000; }
+    else if (dbc_api.acu.assi_state == 5) { assi_state_str = "FINISH"; assi_state_color = 0x00FF00; }
     set_cell(table, 1, 2, "ASSI:", 0xFFFFFF);
     set_cell(table, 1, 3, assi_state_str, assi_state_color);
 
     // Row 2
     set_cell(table, 2, 0, "ASMS:", 0xFFFFFF);
-    set_cell(table, 2, 1, (t.acu_asms == 1) ? "ON" : "OFF", (t.acu_asms == 1) ? 0x00FF00 : 0x808080);
+    set_cell(table, 2, 1, (dbc_api.acu.asms == 1) ? "ON" : "OFF", (dbc_api.acu.asms == 1) ? 0x00FF00 : 0x808080);
     set_cell(table, 2, 2, "IGN:", 0xFFFFFF);
-    set_cell(table, 2, 3, (t.acu_ign == 1) ? "ON" : "OFF", (t.acu_ign == 1) ? 0x00FF00 : 0x808080);
+    set_cell(table, 2, 3, (dbc_api.acu.ign == 1) ? "ON" : "OFF", (dbc_api.acu.ign == 1) ? 0x00FF00 : 0x808080);
 
     // Row 3
     set_cell(table, 3, 0, "EMERGENCY:", 0xFFFFFF);
-    set_cell(table, 3, 1, (t.acu_emergency == 1) ? "ACTIVE" : "OK", (t.acu_emergency == 1) ? 0xFF0000 : 0x00FF00);
+    set_cell(table, 3, 1, (dbc_api.acu.emergency == 1) ? "ACTIVE" : "OK", (dbc_api.acu.emergency == 1) ? 0xFF0000 : 0x00FF00);
 
     const char *acu_emerg_str = "NONE";
     uint32_t acu_emerg_color = 0x00FF00;
-    if (t.acu_emerg_cause == 1) { acu_emerg_str = "SDC_OPEN"; acu_emerg_color = 0xFF0000; }
-    else if (t.acu_emerg_cause == 2) { acu_emerg_str = "RES"; acu_emerg_color = 0xFF0000; }
-    else if (t.acu_emerg_cause == 3) { acu_emerg_str = "PRESS_CHK"; acu_emerg_color = 0xFF0000; }
-    else if (t.acu_emerg_cause == 4) { acu_emerg_str = "VCU_TO"; acu_emerg_color = 0xFF0000; }
-    else if (t.acu_emerg_cause == 5) { acu_emerg_str = "JETSON_TO"; acu_emerg_color = 0xFF0000; }
-    else if (t.acu_emerg_cause == 6) { acu_emerg_str = "WDT"; acu_emerg_color = 0xFF0000; }
+    if (dbc_api.acu.emergency_cause == 1) { acu_emerg_str = "SDC_OPEN"; acu_emerg_color = 0xFF0000; }
+    else if (dbc_api.acu.emergency_cause == 2) { acu_emerg_str = "RES"; acu_emerg_color = 0xFF0000; }
+    else if (dbc_api.acu.emergency_cause == 3) { acu_emerg_str = "PRESS_CHK"; acu_emerg_color = 0xFF0000; }
+    else if (dbc_api.acu.emergency_cause == 4) { acu_emerg_str = "VCU_TO"; acu_emerg_color = 0xFF0000; }
+    else if (dbc_api.acu.emergency_cause == 5) { acu_emerg_str = "JETSON_TO"; acu_emerg_color = 0xFF0000; }
+    else if (dbc_api.acu.emergency_cause == 6) { acu_emerg_str = "WDT"; acu_emerg_color = 0xFF0000; }
     set_cell(table, 3, 2, "Emer Cause:", 0xFFFFFF);
     set_cell(table, 3, 3, acu_emerg_str, acu_emerg_color);
 
     // Row 4
     set_cell(table, 4, 0, "CPU Temp:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%3.0f C", t.acu_cpu_temp);
+    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%3.0f C", dbc_api.acu.acu_cpu_temp);
     set_cell(table, 4, 2, "", 0xFFFFFF);
     set_cell(table, 4, 3, "", 0xFFFFFF);
 
@@ -1740,31 +1722,31 @@ void tick_screen_debug_autonomous_1() {
     // Row 6
     const char *jet_as_state_str = "OFF";
     uint32_t jet_as_state_color = 0x808080;
-    if (t.jetson_as_state == 2) { jet_as_state_str = "READY"; jet_as_state_color = 0x00FF00; }
-    else if (t.jetson_as_state == 3) { jet_as_state_str = "DRIVING"; jet_as_state_color = 0x00FF00; }
-    else if (t.jetson_as_state == 4) { jet_as_state_str = "EMERG"; jet_as_state_color = 0xFF0000; }
-    else if (t.jetson_as_state == 5) { jet_as_state_str = "FINISH"; jet_as_state_color = 0x00FF00; }
+    if (dbc_api.jetson.as_state == 2) { jet_as_state_str = "READY"; jet_as_state_color = 0x00FF00; }
+    else if (dbc_api.jetson.as_state == 3) { jet_as_state_str = "DRIVING"; jet_as_state_color = 0x00FF00; }
+    else if (dbc_api.jetson.as_state == 4) { jet_as_state_str = "EMERG"; jet_as_state_color = 0xFF0000; }
+    else if (dbc_api.jetson.as_state == 5) { jet_as_state_str = "FINISH"; jet_as_state_color = 0x00FF00; }
     set_cell(table, 6, 0, "AS State:", 0xFFFFFF);
     set_cell(table, 6, 1, jet_as_state_str, jet_as_state_color);
 
     set_cell(table, 6, 2, "Mission:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 3, 0xFFFFFF, "%-25.0f", t.jetson_mission);
+    set_cell_fmt(table, 6, 3, 0xFFFFFF, "%-25.0f", dbc_api.jetson.as_mission);
 
     // Row 7
     set_cell(table, 7, 0, "Temp:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 1, 0xFFFFFF, "%3.0f C", t.jetson_temp);
+    set_cell_fmt(table, 7, 1, 0xFFFFFF, "%3.0f C", dbc_api.jetson.temperature);
     set_cell(table, 7, 2, "CPU:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 3, 0xFFFFFF, "%3.0f%%", t.jetson_cpu);
+    set_cell_fmt(table, 7, 3, 0xFFFFFF, "%3.0f%%", dbc_api.jetson.cpu);
 
     // Row 8
     set_cell(table, 8, 0, "GPU:", 0xFFFFFF);
-    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%3.0f%%", t.jetson_gpu);
+    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%3.0f%%", dbc_api.jetson.gpu);
 
     const char *jet_emerg_str = "NONE";
     uint32_t jet_emerg_color = 0x00FF00;
-    if (t.jetson_emerg_cause == 1) { jet_emerg_str = "SDC_OPEN"; jet_emerg_color = 0xFF0000; }
-    else if (t.jetson_emerg_cause == 2) { jet_emerg_str = "RES"; jet_emerg_color = 0xFF0000; }
-    else if (t.jetson_emerg_cause == 3) { jet_emerg_str = "STEER_ERR"; jet_emerg_color = 0xFF0000; }
+    if (dbc_api.jetson.emergency_cause == 1) { jet_emerg_str = "SDC_OPEN"; jet_emerg_color = 0xFF0000; }
+    else if (dbc_api.jetson.emergency_cause == 2) { jet_emerg_str = "RES"; jet_emerg_color = 0xFF0000; }
+    else if (dbc_api.jetson.emergency_cause == 3) { jet_emerg_str = "STEER_ERR"; jet_emerg_color = 0xFF0000; }
     set_cell(table, 8, 2, "Emer Cause:", 0xFFFFFF);
     set_cell(table, 8, 3, jet_emerg_str, jet_emerg_color);
 }
@@ -1784,10 +1766,7 @@ void create_screen_debug_autonomous_2() {
 }
 
 void tick_screen_debug_autonomous_2() {
-    TelemetryData t;
-    if (!ros2subscriber_get_telemetry(&t)) {
-        return;
-    }
+    
     lv_obj_t *table = objects.autonomous_debug_text_2;
     if (!table) return;
 
@@ -1799,33 +1778,33 @@ void tick_screen_debug_autonomous_2() {
 
     // Row 1
     set_cell(table, 1, 0, "IGN Man:", 0xFFFFFF);
-    set_cell(table, 1, 1, (t.vcu_ign_man == 1) ? "ON" : "OFF", (t.vcu_ign_man == 1) ? 0x00FF00 : 0x808080);
+    set_cell(table, 1, 1, (dbc_api.vcu_ign_r2d.ignition_manual == 1) ? "ON" : "OFF", (dbc_api.vcu_ign_r2d.ignition_manual == 1) ? 0x00FF00 : 0x808080);
     set_cell(table, 1, 2, "IGN Auto:", 0xFFFFFF);
-    set_cell(table, 1, 3, (t.vcu_ign_auto == 1) ? "ON" : "OFF", (t.vcu_ign_auto == 1) ? 0x00FF00 : 0x808080);
+    set_cell(table, 1, 3, (dbc_api.vcu_ign_r2d.ignition_auto == 1) ? "ON" : "OFF", (dbc_api.vcu_ign_r2d.ignition_auto == 1) ? 0x00FF00 : 0x808080);
 
     // Row 2
     set_cell(table, 2, 0, "R2D Man:", 0xFFFFFF);
-    set_cell(table, 2, 1, (t.vcu_r2d_man == 1) ? "ON" : "OFF", (t.vcu_r2d_man == 1) ? 0x00FF00 : 0x808080);
+    set_cell(table, 2, 1, (dbc_api.vcu_ign_r2d.r2d_manual == 1) ? "ON" : "OFF", (dbc_api.vcu_ign_r2d.r2d_manual == 1) ? 0x00FF00 : 0x808080);
     set_cell(table, 2, 2, "R2D Auto:", 0xFFFFFF);
-    set_cell(table, 2, 3, (t.vcu_r2d_auto == 1) ? "ON" : "OFF", (t.vcu_r2d_auto == 1) ? 0x00FF00 : 0x808080);
+    set_cell(table, 2, 3, (dbc_api.vcu_ign_r2d.r2d_auto == 1) ? "ON" : "OFF", (dbc_api.vcu_ign_r2d.r2d_auto == 1) ? 0x00FF00 : 0x808080);
 
     // Row 3
     set_cell(table, 3, 0, "Shutdown:", 0xFFFFFF);
-    set_cell(table, 3, 1, (t.vcu_shutdown == 1) ? "CLOSED" : "OPEN", (t.vcu_shutdown == 1) ? 0x00FF00 : 0xFF0000);
+    set_cell(table, 3, 1, (dbc_api.vcu_ign_r2d.shutdown_signal == 1) ? "CLOSED" : "OPEN", (dbc_api.vcu_ign_r2d.shutdown_signal == 1) ? 0x00FF00 : 0xFF0000);
     set_cell(table, 3, 2, "State:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%-25.0f", t.vcu_state);
+    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%-25.0f", dbc_api.vcu_ign_r2d.vcu_state);
 
     // Row 4
     set_cell(table, 4, 0, "HV:", 0xFFFFFF);
-    set_cell(table, 4, 1, (t.vcu_hv == 1) ? "ACTIVE" : "OFF", (t.vcu_hv == 1) ? 0xFF0000 : 0x808080);
+    set_cell(table, 4, 1, (dbc_api.vcu_hv.hv == 1) ? "ACTIVE" : "OFF", (dbc_api.vcu_hv.hv == 1) ? 0xFF0000 : 0x808080);
     set_cell(table, 4, 2, "", 0xFFFFFF);
     set_cell(table, 4, 3, "", 0xFFFFFF);
 
     // Row 5
     set_cell(table, 5, 0, "RPM Act:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%-5.0f", t.vcu_rpm_act);
+    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%-5.0f", dbc_api.vcu_rpm.rpm_actual);
     set_cell(table, 5, 2, "RPM Tgt:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%-5.0f", t.vcu_rpm_tgt);
+    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%-5.0f", dbc_api.vcu_rpm_target.rpm_target);
 }
 
 void create_screen_debug_autonomous_3() {
@@ -1843,10 +1822,7 @@ void create_screen_debug_autonomous_3() {
 }
 
 void tick_screen_debug_autonomous_3() {
-    TelemetryData t;
-    if (!ros2subscriber_get_telemetry(&t)) {
-        return;
-    }
+    
     lv_obj_t *table = objects.autonomous_debug_text_3;
     if (!table) return;
 
@@ -1858,37 +1834,37 @@ void tick_screen_debug_autonomous_3() {
 
     // Row 1
     set_cell(table, 1, 0, "Spd Act:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%3.1f km/h", t.dv_spd_act);
+    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%3.1f km/h", dbc_api.dv_dynamics_1.speed_actual);
     set_cell(table, 1, 2, "Spd Tgt:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 3, 0xFFFFFF, "%3.1f km/h", t.dv_spd_tgt);
+    set_cell_fmt(table, 1, 3, 0xFFFFFF, "%3.1f km/h", dbc_api.dv_dynamics_1.speed_target);
 
     // Row 2
     set_cell(table, 2, 0, "Str Act:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%5.1f", t.dv_str_act);
+    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%5.1f", dbc_api.dv_dynamics_1.steering_angle_actual);
     set_cell(table, 2, 2, "Str Tgt:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 3, 0xFFFFFF, "%5.1f", t.dv_str_tgt);
+    set_cell_fmt(table, 2, 3, 0xFFFFFF, "%5.1f", dbc_api.dv_dynamics_1.steering_angle_target);
 
     // Row 3
     set_cell(table, 3, 0, "Brk Act:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%3.0f%%", t.dv_brk_act);
+    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%3.0f%%", dbc_api.dv_dynamics_1.brake_hydr_actual);
     set_cell(table, 3, 2, "Brk Tgt:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%3.0f%%", t.dv_brk_tgt);
+    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%3.0f%%", dbc_api.dv_dynamics_1.brake_hydr_target);
 
     // Row 4
     set_cell(table, 4, 0, "Mot Act:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%3.0f%%", t.dv_mot_act);
+    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%3.0f%%", dbc_api.dv_dynamics_1.motor_moment_actual);
     set_cell(table, 4, 2, "Mot Tgt:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 3, 0xFFFFFF, "%3.0f%%", t.dv_mot_tgt);
+    set_cell_fmt(table, 4, 3, 0xFFFFFF, "%3.0f%%", dbc_api.dv_dynamics_1.motor_moment_target);
 
     // Row 5
     set_cell(table, 5, 0, "Acc Lon:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%6.3f m/s2", t.dv_acc_lon);
+    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%6.3f m/s2", dbc_api.dv_dynamics_2.acceleration_longitudinal);
     set_cell(table, 5, 2, "Acc Lat:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%6.3f m/s2", t.dv_acc_lat);
+    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%6.3f m/s2", dbc_api.dv_dynamics_2.acceleration_lateral);
 
     // Row 6
     set_cell(table, 6, 0, "Yaw:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 1, 0xFFFFFF, "%6.3f /s", t.dv_yaw);
+    set_cell_fmt(table, 6, 1, 0xFFFFFF, "%6.3f /s", dbc_api.dv_dynamics_2.yaw_rate);
     set_cell(table, 6, 2, "", 0xFFFFFF);
     set_cell(table, 6, 3, "", 0xFFFFFF);
 
@@ -1900,19 +1876,19 @@ void tick_screen_debug_autonomous_3() {
 
     // Row 8
     set_cell(table, 8, 0, "AS:", 0xFFFFFF);
-    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%3.0f", t.dv_as_status);
+    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%3.0f", dbc_api.dv_status.as_status);
     set_cell(table, 8, 2, "EBS:", 0xFFFFFF);
-    set_cell_fmt(table, 8, 3, 0xFFFFFF, "%3.0f", t.dv_ebs_state);
+    set_cell_fmt(table, 8, 3, 0xFFFFFF, "%3.0f", dbc_api.dv_status.asb_ebs_state);
 
     // Row 9
     set_cell(table, 9, 0, "AMI:", 0xFFFFFF);
-    set_cell_fmt(table, 9, 1, 0xFFFFFF, "%3.0f", t.dv_ami_state);
+    set_cell_fmt(table, 9, 1, 0xFFFFFF, "%3.0f", dbc_api.dv_status.ami_state);
     set_cell(table, 9, 2, "Steer:", 0xFFFFFF);
-    set_cell_fmt(table, 9, 3, 0xFFFFFF, "%3.0f", t.dv_steer_state);
+    set_cell_fmt(table, 9, 3, 0xFFFFFF, "%3.0f", dbc_api.dv_status.steering_state);
 
     // Row 10
     set_cell(table, 10, 0, "EBS Red:", 0xFFFFFF);
-    set_cell_fmt(table, 10, 1, 0xFFFFFF, "%3.0f", t.dv_ebs_red_state);
+    set_cell_fmt(table, 10, 1, 0xFFFFFF, "%3.0f", dbc_api.dv_status.asb_redundancy_state);
     set_cell(table, 10, 2, "", 0xFFFFFF);
     set_cell(table, 10, 3, "", 0xFFFFFF);
 }
@@ -1932,10 +1908,7 @@ void create_screen_debug_autonomous_4() {
 }
 
 void tick_screen_debug_autonomous_4() {
-    TelemetryData t;
-    if (!ros2subscriber_get_telemetry(&t)) {
-        return;
-    }
+    
     lv_obj_t *table = objects.autonomous_debug_text_4;
     if (!table) return;
 
@@ -1946,17 +1919,17 @@ void tick_screen_debug_autonomous_4() {
     lv_table_add_cell_ctrl(table, 0, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
 
     // Row 1
-    uint32_t ebs_press_color = (t.ebs_tank_f > 10.0f) ? 0x00FF00 : 0xFF0000;
+    uint32_t ebs_press_color = (dbc_api.asf_signals.ebs_pressure_tank_front > 10.0f) ? 0x00FF00 : 0xFF0000;
     set_cell(table, 1, 0, "EBS Tank F:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 1, ebs_press_color, "%5.1f bar", t.ebs_tank_f);
+    set_cell_fmt(table, 1, 1, ebs_press_color, "%5.1f bar", dbc_api.asf_signals.ebs_pressure_tank_front);
     set_cell(table, 1, 2, "EBS Tank R:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 3, ebs_press_color, "%5.1f bar", t.ebs_tank_r);
+    set_cell_fmt(table, 1, 3, ebs_press_color, "%5.1f bar", dbc_api.asf_signals.ebs_pressure_tank_rear);
 
     // Row 2
     set_cell(table, 2, 0, "Brk Press F:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%5.1f bar", t.brk_press_f);
+    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%5.1f bar", dbc_api.asf_signals.brake_pressure_front);
     set_cell(table, 2, 2, "Brk Press R:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 3, 0xFFFFFF, "%5.1f bar", t.brk_press_r);
+    set_cell_fmt(table, 2, 3, 0xFFFFFF, "%5.1f bar", dbc_api.asf_signals.brake_pressure_rear);
 
     // Row 3: Header Steering Motor
     set_cell(table, 3, 0, "STEERING MOTOR", 0x00BFFF);
@@ -1966,25 +1939,25 @@ void tick_screen_debug_autonomous_4() {
 
     // Row 4
     set_cell(table, 4, 0, "Pos:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%5.1f", t.steer_pos);
+    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%5.1f", dbc_api.cubemars_feedback.position);
     set_cell(table, 4, 2, "Spd:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 3, 0xFFFFFF, "%6.0f ERPM", t.steer_spd);
+    set_cell_fmt(table, 4, 3, 0xFFFFFF, "%6.0f ERPM", dbc_api.cubemars_feedback.speed_rpm);
 
     // Row 5
     set_cell(table, 5, 0, "Curr:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%5.1f A", t.steer_curr);
+    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%5.1f A", dbc_api.cubemars_feedback.current);
     set_cell(table, 5, 2, "Drv T:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%3.0f C", t.steer_temp);
+    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%3.0f C", dbc_api.cubemars_feedback.driver_temp);
 
     // Row 6
     set_cell(table, 6, 0, "Err:", 0xFFFFFF);
-    set_cell(table, 6, 1, (t.steer_err == 0) ? "OK" : "FAULT", (t.steer_err == 0) ? 0x00FF00 : 0xFF0000);
+    set_cell(table, 6, 1, (dbc_api.cubemars_feedback.error_code == 0) ? "OK" : "FAULT", (dbc_api.cubemars_feedback.error_code == 0) ? 0x00FF00 : 0xFF0000);
     set_cell(table, 6, 2, "Pos Target:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 3, 0xFFFFFF, "%5.1f", t.steer_pos_tgt);
+    set_cell_fmt(table, 6, 3, 0xFFFFFF, "%5.1f", dbc_api.cubemars_position_loop.position);
 
     // Row 7
     set_cell(table, 7, 0, "Torque Tgt:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 1, 0xFFFFFF, "%5.2f Nm", t.vcu_torque_tgt);
+    set_cell_fmt(table, 7, 1, 0xFFFFFF, "%5.2f Nm", dbc_api.vcu_torque_target.torque_target);
     set_cell(table, 7, 2, "", 0xFFFFFF);
     set_cell(table, 7, 3, "", 0xFFFFFF);
 }
@@ -2004,10 +1977,7 @@ void create_screen_debug_autonomous_5() {
 }
 
 void tick_screen_debug_autonomous_5() {
-    TelemetryData t;
-    if (!ros2subscriber_get_telemetry(&t)) {
-        return;
-    }
+    
     lv_obj_t *table = objects.autonomous_debug_text_5;
     if (!table) return;
 
@@ -2019,19 +1989,19 @@ void tick_screen_debug_autonomous_5() {
 
     // Row 1
     set_cell(table, 1, 0, "Laps:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%2.0f", t.slam_laps);
+    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%2.0f", dbc_api.slam_stats_can.lap_counter);
     set_cell(table, 1, 2, "Cones:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 3, 0xFFFFFF, "%3.0f", t.slam_cones);
+    set_cell_fmt(table, 1, 3, 0xFFFFFF, "%3.0f", dbc_api.slam_stats_can.cones_count_actual);
 
     // Row 2
     set_cell(table, 2, 0, "All Cones:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%4.0f", t.slam_all);
+    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%4.0f", dbc_api.slam_stats_can.cones_count_all);
     set_cell(table, 2, 2, "RES Signal:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 3, 0xFFFFFF, "%5.1f", t.res_signal);
+    set_cell_fmt(table, 2, 3, 0xFFFFFF, "%5.1f", dbc_api.res.signal);
 
     // Row 3
     set_cell(table, 3, 0, "RES Status:", 0xFFFFFF);
-    set_cell(table, 3, 1, (t.res_signal > 0.0f) ? "OK" : "ESTOP", (t.res_signal > 0.0f) ? 0x00FF00 : 0xFF0000);
+    set_cell(table, 3, 1, (dbc_api.res.signal > 0.0f) ? "OK" : "ESTOP", (dbc_api.res.signal > 0.0f) ? 0x00FF00 : 0xFF0000);
     set_cell(table, 3, 2, "", 0xFFFFFF);
     set_cell(table, 3, 3, "", 0xFFFFFF);
 
@@ -2043,31 +2013,31 @@ void tick_screen_debug_autonomous_5() {
 
     // Row 5
     set_cell(table, 5, 0, "AQT1 BrkP:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%5.1f bar", t.aqt1_brkp);
+    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%5.1f bar", dbc_api.aqt1.brk_press);
     set_cell(table, 5, 2, "AQT1 RES:", 0xFFFFFF);
-    set_cell(table, 5, 3, (t.aqt1_res == 1) ? "ACTIVE" : "OK", (t.aqt1_res == 1) ? 0xFF0000 : 0x00FF00);
+    set_cell(table, 5, 3, (dbc_api.aqt1.res == 1) ? "ACTIVE" : "OK", (dbc_api.aqt1.res == 1) ? 0xFF0000 : 0x00FF00);
 
     // Row 6
     set_cell(table, 6, 0, "AQT1 BOTS:", 0xFFFFFF);
-    set_cell(table, 6, 1, (t.aqt1_bots == 1) ? "ACTIVE" : "OK", (t.aqt1_bots == 1) ? 0xFF0000 : 0x00FF00);
+    set_cell(table, 6, 1, (dbc_api.aqt1.bots == 1) ? "ACTIVE" : "OK", (dbc_api.aqt1.bots == 1) ? 0xFF0000 : 0x00FF00);
     set_cell(table, 6, 2, "AQT4 Inertia:", 0xFFFFFF);
-    set_cell(table, 6, 3, (t.aqt4_inertia == 1) ? "ACTIVE" : "OK", (t.aqt4_inertia == 1) ? 0xFF0000 : 0x00FF00);
+    set_cell(table, 6, 3, (dbc_api.aqt4.inertia == 1) ? "ACTIVE" : "OK", (dbc_api.aqt4.inertia == 1) ? 0xFF0000 : 0x00FF00);
 
     // Row 7
     set_cell(table, 7, 0, "AQT4 Emer:", 0xFFFFFF);
-    set_cell(table, 7, 1, (t.aqt4_emer == 1) ? "ACTIVE" : "OK", (t.aqt4_emer == 1) ? 0xFF0000 : 0x00FF00);
+    set_cell(table, 7, 1, (dbc_api.aqt4.emer_button == 1) ? "ACTIVE" : "OK", (dbc_api.aqt4.emer_button == 1) ? 0xFF0000 : 0x00FF00);
     set_cell(table, 7, 2, "AQT7 BrkP:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 3, 0xFFFFFF, "%5.1f bar", t.aqt7_brkp);
+    set_cell_fmt(table, 7, 3, 0xFFFFFF, "%5.1f bar", dbc_api.aqt7.brk_press);
 
     // Row 8
     set_cell(table, 8, 0, "AQT2 WhlAng:", 0xFFFFFF);
-    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%5.1f", t.aqt2_whl_ang);
+    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%5.1f", dbc_api.aqt2.wheel_angle);
     set_cell(table, 8, 2, "AQT3 WhlAng:", 0xFFFFFF);
-    set_cell_fmt(table, 8, 3, 0xFFFFFF, "%5.1f", t.aqt3_whl_ang);
+    set_cell_fmt(table, 8, 3, 0xFFFFFF, "%5.1f", dbc_api.aqt3.wheel_angle);
 
     // Row 9
     set_cell(table, 9, 0, "AQT4 StAng:", 0xFFFFFF);
-    set_cell_fmt(table, 9, 1, 0xFFFFFF, "%5.1f", t.aqt4_st_ang);
+    set_cell_fmt(table, 9, 1, 0xFFFFFF, "%5.1f", dbc_api.aqt4.st_angle);
     set_cell(table, 9, 2, "", 0xFFFFFF);
     set_cell(table, 9, 3, "", 0xFFFFFF);
 }
