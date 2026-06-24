@@ -453,10 +453,10 @@ class CanSimulatorNode(Node):
                 timestamp=time.time(),
             )
 
-            try:
-                self._bus.send(frame)
-            except Exception as exc:
-                self.get_logger().warn(f'CAN send error: {exc}')
+            # try:
+            #     self._bus.send(frame)
+            # except Exception as exc:
+            #     self.get_logger().warn(f'CAN send error: {exc}')
 
     # -----------------------------------------------------------------------
 

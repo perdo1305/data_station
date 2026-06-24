@@ -274,10 +274,10 @@ def main():
                     timestamp=time.time()
                 )
 
-                try:
-                    bus.send(frame)
-                except Exception as e:
-                    pass
+                # try:
+                #     bus.send(frame)
+                # except Exception as e:
+                #     pass
 
             elapsed = time.time() - start_time
             sleep_time = dt - elapsed

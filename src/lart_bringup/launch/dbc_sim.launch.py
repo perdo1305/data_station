@@ -61,14 +61,14 @@ def generate_launch_description():
 
     return LaunchDescription([
         # ── Simulator: creates vcan0 and pumps CAN frames from the DBC ──────
-        Node(
-            package='sim',
-            executable='can_simulator',
-            name='can_simulator',
-            parameters=[config, dbc_params],
-            output='screen',
-            emulate_tty=True,
-        ),
+        # Node(
+        #     package='sim',
+        #     executable='can_simulator',
+        #     name='can_simulator',
+        #     parameters=[config, dbc_params],
+        #     output='screen',
+        #     emulate_tty=True,
+        # ),
 
         # ── Bridge: reads vcan0, decodes DBC, publishes /can/dbc/* topics ───
         Node(
