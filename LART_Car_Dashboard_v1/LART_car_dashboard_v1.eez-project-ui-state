@@ -30,7 +30,7 @@
           {
             "type": "border",
             "selected": 1,
-            "size": 240,
+            "size": 58.5,
             "location": "right",
             "children": [
               {
@@ -142,7 +142,7 @@
             {
               "type": "row",
               "id": "#3d43a90f-6428-4ab6-9b5d-57d4de63898c",
-              "weight": 18.190827004004255,
+              "weight": 6.641221374045801,
               "children": [
                 {
                   "type": "tabset",
@@ -213,36 +213,14 @@
             {
               "type": "tabset",
               "id": "EDITORS",
-              "weight": 55.628992444385226,
+              "weight": 93.3587786259542,
               "selected": 2,
               "enableDeleteWhenEmpty": false,
               "enableClose": false,
               "children": [
                 {
                   "type": "tab",
-                  "id": "#b4efdf22-0b1c-449e-ad6d-9d9b9ba499be",
-                  "name": "Debug_3",
-                  "component": "editor",
-                  "config": {
-                    "objectPath": "[LART_car_dashboard_v1.eez-project]:/userPages/4",
-                    "permanent": false
-                  },
-                  "icon": "svg:page"
-                },
-                {
-                  "type": "tab",
-                  "id": "#f101308a-d132-4521-8c26-445344264378",
-                  "name": "Debug 1",
-                  "component": "editor",
-                  "config": {
-                    "objectPath": "[LART_car_dashboard_v1.eez-project]:/userPages/2",
-                    "permanent": true
-                  },
-                  "icon": "svg:page"
-                },
-                {
-                  "type": "tab",
-                  "id": "#c2147b03-dac3-499f-bfb0-dc5a17d5b1a3",
+                  "id": "#73f0a912-6343-4dd9-80d3-596340fe7b6d",
                   "name": "Settings",
                   "component": "editor",
                   "config": {
@@ -254,22 +232,22 @@
                 },
                 {
                   "type": "tab",
-                  "id": "#c5c2cb63-3fd8-4b91-b5bf-d506252b8f76",
-                  "name": "Driver View",
+                  "id": "#ba1f35c1-a2cd-4dc5-95d4-e206711f2cde",
+                  "name": "Autonomous",
                   "component": "editor",
                   "config": {
-                    "objectPath": "[LART_car_dashboard_v1.eez-project]:/userPages/0",
+                    "objectPath": "[LART_car_dashboard_v1.eez-project]:/userPages/1",
                     "permanent": true
                   },
                   "icon": "svg:page"
                 },
                 {
                   "type": "tab",
-                  "id": "#5dd4b28b-8e84-484b-881a-626f27c6a184",
-                  "name": "Autonomous",
+                  "id": "#686820e9-3c27-4aee-bca8-f4652b7c0bc0",
+                  "name": "Driver View",
                   "component": "editor",
                   "config": {
-                    "objectPath": "[LART_car_dashboard_v1.eez-project]:/userPages/1",
+                    "objectPath": "[LART_car_dashboard_v1.eez-project]:/userPages/0",
                     "permanent": true
                   },
                   "icon": "svg:page"
@@ -280,7 +258,7 @@
             {
               "type": "row",
               "id": "#9b9aad4d-85b5-4431-867f-52c6f3936ddf",
-              "weight": 26.18018055161051,
+              "weight": 0,
               "children": [
                 {
                   "type": "tabset",
@@ -1222,7 +1200,9 @@
       },
       "selectionBack": {
         "0": {
-          "1": {},
+          "1": {
+            "$selected": true
+          },
           "6": {},
           "8": {},
           "9": {},

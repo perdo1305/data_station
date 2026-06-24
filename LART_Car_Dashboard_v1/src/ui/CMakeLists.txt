@@ -126,7 +126,7 @@ else()
     message(STATUS "Desktop UI runner disabled: SDL2 (libsdl2-dev) or LVGL sources not available")
 endif()
 
-if(ament_cmake_FOUND)
+if(ament_cmake_FOUND AND lart_msgs_FOUND)
     add_executable(can_bridge
         can_bridge.cpp
         generated/can_bridge_impl.cpp
