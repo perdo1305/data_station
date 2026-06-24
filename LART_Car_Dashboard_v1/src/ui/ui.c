@@ -6,6 +6,7 @@
 #include "stdio.h"
 
 #include "ros2subscriber.h"
+#include "dbc_api.h"
 
 // ASSETS DEFINITION
 const uint8_t assets[7920] = {
@@ -573,6 +574,14 @@ void ui_tick() {
     if (ros2subscriber_spin_some() == 0 && ros2subscriber_get_latest_speed(&speed_kph)) {
         ui_set_speed(speed_kph);
     }
+
+    // Automatically transition to autonomous screen on ASMS rising edge (0 -> 1)
+    static float prev_asms = -1.0f;
+    float current_asms = dbc_api.acu.asms;
+    if (current_asms == 1.0f && prev_asms != 1.0f) {
+        ui_set_screen(1); // 1 is Autonomous screen (0-based ROS2 screen ID)
+    }
+    prev_asms = current_asms;
 
     eez_flow_tick();
     tick_screen(g_currentScreen);

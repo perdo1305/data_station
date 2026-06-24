@@ -750,8 +750,6 @@ void create_screen_autonomous() {
             lv_obj_t *obj = lv_bar_create(parent_obj);
             objects.hv_bar_1 = obj;
             lv_obj_set_pos(obj, 736, 96);
-            lv_obj_set_pos(obj, 106, 407);
-            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             lv_obj_set_size(obj, 53, 314);
             lv_bar_set_range(obj, 0, 100);
             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
