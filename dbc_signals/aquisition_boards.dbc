@@ -55,9 +55,9 @@ BO_ 1808 Pedal_Box: 8 Aquisition_Board1
 
 BO_ 1824 Front_Wheel_L: 4 Aquisition_Board2
  SG_ wheel_speed : 0|8@1+ (1,0) [0|0] "Km/h" Vector__XXX
- SG_ tire_temp : 8|8@1+ (1,0) [0|0] "º" Vector__XXX
- SG_ Brake_disc_temp : 16|8@1+ (1,0) [0|0] "º" Vector__XXX
- SG_ wheel_angle : 24|8@1+ (1,0) [0|0] "º" Vector__XXX
+ SG_ tire_temp : 8|8@1+ (1,0) [0|0] "ï¿½" Vector__XXX
+ SG_ Brake_disc_temp : 16|8@1+ (1,0) [0|0] "ï¿½" Vector__XXX
+ SG_ wheel_angle : 24|8@1+ (1,0) [0|0] "ï¿½" Vector__XXX
 
 BO_ 1840 Front_Wheel_R: 4 Aquisition_Board3
  SG_ wheel_speed : 0|8@1+ (1,0) [0|0] "" Vector__XXX
@@ -76,18 +76,17 @@ BO_ 1872 Rear_Wheel_L: 8 Aquisition_Board5
 
 BO_ 1888 Rear_Wheel_R: 8 Aquisition_Board6
  SG_ Hydrauli_brake_pressure : 0|16@1+ (1,0) [0|0] "bar" Vector__XXX
- SG_ NTC1 : 16|8@1+ (1,0) [0|0] "º" Vector__XXX
- SG_ NTC2 : 24|8@1+ (1,0) [0|0] "º" Vector__XXX
- SG_ NTC3 : 32|8@1+ (1,0) [0|0] "º" Vector__XXX
- SG_ NTC4 : 40|8@1+ (1,0) [0|0] "º" Vector__XXX
- SG_ NTC5 : 48|8@1+ (1,0) [0|0] "º" Vector__XXX
- SG_ NTC6 : 56|8@1+ (1,0) [0|0] "º" Vector__XXX
+ SG_ NTC1 : 16|8@1+ (1,0) [0|0] "ï¿½" Vector__XXX
+ SG_ NTC2 : 24|8@1+ (1,0) [0|0] "ï¿½" Vector__XXX
+ SG_ NTC3 : 32|8@1+ (1,0) [0|0] "ï¿½" Vector__XXX
+ SG_ NTC4 : 40|8@1+ (1,0) [0|0] "ï¿½" Vector__XXX
+ SG_ NTC5 : 48|8@1+ (1,0) [0|0] "ï¿½" Vector__XXX
+ SG_ NTC6 : 56|8@1+ (1,0) [0|0] "ï¿½" Vector__XXX
 
 BO_ 8 Central_Rear: 8 Aquisition_Board7
  SG_ wheel_speed : 0|8@1+ (1,0) [0|0] "" Vector__XXX
  SG_ Tire_temp : 8|16@1+ (10,0) [0|0] "" Vector__XXX
  SG_ Brake_disk_temp : 24|16@1+ (10,0) [0|0] "" Vector__XXX
-
 
 
 

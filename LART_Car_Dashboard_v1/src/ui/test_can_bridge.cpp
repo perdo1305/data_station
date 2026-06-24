@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     
     // Subscribe to test target topic
     auto sub = node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/aqt2/spd_wheel",
+        "/can/dbc/aqt2/wheel_spd",
         rclcpp::QoS(10).best_effort(),
         [&](const std_msgs::msg::Float32::SharedPtr msg) {
             received_speed = msg->data;
@@ -35,17 +35,15 @@ int main(int argc, char **argv) {
     );
     
     // Pack sample DBC data using the cantools unpack/pack C bindings
-    struct data_t26_aqt2_t sample = {};
-    sample.spd_wheel = data_t26_aqt2_spd_wheel_encode(42.5f);
-    sample.tire_temp = data_t26_aqt2_tire_temp_encode(60.0f);
-    sample.brake_temp = data_t26_aqt2_brake_temp_encode(120.0f);
+    struct autonomous_t26_aqt2_t sample = {};
+    sample.wheel_spd = autonomous_t26_aqt2_wheel_spd_encode(42.5f);
     
     uint8_t buffer[8] = {0};
-    int pack_res = data_t26_aqt2_pack(buffer, &sample, sizeof(buffer));
-    assert(pack_res == DATA_T26_AQT2_LENGTH);
+    int pack_res = autonomous_t26_aqt2_pack(buffer, &sample, sizeof(buffer));
+    assert(pack_res == AUTONOMOUS_T26_AQT2_LENGTH);
     
     // Execute frame decoding pipeline
-    bool handled = bridge.handle_frame(DATA_T26_AQT2_FRAME_ID, buffer, sizeof(buffer));
+    bool handled = bridge.handle_frame(AUTONOMOUS_T26_AQT2_FRAME_ID, buffer, sizeof(buffer));
     assert(handled == true);
     
     // Process message callbacks

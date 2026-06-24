@@ -560,7 +560,10 @@ CanBridgeImpl::CanBridgeImpl(rclcpp::Node* node) : node_(node) {
     pub_autonomous_t26_slam_stats_can_lap_counter = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slam_stats_can/lap_counter", sensor_qos);
     pub_autonomous_t26_slam_stats_can_cones_count_actual = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slam_stats_can/cones_count_actual", sensor_qos);
     pub_autonomous_t26_slam_stats_can_cones_count_all = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slam_stats_can/cones_count_all", sensor_qos);
-    pub_autonomous_t26_vcu_rpm_rpm_actual = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/vcu_rpm/rpm_actual", sensor_qos);
+    pub_autonomous_t26_vcu_rpm_motor_rpm_left = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/vcu_rpm/motor_rpm_left", sensor_qos);
+    pub_autonomous_t26_vcu_rpm_motor_rpm_right = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/vcu_rpm/motor_rpm_right", sensor_qos);
+    pub_autonomous_t26_vcu_rpm_motor_current_left = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/vcu_rpm/motor_current_left", sensor_qos);
+    pub_autonomous_t26_vcu_rpm_motor_current_right = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/vcu_rpm/motor_current_right", sensor_qos);
     pub_powertrain_t26_ivt_msg_response_ivt_id_response = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/ivt_msg_response/ivt_id_response", sensor_qos);
     pub_powertrain_t26_ivt_msg_response_b1_trigger_spare = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/ivt_msg_response/b1_trigger_spare", sensor_qos);
     pub_powertrain_t26_ivt_msg_response_ff_wrong_command = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/ivt_msg_response/ff_wrong_command", sensor_qos);
@@ -756,36 +759,35 @@ CanBridgeImpl::CanBridgeImpl(rclcpp::Node* node) : node_(node) {
     pub_powertrain_t26_master_soc_accumulator_soc_integer = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/master_soc_accumulator/soc_integer", sensor_qos);
     pub_powertrain_t26_master_soc_accumulator_soc_float = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/master_soc_accumulator/soc_float", sensor_qos);
     pub_powertrain_t26_master_msc_id_4_slaves_detected = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/master_msc_id_4/slaves_detected", sensor_qos);
-    pub_powertrain_t26_apps_adc_raw_apps1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/apps_adc_raw/apps1", sensor_qos);
-    pub_powertrain_t26_apps_adc_raw_apps2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/apps_adc_raw/apps2", sensor_qos);
-    pub_autonomous_t26_aqt1_brk_press = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt1/brk_press", sensor_qos);
+    pub_powertrain_t26_apps_adc_raw_apps1_raw = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/apps_adc_raw/apps1_raw", sensor_qos);
+    pub_powertrain_t26_apps_adc_raw_apps2_raw = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/apps_adc_raw/apps2_raw", sensor_qos);
+    pub_autonomous_t26_aqt1_frt_brk_press = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt1/frt_brk_press", sensor_qos);
     pub_autonomous_t26_aqt1_res = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt1/res", sensor_qos);
     pub_autonomous_t26_aqt1_bots = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt1/bots", sensor_qos);
-    pub_data_t26_aqt2_spd_wheel = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt2/spd_wheel", sensor_qos);
     pub_data_t26_aqt2_tire_temp = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt2/tire_temp", sensor_qos);
     pub_data_t26_aqt2_brake_temp = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt2/brake_temp", sensor_qos);
-    pub_autonomous_t26_aqt2_wheel_angle = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt2/wheel_angle", sensor_qos);
-    pub_data_t26_aqt3_spd_wheel = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt3/spd_wheel", sensor_qos);
+    pub_autonomous_t26_aqt2_wheel_spd = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt2/wheel_spd", sensor_qos);
     pub_data_t26_aqt3_tire_temp = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt3/tire_temp", sensor_qos);
     pub_data_t26_aqt3_brake_temp = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt3/brake_temp", sensor_qos);
-    pub_autonomous_t26_aqt3_wheel_angle = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt3/wheel_angle", sensor_qos);
-    pub_powertrain_t26_dashboard_ignition = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/dashboard/ignition", sensor_qos);
-    pub_powertrain_t26_dashboard_ready_to_drive = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/dashboard/ready_to_drive", sensor_qos);
+    pub_autonomous_t26_aqt3_wheel_spd = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt3/wheel_spd", sensor_qos);
+    pub_powertrain_t26_dashboard_ignition_switch_raw = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/dashboard/ignition_switch_raw", sensor_qos);
+    pub_powertrain_t26_dashboard_r2d_button_raw = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/dashboard/r2d_button_raw", sensor_qos);
     pub_autonomous_t26_aqt4_st_angle = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt4/st_angle", sensor_qos);
+    pub_autonomous_t26_aqt4_susp_l = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt4/susp_l", sensor_qos);
+    pub_autonomous_t26_aqt4_susp_r = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt4/susp_r", sensor_qos);
     pub_autonomous_t26_aqt4_inertia = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt4/inertia", sensor_qos);
-    pub_autonomous_t26_aqt4_emer_button = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt4/emer_button", sensor_qos);
-    pub_data_t26_aqt5_spd_wheel = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt5/spd_wheel", sensor_qos);
+    pub_autonomous_t26_aqt4_emergency = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt4/emergency", sensor_qos);
     pub_data_t26_aqt5_tire_temp = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt5/tire_temp", sensor_qos);
     pub_data_t26_aqt5_brake_temp = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt5/brake_temp", sensor_qos);
-    pub_data_t26_aqt6_spd_wheel = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt6/spd_wheel", sensor_qos);
+    pub_powertrain_t26_vcu_states_vcu_state = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/vcu_states/vcu_state", sensor_qos);
     pub_data_t26_aqt6_tire_temp = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt6/tire_temp", sensor_qos);
     pub_data_t26_aqt6_brake_temp = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt6/brake_temp", sensor_qos);
-    pub_data_t26_aqt7_1_ntc_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt7_1/ntc_1", sensor_qos);
-    pub_data_t26_aqt7_1_ntc_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt7_1/ntc_2", sensor_qos);
-    pub_data_t26_aqt7_1_ntc_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt7_1/ntc_3", sensor_qos);
-    pub_autonomous_t26_aqt7_brk_press = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt7/brk_press", sensor_qos);
-    pub_data_t26_aqt7_2_susp_r = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt7_2/susp_r", sensor_qos);
-    pub_data_t26_aqt7_2_susp_l = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt7_2/susp_l", sensor_qos);
+    pub_data_t26_aqt7_susp_l = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt7/susp_l", sensor_qos);
+    pub_data_t26_aqt7_susp_r = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt7/susp_r", sensor_qos);
+    pub_autonomous_t26_aqt7_rear_brk_press = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt7/rear_brk_press", sensor_qos);
+    pub_data_t26_aqt8_ntc1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt8/ntc1", sensor_qos);
+    pub_data_t26_aqt8_ntc2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt8/ntc2", sensor_qos);
+    pub_data_t26_aqt8_ntc3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/aqt8/ntc3", sensor_qos);
     pub_autonomous_t26_cubemars_feedback_position = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/cubemars_feedback/position", sensor_qos);
     pub_autonomous_t26_cubemars_feedback_speed_rpm = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/cubemars_feedback/speed_rpm", sensor_qos);
     pub_autonomous_t26_cubemars_feedback_current = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/cubemars_feedback/current", sensor_qos);
@@ -2991,8 +2993,14 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
                 struct autonomous_t26_vcu_rpm_t decoded = {};
                 if (autonomous_t26_vcu_rpm_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = autonomous_t26_vcu_rpm_rpm_actual_decode(decoded.rpm_actual);
-                    pub_autonomous_t26_vcu_rpm_rpm_actual->publish(out);
+                    out.data = autonomous_t26_vcu_rpm_motor_rpm_left_decode(decoded.motor_rpm_left);
+                    pub_autonomous_t26_vcu_rpm_motor_rpm_left->publish(out);
+                    out.data = autonomous_t26_vcu_rpm_motor_rpm_right_decode(decoded.motor_rpm_right);
+                    pub_autonomous_t26_vcu_rpm_motor_rpm_right->publish(out);
+                    out.data = autonomous_t26_vcu_rpm_motor_current_left_decode(decoded.motor_current_left);
+                    pub_autonomous_t26_vcu_rpm_motor_current_left->publish(out);
+                    out.data = autonomous_t26_vcu_rpm_motor_current_right_decode(decoded.motor_current_right);
+                    pub_autonomous_t26_vcu_rpm_motor_current_right->publish(out);
                 }
             }
             return true;
@@ -3542,18 +3550,18 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
                 struct powertrain_t26_apps_adc_raw_t decoded = {};
                 if (powertrain_t26_apps_adc_raw_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_apps_adc_raw_apps1_decode(decoded.apps1);
-                    pub_powertrain_t26_apps_adc_raw_apps1->publish(out);
-                    out.data = powertrain_t26_apps_adc_raw_apps2_decode(decoded.apps2);
-                    pub_powertrain_t26_apps_adc_raw_apps2->publish(out);
+                    out.data = powertrain_t26_apps_adc_raw_apps1_raw_decode(decoded.apps1_raw);
+                    pub_powertrain_t26_apps_adc_raw_apps1_raw->publish(out);
+                    out.data = powertrain_t26_apps_adc_raw_apps2_raw_decode(decoded.apps2_raw);
+                    pub_powertrain_t26_apps_adc_raw_apps2_raw->publish(out);
                 }
             }
             {
                 struct autonomous_t26_aqt1_t decoded = {};
                 if (autonomous_t26_aqt1_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = autonomous_t26_aqt1_brk_press_decode(decoded.brk_press);
-                    pub_autonomous_t26_aqt1_brk_press->publish(out);
+                    out.data = autonomous_t26_aqt1_frt_brk_press_decode(decoded.frt_brk_press);
+                    pub_autonomous_t26_aqt1_frt_brk_press->publish(out);
                     out.data = autonomous_t26_aqt1_res_decode(decoded.res);
                     pub_autonomous_t26_aqt1_res->publish(out);
                     out.data = autonomous_t26_aqt1_bots_decode(decoded.bots);
@@ -3567,8 +3575,6 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
                 struct data_t26_aqt2_t decoded = {};
                 if (data_t26_aqt2_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = data_t26_aqt2_spd_wheel_decode(decoded.spd_wheel);
-                    pub_data_t26_aqt2_spd_wheel->publish(out);
                     out.data = data_t26_aqt2_tire_temp_decode(decoded.tire_temp);
                     pub_data_t26_aqt2_tire_temp->publish(out);
                     out.data = data_t26_aqt2_brake_temp_decode(decoded.brake_temp);
@@ -3579,8 +3585,8 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
                 struct autonomous_t26_aqt2_t decoded = {};
                 if (autonomous_t26_aqt2_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = autonomous_t26_aqt2_wheel_angle_decode(decoded.wheel_angle);
-                    pub_autonomous_t26_aqt2_wheel_angle->publish(out);
+                    out.data = autonomous_t26_aqt2_wheel_spd_decode(decoded.wheel_spd);
+                    pub_autonomous_t26_aqt2_wheel_spd->publish(out);
                 }
             }
             return true;
@@ -3590,8 +3596,6 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
                 struct data_t26_aqt3_t decoded = {};
                 if (data_t26_aqt3_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = data_t26_aqt3_spd_wheel_decode(decoded.spd_wheel);
-                    pub_data_t26_aqt3_spd_wheel->publish(out);
                     out.data = data_t26_aqt3_tire_temp_decode(decoded.tire_temp);
                     pub_data_t26_aqt3_tire_temp->publish(out);
                     out.data = data_t26_aqt3_brake_temp_decode(decoded.brake_temp);
@@ -3602,8 +3606,8 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
                 struct autonomous_t26_aqt3_t decoded = {};
                 if (autonomous_t26_aqt3_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = autonomous_t26_aqt3_wheel_angle_decode(decoded.wheel_angle);
-                    pub_autonomous_t26_aqt3_wheel_angle->publish(out);
+                    out.data = autonomous_t26_aqt3_wheel_spd_decode(decoded.wheel_spd);
+                    pub_autonomous_t26_aqt3_wheel_spd->publish(out);
                 }
             }
             return true;
@@ -3613,10 +3617,10 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
                 struct powertrain_t26_dash_board_t decoded = {};
                 if (powertrain_t26_dash_board_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_dash_board_ignition_decode(decoded.ignition);
-                    pub_powertrain_t26_dashboard_ignition->publish(out);
-                    out.data = powertrain_t26_dash_board_ready_to_drive_decode(decoded.ready_to_drive);
-                    pub_powertrain_t26_dashboard_ready_to_drive->publish(out);
+                    out.data = powertrain_t26_dash_board_ignition_switch_raw_decode(decoded.ignition_switch_raw);
+                    pub_powertrain_t26_dashboard_ignition_switch_raw->publish(out);
+                    out.data = powertrain_t26_dash_board_r2d_button_raw_decode(decoded.r2d_button_raw);
+                    pub_powertrain_t26_dashboard_r2d_button_raw->publish(out);
                 }
             }
             {
@@ -3625,10 +3629,14 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
                     std_msgs::msg::Float32 out;
                     out.data = autonomous_t26_aqt4_st_angle_decode(decoded.st_angle);
                     pub_autonomous_t26_aqt4_st_angle->publish(out);
+                    out.data = autonomous_t26_aqt4_susp_l_decode(decoded.susp_l);
+                    pub_autonomous_t26_aqt4_susp_l->publish(out);
+                    out.data = autonomous_t26_aqt4_susp_r_decode(decoded.susp_r);
+                    pub_autonomous_t26_aqt4_susp_r->publish(out);
                     out.data = autonomous_t26_aqt4_inertia_decode(decoded.inertia);
                     pub_autonomous_t26_aqt4_inertia->publish(out);
-                    out.data = autonomous_t26_aqt4_emer_button_decode(decoded.emer_button);
-                    pub_autonomous_t26_aqt4_emer_button->publish(out);
+                    out.data = autonomous_t26_aqt4_emergency_decode(decoded.emergency);
+                    pub_autonomous_t26_aqt4_emergency->publish(out);
                 }
             }
             return true;
@@ -3638,12 +3646,18 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
                 struct data_t26_aqt5_t decoded = {};
                 if (data_t26_aqt5_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = data_t26_aqt5_spd_wheel_decode(decoded.spd_wheel);
-                    pub_data_t26_aqt5_spd_wheel->publish(out);
                     out.data = data_t26_aqt5_tire_temp_decode(decoded.tire_temp);
                     pub_data_t26_aqt5_tire_temp->publish(out);
                     out.data = data_t26_aqt5_brake_temp_decode(decoded.brake_temp);
                     pub_data_t26_aqt5_brake_temp->publish(out);
+                }
+            }
+            {
+                struct powertrain_t26_vcu_states_t decoded = {};
+                if (powertrain_t26_vcu_states_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_vcu_states_vcu_state_decode(decoded.vcu_state);
+                    pub_powertrain_t26_vcu_states_vcu_state->publish(out);
                 }
             }
             return true;
@@ -3653,8 +3667,6 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
                 struct data_t26_aqt6_t decoded = {};
                 if (data_t26_aqt6_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = data_t26_aqt6_spd_wheel_decode(decoded.spd_wheel);
-                    pub_data_t26_aqt6_spd_wheel->publish(out);
                     out.data = data_t26_aqt6_tire_temp_decode(decoded.tire_temp);
                     pub_data_t26_aqt6_tire_temp->publish(out);
                     out.data = data_t26_aqt6_brake_temp_decode(decoded.brake_temp);
@@ -3665,36 +3677,36 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
         }
         case 1904u: {
             {
-                struct data_t26_aqt7_1_t decoded = {};
-                if (data_t26_aqt7_1_unpack(&decoded, data, dlc) == 0) {
+                struct data_t26_aqt7_t decoded = {};
+                if (data_t26_aqt7_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = data_t26_aqt7_1_ntc_1_decode(decoded.ntc_1);
-                    pub_data_t26_aqt7_1_ntc_1->publish(out);
-                    out.data = data_t26_aqt7_1_ntc_2_decode(decoded.ntc_2);
-                    pub_data_t26_aqt7_1_ntc_2->publish(out);
-                    out.data = data_t26_aqt7_1_ntc_3_decode(decoded.ntc_3);
-                    pub_data_t26_aqt7_1_ntc_3->publish(out);
+                    out.data = data_t26_aqt7_susp_l_decode(decoded.susp_l);
+                    pub_data_t26_aqt7_susp_l->publish(out);
+                    out.data = data_t26_aqt7_susp_r_decode(decoded.susp_r);
+                    pub_data_t26_aqt7_susp_r->publish(out);
                 }
             }
             {
                 struct autonomous_t26_aqt7_t decoded = {};
                 if (autonomous_t26_aqt7_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = autonomous_t26_aqt7_brk_press_decode(decoded.brk_press);
-                    pub_autonomous_t26_aqt7_brk_press->publish(out);
+                    out.data = autonomous_t26_aqt7_rear_brk_press_decode(decoded.rear_brk_press);
+                    pub_autonomous_t26_aqt7_rear_brk_press->publish(out);
                 }
             }
             return true;
         }
-        case 1909u: {
+        case 1920u: {
             {
-                struct data_t26_aqt7_2_t decoded = {};
-                if (data_t26_aqt7_2_unpack(&decoded, data, dlc) == 0) {
+                struct data_t26_aqt8_t decoded = {};
+                if (data_t26_aqt8_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = data_t26_aqt7_2_susp_r_decode(decoded.susp_r);
-                    pub_data_t26_aqt7_2_susp_r->publish(out);
-                    out.data = data_t26_aqt7_2_susp_l_decode(decoded.susp_l);
-                    pub_data_t26_aqt7_2_susp_l->publish(out);
+                    out.data = data_t26_aqt8_ntc1_decode(decoded.ntc1);
+                    pub_data_t26_aqt8_ntc1->publish(out);
+                    out.data = data_t26_aqt8_ntc2_decode(decoded.ntc2);
+                    pub_data_t26_aqt8_ntc2->publish(out);
+                    out.data = data_t26_aqt8_ntc3_decode(decoded.ntc3);
+                    pub_data_t26_aqt8_ntc3->publish(out);
                 }
             }
             return true;

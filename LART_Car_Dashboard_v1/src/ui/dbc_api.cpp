@@ -78,17 +78,17 @@ void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rc
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/apps_adc_raw/apps1", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+        "/can/dbc/apps_adc_raw/apps1_raw", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.apps_adc_raw.apps1 = msg->data;
+                dbc_api.apps_adc_raw.apps1_raw = msg->data;
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/apps_adc_raw/apps2", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+        "/can/dbc/apps_adc_raw/apps2_raw", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.apps_adc_raw.apps2 = msg->data;
+                dbc_api.apps_adc_raw.apps2_raw = msg->data;
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
@@ -99,10 +99,10 @@ void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rc
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/aqt1/brk_press", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+        "/can/dbc/aqt1/frt_brk_press", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt1.brk_press = msg->data;
+                dbc_api.aqt1.frt_brk_press = msg->data;
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
@@ -120,13 +120,6 @@ void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rc
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/aqt2/spd_wheel", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt2.spd_wheel = msg->data;
-            }
-        }));
-    subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
         "/can/dbc/aqt2/tire_temp", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
@@ -134,10 +127,10 @@ void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rc
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/aqt2/wheel_angle", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+        "/can/dbc/aqt2/wheel_spd", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt2.wheel_angle = msg->data;
+                dbc_api.aqt2.wheel_spd = msg->data;
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
@@ -148,13 +141,6 @@ void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rc
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/aqt3/spd_wheel", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt3.spd_wheel = msg->data;
-            }
-        }));
-    subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
         "/can/dbc/aqt3/tire_temp", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
@@ -162,17 +148,17 @@ void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rc
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/aqt3/wheel_angle", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+        "/can/dbc/aqt3/wheel_spd", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt3.wheel_angle = msg->data;
+                dbc_api.aqt3.wheel_spd = msg->data;
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/aqt4/emer_button", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+        "/can/dbc/aqt4/emergency", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt4.emer_button = msg->data;
+                dbc_api.aqt4.emergency = msg->data;
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
@@ -190,17 +176,24 @@ void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rc
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
+        "/can/dbc/aqt4/susp_l", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt4.susp_l = msg->data;
+            }
+        }));
+    subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
+        "/can/dbc/aqt4/susp_r", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt4.susp_r = msg->data;
+            }
+        }));
+    subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
         "/can/dbc/aqt5/brake_temp", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.aqt5.brake_temp = msg->data;
-            }
-        }));
-    subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/aqt5/spd_wheel", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt5.spd_wheel = msg->data;
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
@@ -218,13 +211,6 @@ void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rc
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/aqt6/spd_wheel", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt6.spd_wheel = msg->data;
-            }
-        }));
-    subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
         "/can/dbc/aqt6/tire_temp", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
@@ -232,45 +218,45 @@ void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rc
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/aqt7/brk_press", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+        "/can/dbc/aqt7/rear_brk_press", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt7.brk_press = msg->data;
+                dbc_api.aqt7.rear_brk_press = msg->data;
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/aqt7_1/ntc_1", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+        "/can/dbc/aqt7/susp_l", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt7_1.ntc_1 = msg->data;
+                dbc_api.aqt7.susp_l = msg->data;
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/aqt7_1/ntc_2", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+        "/can/dbc/aqt7/susp_r", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt7_1.ntc_2 = msg->data;
+                dbc_api.aqt7.susp_r = msg->data;
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/aqt7_1/ntc_3", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+        "/can/dbc/aqt8/ntc1", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt7_1.ntc_3 = msg->data;
+                dbc_api.aqt8.ntc1 = msg->data;
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/aqt7_2/susp_l", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+        "/can/dbc/aqt8/ntc2", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt7_2.susp_l = msg->data;
+                dbc_api.aqt8.ntc2 = msg->data;
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/aqt7_2/susp_r", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+        "/can/dbc/aqt8/ntc3", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt7_2.susp_r = msg->data;
+                dbc_api.aqt8.ntc3 = msg->data;
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
@@ -365,17 +351,17 @@ void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rc
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/dashboard/ignition", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+        "/can/dbc/dashboard/ignition_switch_raw", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.dashboard.ignition = msg->data;
+                dbc_api.dashboard.ignition_switch_raw = msg->data;
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/dashboard/ready_to_drive", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+        "/can/dbc/dashboard/r2d_button_raw", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.dashboard.ready_to_drive = msg->data;
+                dbc_api.dashboard.r2d_button_raw = msg->data;
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
@@ -5678,10 +5664,31 @@ void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rc
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/vcu_rpm/rpm_actual", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+        "/can/dbc/vcu_rpm/motor_current_left", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.vcu_rpm.rpm_actual = msg->data;
+                dbc_api.vcu_rpm.motor_current_left = msg->data;
+            }
+        }));
+    subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
+        "/can/dbc/vcu_rpm/motor_current_right", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.vcu_rpm.motor_current_right = msg->data;
+            }
+        }));
+    subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
+        "/can/dbc/vcu_rpm/motor_rpm_left", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.vcu_rpm.motor_rpm_left = msg->data;
+            }
+        }));
+    subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
+        "/can/dbc/vcu_rpm/motor_rpm_right", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.vcu_rpm.motor_rpm_right = msg->data;
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
@@ -5689,6 +5696,13 @@ void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rc
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.vcu_rpm_target.rpm_target = msg->data;
+            }
+        }));
+    subs.push_back(node->create_subscription<std_msgs::msg::Float32>(
+        "/can/dbc/vcu_states/vcu_state", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.vcu_states.vcu_state = msg->data;
             }
         }));
     subs.push_back(node->create_subscription<std_msgs::msg::Float32>(

@@ -33,7 +33,7 @@ NS_ :
 
 BS_:
 
-BU_: AMS VCU HOST ISABELLE DTI Aquisition_Board1 Aquisition_Board4
+BU_: AMS VCU HOST ISABELLE DTI Acquisition_Board1 Acquisition_Board4
 
 
 VAL_TABLE_ _B9_Voltage_Channels 3 "3 Channels" 0 "0 Channels" ;
@@ -994,13 +994,13 @@ BO_ 130 Start_Balancing: 1 HOST
 BO_ 220 Start_Programmer: 1 HOST
  SG_ programming_request : 0|1@1+ (1,0) [0|1] "ON/OFF"  AMS
 
-BO_ 1808 APPS_ADC_Raw: 4 Aquisition_Board1
- SG_ APPS1 : 0|16@1+ (0.1,0) [0|0] "bits" Vector__XXX
- SG_ APPS2 : 16|16@1+ (0.1,0) [0|0] "bits" Vector__XXX
+BO_ 1808 APPS_ADC_Raw: 4 Acquisition_Board1
+ SG_ apps1_raw : 0|16@1+ (0.1,0) [0|0] "bits" Vector__XXX
+ SG_ apps2_raw : 16|16@1+ (0.1,0) [0|0] "bits" Vector__XXX
 
-BO_ 1856 DashBoard: 1 Aquisition_Board4
- SG_ Ignition : 0|1@1+ (1,0) [0|0] "" Vector__XXX
- SG_ Ready_To_Drive : 1|1@1+ (1,0) [0|0] "" Vector__XXX
+BO_ 1856 DashBoard: 1 Acquisition_Board4
+ SG_ ignition_switch_raw : 0|1@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ r2d_button_raw : 1|1@1+ (1,0) [0|0] "" Vector__XXX
 
 BO_ 1797 Master_SOC_Accumulator: 8 AMS
  SG_ SOC_Integer : 0|8@1+ (1,0) [0|0] "" Vector__XXX
@@ -1011,6 +1011,9 @@ BO_ 1798 Master_MSC_ID_4: 8 AMS
 
 BO_ 129 Start_Charging: 1 HOST
  SG_ Charging_Request : 0|1@1+ (1,0) [0|0] "ON/OFF" Vector__XXX
+
+BO_ 1872 VCU_states: 8 VCU
+ SG_ vcu_state : 7|8@0+ (1,0) [0|0] "" Vector__XXX
 
 
 
@@ -1108,7 +1111,7 @@ CM_ SG_ 1797 SOC_Float "State of Charge";
 CM_ SG_ 1798 slaves_detected "slaves detected in the daisychain";
 BA_DEF_  "BusType" STRING ;
 BA_DEF_DEF_  "BusType" "CAN";
-VAL_ 131 Precharge_Request 0 "PRECHARGE OFF" 1 "BALANCING ON" ;
+VAL_ 131 Precharge_Request 0 "open/de-energize" 1 "close/energize contactors" ;
 VAL_ 262 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
 VAL_ 262 module_overvoltage 0 "No Fault" 1 "Overvoltage Detected" ;
 VAL_ 262 module_undervoltage 0 "No Fault" 1 "Undervoltage Detected" ;
@@ -1137,4 +1140,4 @@ VAL_ 1795 fault2_index_type 0 "SLAVE" 1 "CELL" 2 "CHANNEL" 3 "CONTACTORS" 4 "SLA
 VAL_ 130 Balancing_Request 0 "BALANCING OFF" 1 "BALANCING ON" ;
 VAL_ 220 programming_request 1 "JumpToBootloader" ;
 VAL_ 129 Charging_Request 0 "CHARGING OFF" 1 "CHARGING ON" ;
-
+VAL_ 1872 vcu_state 0 "STATE_INIT," 1 "STATE_SHUTDOWN" 2 "STATE_STANDBY" 3 "STATE_PRECHARGE" 4 "STATE_WAITING_FOR_R2D_MANUAL" 5 "STATE_WAITING_FOR_R2D_AUTO" 6 "STATE_READY_MANUAL" 7 "STATE_READY_AUTONOMOUS" 8 "STATE_AS_EMERGENCY" ;

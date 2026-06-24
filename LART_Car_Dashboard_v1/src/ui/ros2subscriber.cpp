@@ -231,28 +231,28 @@ LART_WEAK int ros2subscriber_init(void) {
     SUB_FLOAT_MAP(apps2, pedal_box.apps2, "/can/dbc/pedal_box/apps2");
 
     // Wheels (AQT2/3/5/6)
-    SUB_FLOAT_MAP(spd_fl, aqt2.spd_wheel, "/can/dbc/aqt2/spd_wheel");
+    SUB_FLOAT_MAP(spd_fl, aqt2.wheel_spd, "/can/dbc/aqt2/wheel_spd");
     SUB_FLOAT_MAP(temp_fl, aqt2.tire_temp, "/can/dbc/aqt2/tire_temp");
     SUB_FLOAT_MAP(brk_fl, aqt2.brake_temp, "/can/dbc/aqt2/brake_temp");
 
-    SUB_FLOAT_MAP(spd_fr, aqt3.spd_wheel, "/can/dbc/aqt3/spd_wheel");
+    SUB_FLOAT_MAP(spd_fr, aqt3.wheel_spd, "/can/dbc/aqt3/wheel_spd");
     SUB_FLOAT_MAP(temp_fr, aqt3.tire_temp, "/can/dbc/aqt3/tire_temp");
     SUB_FLOAT_MAP(brk_fr, aqt3.brake_temp, "/can/dbc/aqt3/brake_temp");
 
-    SUB_FLOAT_MAP(spd_rl, aqt5.spd_wheel, "/can/dbc/aqt5/spd_wheel");
+    // SUB_FLOAT_MAP(spd_rl, aqt5.spd_wheel, "/can/dbc/aqt5/spd_wheel");
     SUB_FLOAT_MAP(temp_rl, aqt5.tire_temp, "/can/dbc/aqt5/tire_temp");
     SUB_FLOAT_MAP(brk_rl, aqt5.brake_temp, "/can/dbc/aqt5/brake_temp");
 
-    SUB_FLOAT_MAP(spd_rr, aqt6.spd_wheel, "/can/dbc/aqt6/spd_wheel");
+    // SUB_FLOAT_MAP(spd_rr, aqt6.spd_wheel, "/can/dbc/aqt6/spd_wheel");
     SUB_FLOAT_MAP(temp_rr, aqt6.tire_temp, "/can/dbc/aqt6/tire_temp");
     SUB_FLOAT_MAP(brk_rr, aqt6.brake_temp, "/can/dbc/aqt6/brake_temp");
 
-    // Rear Sensors AQT7
-    SUB_FLOAT_MAP(ntc1, aqt7_1.ntc_1, "/can/dbc/aqt7_1/ntc_1");
-    SUB_FLOAT_MAP(ntc2, aqt7_1.ntc_2, "/can/dbc/aqt7_1/ntc_2");
-    SUB_FLOAT_MAP(ntc3, aqt7_1.ntc_3, "/can/dbc/aqt7_1/ntc_3");
-    SUB_FLOAT_MAP(susp_r, aqt7_2.susp_r, "/can/dbc/aqt7_2/susp_r");
-    SUB_FLOAT_MAP(susp_l, aqt7_2.susp_l, "/can/dbc/aqt7_2/susp_l");
+    // Rear Sensors (AQT8 and AQT7)
+    SUB_FLOAT_MAP(ntc1, aqt8.ntc1, "/can/dbc/aqt8/ntc1");
+    SUB_FLOAT_MAP(ntc2, aqt8.ntc2, "/can/dbc/aqt8/ntc2");
+    SUB_FLOAT_MAP(ntc3, aqt8.ntc3, "/can/dbc/aqt8/ntc3");
+    SUB_FLOAT_MAP(susp_r, aqt7.susp_r, "/can/dbc/aqt7/susp_r");
+    SUB_FLOAT_MAP(susp_l, aqt7.susp_l, "/can/dbc/aqt7/susp_l");
 
     // Autonomous: ACU
     SUB_FLOAT_MAP(acu_state, acu.acu_state, "/can/dbc/acu/acu_state");
@@ -285,7 +285,7 @@ LART_WEAK int ros2subscriber_init(void) {
     SUB_FLOAT_MAP(vcu_hv, vcu_hv.hv, "/can/dbc/vcu_hv/hv");
     SUB_FLOAT_MAP(vcu_brkf, vcu_hv.brake_pressure_front, "/can/dbc/vcu_hv/brake_pressure_front");
     SUB_FLOAT_MAP(vcu_brkr, vcu_hv.brake_pressure_rear, "/can/dbc/vcu_hv/brake_pressure_rear");
-    SUB_FLOAT_MAP(vcu_rpm_act, vcu_rpm.rpm_actual, "/can/dbc/vcu_rpm/rpm_actual");
+    SUB_FLOAT_MAP(vcu_rpm_act, vcu_rpm.motor_rpm_left, "/can/dbc/vcu_rpm/motor_rpm_left");
     SUB_FLOAT_MAP(vcu_rpm_tgt, vcu_rpm_target.rpm_target, "/can/dbc/vcu_rpm_target/rpm_target");
     SUB_FLOAT_MAP(vcu_torque_tgt, vcu_torque_target.torque_target, "/can/dbc/vcu_torque_target/torque_target");
 
@@ -332,17 +332,17 @@ LART_WEAK int ros2subscriber_init(void) {
     SUB_FLOAT_MAP(res_signal, res.signal, "/can/dbc/res/signal");
 
     // AQT1
-    SUB_FLOAT_MAP(aqt1_brkp, aqt1.brk_press, "/can/dbc/aqt1/brk_press");
+    SUB_FLOAT_MAP(aqt1_brkp, aqt1.frt_brk_press, "/can/dbc/aqt1/frt_brk_press");
     SUB_FLOAT_MAP(aqt1_res, aqt1.res, "/can/dbc/aqt1/res");
     SUB_FLOAT_MAP(aqt1_bots, aqt1.bots, "/can/dbc/aqt1/bots");
 
     // AQT2 / 3 / 4 / 7
-    SUB_FLOAT_MAP(aqt2_whl_ang, aqt2.wheel_angle, "/can/dbc/aqt2/wheel_angle");
-    SUB_FLOAT_MAP(aqt3_whl_ang, aqt3.wheel_angle, "/can/dbc/aqt3/wheel_angle");
+    // SUB_FLOAT_MAP(aqt2_whl_ang, aqt2.wheel_angle, "/can/dbc/aqt2/wheel_angle");
+    // SUB_FLOAT_MAP(aqt3_whl_ang, aqt3.wheel_angle, "/can/dbc/aqt3/wheel_angle");
     SUB_FLOAT_MAP(aqt4_st_ang, aqt4.st_angle, "/can/dbc/aqt4/st_angle");
     SUB_FLOAT_MAP(aqt4_inertia, aqt4.inertia, "/can/dbc/aqt4/inertia");
-    SUB_FLOAT_MAP(aqt4_emer, aqt4.emer_button, "/can/dbc/aqt4/emer_button");
-    SUB_FLOAT_MAP(aqt7_brkp, aqt7.brk_press, "/can/dbc/aqt7/brk_press");
+    SUB_FLOAT_MAP(aqt4_emer, aqt4.emergency, "/can/dbc/aqt4/emergency");
+    SUB_FLOAT_MAP(aqt7_brkp, aqt7.rear_brk_press, "/can/dbc/aqt7/rear_brk_press");
 
     // Missing/Additional DBC Subscriptions
     SUB_FLOAT_MAP(v_max, master_msc_id_3.overall_maximum_voltage, "/can/dbc/master_msc_id_3/overall_maximum_voltage");

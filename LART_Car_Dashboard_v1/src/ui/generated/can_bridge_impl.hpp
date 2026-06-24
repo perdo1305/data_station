@@ -822,7 +822,10 @@ private:
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_slam_stats_can_cones_count_all;
 
     // Publishers for message: VCU_RPM (0x509)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_rpm_rpm_actual;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_rpm_motor_rpm_left;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_rpm_motor_rpm_right;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_rpm_motor_current_left;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_rpm_motor_current_right;
 
     // Publishers for message: IVT_Msg_Response (0x511)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_ivt_msg_response_ivt_id_response;
@@ -1054,60 +1057,61 @@ private:
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_master_msc_id_4_slaves_detected;
 
     // Publishers for message: APPS_ADC_Raw (0x710)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_apps_adc_raw_apps1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_apps_adc_raw_apps2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_apps_adc_raw_apps1_raw;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_apps_adc_raw_apps2_raw;
 
     // Publishers for message: AQT1 (0x710)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt1_brk_press;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt1_frt_brk_press;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt1_res;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt1_bots;
 
     // Publishers for message: AQT2 (0x720)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt2_spd_wheel;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt2_tire_temp;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt2_brake_temp;
 
     // Publishers for message: AQT2 (0x720)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt2_wheel_angle;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt2_wheel_spd;
 
     // Publishers for message: AQT3 (0x730)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt3_spd_wheel;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt3_tire_temp;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt3_brake_temp;
 
     // Publishers for message: AQT3 (0x730)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt3_wheel_angle;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt3_wheel_spd;
 
     // Publishers for message: DashBoard (0x740)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_dashboard_ignition;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_dashboard_ready_to_drive;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_dashboard_ignition_switch_raw;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_dashboard_r2d_button_raw;
 
     // Publishers for message: AQT4 (0x740)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt4_st_angle;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt4_susp_l;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt4_susp_r;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt4_inertia;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt4_emer_button;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt4_emergency;
 
     // Publishers for message: AQT5 (0x750)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt5_spd_wheel;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt5_tire_temp;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt5_brake_temp;
 
+    // Publishers for message: VCU_states (0x750)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_vcu_states_vcu_state;
+
     // Publishers for message: AQT6 (0x760)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt6_spd_wheel;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt6_tire_temp;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt6_brake_temp;
 
-    // Publishers for message: AQT7_1 (0x770)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt7_1_ntc_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt7_1_ntc_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt7_1_ntc_3;
+    // Publishers for message: AQT7 (0x770)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt7_susp_l;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt7_susp_r;
 
     // Publishers for message: AQT7 (0x770)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt7_brk_press;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt7_rear_brk_press;
 
-    // Publishers for message: AQT7_2 (0x775)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt7_2_susp_r;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt7_2_susp_l;
+    // Publishers for message: AQT8 (0x780)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt8_ntc1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt8_ntc2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt8_ntc3;
 
     // Publishers for message: CubeMars_Feedback (0x2968)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_cubemars_feedback_position;

@@ -1,4 +1,4 @@
-VERSION " "
+VERSION ""
 
 
 NS_ : 
@@ -33,42 +33,44 @@ NS_ :
 
 BS_:
 
-BU_: Aquisition_Board2 Aquisition_Board3 Aquisition_Board5 Aquisition_Board6 Aquisition_Board7
+BU_: Acquisition_Board2 Acquisition_Board3 Acquisition_Board5 Acquisition_Board6 Acquisition_Board7 Acquisition_Board8
 
 
 BO_ 3221225472 VECTOR__INDEPENDENT_SIG_MSG: 0 Vector__XXX
  SG_ NewSignal_0017 : 32|8@1+ (1,0) [0|0] "" Vector__XXX
  SG_ NewSignal_0016 : 48|16@1+ (0.1,0) [0|0] "" Vector__XXX
-
-BO_ 1824 AQT2: 6 Aquisition_Board2
- SG_ SPD_WHEEL : 0|16@1+ (0.1,0) [0|0] "km/h" Vector__XXX
- SG_ TIRE_TEMP : 16|16@1- (0.1,0) [0|0] "ºC" Vector__XXX
- SG_ BRAKE_TEMP : 32|16@1- (0.1,0) [0|0] "ºC" Vector__XXX
-
-BO_ 1840 AQT3: 6 Aquisition_Board3
- SG_ SPD_WHEEL : 0|16@1+ (0.1,0) [0|0] "km/h" Vector__XXX
- SG_ TIRE_TEMP : 16|16@1- (0.1,0) [0|0] "ºC" Vector__XXX
- SG_ BRAKE_TEMP : 32|16@1- (0.1,0) [0|0] "ºC" Vector__XXX
-
-BO_ 1872 AQT5: 6 Aquisition_Board5
- SG_ SPD_WHEEL : 0|16@1+ (0.1,0) [0|0] "km/h" Vector__XXX
- SG_ TIRE_TEMP : 16|16@1- (0.1,0) [0|0] "ºC" Vector__XXX
- SG_ BRAKE_TEMP : 32|16@1- (0.1,0) [0|0] "ºC" Vector__XXX
-
-BO_ 1888 AQT6: 6 Aquisition_Board6
- SG_ SPD_WHEEL : 0|16@1+ (0.1,0) [0|0] "km/h" Vector__XXX
- SG_ TIRE_TEMP : 16|16@1- (0.1,0) [0|0] "ºC" Vector__XXX
- SG_ BRAKE_TEMP : 32|16@1- (0.1,0) [0|0] "ºC" Vector__XXX
-
-BO_ 1904 AQT7_1: 6 Aquisition_Board7
- SG_ NTC_1 : 0|16@1- (0.1,0) [0|0] "ºC" Vector__XXX
- SG_ NTC_2 : 16|16@1- (0.1,0) [0|0] "ºC" Vector__XXX
- SG_ NTC_3 : 32|16@1- (0.1,0) [0|0] "ºC" Vector__XXX
-
-BO_ 1909 AQT7_2: 4 Aquisition_Board7
  SG_ SUSP_R : 0|16@1+ (0.1,0) [0|0] "mm" Vector__XXX
  SG_ SUSP_L : 16|16@1+ (0.1,0) [0|0] "mm" Vector__XXX
+ SG_ NTC_3 : 32|16@1- (0.1,0) [0|0] "ï¿½C" Vector__XXX
+ SG_ SPD_WHEEL : 0|16@1+ (0.1,0) [0|0] "km/h" Vector__XXX
+ SG_ SPD_WHEEL : 0|16@1+ (0.1,0) [0|0] "km/h" Vector__XXX
+ SG_ SPD_WHEEL : 0|16@1+ (0.1,0) [0|0] "km/h" Vector__XXX
+ SG_ SPD_WHEEL : 0|16@1+ (0.1,0) [0|0] "km/h" Vector__XXX
 
+BO_ 1824 AQT2: 4 Acquisition_Board2
+ SG_ TIRE_TEMP : 0|16@1- (0.1,0) [0|0] "ï¿½C" Vector__XXX
+ SG_ BRAKE_TEMP : 16|16@1- (0.1,0) [0|0] "ï¿½C" Vector__XXX
+
+BO_ 1840 AQT3: 4 Acquisition_Board3
+ SG_ TIRE_TEMP : 0|16@1- (0.1,0) [0|0] "ï¿½C" Vector__XXX
+ SG_ BRAKE_TEMP : 16|16@1- (0.1,0) [0|0] "ï¿½C" Vector__XXX
+
+BO_ 1872 AQT5: 4 Acquisition_Board5
+ SG_ TIRE_TEMP : 0|16@1- (0.1,0) [0|0] "ï¿½C" Vector__XXX
+ SG_ BRAKE_TEMP : 16|16@1- (0.1,0) [0|0] "ï¿½C" Vector__XXX
+
+BO_ 1888 AQT6: 4 Acquisition_Board6
+ SG_ TIRE_TEMP : 0|16@1- (0.1,0) [0|0] "ï¿½C" Vector__XXX
+ SG_ BRAKE_TEMP : 16|16@1- (0.1,0) [0|0] "ï¿½C" Vector__XXX
+
+BO_ 1904 AQT7: 4 Acquisition_Board7
+ SG_ SUSP_L : 0|16@1- (0.1,0) [0|0] "ï¿½C" Vector__XXX
+ SG_ SUSP_R : 16|16@1- (0.1,0) [0|0] "ï¿½C" Vector__XXX
+
+BO_ 1920 AQT8: 6 Acquisition_Board8
+ SG_ NTC1 : 0|16@1+ (0.1,0) [0|0] "ï¿½C" Vector__XXX
+ SG_ NTC2 : 16|16@1+ (0.1,0) [0|0] "ï¿½C" Vector__XXX
+ SG_ NTC3 : 32|16@1+ (0.1,0) [0|0] "ï¿½C" Vector__XXX
 
 
 

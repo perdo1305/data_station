@@ -19,53 +19,49 @@ typedef struct {
         float mission_select;
     } acu;
     struct {
-        float apps1;
-        float apps2;
+        float apps1_raw;
+        float apps2_raw;
     } apps_adc_raw;
     struct {
         float bots;
-        float brk_press;
+        float frt_brk_press;
         float res;
     } aqt1;
     struct {
         float brake_temp;
-        float spd_wheel;
         float tire_temp;
-        float wheel_angle;
+        float wheel_spd;
     } aqt2;
     struct {
         float brake_temp;
-        float spd_wheel;
         float tire_temp;
-        float wheel_angle;
+        float wheel_spd;
     } aqt3;
     struct {
-        float emer_button;
+        float emergency;
         float inertia;
         float st_angle;
+        float susp_l;
+        float susp_r;
     } aqt4;
     struct {
         float brake_temp;
-        float spd_wheel;
         float tire_temp;
     } aqt5;
     struct {
         float brake_temp;
-        float spd_wheel;
         float tire_temp;
     } aqt6;
     struct {
-        float brk_press;
-    } aqt7;
-    struct {
-        float ntc_1;
-        float ntc_2;
-        float ntc_3;
-    } aqt7_1;
-    struct {
+        float rear_brk_press;
         float susp_l;
         float susp_r;
-    } aqt7_2;
+    } aqt7;
+    struct {
+        float ntc1;
+        float ntc2;
+        float ntc3;
+    } aqt8;
     struct {
         float brake_pressure_front;
         float brake_pressure_rear;
@@ -88,8 +84,8 @@ typedef struct {
         float position;
     } cubemars_position_loop;
     struct {
-        float ignition;
-        float ready_to_drive;
+        float ignition_switch_raw;
+        float r2d_button_raw;
     } dashboard;
     struct {
         float suspension_level_left;
@@ -1125,11 +1121,17 @@ typedef struct {
         float vcu_state;
     } vcu_ign_r2d;
     struct {
-        float rpm_actual;
+        float motor_current_left;
+        float motor_current_right;
+        float motor_rpm_left;
+        float motor_rpm_right;
     } vcu_rpm;
     struct {
         float rpm_target;
     } vcu_rpm_target;
+    struct {
+        float vcu_state;
+    } vcu_states;
     struct {
         float torque_target;
     } vcu_torque_target;

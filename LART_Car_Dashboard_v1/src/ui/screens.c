@@ -1511,21 +1511,21 @@ void tick_screen_debug_3() {
 
     // Row 7
     set_cell(table, 7, 0, "NTC1:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 1, 0xFFFFFF, "%4.1f C", dbc_api.aqt7_1.ntc_1);
+    set_cell_fmt(table, 7, 1, 0xFFFFFF, "%4.1f C", dbc_api.aqt8.ntc1);
     set_cell(table, 7, 2, "NTC2:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 3, 0xFFFFFF, "%4.1f C", dbc_api.aqt7_1.ntc_2);
+    set_cell_fmt(table, 7, 3, 0xFFFFFF, "%4.1f C", dbc_api.aqt8.ntc2);
 
     // Row 8
     set_cell(table, 8, 0, "NTC3:", 0xFFFFFF);
-    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%4.1f C", dbc_api.aqt7_1.ntc_3);
+    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%4.1f C", dbc_api.aqt8.ntc3);
     set_cell(table, 8, 2, "", 0xFFFFFF);
     set_cell(table, 8, 3, "", 0xFFFFFF);
 
     // Row 9
     set_cell(table, 9, 0, "Susp R:", 0xFFFFFF);
-    set_cell_fmt(table, 9, 1, 0xFFFFFF, "%5.1f mm", dbc_api.aqt7_2.susp_r);
+    set_cell_fmt(table, 9, 1, 0xFFFFFF, "%5.1f mm", dbc_api.aqt7.susp_r);
     set_cell(table, 9, 2, "Susp L:", 0xFFFFFF);
-    set_cell_fmt(table, 9, 3, 0xFFFFFF, "%5.1f mm", dbc_api.aqt7_2.susp_l);
+    set_cell_fmt(table, 9, 3, 0xFFFFFF, "%5.1f mm", dbc_api.aqt7.susp_l);
 
     // Row 10
     set_cell(table, 10, 0, "IGN:", 0xFFFFFF);
@@ -1561,7 +1561,7 @@ void tick_screen_debug_wheels_4() {
 
     // Row 1: FL Wheel
     set_cell(table, 1, 0, "FL Speed:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%3.0f km/h", dbc_api.aqt2.spd_wheel);
+    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%3.0f km/h", dbc_api.aqt2.wheel_spd);
     set_cell(table, 1, 2, "FL Temp:", 0xFFFFFF);
     set_cell_fmt(table, 1, 3, 0xFFFFFF, "%4.1f C", dbc_api.aqt2.tire_temp);
 
@@ -1573,7 +1573,7 @@ void tick_screen_debug_wheels_4() {
 
     // Row 3: FR Wheel
     set_cell(table, 3, 0, "FR Speed:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%3.0f km/h", dbc_api.aqt3.spd_wheel);
+    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%3.0f km/h", dbc_api.aqt3.wheel_spd);
     set_cell(table, 3, 2, "FR Temp:", 0xFFFFFF);
     set_cell_fmt(table, 3, 3, 0xFFFFFF, "%4.1f C", dbc_api.aqt3.tire_temp);
 
@@ -1585,7 +1585,7 @@ void tick_screen_debug_wheels_4() {
 
     // Row 5: RL Wheel
     set_cell(table, 5, 0, "RL Speed:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%3.0f km/h", dbc_api.aqt5.spd_wheel);
+    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%3.0f km/h", 0.0f);
     set_cell(table, 5, 2, "RL Temp:", 0xFFFFFF);
     set_cell_fmt(table, 5, 3, 0xFFFFFF, "%4.1f C", dbc_api.aqt5.tire_temp);
 
@@ -1597,7 +1597,7 @@ void tick_screen_debug_wheels_4() {
 
     // Row 7: RR Wheel
     set_cell(table, 7, 0, "RR Speed:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 1, 0xFFFFFF, "%3.0f km/h", dbc_api.aqt6.spd_wheel);
+    set_cell_fmt(table, 7, 1, 0xFFFFFF, "%3.0f km/h", 0.0f);
     set_cell(table, 7, 2, "RR Temp:", 0xFFFFFF);
     set_cell_fmt(table, 7, 3, 0xFFFFFF, "%4.1f C", dbc_api.aqt6.tire_temp);
 
@@ -1815,7 +1815,7 @@ void tick_screen_debug_autonomous_2() {
 
     // Row 5
     set_cell(table, 5, 0, "RPM Act:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%-5.0f", dbc_api.vcu_rpm.rpm_actual);
+    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%-5.0f", dbc_api.vcu_rpm.motor_rpm_left);
     set_cell(table, 5, 2, "RPM Tgt:", 0xFFFFFF);
     set_cell_fmt(table, 5, 3, 0xFFFFFF, "%-5.0f", dbc_api.vcu_rpm_target.rpm_target);
 }
@@ -2026,7 +2026,7 @@ void tick_screen_debug_autonomous_5() {
 
     // Row 5
     set_cell(table, 5, 0, "AQT1 BrkP:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%5.1f bar", dbc_api.aqt1.brk_press);
+    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%5.1f bar", dbc_api.aqt1.frt_brk_press);
     set_cell(table, 5, 2, "AQT1 RES:", 0xFFFFFF);
     set_cell(table, 5, 3, (dbc_api.aqt1.res == 1) ? "ACTIVE" : "OK", (dbc_api.aqt1.res == 1) ? 0xFF0000 : 0x00FF00);
 
@@ -2038,15 +2038,15 @@ void tick_screen_debug_autonomous_5() {
 
     // Row 7
     set_cell(table, 7, 0, "AQT4 Emer:", 0xFFFFFF);
-    set_cell(table, 7, 1, (dbc_api.aqt4.emer_button == 1) ? "ACTIVE" : "OK", (dbc_api.aqt4.emer_button == 1) ? 0xFF0000 : 0x00FF00);
+    set_cell(table, 7, 1, (dbc_api.aqt4.emergency == 1) ? "ACTIVE" : "OK", (dbc_api.aqt4.emergency == 1) ? 0xFF0000 : 0x00FF00);
     set_cell(table, 7, 2, "AQT7 BrkP:", 0xFFFFFF);
-    set_cell_fmt(table, 7, 3, 0xFFFFFF, "%5.1f bar", dbc_api.aqt7.brk_press);
+    set_cell_fmt(table, 7, 3, 0xFFFFFF, "%5.1f bar", dbc_api.aqt7.rear_brk_press);
 
     // Row 8
     set_cell(table, 8, 0, "AQT2 WhlAng:", 0xFFFFFF);
-    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%5.1f", dbc_api.aqt2.wheel_angle);
+    set_cell_fmt(table, 8, 1, 0xFFFFFF, "%5.1f", 0.0f);
     set_cell(table, 8, 2, "AQT3 WhlAng:", 0xFFFFFF);
-    set_cell_fmt(table, 8, 3, 0xFFFFFF, "%5.1f", dbc_api.aqt3.wheel_angle);
+    set_cell_fmt(table, 8, 3, 0xFFFFFF, "%5.1f", 0.0f);
 
     // Row 9
     set_cell(table, 9, 0, "AQT4 StAng:", 0xFFFFFF);

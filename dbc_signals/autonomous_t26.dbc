@@ -33,7 +33,8 @@ NS_ :
 
 BS_:
 
-BU_: JETSON VCU ACU RES DYN_F DYN_R FSG_DATA_LOGGER AK10_9 Aquisition_Board1 Aquisition_Board2 Aquisition_Board3 Aquisition_Board4 Aquisition_Board7
+BU_: JETSON VCU ACU RES DYN_F DYN_R FSG_DATA_LOGGER AK10_9 Acquisition_Board1 Acquisition_Board2 Acquisition_Board3 Acquisition_Board4 Acquisition_Board7
+
 
 
 BO_ 81 ACU: 8 ACU
@@ -43,7 +44,7 @@ BO_ 81 ACU: 8 ACU
  SG_ AS_STATE : 19|3@1+ (1,0) [0|0] ""  JETSON
  SG_ ACU_STATE : 4|4@1+ (1,0) [0|0] ""  JETSON
  SG_ ASSI_STATE : 0|4@1+ (1,0) [0|0] ""  JETSON
- SG_ ACU_CPU_TEMP : 8|8@1+ (1,0) [0|255] "�"  JETSON
+ SG_ ACU_CPU_TEMP : 8|8@1+ (1,0) [0|255] "ºc"  JETSON
  SG_ Mission_select : 16|3@1+ (1,0) [0|0] ""  JETSON
  SG_ EMERGENCY_cause : 25|7@1+ (1,0) [0|0] ""  JETSON
 
@@ -55,26 +56,28 @@ BO_ 2147494248 CubeMars_Feedback: 8 AK10_9
  SG_ Error_Code : 56|8@1+ (1,0) [0|255] ""  JETSON
 
 BO_ 2147484776 CubeMars_position_loop: 4 JETSON
- SG_ POSITION : 7|32@0- (1000,0) [0|0] "�"  AK10_9
+ SG_ POSITION : 7|32@0- (1000,0) [0|0] "deg"  AK10_9
 
-BO_ 1808 AQT1: 3 Aquisition_Board1
- SG_ BRK_PRESS : 0|16@1+ (0.1,0) [0|0] "bar"  ACU
+BO_ 1808 AQT1: 3 Acquisition_Board1
+ SG_ FRT_BRK_PRESS : 0|16@1+ (0.1,0) [0|0] "bar"  ACU
  SG_ RES : 16|1@1+ (1,0) [0|0] ""  JETSON
  SG_ BOTS : 17|1@1+ (1,0) [0|0] ""  JETSON
 
-BO_ 1824 AQT2: 2 Aquisition_Board2
- SG_ WHEEL_ANGLE : 0|16@1- (0.1,0) [0|0] "�"  JETSON
+BO_ 1824 AQT2: 2 Acquisition_Board2
+ SG_ WHEEL_SPD : 0|16@1- (0.1,0) [0|0] "ms"  JETSON
 
-BO_ 1840 AQT3: 2 Aquisition_Board3
- SG_ WHEEL_ANGLE : 0|16@1- (0.1,0) [0|0] "�"  JETSON
+BO_ 1840 AQT3: 2 Acquisition_Board3
+ SG_ WHEEL_SPD : 0|16@1- (0.1,0) [0|0] "ms"  JETSON
 
-BO_ 1856 AQT4: 3 Aquisition_Board4
- SG_ ST_ANGLE : 0|16@1- (0.1,0) [0|0] "�"  JETSON
- SG_ INERTIA : 16|1@1+ (1,0) [0|0] ""  JETSON
- SG_ EMER_BUTTON : 17|1@1+ (1,0) [0|0] ""  JETSON
+BO_ 1856 AQT4: 7 Acquisition_Board4
+ SG_ ST_ANGLE : 0|16@1- (0.1,0) [0|0] "º"  JETSON
+ SG_ SUSP_L : 16|16@1+ (0.1,0) [0|0] "mm" Vector__XXX
+ SG_ SUSP_R : 32|16@1+ (0.1,0) [0|0] "mm" Vector__XXX
+ SG_ INERTIA : 48|1@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ EMERGENCY : 49|1@1+ (1,0) [0|0] "" Vector__XXX
 
-BO_ 1904 AQT7: 2 Aquisition_Board7
- SG_ BRK_PRESS : 0|16@1+ (0.1,0) [0|0] "bar"  ACU
+BO_ 1904 AQT7: 2 Acquisition_Board7
+ SG_ REAR_BRK_PRESS : 0|16@1+ (0.1,0) [0|0] "bar"  ACU
 
 BO_ 1536 VCU_IGN_R2D: 8 VCU
  SG_ ignition_manual : 0|8@1+ (1,0) [0|0] ""  ACU
@@ -89,8 +92,8 @@ BO_ 1536 VCU_IGN_R2D: 8 VCU
 BO_ 1280 DV_dynamics_1: 8 JETSON
  SG_ Speed_actual : 0|8@1+ (1,0) [0|255] "km/h"  FSG_DATA_LOGGER
  SG_ Speed_target : 8|8@1+ (1,0) [0|255] "km/h"  FSG_DATA_LOGGER
- SG_ Steering_angle_actual : 16|8@1- (0.5,0) [-64|63.5] "�"  FSG_DATA_LOGGER
- SG_ Steering_angle_target : 24|8@1- (0.5,0) [-64|63.5] "�"  FSG_DATA_LOGGER
+ SG_ Steering_angle_actual : 16|8@1- (0.5,0) [-64|63.5] "rad"  FSG_DATA_LOGGER
+ SG_ Steering_angle_target : 24|8@1- (0.5,0) [-64|63.5] "rad"  FSG_DATA_LOGGER
  SG_ Brake_hydr_actual : 32|8@1+ (1,0) [0|100] "%"  FSG_DATA_LOGGER
  SG_ Brake_hydr_target : 40|8@1+ (1,0) [0|100] "%"  FSG_DATA_LOGGER
  SG_ Motor_moment_actual : 48|8@1- (1,0) [-128|127] "%"  FSG_DATA_LOGGER
@@ -99,7 +102,7 @@ BO_ 1280 DV_dynamics_1: 8 JETSON
 BO_ 1281 DV_dynamics_2: 8 JETSON
  SG_ Acceleration_longitudinal : 0|16@1- (0.001953125,0) [0|0] "m/s2"  FSG_DATA_LOGGER
  SG_ Acceleration_lateral : 16|16@1- (0.001953125,0) [0|0] "m/s2"  FSG_DATA_LOGGER
- SG_ Yaw_rate : 32|16@1- (0.0078125,0) [0|0] "�/s"  FSG_DATA_LOGGER
+ SG_ Yaw_rate : 32|16@1- (0.0078125,0) [0|0] "m/s2"  FSG_DATA_LOGGER
 
 BO_ 129 VCU_HV: 3 VCU
  SG_ HV : 0|8@1+ (1,0) [0|0] ""  ACU
@@ -117,13 +120,16 @@ BO_ 1282 DV_status: 8 ACU
  SG_ Cones_count_all : 23|17@1+ (1,0) [0|131071] ""  FSG_DATA_LOGGER
 
 BO_ 1297 ASF_SIGNALS: 4 ACU
- SG_ EBS_Pressure_Tank_Front : 0|8@1+ (10,0) [0|0] "bar"  FSG_DATA_LOGGER
- SG_ EBS_Pressure_Tank_Rear : 8|8@1+ (10,0) [0|0] "bar"  FSG_DATA_LOGGER
- SG_ Brake_Pressure_Front : 16|8@1+ (10,0) [0|0] "bar"  FSG_DATA_LOGGER
- SG_ Brake_Pressure_Rear : 24|8@1+ (10,0) [0|0] "bar"  FSG_DATA_LOGGER
+ SG_ EBS_Pressure_Tank_Front : 0|8@1+ (0.1,0) [0|0] "bar"  FSG_DATA_LOGGER
+ SG_ EBS_Pressure_Tank_Rear : 8|8@1+ (0.1,0) [0|0] "bar"  FSG_DATA_LOGGER
+ SG_ Brake_Pressure_Front : 16|8@1+ (0.1,0) [0|0] "bar"  FSG_DATA_LOGGER
+ SG_ Brake_Pressure_Rear : 24|8@1+ (0.1,0) [0|0] "bar"  FSG_DATA_LOGGER
 
-BO_ 1289 VCU_RPM: 2 VCU
- SG_ rpm_actual : 0|16@1- (1,0) [0|6000] "RPM"  JETSON
+BO_ 1289 VCU_RPM: 8 VCU
+ SG_ motor_rpm_left : 0|16@1+ (1,0) [0|6000] "RPM"  JETSON
+ SG_ motor_rpm_right : 16|16@1+ (1,0) [0|0] "RPM" Vector__XXX
+ SG_ motor_current_left : 32|16@1- (1,0) [0|0] "A" Vector__XXX
+ SG_ motor_current_right : 48|16@1- (1,0) [0|0] "A" Vector__XXX
 
 BO_ 1178 VCU_TORQUE_TARGET: 2 JETSON
  SG_ torque_target : 0|16@1- (1,0) [-100|100] "RPM"  VCU
@@ -163,5 +169,8 @@ VAL_ 1282 AS_status 1 "AS_status_off" 2 "AS_status_ready" 3 "AS_status_driving" 
 VAL_ 1282 ASB_EBS_state 1 "ASB_EBS_state_deactivated" 2 "ASB_EBS_state_initial_checkup_passed" 3 "ASB_EBS_state_activated" ;
 VAL_ 1282 AMI_state 1 "AMI_state_acceleration" 2 "AMI_state_skidpad" 3 "AMI_state_trackdrive" 4 "AMI_state_braketest" 5 "AMI_state_inspection" 6 "AMI_state_autocross" ;
 VAL_ 1282 ASB_redundancy_state 1 "ASB_redundancy_state_deactivated" 2 "ASB_redundancy_state_engaged" 3 "ASB_redundancy_state_initial_checkup_passed" ;
-VAL_ 97 EMERGENCY_CAUSE 0 "None" 1 "ACU" 2 "ZED" 3 "Steering" 4 "Planner" 5 "SLAM" 6 "P-Puma" 7 "IMU" ;
+VAL_ 97 EMERGENCY_CAUSE 0 "None" 1 "RES" 2 "ACU" 3 "ZED" 4 "Steering_error" 5 "Steering_timeout" 6 "Planner" 7 "SLAM" 8 "P-Puma" 9 "IMU" ;
 
+
+
+VAL_ 2147494248 Error_Code 0 "None" 1 "OVER-VOLTAGE" 2 "UNDER-VOLTAGE" 3 "DRIVER-FAULT" 4 "OVER-CURRENT" 5 "MOSFET-OVER-TEMP" 6 "MOTOR-OVER-TEMP" 7 "GATE-DRIVE-OVER-VOLTAGE" 8 "GATE-DRIVE-UNDER-VOLTAGE" 9 "MCU-UNDER-VOLTAGE" 10 "REBOOTING-FROM-WATCHDOG" 11 "ENCODER-FAULT" 12 "MIN-ENCODER-LIMIT-EXCEEDED" 13 "MAX-ENCODER-LIMIT-EXCEEDED" 14 "FLASH-FAULT" 15 "HIGH-OFFSET-CURRENT-SENSOR1" 16 "HIGH-OFFSET-CURRENT-SENSOR2" ;
