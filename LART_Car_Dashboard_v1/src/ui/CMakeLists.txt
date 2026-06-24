@@ -40,7 +40,11 @@ target_compile_features(ros2subscriber PUBLIC cxx_std_17)
 target_include_directories(ros2subscriber PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src>
 )
+
+target_compile_definitions(ros2subscriber PRIVATE LV_CONF_INCLUDE_SIMPLE=1 LV_FONT_FMT_TXT_LARGE=1)
 
 target_link_libraries(ros2subscriber Threads::Threads)
 if(ament_cmake_FOUND)
@@ -80,8 +84,6 @@ if(SDL2_FOUND AND LVGL_SOURCES)
         images.c
         screen_api.cpp
         screens.c
-        power_api.cpp
-        speed_api.cpp
         styles.c
         ui.c
         fonts/ui_font_orbiter_bold_100.c

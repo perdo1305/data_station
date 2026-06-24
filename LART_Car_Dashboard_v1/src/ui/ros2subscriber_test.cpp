@@ -5,6 +5,41 @@
 #include <cassert>
 #include <thread>
 #include <chrono>
+#include <cstdlib>
+#include "eez-flow.h"
+
+// Stub implementations of eez functions to satisfy the linker for the test executable
+namespace eez {
+    void free(void *ptr) {
+        ::free(ptr);
+    }
+
+    Value Value::makeStringRef(const char *str, int len, uint32_t id) {
+        (void)len;
+        (void)id;
+        Value val;
+        val.type = VALUE_TYPE_STRING;
+        val.options = 0;
+        val.strValue = str;
+        return val;
+    }
+
+    const char *Value::getString() const {
+        return type == VALUE_TYPE_STRING ? strValue : nullptr;
+    }
+
+    namespace flow {
+        void setGlobalVariable(uint32_t globalVariableIndex, const Value &value) {
+            (void)globalVariableIndex;
+            (void)value;
+        }
+
+        Value getGlobalVariable(uint32_t globalVariableIndex) {
+            (void)globalVariableIndex;
+            return Value();
+        }
+    }
+}
 
 int main(int argc, char **argv) {
     // Sourcing rclcpp dependencies and initializing execution context

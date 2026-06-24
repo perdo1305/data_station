@@ -1743,7 +1743,7 @@ void tick_screen_debug_autonomous_1() {
     set_cell(table, 6, 1, jet_as_state_str, jet_as_state_color);
 
     set_cell(table, 6, 2, "Mission:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 3, 0xFFFFFF, "%-25.0f", dbc_api.jetson.as_mission);
+    set_cell(table, 6, 3, ui_get_mission_name((int)dbc_api.jetson.as_mission), 0xFFFFFF);
 
     // Row 7
     set_cell(table, 7, 0, "Temp:", 0xFFFFFF);

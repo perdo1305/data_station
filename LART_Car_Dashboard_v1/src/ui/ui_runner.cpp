@@ -45,8 +45,6 @@ bool g_running = true;
 lv_display_t *g_display = nullptr;
 #endif
 
-lv_obj_t *g_can_log_label = nullptr;
-
 void present_frame() {
     if (!g_framebuffer_dirty) {
         return;
@@ -287,7 +285,7 @@ int main(int argc, char **argv) {
         assert(val_laps.getInt() == 3);
 
         auto val_mission = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_MISSION);
-        assert(std::strcmp(val_mission.getString(), "ENDURANCE") == 0);
+        assert(std::strcmp(val_mission.getString(), "BRAKE TEST") == 0);
 
         // Test 2: Backwards compatibility (passing TelemetryData)
         TelemetryData t = {};
@@ -350,12 +348,6 @@ int main(int argc, char **argv) {
     ui_init();
     ui_set_speed(initial_speed);
 
-    g_can_log_label = lv_label_create(lv_layer_top());
-    lv_obj_align(g_can_log_label, LV_ALIGN_BOTTOM_RIGHT, -5, -5);
-    lv_obj_set_style_text_font(g_can_log_label, &ui_font_orbitron_15, 0);
-    lv_obj_set_style_text_color(g_can_log_label, lv_color_hex(0xA8AFBE), 0);
-    lv_label_set_text(g_can_log_label, "");
-
     uint32_t last_tick_ms = SDL_GetTicks();
 
     while (g_running) {
@@ -371,11 +363,6 @@ int main(int argc, char **argv) {
         const uint32_t now_ms = SDL_GetTicks();
         const uint32_t elapsed_ms = now_ms - last_tick_ms;
         last_tick_ms = now_ms;
-
-        char can_log_buffer[1024];
-        if (ros2subscriber_get_can_log(can_log_buffer, sizeof(can_log_buffer))) {
-            lv_label_set_text(g_can_log_label, can_log_buffer);
-        }
 
         lv_tick_inc(elapsed_ms);
         ui_tick();
