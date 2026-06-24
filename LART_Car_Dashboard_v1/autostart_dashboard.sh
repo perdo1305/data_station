@@ -27,9 +27,11 @@ source /home/lart2026/ros2_jazzy/install/setup.bash 2>/dev/null || true
 source /home/lart2026/GIT/data_station/install/setup.bash 2>/dev/null || true
 
 # 2. Export necessary environment variables
+export ROS_DOMAIN_ID=42
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/lart2026/ros2_jazzy/install/lib
 export DISPLAY=:0
-export XDG_RUNTIME_DIR=/run/user/$(id -u)
+_UID=$(id -u)
+export XDG_RUNTIME_DIR=/run/user/$_UID
 
 # 3. Navigate to Project
 cd "$PROJECT_DIR" || exit 1
@@ -38,8 +40,33 @@ cd "$PROJECT_DIR" || exit 1
 sleep 10
 
 # 5. Launch Dashboard and Kill Splash Screen
-# We run make in the background so we can signal Plymouth to quit
-make display-local
+# Only build if the binary does not exist yet (first run / after clean).
+# On subsequent boots the pre-built binary is launched directly, skipping
+# the long cmake+compile step entirely.
+UI_BIN="$PROJECT_DIR/build/ui-build/ui_runner"
+CAN_BRIDGE_BIN="$PROJECT_DIR/build/ui-build/can_bridge"
+
+if [ ! -x "$UI_BIN" ]; then
+    echo "ui_runner not found – building for the first time (this will take a while)..."
+    make display-local
+else
+    echo "ui_runner already built – launching directly."
+
+    # 5a. Start the CAN bridge in the background (SocketCAN → ROS2 topics)
+    if [ -x "$CAN_BRIDGE_BIN" ]; then
+        echo "Starting can_bridge on can0 (domain $ROS_DOMAIN_ID)..."
+        "$CAN_BRIDGE_BIN" --ros-args -p can_interface:=can0 &
+        CAN_BRIDGE_PID=$!
+        echo "can_bridge PID: $CAN_BRIDGE_PID"
+        # Give it a moment to bind the socket and register topics
+        sleep 2
+    else
+        echo "WARNING: can_bridge binary not found at $CAN_BRIDGE_BIN – CAN data will not be bridged to ROS2."
+    fi
+
+    # 5b. Launch the UI (replaces this process)
+    exec "$UI_BIN"
+fi
 
 # Give the app a moment to claim the window, then hide loading screen
 sleep 10

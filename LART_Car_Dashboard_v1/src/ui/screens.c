@@ -1723,8 +1723,8 @@ void tick_screen_debug_autonomous_1() {
     // Row 4
     set_cell(table, 4, 0, "CPU Temp:", 0xFFFFFF);
     set_cell_fmt(table, 4, 1, 0xFFFFFF, "%3.0f C", dbc_api.acu.acu_cpu_temp);
-    set_cell(table, 4, 2, "", 0xFFFFFF);
-    set_cell(table, 4, 3, "", 0xFFFFFF);
+    set_cell(table, 4, 2, "Mission:", 0xFFFFFF);
+    set_cell(table, 4, 3, ui_get_mission_name((int)dbc_api.acu.mission_select), 0xFFFFFF);
 
     // Row 5: Header Jetson
     set_cell(table, 5, 0, "JETSON STATUS", 0x00BFFF);

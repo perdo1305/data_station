@@ -9,6 +9,7 @@
 // Include the cantools-generated C headers
 #include "data_t26.h"
 #include "powertrain_t26.h"
+#include "autonomous_t26.h"
 
 class CanBridgeImpl {
 public:
@@ -30,11 +31,35 @@ private:
     // Publishers for message: HV500_SetBrakeCurrent (0x44)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_setbrakecurrent_cmd_targetbrakecurrent;
 
+    // Publishers for message: ACU (0x51)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_acu_assi_state;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_acu_acu_state;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_acu_acu_cpu_temp;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_acu_mission_select;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_acu_as_state;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_acu_emergency;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_acu_asms;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_acu_ign;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_acu_emergency_cause;
+
+    // Publishers for message: JETSON (0x61)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_jetson_as_state;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_jetson_as_mission;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_jetson_temperature;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_jetson_cpu;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_jetson_gpu;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_jetson_emergency_cause;
+
     // Publishers for message: HV500_SetERPM (0x64)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_seterpm_cmd_targetspeed;
 
     // Publishers for message: Start_Charging (0x81)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_start_charging_charging_request;
+
+    // Publishers for message: VCU_HV (0x81)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_hv_hv;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_hv_brake_pressure_front;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_hv_brake_pressure_rear;
 
     // Publishers for message: Start_Balancing (0x82)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_start_balancing_balancing_request;
@@ -567,6 +592,9 @@ private:
     // Publishers for message: HV500_SetDriveEnable (0x184)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_setdriveenable_cmd_driveenable;
 
+    // Publishers for message: RES (0x191)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_res_signal;
+
     // Publishers for message: Slave_06_Voltage_ID_2 (0x1A4)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_5;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_6;
@@ -717,6 +745,9 @@ private:
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_foc_actual_foc_id;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_foc_actual_foc_iq;
 
+    // Publishers for message: CubeMars_position_loop (0x468)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_cubemars_position_loop_position;
+
     // Publishers for message: HV500_MISC (0x484)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_actual_throttle;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_actual_brake;
@@ -742,6 +773,12 @@ private:
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_rpm_min_limit;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_can_map_version;
 
+    // Publishers for message: VCU_RPM_TARGET (0x499)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_rpm_target_rpm_target;
+
+    // Publishers for message: VCU_TORQUE_TARGET (0x49A)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_torque_target_torque_target;
+
     // Publishers for message: HV500_MinMaxAcCurrent (0x4A4)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_minmaxaccurrent_maxaccurrent;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_minmaxaccurrent_availablemaxaccurrent;
@@ -753,6 +790,39 @@ private:
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_minmaxdccurrent_availablemaxdccurrent;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_minmaxdccurrent_mindccurrent;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_minmaxdccurrent_availablemindccurrent;
+
+    // Publishers for message: DV_dynamics_1 (0x500)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_dynamics_1_speed_actual;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_dynamics_1_speed_target;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_dynamics_1_steering_angle_actual;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_dynamics_1_steering_angle_target;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_dynamics_1_brake_hydr_actual;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_dynamics_1_brake_hydr_target;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_dynamics_1_motor_moment_actual;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_dynamics_1_motor_moment_target;
+
+    // Publishers for message: DV_dynamics_2 (0x501)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_dynamics_2_acceleration_longitudinal;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_dynamics_2_acceleration_lateral;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_dynamics_2_yaw_rate;
+
+    // Publishers for message: DV_status (0x502)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_status_as_status;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_status_asb_ebs_state;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_status_ami_state;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_status_steering_state;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_status_asb_redundancy_state;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_status_lap_counter;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_status_cones_count_actual;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_status_cones_count_all;
+
+    // Publishers for message: SLAM_STATS_CAN (0x505)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_slam_stats_can_lap_counter;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_slam_stats_can_cones_count_actual;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_slam_stats_can_cones_count_all;
+
+    // Publishers for message: VCU_RPM (0x509)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_rpm_rpm_actual;
 
     // Publishers for message: IVT_Msg_Response (0x511)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_ivt_msg_response_ivt_id_response;
@@ -856,6 +926,12 @@ private:
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_ivt_msg_response_b9_resp_device_v_supply;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_ivt_msg_response_ba_resp_sw_ver_internal;
 
+    // Publishers for message: ASF_SIGNALS (0x511)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_asf_signals_ebs_pressure_tank_front;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_asf_signals_ebs_pressure_tank_rear;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_asf_signals_brake_pressure_front;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_asf_signals_brake_pressure_rear;
+
     // Publishers for message: IVT_Msg_Result_I (0x521)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_ivt_msg_result_i_ivt_id_result_i;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_ivt_msg_result_i_ivt_result_i_system_error;
@@ -928,6 +1004,16 @@ private:
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_ivt_msg_result_wh_ivt_msgcount_result_wh;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_ivt_msg_result_wh_ivt_result_wh;
 
+    // Publishers for message: VCU_IGN_R2D (0x600)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_ign_r2d_ignition_manual;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_ign_r2d_r2d_manual;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_ign_r2d_ignition_auto;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_ign_r2d_r2d_auto;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_ign_r2d_shutdown_signal;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_ign_r2d_vcu_state;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_ign_r2d_r2d_button_raw;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_ign_r2d_ignition_switch_raw;
+
     // Publishers for message: Master_MSC_ID_1 (0x701)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_master_msc_id_1_mcu_vref;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_master_msc_id_1_mcu_temperature;
@@ -971,19 +1057,35 @@ private:
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_apps_adc_raw_apps1;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_apps_adc_raw_apps2;
 
+    // Publishers for message: AQT1 (0x710)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt1_brk_press;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt1_res;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt1_bots;
+
     // Publishers for message: AQT2 (0x720)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt2_spd_wheel;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt2_tire_temp;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt2_brake_temp;
+
+    // Publishers for message: AQT2 (0x720)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt2_wheel_angle;
 
     // Publishers for message: AQT3 (0x730)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt3_spd_wheel;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt3_tire_temp;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt3_brake_temp;
 
+    // Publishers for message: AQT3 (0x730)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt3_wheel_angle;
+
     // Publishers for message: DashBoard (0x740)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_dashboard_ignition;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_dashboard_ready_to_drive;
+
+    // Publishers for message: AQT4 (0x740)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt4_st_angle;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt4_inertia;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt4_emer_button;
 
     // Publishers for message: AQT5 (0x750)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt5_spd_wheel;
@@ -1000,9 +1102,19 @@ private:
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt7_1_ntc_2;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt7_1_ntc_3;
 
+    // Publishers for message: AQT7 (0x770)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_aqt7_brk_press;
+
     // Publishers for message: AQT7_2 (0x775)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt7_2_susp_r;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_data_t26_aqt7_2_susp_l;
+
+    // Publishers for message: CubeMars_Feedback (0x2968)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_cubemars_feedback_position;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_cubemars_feedback_speed_rpm;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_cubemars_feedback_current;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_cubemars_feedback_driver_temp;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_cubemars_feedback_error_code;
 
 };
 

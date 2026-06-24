@@ -27,7 +27,8 @@ def main():
     
     db_configs = [
         {"name": "data_t26", "file": "data_t26.dbc"},
-        {"name": "powertrain_t26", "file": "powertrain_t26.dbc"}
+        {"name": "powertrain_t26", "file": "powertrain_t26.dbc"},
+        {"name": "autonomous_t26", "file": "autonomous_t26.dbc"}
     ]
     
     # 1. Read the DBC databases
@@ -69,6 +70,7 @@ def main():
         "// Include the cantools-generated C headers",
         '#include "data_t26.h"',
         '#include "powertrain_t26.h"',
+        '#include "autonomous_t26.h"',
         "",
         "class CanBridgeImpl {",
         "public:",
@@ -137,41 +139,49 @@ def main():
         "    switch (can_id) {"
     ])
     
-    # Add handle_frame switch case dispatch block
+    # Group messages by frame_id to avoid duplicate switch-case labels
+    grouped_messages = {}
     for m_info in messages_to_decode:
-        db_name = m_info["db_name"]
-        msg_name = m_info["msg_name"]
-        msg_c_name = m_info["msg_c_name"]
-        msg_slug = m_info["msg_slug"]
+        fid = m_info["frame_id"]
+        if fid not in grouped_messages:
+            grouped_messages[fid] = []
+        grouped_messages[fid].append(m_info)
         
-        # Build uppercase frame ID macro matching the headers
-        frame_id_macro = f"{db_name.upper()}_{msg_c_name.upper()}_FRAME_ID"
-        # Wait, for aqt7_1 it's AQT7_1, not AQT7_1. Let's make sure it matches.
-        # Yes, we checked data_t26.h and the macro is #define DATA_T26_AQT7_1_FRAME_ID (0x770u).
-        # And for powertrain_t26 it's like POWERTRAIN_T26_SLAVE_01_VOLTAGE_ID_1_FRAME_ID (0x100u).
+    # Add handle_frame switch case dispatch block
+    for fid in sorted(grouped_messages.keys()):
+        cpp_lines.append(f"        case {fid}u: {{")
         
-        cpp_lines.extend([
-            f"        case {frame_id_macro}: {{",
-            f"            struct {db_name}_{msg_c_name}_t decoded = {{}};",
-            f"            if ({db_name}_{msg_c_name}_unpack(&decoded, data, dlc) == 0) {{",
-            f"                std_msgs::msg::Float32 out;"
-        ])
-        
-        for sig in m_info["msg"].signals:
-            sig_slug = _ros_name(sig.name)
-            sig_c_name = _to_c_name(sig.name)
-            pub_name = f"pub_{db_name}_{msg_slug}_{sig_slug}"
-            
-            # Form the C decode function
-            decode_fn = f"{db_name}_{msg_c_name}_{sig_c_name}_decode"
+        for m_info in grouped_messages[fid]:
+            db_name = m_info["db_name"]
+            msg_c_name = m_info["msg_c_name"]
+            msg_slug = m_info["msg_slug"]
             
             cpp_lines.extend([
-                f"                out.data = {decode_fn}(decoded.{sig_c_name});",
-                f"                {pub_name}->publish(out);"
+                f"            {{",
+                f"                struct {db_name}_{msg_c_name}_t decoded = {{}};",
+                f"                if ({db_name}_{msg_c_name}_unpack(&decoded, data, dlc) == 0) {{",
+                f"                    std_msgs::msg::Float32 out;"
+            ])
+            
+            for sig in m_info["msg"].signals:
+                sig_slug = _ros_name(sig.name)
+                sig_c_name = _to_c_name(sig.name)
+                pub_name = f"pub_{db_name}_{msg_slug}_{sig_slug}"
+                
+                # Form the C decode function
+                decode_fn = f"{db_name}_{msg_c_name}_{sig_c_name}_decode"
+                
+                cpp_lines.extend([
+                    f"                    out.data = {decode_fn}(decoded.{sig_c_name});",
+                    f"                    {pub_name}->publish(out);"
+                ])
+                
+            cpp_lines.extend([
+                f"                }}",
+                f"            }}"
             ])
             
         cpp_lines.extend([
-            f"            }}",
             f"            return true;",
             f"        }}"
         ])

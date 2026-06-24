@@ -132,6 +132,7 @@ if(ament_cmake_FOUND)
         generated/can_bridge_impl.cpp
         generated/data_t26.c
         generated/powertrain_t26.c
+        generated/autonomous_t26.c
     )
     target_compile_features(can_bridge PUBLIC cxx_std_17)
     target_include_directories(can_bridge PRIVATE
@@ -159,6 +160,7 @@ if(ament_cmake_FOUND)
         generated/can_bridge_impl.cpp
         generated/data_t26.c
         generated/powertrain_t26.c
+        generated/autonomous_t26.c
     )
     target_compile_features(test_can_bridge PUBLIC cxx_std_17)
     target_include_directories(test_can_bridge PRIVATE
