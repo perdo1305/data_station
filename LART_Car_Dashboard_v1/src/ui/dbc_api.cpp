@@ -5858,7 +5858,7 @@ extern "C" const char *ui_get_mission_name(int mission_id) {
         case 4: return "BRAKE TEST";
         case 5: return "INSPECTION";
         case 6: return "AUTOCROSS";
-        default: return "NONE";
+        default: return "MANUAL";
     }
 }
 
