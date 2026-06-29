@@ -3,9 +3,22 @@
 #
 # !! UPDATE rpm_can_id to match your car's CAN DBC !!
 
-can_bridge:
+can_bridge_can0:
   ros__parameters:
     can_interface: can0          # can0 or can1 from the Waveshare HAT
+    rpm_can_id: 291              # 0x123 — UPDATE to your ECU's RPM message ID
+    rpm_start_byte: 0            # byte offset of RPM value inside the CAN frame
+    rpm_length_bytes: 2          # number of bytes (big-endian unsigned)
+    rpm_scale: 1.0               # raw_value * scale + offset = RPM
+    rpm_offset: 0.0
+    # DBC-based dynamic decoding (optional).
+    # Set to the absolute path of a .dbc file to enable /can/dbc/* topics.
+    # Leave empty for legacy RPM-only mode (no cantools dependency needed).
+    dbc_path: ""    # e.g. /home/user/lart_ws/dbc_signals/autonomous_t26.dbc
+
+can_bridge_can1:
+  ros__parameters:
+    can_interface: can1          # can0 or can1 from the Waveshare HAT
     rpm_can_id: 291              # 0x123 — UPDATE to your ECU's RPM message ID
     rpm_start_byte: 0            # byte offset of RPM value inside the CAN frame
     rpm_length_bytes: 2          # number of bytes (big-endian unsigned)

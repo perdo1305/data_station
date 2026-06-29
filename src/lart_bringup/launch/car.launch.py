@@ -21,7 +21,15 @@ def generate_launch_description():
         Node(
             package='lart_bringup',
             executable='can_bridge',
-            name='can_bridge',
+            name='can_bridge_can0',
+            parameters=[config],
+            output='screen',
+            emulate_tty=True,
+        ),
+        Node(
+            package='lart_bringup',
+            executable='can_bridge',
+            name='can_bridge_can1',
             parameters=[config],
             output='screen',
             emulate_tty=True,
