@@ -27,6 +27,7 @@
 #include <rclcpp/qos.hpp>
 #include <std_msgs/msg/float32.hpp>
 #include <std_msgs/msg/int32.hpp>
+#include <std_msgs/msg/string.hpp>
 
 #if !defined(LART_HAVE_DASHBOARD_STATE_MSG)
 #if defined(__has_include)
@@ -88,6 +89,9 @@ rclcpp::SubscriptionBase::SharedPtr g_sub;
 rclcpp::SubscriptionBase::SharedPtr g_sub_hv;
 rclcpp::SubscriptionBase::SharedPtr g_sub_screen;
 rclcpp::SubscriptionBase::SharedPtr g_sub_can_frames;
+rclcpp::SubscriptionBase::SharedPtr g_sub_notifications;
+rclcpp::SubscriptionBase::SharedPtr g_sub_notification_ack;
+rclcpp::Publisher<std_msgs::msg::String>::SharedPtr g_pub_notification_ack;
 
 const char *env_or_default(const char *name, const char *fallback) {
     const char *value = std::getenv(name);
@@ -153,6 +157,31 @@ LART_WEAK int ros2subscriber_init(void) {
     };
 
     g_sub_screen = g_node->create_subscription<std_msgs::msg::Int32>(screen_topic, rclcpp::QoS(10), screen_callback);
+
+    // Direct notification subscription
+    auto notifications_callback = [](const std_msgs::msg::String::SharedPtr msg) {
+        if (msg) {
+            ui_add_notification(msg->data.c_str(), "System Alert", msg->data.c_str());
+        }
+    };
+    g_sub_notifications = g_node->create_subscription<std_msgs::msg::String>(
+        "/vehicle/notifications", rclcpp::QoS(10), notifications_callback);
+
+    // Notification ACK subscription
+    auto notification_ack_callback = [](const std_msgs::msg::String::SharedPtr msg) {
+        if (msg) {
+            if (msg->data.empty() || msg->data == "all") {
+                ui_clear_all_notifications();
+            } else {
+                ui_clear_notification(msg->data.c_str());
+            }
+        }
+    };
+    g_sub_notification_ack = g_node->create_subscription<std_msgs::msg::String>(
+        "/vehicle/notification_ack", rclcpp::QoS(10), notification_ack_callback);
+
+    g_pub_notification_ack = g_node->create_publisher<std_msgs::msg::String>(
+        "/vehicle/notification_ack", rclcpp::QoS(10));
 
 #if LART_HAVE_CAN_FRAME_MSG
     auto can_frame_callback = [](const lart_msgs::msg::CanFrame::SharedPtr msg) {
@@ -443,6 +472,9 @@ LART_WEAK void ros2subscriber_fini(void) {
     g_sub_hv.reset();
     g_sub_screen.reset();
     g_sub_can_frames.reset();
+    g_sub_notifications.reset();
+    g_sub_notification_ack.reset();
+    g_pub_notification_ack.reset();
     g_subs.clear();
 
     {
@@ -475,6 +507,14 @@ LART_WEAK void ros2subscriber_fini(void) {
     g_latest_hv.store(0.0f);
     g_screen_change_requested.store(0);
     g_requested_screen_id.store(0);
+}
+
+LART_WEAK void ros2subscriber_publish_ack(const char *id) {
+    if (g_pub_notification_ack && id) {
+        std_msgs::msg::String msg;
+        msg.data = id;
+        g_pub_notification_ack->publish(msg);
+    }
 }
 
 #else
@@ -521,6 +561,10 @@ LART_WEAK int ros2subscriber_get_can_log(char *buffer, size_t max_len) {
 }
 
 LART_WEAK void ros2subscriber_fini(void) {
+}
+
+LART_WEAK void ros2subscriber_publish_ack(const char *id) {
+    (void)id;
 }
 
 #endif

@@ -32,6 +32,23 @@ def main():
         for sig in msg.signals:
             message_signals[msg_slug].add(_ros_name(sig.name))
             
+    # Identify error signals for checking
+    error_signals = []
+    for msg in db.messages:
+        if not msg.signals:
+            continue
+        msg_slug = _ros_name(msg.name)
+        for sig in msg.signals:
+            sig_slug = _ros_name(sig.name)
+            if any(k in sig_slug.lower() for k in ('error', 'fault', 'emergency', 'fail')):
+                error_signals.append({
+                    'msg_name': msg.name,
+                    'sig_name': sig.name,
+                    'msg_slug': msg_slug,
+                    'sig_slug': sig_slug,
+                    'choices': getattr(sig, 'choices', None)
+                })
+
     # Generate Header
     header_lines = [
         "// Auto-generated from DBC files by generate_dbc_api.py. Do not edit.",
@@ -56,6 +73,8 @@ def main():
         "",
         "extern DbcApi dbc_api;",
         "",
+        "void check_dbc_errors(void (*on_error)(const char *id, const char *msg_name, const char *sig_name, float value, const char *choice_label));",
+        "",
         "#ifdef __cplusplus",
         "}",
         "#if defined(LART_UI_HAVE_RCLCPP) && LART_UI_HAVE_RCLCPP",
@@ -78,6 +97,8 @@ def main():
     source_lines = [
         "// Auto-generated from DBC files by generate_dbc_api.py. Do not edit.",
         "#include \"dbc_api.h\"",
+        "#include <string>",
+        "#include <cctype>",
         "",
         "DbcApi dbc_api = {};",
         "",
@@ -252,6 +273,57 @@ def main():
         "    }",
         "}"
     ])
+
+    error_checking_lines = [
+        "",
+        "extern \"C\" void check_dbc_errors(void (*on_error)(const char *id, const char *msg_name, const char *sig_name, float value, const char *choice_label)) {",
+        "    if (!on_error) return;",
+        ""
+    ]
+    
+    for err in error_signals:
+        msg_slug = err['msg_slug']
+        sig_slug = err['sig_slug']
+        msg_name = err['msg_name'].replace('"', '\\"')
+        sig_name = err['sig_name'].replace('"', '\\"')
+        sig_id = f"{msg_slug}.{sig_slug}"
+        
+        error_checking_lines.append(f"    {{")
+        error_checking_lines.append(f"        float val = dbc_api.{msg_slug}.{sig_slug};")
+        
+        if err['choices'] and len(err['choices']) > 0:
+            error_checking_lines.append(f"        int val_int = static_cast<int>(val);")
+            error_checking_lines.append(f"        const char *label = nullptr;")
+            for val_code, choice in err['choices'].items():
+                choice_escaped = str(choice).replace('"', '\\"')
+                error_checking_lines.append(f"        if (val_int == {val_code}) label = \"{choice_escaped}\";")
+            
+            error_checking_lines.extend([
+                "        if (label) {",
+                "            bool is_safe = false;",
+                "            std::string l_lower = label;",
+                "            for (auto &c : l_lower) c = std::tolower(c);",
+                "            if (l_lower == \"none\" || l_lower == \"empty\" || l_lower == \"no fault\" ||",
+                "                l_lower == \"ok\" || l_lower == \"normal\" || l_lower == \"off\" ||",
+                "                l_lower == \"deactivated\" || l_lower == \"no open wire\" || l_lower == \"false\") {",
+                "                is_safe = true;",
+                "            }",
+                "            if (!is_safe) {",
+                f"                on_error(\"{sig_id}\", \"{msg_name}\", \"{sig_name}\", val, label);",
+                "            }",
+                "        }",
+            ])
+        else:
+            error_checking_lines.extend([
+                "        if (val > 0.5f) {",
+                f"            on_error(\"{sig_id}\", \"{msg_name}\", \"{sig_name}\", val, \"ERROR\");",
+                "        }"
+            ])
+        error_checking_lines.append(f"    }}")
+        
+    error_checking_lines.append("}")
+    
+    source_lines.extend(error_checking_lines)
 
     source_path = os.path.join(script_dir, "dbc_api.cpp")
     with open(source_path, "w") as f:

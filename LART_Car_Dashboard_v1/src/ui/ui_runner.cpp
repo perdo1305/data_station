@@ -14,8 +14,15 @@
 #include <cstdio>
 #include <cstdlib>
 #include <vector>
+#include <map>
+#include <string>
 
 extern "C" void ui_fini(void);
+
+LV_FONT_DECLARE(ui_font_orbitron_15);
+LV_FONT_DECLARE(ui_font_orbitron_bold_15);
+LV_FONT_DECLARE(ui_font_orbitron_bold_20);
+LV_FONT_DECLARE(ui_font_orbitron_25);
 
 namespace {
 constexpr int kUiWidth = 800;
@@ -154,6 +161,8 @@ bool create_window() {
         return false;
     }
 
+    SDL_ShowCursor(1);
+
     return true;
 }
 
@@ -219,9 +228,133 @@ void init_lvgl() {
 #endif
 }
 
-}  // namespace
+struct LvNotif {
+    std::string id;
+    std::string title;
+    std::string message;
+    lv_obj_t *container;
+    lv_obj_t *title_label;
+    lv_obj_t *msg_label;
+};
 
-LV_FONT_DECLARE(ui_font_orbitron_15);
+static std::vector<LvNotif> g_lv_notifications;
+static std::map<std::string, bool> g_last_error_state;
+
+constexpr int kNotifWidth = 650;
+constexpr int kNotifHeight = 80;
+constexpr int kNotifSpacing = 8;
+constexpr int kNotifMaxVisible = 4;
+
+void reposition_notifications() {
+    for (size_t i = 0; i < g_lv_notifications.size(); ++i) {
+        if (i < kNotifMaxVisible) {
+            lv_obj_clear_flag(g_lv_notifications[i].container, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_set_pos(g_lv_notifications[i].container, (kUiWidth - kNotifWidth) / 2, 15 + i * (kNotifHeight + kNotifSpacing));
+        } else {
+            lv_obj_add_flag(g_lv_notifications[i].container, LV_OBJ_FLAG_HIDDEN);
+        }
+    }
+}
+
+static void notif_click_cb(lv_event_t *e) {
+    lv_obj_t *obj = static_cast<lv_obj_t*>(lv_event_get_current_target(e));
+    for (auto it = g_lv_notifications.begin(); it != g_lv_notifications.end(); ++it) {
+        if (it->container == obj) {
+            ros2subscriber_publish_ack(it->id.c_str());
+            lv_obj_del(it->container);
+            g_lv_notifications.erase(it);
+            reposition_notifications();
+            break;
+        }
+    }
+}
+
+extern "C" void ui_add_notification(const char *id, const char *title, const char *message) {
+    for (auto &n : g_lv_notifications) {
+        if (n.id == id) {
+            n.title = title;
+            n.message = message;
+            lv_label_set_text(n.title_label, title);
+            lv_label_set_text(n.msg_label, message);
+            return;
+        }
+    }
+    
+    lv_obj_t *sys_layer = lv_layer_sys();
+    if (!sys_layer) return;
+    
+    lv_obj_t *container = lv_obj_create(sys_layer);
+    lv_obj_set_size(container, kNotifWidth, kNotifHeight);
+    
+    // Premium theme styling matching Formula Student
+    lv_obj_set_style_bg_color(container, lv_color_hex(0x24080c), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(container, 230, LV_PART_MAIN | LV_STATE_DEFAULT);
+    
+    lv_obj_set_style_border_color(container, lv_color_hex(0xff3b4d), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(container, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(container, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_radius(container, 8, LV_PART_MAIN | LV_STATE_DEFAULT);
+    
+    lv_obj_set_style_pad_all(container, 8, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_clear_flag(container, LV_OBJ_FLAG_SCROLLABLE);
+    
+    // Warning accent line
+    lv_obj_t *accent = lv_obj_create(container);
+    lv_obj_set_size(accent, 6, kNotifHeight - 20);
+    lv_obj_align(accent, LV_ALIGN_LEFT_MID, 0, 0);
+    lv_obj_set_style_bg_color(accent, lv_color_hex(0xff3b4d), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(accent, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(accent, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_radius(accent, 3, LV_PART_MAIN | LV_STATE_DEFAULT);
+    
+    // Title Label
+    lv_obj_t *title_lbl = lv_label_create(container);
+    lv_label_set_text(title_lbl, title);
+    lv_obj_align(title_lbl, LV_ALIGN_TOP_LEFT, 20, 6);
+    lv_obj_set_style_text_color(title_lbl, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(title_lbl, &ui_font_orbitron_bold_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    
+    // Message Label
+    lv_obj_t *msg_lbl = lv_label_create(container);
+    lv_label_set_text(msg_lbl, message);
+    lv_obj_align(msg_lbl, LV_ALIGN_BOTTOM_LEFT, 20, -6);
+    lv_obj_set_style_text_color(msg_lbl, lv_color_hex(0xffb5bd), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(msg_lbl, &ui_font_orbitron_25, LV_PART_MAIN | LV_STATE_DEFAULT);
+    
+    // "TAP TO ACK" helper text
+    lv_obj_t *ack_lbl = lv_label_create(container);
+    lv_label_set_text(ack_lbl, "TAP TO ACK");
+    lv_obj_align(ack_lbl, LV_ALIGN_RIGHT_MID, -20, 0);
+    lv_obj_set_style_text_color(ack_lbl, lv_color_hex(0x8f585d), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ack_lbl, &ui_font_orbitron_bold_15, LV_PART_MAIN | LV_STATE_DEFAULT);
+    
+    lv_obj_add_event_cb(container, notif_click_cb, LV_EVENT_CLICKED, nullptr);
+    
+    g_lv_notifications.push_back({id, title, message, container, title_lbl, msg_lbl});
+    reposition_notifications();
+}
+
+extern "C" void ui_clear_notification(const char *id) {
+    std::string id_str = id;
+    for (auto it = g_lv_notifications.begin(); it != g_lv_notifications.end(); ) {
+        if (it->id == id_str || it->title == id_str || it->message.find(id_str) != std::string::npos) {
+            lv_obj_del(it->container);
+            it = g_lv_notifications.erase(it);
+        } else {
+            ++it;
+        }
+    }
+    reposition_notifications();
+}
+
+extern "C" void ui_clear_all_notifications() {
+    for (const auto &n : g_lv_notifications) {
+        lv_obj_del(n.container);
+    }
+    g_lv_notifications.clear();
+}
+
+}  // namespace
 
 int main(int argc, char **argv) {
     if (std::getenv("LART_TEST_MAPPINGS") != nullptr) {
@@ -366,6 +499,34 @@ int main(int argc, char **argv) {
 
         lv_tick_inc(elapsed_ms);
         ui_tick();
+
+        // Check for DBC errors
+        static std::map<std::string, bool> current_errors;
+        current_errors.clear();
+        
+        check_dbc_errors([](const char *id, const char *msg_name, const char *sig_name, float value, const char *choice_label) {
+            std::string id_str = id;
+            current_errors[id_str] = true;
+            if (!g_last_error_state[id_str]) {
+                g_last_error_state[id_str] = true;
+                char title_buf[128];
+                std::snprintf(title_buf, sizeof(title_buf), "%s Fault", msg_name);
+                char msg_buf[256];
+                if (std::strcmp(choice_label, "ERROR") == 0) {
+                    std::snprintf(msg_buf, sizeof(msg_buf), "%s: ACTIVE", sig_name);
+                } else {
+                    std::snprintf(msg_buf, sizeof(msg_buf), "%s", choice_label);
+                }
+                ui_add_notification(id, title_buf, msg_buf);
+            }
+        });
+        
+        for (auto &pair : g_last_error_state) {
+            if (pair.second && !current_errors[pair.first]) {
+                pair.second = false;
+            }
+        }
+
         lv_timer_handler();
         present_frame();
 
