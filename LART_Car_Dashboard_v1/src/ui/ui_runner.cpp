@@ -235,6 +235,7 @@ struct LvNotif {
     lv_obj_t *container;
     lv_obj_t *title_label;
     lv_obj_t *msg_label;
+    uint32_t created_ms;
 };
 
 static std::vector<LvNotif> g_lv_notifications;
@@ -274,6 +275,7 @@ extern "C" void ui_add_notification(const char *id, const char *title, const cha
         if (n.id == id) {
             n.title = title;
             n.message = message;
+            n.created_ms = lv_tick_get();
             lv_label_set_text(n.title_label, title);
             lv_label_set_text(n.msg_label, message);
             return;
@@ -330,7 +332,7 @@ extern "C" void ui_add_notification(const char *id, const char *title, const cha
     
     lv_obj_add_event_cb(container, notif_click_cb, LV_EVENT_CLICKED, nullptr);
     
-    g_lv_notifications.push_back({id, title, message, container, title_lbl, msg_lbl});
+    g_lv_notifications.push_back({id, title, message, container, title_lbl, msg_lbl, lv_tick_get()});
     reposition_notifications();
 }
 
@@ -352,6 +354,23 @@ extern "C" void ui_clear_all_notifications() {
         lv_obj_del(n.container);
     }
     g_lv_notifications.clear();
+}
+
+void check_expired_notifications() {
+    uint32_t now = lv_tick_get();
+    bool changed = false;
+    for (auto it = g_lv_notifications.begin(); it != g_lv_notifications.end(); ) {
+        if (now - it->created_ms >= 10000) {
+            lv_obj_del(it->container);
+            it = g_lv_notifications.erase(it);
+            changed = true;
+        } else {
+            ++it;
+        }
+    }
+    if (changed) {
+        reposition_notifications();
+    }
 }
 
 }  // namespace
@@ -499,6 +518,8 @@ int main(int argc, char **argv) {
 
         lv_tick_inc(elapsed_ms);
         ui_tick();
+
+        check_expired_notifications();
 
         // Check for DBC errors
         static std::map<std::string, bool> current_errors;
