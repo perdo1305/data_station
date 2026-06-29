@@ -32,6 +32,7 @@ file(GLOB_RECURSE LVGL_SOURCES CONFIGURE_DEPENDS
 
 add_library(ros2subscriber STATIC
     ros2subscriber.cpp
+    dbc_api.cpp
 )
 
 target_compile_features(ros2subscriber PUBLIC cxx_std_17)
@@ -39,7 +40,11 @@ target_compile_features(ros2subscriber PUBLIC cxx_std_17)
 target_include_directories(ros2subscriber PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third_party/lvgl/src>
 )
+
+target_compile_definitions(ros2subscriber PRIVATE LV_CONF_INCLUDE_SIMPLE=1 LV_FONT_FMT_TXT_LARGE=1)
 
 target_link_libraries(ros2subscriber Threads::Threads)
 if(ament_cmake_FOUND)
@@ -79,8 +84,6 @@ if(SDL2_FOUND AND LVGL_SOURCES)
         images.c
         screen_api.cpp
         screens.c
-        power_api.cpp
-        speed_api.cpp
         styles.c
         ui.c
         fonts/ui_font_orbiter_bold_100.c
@@ -121,6 +124,53 @@ if(SDL2_FOUND AND LVGL_SOURCES)
     endif()
 else()
     message(STATUS "Desktop UI runner disabled: SDL2 (libsdl2-dev) or LVGL sources not available")
+endif()
+
+if(ament_cmake_FOUND AND lart_msgs_FOUND)
+    add_executable(can_bridge
+        can_bridge.cpp
+        generated/can_bridge_impl.cpp
+        generated/data_t26.c
+        generated/powertrain_t26.c
+        generated/autonomous_t26.c
+    )
+    target_compile_features(can_bridge PUBLIC cxx_std_17)
+    target_include_directories(can_bridge PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/generated
+    )
+    target_link_libraries(can_bridge Threads::Threads)
+    ament_target_dependencies(can_bridge rclcpp std_msgs)
+    if(lart_msgs_FOUND)
+        ament_target_dependencies(can_bridge lart_msgs)
+    endif()
+    install(TARGETS can_bridge
+        DESTINATION lib/${PROJECT_NAME}
+    )
+
+    add_executable(ros2subscriber_test ros2subscriber_test.cpp)
+    target_compile_features(ros2subscriber_test PUBLIC cxx_std_17)
+    target_link_libraries(ros2subscriber_test ros2subscriber)
+    ament_target_dependencies(ros2subscriber_test rclcpp std_msgs)
+    if(lart_msgs_FOUND)
+        ament_target_dependencies(ros2subscriber_test lart_msgs)
+    endif()
+
+    add_executable(test_can_bridge
+        test_can_bridge.cpp
+        generated/can_bridge_impl.cpp
+        generated/data_t26.c
+        generated/powertrain_t26.c
+        generated/autonomous_t26.c
+    )
+    target_compile_features(test_can_bridge PUBLIC cxx_std_17)
+    target_include_directories(test_can_bridge PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/generated
+    )
+    target_link_libraries(test_can_bridge Threads::Threads)
+    ament_target_dependencies(test_can_bridge rclcpp std_msgs)
+    if(lart_msgs_FOUND)
+        ament_target_dependencies(test_can_bridge lart_msgs)
+    endif()
 endif()
 
 if(ament_cmake_FOUND)

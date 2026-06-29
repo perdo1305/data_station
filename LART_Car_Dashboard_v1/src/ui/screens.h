@@ -56,11 +56,11 @@ typedef struct _objects_t {
     lv_obj_t *brake_acell_presure_container;
     lv_obj_t *brake_presure_bar;
     lv_obj_t *accellerator_presure_bar;
-    lv_obj_t *obj2;
     lv_obj_t *hv_bar;
     lv_obj_t *lv_bar;
     lv_obj_t *hv_label;
     lv_obj_t *lv_label;
+    lv_obj_t *obj2;
     lv_obj_t *obj3;
     lv_obj_t *hv_bar_1;
     lv_obj_t *lv_bar_1;

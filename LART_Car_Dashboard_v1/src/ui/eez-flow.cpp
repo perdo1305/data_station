@@ -6077,7 +6077,7 @@ bool evalProperty(FlowState *flowState, int componentIndex, int propertyIndex, V
     auto component = flowState->flow->components[componentIndex];
     if (propertyIndex < 0 || propertyIndex >= (int)component->properties.count) {
         char message[256];
-        snprintf(message, sizeof(message), "invalid property index %d in component at index %d in flow at index %d", propertyIndex, componentIndex, flowState->flowIndex);
+        snprintf(message, sizeof(message), "invalid property index %d in component at index %d (type %d, properties count %d) in flow at index %d", propertyIndex, componentIndex, component->type, component->properties.count, flowState->flowIndex);
         FlowError flowError = errorMessage.setDescription(message);
         throwError(flowState, componentIndex, flowError);
         return false;

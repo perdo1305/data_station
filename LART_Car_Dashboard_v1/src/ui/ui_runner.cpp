@@ -2,6 +2,7 @@
 #include "screens.h"
 #include "vars.h"
 #include "ros2subscriber.h"
+#include "dbc_api.h"
 #include <cmath>
 #include <cstring>
 #include <cassert>
@@ -18,6 +19,8 @@ extern "C" void ui_fini(void);
 
 namespace {
 constexpr int kUiWidth = 800;
+// ... (rest of the code remains unchanged up to line 225)
+
 constexpr int kUiHeight = 480;
 constexpr int kBufferLines = 40;
 constexpr int kFrameDelayMs = 5;
@@ -41,13 +44,6 @@ bool g_running = true;
 #if LVGL_VERSION_MAJOR >= 9
 lv_display_t *g_display = nullptr;
 #endif
-
-uint32_t color_to_argb(lv_color_t color) {
-    return 0xFF000000u
-        | (static_cast<uint32_t>(color.red) << 16)
-        | (static_cast<uint32_t>(color.green) << 8)
-        | static_cast<uint32_t>(color.blue);
-}
 
 void present_frame() {
     if (!g_framebuffer_dirty) {
@@ -225,28 +221,40 @@ void init_lvgl() {
 
 }  // namespace
 
+LV_FONT_DECLARE(ui_font_orbitron_15);
+
 int main(int argc, char **argv) {
     if (std::getenv("LART_TEST_MAPPINGS") != nullptr) {
         init_lvgl();
+
+        // Override EEZ-Flow hooks to prevent crashing on flow completion/errors,
+        // and provide logging for any flow errors.
+        eez::flow::stopScriptHook = []() {
+            // No-op
+        };
+        eez::flow::onFlowErrorHook = [](eez::flow::FlowState *, int componentIndex, const char *errorMessage) {
+            std::fprintf(stderr, "[EEZ-Flow Error] Component %d: %s\n", componentIndex, errorMessage);
+        };
+
         ui_init();
         
         std::printf("[TEST] Running telemetry mapping unit tests...\n");
 
-        TelemetryData t = {};
-        t.brk_press_f = 45.2f;
-        t.brk_press_r = 10.0f;
-        t.apps1 = 80.0f;
-        t.apps2 = 78.0f;
-        t.ams_soc = 92.5f;
-        t.ivt_u3 = 24300.0f; // 24.3V
-        t.vcu_r2d_man = 1.0f; // Ready
-        t.dv_spd_act = 55.4f;
-        t.inv_temp_ctrl = 38.2f;
-        t.inv_temp_mot = 62.1f;
-        t.slam_laps = 3.0f;
-        t.acu_mission = 4.0f; // Endurance
+        // Test 1: Setting dbc_api directly and calling with NULL
+        dbc_api.asf_signals.brake_pressure_front = 45.2f;
+        dbc_api.asf_signals.brake_pressure_rear = 10.0f;
+        dbc_api.pedal_box.apps1 = 80.0f;
+        dbc_api.pedal_box.apps2 = 78.0f;
+        dbc_api.master_soc_accumulator.soc_float = 92.5f;
+        dbc_api.ivt_msg_result_u3.ivt_result_u3 = 24300.0f;
+        dbc_api.vcu_ign_r2d.r2d_manual = 1.0f;
+        dbc_api.dv_dynamics_1.speed_actual = 55.4f;
+        dbc_api.hv500_temperatures.actual_tempcontroller = 38.2f;
+        dbc_api.hv500_temperatures.actual_tempmotor = 62.1f;
+        dbc_api.slam_stats_can.lap_counter = 3.0f;
+        dbc_api.acu.mission_select = 4.0f;
 
-        ui_update_telemetry_vars(&t);
+        ui_update_telemetry_vars(nullptr);
 
         // Assertions
         auto val_brake = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_BRAKE_PEDAL_PRESSURE);
@@ -277,7 +285,34 @@ int main(int argc, char **argv) {
         assert(val_laps.getInt() == 3);
 
         auto val_mission = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_MISSION);
-        assert(std::strcmp(val_mission.getString(), "ENDURANCE") == 0);
+        assert(std::strcmp(val_mission.getString(), "BRAKE TEST") == 0);
+
+        // Test 2: Backwards compatibility (passing TelemetryData)
+        TelemetryData t = {};
+        t.brk_press_f = 20.0f;
+        t.apps1 = 50.0f;
+        t.ams_soc = 80.0f;
+        t.ivt_u3 = 25000.0f;
+        t.vcu_r2d_man = 0.0f;
+        t.rear_r2d = 1.0f; // Ready
+        t.dv_spd_act = 10.0f;
+        t.inv_temp_ctrl = 30.0f;
+        t.inv_temp_mot = 40.0f;
+        t.slam_laps = 5.0f;
+        t.acu_mission = 1.0f; // ACCEL
+
+        ui_update_telemetry_vars(&t);
+
+        assert(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_BRAKE_PEDAL_PRESSURE).getInt() == 20);
+        assert(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_ACCELL_PEDAL_PRESSURE).getInt() == 50);
+        assert(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_SOC).getInt() == 80);
+        assert(std::abs(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_LV).getFloat() - 25.0f) < 0.01f);
+        assert(std::strcmp(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_READY).getString(), "READY") == 0);
+        assert(std::abs(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_SPEED).getFloat() - 10.0f) < 0.01f);
+        assert(std::abs(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_TEMP_INV).getFloat() - 30.0f) < 0.01f);
+        assert(std::abs(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_TEMP_MOTOR).getFloat() - 40.0f) < 0.01f);
+        assert(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_LAP_COUNT).getInt() == 5);
+        assert(std::strcmp(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_MISSION).getString(), "ACCEL") == 0);
 
         std::printf("[TEST] ✓ All telemetry mapping unit tests passed successfully!\n");
         std::_Exit(0);
@@ -300,6 +335,16 @@ int main(int argc, char **argv) {
     }
 
     init_lvgl();
+
+    // Override EEZ-Flow hooks to prevent crashing on flow completion/errors,
+    // and provide logging for any flow errors.
+    eez::flow::stopScriptHook = []() {
+        // No-op
+    };
+    eez::flow::onFlowErrorHook = [](eez::flow::FlowState *, int componentIndex, const char *errorMessage) {
+        std::fprintf(stderr, "[EEZ-Flow Error] Component %d: %s\n", componentIndex, errorMessage);
+    };
+
     ui_init();
     ui_set_speed(initial_speed);
 

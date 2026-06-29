@@ -1,6 +1,8 @@
 #ifndef LART_ROS2SUBSCRIBER_H
 #define LART_ROS2SUBSCRIBER_H
 
+#include <stddef.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -154,6 +156,7 @@ int ros2subscriber_get_latest_speed(float *speed_kph);
 int ros2subscriber_get_latest_hv(float *hv_value);
 int ros2subscriber_get_screen_change_request(int *screen_id);
 int ros2subscriber_get_telemetry(TelemetryData *out);
+int ros2subscriber_get_can_log(char *buffer, size_t max_len);
 void ros2subscriber_fini(void);
 
 #ifdef __cplusplus
