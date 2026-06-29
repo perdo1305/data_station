@@ -52,12 +52,17 @@ if [ ! -x "$UI_BIN" ]; then
 else
     echo "ui_runner already built – launching directly."
 
-    # 5a. Start the CAN bridge in the background (SocketCAN → ROS2 topics)
+    # 5a. Start the CAN bridges in the background (SocketCAN → ROS2 topics)
     if [ -x "$CAN_BRIDGE_BIN" ]; then
-        echo "Starting can_bridge on can0 (domain $ROS_DOMAIN_ID)..."
-        "$CAN_BRIDGE_BIN" --ros-args -p can_interface:=can0 &
-        CAN_BRIDGE_PID=$!
-        echo "can_bridge PID: $CAN_BRIDGE_PID"
+        echo "Starting can_bridge_can0 on can0 (domain $ROS_DOMAIN_ID)..."
+        "$CAN_BRIDGE_BIN" --ros-args -r __node:=can_bridge_can0 -p can_interface:=can0 &
+        CAN_BRIDGE_0_PID=$!
+        echo "can_bridge_can0 PID: $CAN_BRIDGE_0_PID"
+
+        echo "Starting can_bridge_can1 on can1 (domain $ROS_DOMAIN_ID)..."
+        "$CAN_BRIDGE_BIN" --ros-args -r __node:=can_bridge_can1 -p can_interface:=can1 &
+        CAN_BRIDGE_1_PID=$!
+        echo "can_bridge_can1 PID: $CAN_BRIDGE_1_PID"
         # Give it a moment to bind the socket and register topics
         sleep 2
     else
