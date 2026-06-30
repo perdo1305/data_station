@@ -37,7 +37,24 @@ export XDG_RUNTIME_DIR=/run/user/$_UID
 cd "$PROJECT_DIR" || exit 1
 
 # 4. Wait for Desktop Environment to settle
-sleep 10
+# Check dynamically up to 10 seconds (50 * 0.2s) instead of a hard sleep 10
+X_READY=0
+for i in {1..50}; do
+    if xset -q >/dev/null 2>&1 || xhost >/dev/null 2>&1; then
+        echo "Desktop Environment/X server is ready."
+        X_READY=1
+        break
+    fi
+    sleep 0.2
+done
+
+# If it is ready, add a tiny extra delay (e.g. 0.5s) to let the window manager finish layout.
+# If not ready, continue anyway.
+if [ $X_READY -eq 1 ]; then
+    sleep 0.5
+else
+    echo "WARNING: X server not responsive or commands not available. Proceeding..."
+fi
 
 # 5. Launch Dashboard and Kill Splash Screen
 # Only build if the binary does not exist yet (first run / after clean).
@@ -48,6 +65,8 @@ CAN_BRIDGE_BIN="$PROJECT_DIR/build/ui-build/can_bridge"
 
 if [ ! -x "$UI_BIN" ]; then
     echo "ui_runner not found – building for the first time (this will take a while)..."
+    # Quit plymouth since building will take a while and we don't want the splash screen hanging
+    plymouth quit 2>/dev/null || true
     make display-local
 else
     echo "ui_runner already built – launching directly."
@@ -63,16 +82,13 @@ else
         "$CAN_BRIDGE_BIN" --ros-args -r __node:=can_bridge_can1 -p can_interface:=can1 &
         CAN_BRIDGE_1_PID=$!
         echo "can_bridge_can1 PID: $CAN_BRIDGE_1_PID"
-        # Give it a moment to bind the socket and register topics
-        sleep 2
     else
         echo "WARNING: can_bridge binary not found at $CAN_BRIDGE_BIN – CAN data will not be bridged to ROS2."
     fi
 
+    # Quit plymouth in the background after 1 second so the UI has time to initialize and draw
+    (sleep 1 && plymouth quit 2>/dev/null || true) &
+
     # 5b. Launch the UI (replaces this process)
     exec "$UI_BIN"
 fi
-
-# Give the app a moment to claim the window, then hide loading screen
-sleep 10
-plymouth quit
