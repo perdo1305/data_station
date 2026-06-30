@@ -38,23 +38,23 @@ cd "$PROJECT_DIR" || exit 1
 
 # 4. Wait for Desktop Environment to settle
 # Check dynamically up to 10 seconds (50 * 0.2s) instead of a hard sleep 10
-X_READY=0
-for i in {1..50}; do
-    if xset -q >/dev/null 2>&1 || xhost >/dev/null 2>&1; then
-        echo "Desktop Environment/X server is ready."
-        X_READY=1
-        break
-    fi
-    sleep 0.2
-done
+#X_READY=0
+#for i in {1..50}; do
+#    if xset -q >/dev/null 2>&1 || xhost >/dev/null 2>&1; then
+#        echo "Desktop Environment/X server is ready."
+#        X_READY=1
+#        break
+#    fi
+#    sleep 0.2
+#done
 
 # If it is ready, add a tiny extra delay (e.g. 0.5s) to let the window manager finish layout.
 # If not ready, continue anyway.
-if [ $X_READY -eq 1 ]; then
-    sleep 0.5
-else
-    echo "WARNING: X server not responsive or commands not available. Proceeding..."
-fi
+#if [ $X_READY -eq 1 ]; then
+#    sleep 0.5
+#else
+#    echo "WARNING: X server not responsive or commands not available. Proceeding..."
+#fi
 
 # 5. Launch Dashboard and Kill Splash Screen
 # Only build if the binary does not exist yet (first run / after clean).
