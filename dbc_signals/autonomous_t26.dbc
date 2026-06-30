@@ -49,14 +49,14 @@ BO_ 81 ACU: 8 ACU
  SG_ EMERGENCY_cause : 25|7@1+ (1,0) [0|0] ""  JETSON
 
 BO_ 2147494248 CubeMars_Feedback: 8 AK10_9
- SG_ Position : 0|16@1- (0.1,0) [-3200|3200] "deg"  JETSON
- SG_ Speed_RPM : 16|16@1- (1890,0) [-320000|320000] "ERPM"  JETSON
- SG_ Current : 32|16@1- (0.01,0) [-60|60] "A"  JETSON
- SG_ Driver_Temp : 48|8@1- (1,0) [-20|127] "degC"  JETSON
- SG_ Error_Code : 56|8@1+ (1,0) [0|255] ""  JETSON
+ SG_ Position : 7|16@0- (0.1,0) [-3200|3200] "deg"  JETSON
+ SG_ Speed_RPM : 23|16@0- (0.0529100529,0) [-1693.121693|1693.121693] "RPM"  JETSON
+ SG_ Current : 39|16@0- (0.01,0) [-60|60] "A"  JETSON
+ SG_ Driver_Temp : 55|8@0- (1,0) [-20|127] "degC"  JETSON
+ SG_ Error_Code : 63|8@0+ (1,0) [0|7] ""  JETSON
 
 BO_ 2147484776 CubeMars_position_loop: 4 JETSON
- SG_ POSITION : 7|32@0- (1000,0) [0|0] "deg"  AK10_9
+ SG_ POSITION : 7|32@0- (0.0001,0) [-36000|36000] "deg"  AK10_9
 
 BO_ 1808 AQT1: 3 Acquisition_Board1
  SG_ FRT_BRK_PRESS : 0|16@1+ (0.1,0) [0|0] "bar"  ACU
@@ -158,6 +158,7 @@ BO_ 1285 SLAM_STATS_CAN: 4 JETSON
 CM_ BU_ AK10_9 "Atuador direcao";
 CM_ SG_ 81 ACU_STATE "";
 CM_ BO_ 2147494248 "";
+CM_ SG_ 2147494248 Position " ";
 VAL_ 81 IGN 0 "OFF" 1 "ON" ;
 VAL_ 81 ASMS 0 "OFF" 1 "ON" ;
 VAL_ 81 EMERGENCY 0 "OFF" 1 "ON" ;

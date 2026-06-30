@@ -2031,7 +2031,7 @@ void tick_screen_debug_autonomous_4() {
     set_cell(table, 4, 0, "Pos:", 0xFFFFFF);
     set_cell_fmt(table, 4, 1, 0xFFFFFF, "%5.1f", dbc_api.cubemars_feedback.position);
     set_cell(table, 4, 2, "Spd:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 3, 0xFFFFFF, "%6.0f ERPM", dbc_api.cubemars_feedback.speed_rpm);
+    set_cell_fmt(table, 4, 3, 0xFFFFFF, "%6.0f RPM", dbc_api.cubemars_feedback.speed_rpm);
 
     // Row 5
     set_cell(table, 5, 0, "Curr:", 0xFFFFFF);
