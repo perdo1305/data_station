@@ -167,6 +167,10 @@ static const char *object_names[] = {
     "pneumaticresure_container",
     "brake_presure_bar_3",
     "brake_presure_bar_4",
+    "brk_press_label_f",
+    "brk_press_label_r",
+    "pneum_press_label_f",
+    "pneum_press_label_r",
     "lap_times_container_1",
     "laptime_label_1",
     "lastlap_label_1",
@@ -845,13 +849,14 @@ void create_screen_autonomous() {
                     lv_label_set_text_static(obj, "BRK\nPRESS");
                 }
                 {
-                    // brakePresureBar_1
+                    // brakePresureBar_1 (BRK PRESS front, 0-100 bar)
                     lv_obj_t *obj = lv_bar_create(parent_obj);
                     objects.brake_presure_bar_1 = obj;
                     lv_obj_set_pos(obj, 16, 25);
                     lv_obj_set_size(obj, 20, 81);
+                    lv_bar_set_range(obj, 0, 100);
                     lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
-                    lv_bar_set_value(obj, 67, LV_ANIM_OFF);
+                    lv_bar_set_value(obj, 0, LV_ANIM_OFF);
                     lv_bar_set_start_value(obj, 0, LV_ANIM_OFF);
                     lv_obj_set_style_radius(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
                     lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -859,13 +864,14 @@ void create_screen_autonomous() {
                     lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_INDICATOR | LV_STATE_DEFAULT);
                 }
                 {
-                    // brakePresureBar_2
+                    // brakePresureBar_2 (BRK PRESS rear, 0-100 bar)
                     lv_obj_t *obj = lv_bar_create(parent_obj);
                     objects.brake_presure_bar_2 = obj;
                     lv_obj_set_pos(obj, 57, 25);
                     lv_obj_set_size(obj, 20, 81);
+                    lv_bar_set_range(obj, 0, 100);
                     lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
-                    lv_bar_set_value(obj, 67, LV_ANIM_OFF);
+                    lv_bar_set_value(obj, 0, LV_ANIM_OFF);
                     lv_bar_set_start_value(obj, 0, LV_ANIM_OFF);
                     lv_obj_set_style_radius(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
                     lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -873,18 +879,24 @@ void create_screen_autonomous() {
                     lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_INDICATOR | LV_STATE_DEFAULT);
                 }
                 {
+                    // brk_press_label_f — live front brake pressure under bar_1
                     lv_obj_t *obj = lv_label_create(parent_obj);
-                    lv_obj_set_pos(obj, 14, 106);
-                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+                    objects.brk_press_label_f = obj;
+                    lv_obj_set_pos(obj, 5, 106);
+                    lv_obj_set_size(obj, 36, LV_SIZE_CONTENT);
                     add_style_text(obj);
-                    lv_label_set_text_static(obj, "10");
+                    lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_label_set_text(obj, "0");
                 }
                 {
+                    // brk_press_label_r — live rear brake pressure under bar_2
                     lv_obj_t *obj = lv_label_create(parent_obj);
-                    lv_obj_set_pos(obj, 54, 106);
-                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+                    objects.brk_press_label_r = obj;
+                    lv_obj_set_pos(obj, 46, 106);
+                    lv_obj_set_size(obj, 36, LV_SIZE_CONTENT);
                     add_style_text(obj);
-                    lv_label_set_text_static(obj, "10");
+                    lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_label_set_text(obj, "0");
                 }
             }
         }
@@ -914,13 +926,14 @@ void create_screen_autonomous() {
                     lv_label_set_text_static(obj, "PNEUM\nPRESS");
                 }
                 {
-                    // brakePresureBar_3
+                    // brakePresureBar_3 (PNEUM PRESS front EBS tank, 0-10 bar → 0-100 scale)
                     lv_obj_t *obj = lv_bar_create(parent_obj);
                     objects.brake_presure_bar_3 = obj;
                     lv_obj_set_pos(obj, 16, 25);
                     lv_obj_set_size(obj, 20, 81);
+                    lv_bar_set_range(obj, 0, 100);
                     lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
-                    lv_bar_set_value(obj, 67, LV_ANIM_OFF);
+                    lv_bar_set_value(obj, 0, LV_ANIM_OFF);
                     lv_bar_set_start_value(obj, 0, LV_ANIM_OFF);
                     lv_obj_set_style_radius(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
                     lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -928,13 +941,14 @@ void create_screen_autonomous() {
                     lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_INDICATOR | LV_STATE_DEFAULT);
                 }
                 {
-                    // brakePresureBar_4
+                    // brakePresureBar_4 (PNEUM PRESS rear EBS tank, 0-10 bar → 0-100 scale)
                     lv_obj_t *obj = lv_bar_create(parent_obj);
                     objects.brake_presure_bar_4 = obj;
                     lv_obj_set_pos(obj, 57, 25);
                     lv_obj_set_size(obj, 20, 81);
+                    lv_bar_set_range(obj, 0, 100);
                     lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
-                    lv_bar_set_value(obj, 67, LV_ANIM_OFF);
+                    lv_bar_set_value(obj, 0, LV_ANIM_OFF);
                     lv_bar_set_start_value(obj, 0, LV_ANIM_OFF);
                     lv_obj_set_style_radius(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
                     lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -942,18 +956,24 @@ void create_screen_autonomous() {
                     lv_obj_set_style_bg_color(obj, lv_color_hex(0xfb0000), LV_PART_INDICATOR | LV_STATE_DEFAULT);
                 }
                 {
+                    // pneum_press_label_f — live front EBS tank pressure under bar_3
                     lv_obj_t *obj = lv_label_create(parent_obj);
-                    lv_obj_set_pos(obj, 14, 106);
-                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+                    objects.pneum_press_label_f = obj;
+                    lv_obj_set_pos(obj, 5, 106);
+                    lv_obj_set_size(obj, 36, LV_SIZE_CONTENT);
                     add_style_text(obj);
-                    lv_label_set_text_static(obj, "10");
+                    lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_label_set_text(obj, "0");
                 }
                 {
+                    // pneum_press_label_r — live rear EBS tank pressure under bar_4
                     lv_obj_t *obj = lv_label_create(parent_obj);
-                    lv_obj_set_pos(obj, 54, 106);
-                    lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+                    objects.pneum_press_label_r = obj;
+                    lv_obj_set_pos(obj, 46, 106);
+                    lv_obj_set_size(obj, 36, LV_SIZE_CONTENT);
                     add_style_text(obj);
-                    lv_label_set_text_static(obj, "10");
+                    lv_obj_set_style_text_align(obj, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_label_set_text(obj, "0");
                 }
             }
         }
@@ -1167,6 +1187,63 @@ void tick_screen_autonomous() {
             tick_value_change_obj = objects.km_label_3;
             lv_label_set_text(objects.km_label_3, new_val);
             tick_value_change_obj = NULL;
+        }
+    }
+    // BRK PRESS front (bar_1) and rear (bar_2): 0-100 bar scale
+    {
+        int32_t new_val = (int32_t)dbc_api.asf_signals.brake_pressure_front;
+        if (new_val < 0) new_val = 0;
+        if (new_val > 100) new_val = 100;
+        if (new_val != lv_bar_get_value(objects.brake_presure_bar_1)) {
+            lv_bar_set_value(objects.brake_presure_bar_1, new_val, LV_ANIM_OFF);
+        }
+        char buf[16];
+        snprintf(buf, sizeof(buf), "%d", new_val);
+        if (strcmp(buf, lv_label_get_text(objects.brk_press_label_f)) != 0) {
+            lv_label_set_text(objects.brk_press_label_f, buf);
+        }
+    }
+    {
+        int32_t new_val = (int32_t)dbc_api.asf_signals.brake_pressure_rear;
+        if (new_val < 0) new_val = 0;
+        if (new_val > 100) new_val = 100;
+        if (new_val != lv_bar_get_value(objects.brake_presure_bar_2)) {
+            lv_bar_set_value(objects.brake_presure_bar_2, new_val, LV_ANIM_OFF);
+        }
+        char buf[16];
+        snprintf(buf, sizeof(buf), "%d", new_val);
+        if (strcmp(buf, lv_label_get_text(objects.brk_press_label_r)) != 0) {
+            lv_label_set_text(objects.brk_press_label_r, buf);
+        }
+    }
+    // PNEUM PRESS: EBS tank front (bar_3) and rear (bar_4)
+    // EBS tank pressure is 0-10 bar; scale ×10 to fill the 0-100 widget range
+    {
+        float raw = dbc_api.asf_signals.ebs_pressure_tank_front;
+        int32_t new_val = (int32_t)(raw * 10.0f);
+        if (new_val < 0) new_val = 0;
+        if (new_val > 100) new_val = 100;
+        if (new_val != lv_bar_get_value(objects.brake_presure_bar_3)) {
+            lv_bar_set_value(objects.brake_presure_bar_3, new_val, LV_ANIM_OFF);
+        }
+        char buf[16];
+        snprintf(buf, sizeof(buf), "%.1f", raw < 0.0f ? 0.0f : raw);
+        if (strcmp(buf, lv_label_get_text(objects.pneum_press_label_f)) != 0) {
+            lv_label_set_text(objects.pneum_press_label_f, buf);
+        }
+    }
+    {
+        float raw = dbc_api.asf_signals.ebs_pressure_tank_rear;
+        int32_t new_val = (int32_t)(raw * 10.0f);
+        if (new_val < 0) new_val = 0;
+        if (new_val > 100) new_val = 100;
+        if (new_val != lv_bar_get_value(objects.brake_presure_bar_4)) {
+            lv_bar_set_value(objects.brake_presure_bar_4, new_val, LV_ANIM_OFF);
+        }
+        char buf[16];
+        snprintf(buf, sizeof(buf), "%.1f", raw < 0.0f ? 0.0f : raw);
+        if (strcmp(buf, lv_label_get_text(objects.pneum_press_label_r)) != 0) {
+            lv_label_set_text(objects.pneum_press_label_r, buf);
         }
     }
 }

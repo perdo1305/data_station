@@ -72,6 +72,10 @@ typedef struct _objects_t {
     lv_obj_t *pneumaticresure_container;
     lv_obj_t *brake_presure_bar_3;
     lv_obj_t *brake_presure_bar_4;
+    lv_obj_t *brk_press_label_f;    // live BRK front pressure value label
+    lv_obj_t *brk_press_label_r;    // live BRK rear pressure value label
+    lv_obj_t *pneum_press_label_f;  // live PNEUM front pressure value label
+    lv_obj_t *pneum_press_label_r;  // live PNEUM rear pressure value label
     lv_obj_t *lap_times_container_1;
     lv_obj_t *laptime_label_1;
     lv_obj_t *lastlap_label_1;
