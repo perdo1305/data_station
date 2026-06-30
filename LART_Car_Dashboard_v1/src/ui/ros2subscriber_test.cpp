@@ -43,6 +43,17 @@ namespace eez {
     }
 }
 
+// Stub UI notification callbacks (normally provided by ui_runner, not linked in this test)
+extern "C" {
+    void ui_add_notification(const char *id, const char *title, const char *message) {
+        (void)id; (void)title; (void)message;
+    }
+    void ui_clear_notification(const char *id) {
+        (void)id;
+    }
+    void ui_clear_all_notifications(void) {}
+}
+
 int main(int argc, char **argv) {
     // Sourcing rclcpp dependencies and initializing execution context
     rclcpp::init(argc, argv);

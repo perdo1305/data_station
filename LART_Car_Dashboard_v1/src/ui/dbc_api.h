@@ -1139,6 +1139,8 @@ typedef struct {
 
 extern DbcApi dbc_api;
 
+void check_dbc_errors(void (*on_error)(const char *id, const char *msg_name, const char *sig_name, float value, const char *choice_label));
+
 #ifdef __cplusplus
 }
 #if defined(LART_UI_HAVE_RCLCPP) && LART_UI_HAVE_RCLCPP

@@ -159,6 +159,11 @@ int ros2subscriber_get_telemetry(TelemetryData *out);
 int ros2subscriber_get_can_log(char *buffer, size_t max_len);
 void ros2subscriber_fini(void);
 
+void ui_add_notification(const char *id, const char *title, const char *message);
+void ui_clear_notification(const char *id);
+void ui_clear_all_notifications(void);
+void ros2subscriber_publish_ack(const char *id);
+
 #ifdef __cplusplus
 }
 #endif
