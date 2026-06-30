@@ -5780,8 +5780,8 @@ extern "C" void ui_update_telemetry_vars(const void *t_ptr) {
     eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_BRAKE_PEDAL_PRESSURE, eez::IntegerValue(brake_val));
 
     // 2. ACCELL PEDAL PRESSURE (0 to 100)
-    float apps1_val = (dbc_api.apps_adc_raw.apps1_raw / 4095.0f) * 100.0f;
-    float apps2_val = (dbc_api.apps_adc_raw.apps2_raw / 4095.0f) * 100.0f;
+    float apps1_val = ((dbc_api.apps_adc_raw.apps1_raw * 10.0f) / 4095.0f) * 100.0f;
+    float apps2_val = ((dbc_api.apps_adc_raw.apps2_raw * 10.0f) / 4095.0f) * 100.0f;
     float max_acc = apps1_val;
     if (apps2_val > max_acc) max_acc = apps2_val;
     if (dbc_api.pedal_box.apps1 > max_acc) max_acc = dbc_api.pedal_box.apps1;

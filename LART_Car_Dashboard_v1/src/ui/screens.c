@@ -1579,10 +1579,12 @@ void tick_screen_debug_3() {
     lv_table_add_cell_ctrl(table, 5, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
 
     // Row 6
+    float apps1_show = (dbc_api.pedal_box.apps1 > 0.0f) ? dbc_api.pedal_box.apps1 : dbc_api.apps_adc_raw.apps1_raw;
+    float apps2_show = (dbc_api.pedal_box.apps2 > 0.0f) ? dbc_api.pedal_box.apps2 : dbc_api.apps_adc_raw.apps2_raw;
     set_cell(table, 6, 0, "APPS1:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 1, 0xFFFFFF, "%6.1f", dbc_api.pedal_box.apps1);
+    set_cell_fmt(table, 6, 1, 0xFFFFFF, "%6.1f", apps1_show);
     set_cell(table, 6, 2, "APPS2:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 3, 0xFFFFFF, "%6.1f", dbc_api.pedal_box.apps2);
+    set_cell_fmt(table, 6, 3, 0xFFFFFF, "%6.1f", apps2_show);
 
     // Row 7
     set_cell(table, 7, 0, "NTC1:", 0xFFFFFF);

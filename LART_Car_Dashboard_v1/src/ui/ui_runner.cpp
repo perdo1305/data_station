@@ -161,7 +161,7 @@ bool create_window() {
         return false;
     }
 
-    SDL_ShowCursor(1);
+    SDL_ShowCursor(0);
 
     return true;
 }
@@ -465,6 +465,16 @@ int main(int argc, char **argv) {
         assert(std::abs(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_TEMP_MOTOR).getFloat() - 40.0f) < 0.01f);
         assert(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_LAP_COUNT).getInt() == 5);
         assert(std::strcmp(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_MISSION).getString(), "ACCEL") == 0);
+
+        // Test 3: Test emergency screen transition on as_state = 4
+        // The default screen after ui_init is SCREEN_ID_DRIVER_VIEW (1)
+        assert(eez_flow_get_current_screen() == SCREEN_ID_DRIVER_VIEW);
+
+        dbc_api.acu.as_state = 4.0f;
+        ui_tick(); // Tick once to detect the state change and queue the screen change
+        ui_tick(); // Tick twice to apply the screen change
+
+        assert(eez_flow_get_current_screen() == SCREEN_ID_DEBUG_AUTONOMOUS_1);
 
         std::printf("[TEST] ✓ All telemetry mapping unit tests passed successfully!\n");
         std::_Exit(0);
