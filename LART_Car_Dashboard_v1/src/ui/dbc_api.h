@@ -1144,10 +1144,12 @@ void check_dbc_errors(void (*on_error)(const char *id, const char *msg_name, con
 #ifdef __cplusplus
 }
 #if defined(LART_UI_HAVE_RCLCPP) && LART_UI_HAVE_RCLCPP
+#if defined(LART_HAVE_LART_MSGS) && LART_HAVE_LART_MSGS
 #include <memory>
 #include <vector>
 #include <rclcpp/rclcpp.hpp>
 void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs);
+#endif
 #endif
 #endif
 

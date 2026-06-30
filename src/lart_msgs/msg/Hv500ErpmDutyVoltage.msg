@@ -1,0 +1,3 @@
+float32 actual_duty
+float32 actual_erpm
+float32 actual_inputvoltage

@@ -1,0 +1,4 @@
+float32 temperature_value_1
+float32 temperature_value_2
+float32 temperature_value_3
+float32 temperature_value_4

@@ -1,0 +1,4 @@
+float32 availablemaxaccurrent
+float32 availableminaccurrent
+float32 maxaccurrent
+float32 minaccurrent

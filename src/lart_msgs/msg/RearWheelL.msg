@@ -1,0 +1,3 @@
+float32 ignition
+float32 mission_select
+float32 shutdown_circuit

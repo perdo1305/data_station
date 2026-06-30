@@ -12,6 +12,10 @@ def _ros_name(raw: str) -> str:
         slug = 'val_' + slug
     return slug
 
+def _ros_header_name(class_name: str) -> str:
+    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', class_name)
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+
 def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     dbc_dir = os.path.abspath(os.path.join(script_dir, "../../../dbc_signals"))
@@ -31,6 +35,56 @@ def main():
             message_signals[msg_slug] = set()
         for sig in msg.signals:
             message_signals[msg_slug].add(_ros_name(sig.name))
+            
+    # 1. Generate ROS 2 message files and update lart_msgs/CMakeLists.txt
+    lart_msgs_dir = os.path.abspath(os.path.join(script_dir, "../../../src/lart_msgs"))
+    msg_dir = os.path.join(lart_msgs_dir, "msg")
+    os.makedirs(msg_dir, exist_ok=True)
+    
+    generated_msg_files = []
+    for msg_slug, sig_slugs in message_signals.items():
+        class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
+        msg_filename = f"{class_name}.msg"
+        msg_path = os.path.join(msg_dir, msg_filename)
+        
+        lines = []
+        for sig_slug in sorted(list(sig_slugs)):
+            lines.append(f"float32 {sig_slug}")
+            
+        with open(msg_path, "w") as mf:
+            mf.write("\n".join(lines) + "\n")
+        generated_msg_files.append(msg_filename)
+        
+    cmake_path = os.path.join(lart_msgs_dir, "CMakeLists.txt")
+    standard_msgs = [
+        "msg/ButtonEvent.msg",
+        "msg/EncoderDelta.msg",
+        "msg/CanFrame.msg",
+        "msg/DashboardState.msg"
+    ]
+    all_msgs = standard_msgs + [f"msg/{mf}" for mf in sorted(generated_msg_files)]
+    
+    cmake_lines = [
+        "cmake_minimum_required(VERSION 3.8)",
+        "project(lart_msgs)",
+        "",
+        "find_package(ament_cmake REQUIRED)",
+        "find_package(rosidl_default_generators REQUIRED)",
+        "find_package(builtin_interfaces REQUIRED)",
+        "",
+        "rosidl_generate_interfaces(${PROJECT_NAME}"
+    ]
+    for m in all_msgs:
+        cmake_lines.append(f'  "{m}"')
+    cmake_lines.extend([
+        "  DEPENDENCIES builtin_interfaces",
+        ")",
+        "",
+        "ament_package()"
+    ])
+    with open(cmake_path, "w") as cf:
+        cf.write("\n".join(cmake_lines) + "\n")
+    print(f"Generated {len(generated_msg_files)} .msg files and updated CMakeLists.txt")
             
     # Identify error signals for checking
     error_signals = []
@@ -78,10 +132,12 @@ def main():
         "#ifdef __cplusplus",
         "}",
         "#if defined(LART_UI_HAVE_RCLCPP) && LART_UI_HAVE_RCLCPP",
+        "#if defined(LART_HAVE_LART_MSGS) && LART_HAVE_LART_MSGS",
         "#include <memory>",
         "#include <vector>",
         "#include <rclcpp/rclcpp.hpp>",
         "void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs);",
+        "#endif",
         "#endif",
         "#endif",
         "",
@@ -93,7 +149,70 @@ def main():
         f.write("\n".join(header_lines) + "\n")
     print(f"Generated: {header_path}")
     
-    # Generate Source
+    # Clean up old sub-chunk files
+    for old_file in glob.glob(os.path.join(script_dir, "dbc_api_sub_*.cpp")):
+        try:
+            os.remove(old_file)
+        except Exception:
+            pass
+
+    sorted_slugs = sorted(message_signals.keys())
+    chunk_size = 30
+    chunks = [sorted_slugs[i:i + chunk_size] for i in range(0, len(sorted_slugs), chunk_size)]
+
+    for idx, chunk_slugs in enumerate(chunks):
+        sub_lines = [
+            "// Auto-generated from DBC files by generate_dbc_api.py. Do not edit.",
+            "#include \"dbc_api.h\"",
+            "#if defined(LART_UI_HAVE_RCLCPP) && LART_UI_HAVE_RCLCPP",
+            "#if defined(LART_HAVE_LART_MSGS) && LART_HAVE_LART_MSGS",
+            "#include <rclcpp/rclcpp.hpp>",
+            "#include <mutex>",
+            "#include <vector>",
+            "extern std::mutex dbc_api_mutex;"
+        ]
+        
+        for msg_slug in sorted(chunk_slugs):
+            class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
+            header_name = _ros_header_name(class_name)
+            sub_lines.append(f'#include <lart_msgs/msg/{header_name}.hpp>')
+            
+        sub_lines.extend([
+            "",
+            f"void init_dbc_api_subscribers_chunk_{idx}(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs) {{",
+            "    auto sensor_qos = rclcpp::QoS(10).best_effort();",
+            ""
+        ])
+        
+        for msg_slug in sorted(chunk_slugs):
+            class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
+            msg_class = f"lart_msgs::msg::{class_name}"
+            topic = f"/can/dbc/{msg_slug}"
+            sub_lines.extend([
+                f"    subs.push_back(node->create_subscription<{msg_class}>(",
+                f"        \"{topic}\", sensor_qos, [](const std::shared_ptr<{msg_class}> msg) {{",
+                f"            if (msg) {{",
+                f"                std::lock_guard<std::mutex> lock(dbc_api_mutex);"
+            ])
+            for sig_slug in sorted(message_signals[msg_slug]):
+                sub_lines.append(f"                dbc_api.{msg_slug}.{sig_slug} = msg->{sig_slug};")
+            sub_lines.extend([
+                f"            }}",
+                f"        }}));"
+            ])
+            
+        sub_lines.extend([
+            "}",
+            "#endif",
+            "#endif"
+        ])
+        
+        sub_path = os.path.join(script_dir, f"dbc_api_sub_{idx}.cpp")
+        with open(sub_path, "w") as sf:
+            sf.write("\n".join(sub_lines) + "\n")
+        print(f"Generated: {sub_path}")
+
+    # Generate Source (dbc_api.cpp)
     source_lines = [
         "// Auto-generated from DBC files by generate_dbc_api.py. Do not edit.",
         "#include \"dbc_api.h\"",
@@ -103,33 +222,28 @@ def main():
         "DbcApi dbc_api = {};",
         "",
         "#if defined(LART_UI_HAVE_RCLCPP) && LART_UI_HAVE_RCLCPP",
+        "#if defined(LART_HAVE_LART_MSGS) && LART_HAVE_LART_MSGS",
         "#include <rclcpp/rclcpp.hpp>",
-        "#include <std_msgs/msg/float32.hpp>",
         "#include <mutex>",
         "#include <vector>",
         "",
-        "static std::mutex dbc_api_mutex;",
-        "",
-        "void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs) {",
-        "    auto sensor_qos = rclcpp::QoS(10).best_effort();",
-        ""
+        "std::mutex dbc_api_mutex;"
     ]
     
-    for msg_slug in sorted(message_signals.keys()):
-        for sig_slug in sorted(message_signals[msg_slug]):
-            topic = f"/can/dbc/{msg_slug}/{sig_slug}"
-            source_lines.extend([
-                f"    subs.push_back(node->create_subscription<std_msgs::msg::Float32>(",
-                f"        \"{topic}\", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {{",
-                f"            if (msg) {{",
-                f"                std::lock_guard<std::mutex> lock(dbc_api_mutex);",
-                f"                dbc_api.{msg_slug}.{sig_slug} = msg->data;",
-                f"            }}",
-                f"        }}));"
-            ])
-            
+    for idx in range(len(chunks)):
+        source_lines.append(f"extern void init_dbc_api_subscribers_chunk_{idx}(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs);")
+        
+    source_lines.extend([
+        "",
+        "void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs) {",
+    ])
+    
+    for idx in range(len(chunks)):
+        source_lines.append(f"    init_dbc_api_subscribers_chunk_{idx}(node, subs);")
+        
     source_lines.extend([
         "}",
+        "#endif",
         "#endif",
         "",
         "// Combined from power_api.cpp and speed_api.cpp",

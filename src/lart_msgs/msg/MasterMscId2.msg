@@ -1,0 +1,7 @@
+float32 fault1_code
+float32 fault1_index_type
+float32 fault1_index_value
+float32 fault2_code
+float32 fault2_index_type
+float32 fault2_index_value
+float32 master_runtime

@@ -88,17 +88,26 @@ def main():
         ""
     ]
     
-    # Add publisher declarations
-    for m_info in messages_to_decode:
-        db_name = m_info["db_name"]
-        msg_slug = m_info["msg_slug"]
-        hpp_lines.append(f"    // Publishers for message: {m_info['msg_name']} (0x{m_info['frame_id']:X})")
-        for sig in m_info["msg"].signals:
-            sig_slug = _ros_name(sig.name)
-            pub_name = f"pub_{db_name}_{msg_slug}_{sig_slug}"
-            hpp_lines.append(f"    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr {pub_name};")
-        hpp_lines.append("")
-        
+    # Add publisher declarations and message includes
+    unique_msg_slugs = sorted(list(set(m_info["msg_slug"] for m_info in messages_to_decode)))
+    
+    # Generate correct ROS2-style header filenames
+    def _ros_header_name(slug: str) -> str:
+        class_name = ''.join(word.capitalize() for word in slug.split('_') if word)
+        s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', class_name)
+        return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+
+    # Insert custom message includes at the top of the header file (index 13 or so, after the other headers)
+    # We can just put them in hpp_lines
+    hpp_lines = hpp_lines[:13] + [f'#include <lart_msgs/msg/{_ros_header_name(slug)}.hpp>' for slug in unique_msg_slugs] + [""] + hpp_lines[13:]
+
+    # Add private publisher fields
+    hpp_lines.append("    // Aggregated publishers by message slug")
+    for msg_slug in unique_msg_slugs:
+        class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
+        hpp_lines.append(f"    rclcpp::Publisher<lart_msgs::msg::{class_name}>::SharedPtr pub_{msg_slug};")
+    hpp_lines.append("")
+
     hpp_lines.extend([
         "};",
         "",
@@ -121,14 +130,10 @@ def main():
     ]
     
     # Initialize publishers
-    for m_info in messages_to_decode:
-        db_name = m_info["db_name"]
-        msg_slug = m_info["msg_slug"]
-        for sig in m_info["msg"].signals:
-            sig_slug = _ros_name(sig.name)
-            pub_name = f"pub_{db_name}_{msg_slug}_{sig_slug}"
-            topic = f"/can/dbc/{msg_slug}/{sig_slug}"
-            cpp_lines.append(f'    {pub_name} = node_->create_publisher<std_msgs::msg::Float32>("{topic}", sensor_qos);')
+    for msg_slug in unique_msg_slugs:
+        class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
+        topic = f"/can/dbc/{msg_slug}"
+        cpp_lines.append(f'    pub_{msg_slug} = node_->create_publisher<lart_msgs::msg::{class_name}>("{topic}", sensor_qos);')
     
     cpp_lines.extend([
         "}",
@@ -151,32 +156,47 @@ def main():
     for fid in sorted(grouped_messages.keys()):
         cpp_lines.append(f"        case {fid}u: {{")
         
+        # Group by msg_slug for the same frame_id to merge signals
+        slug_to_minfos = {}
         for m_info in grouped_messages[fid]:
-            db_name = m_info["db_name"]
-            msg_c_name = m_info["msg_c_name"]
-            msg_slug = m_info["msg_slug"]
+            slug = m_info["msg_slug"]
+            if slug not in slug_to_minfos:
+                slug_to_minfos[slug] = []
+            slug_to_minfos[slug].append(m_info)
             
+        for msg_slug, m_list in slug_to_minfos.items():
+            class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
             cpp_lines.extend([
                 f"            {{",
-                f"                struct {db_name}_{msg_c_name}_t decoded = {{}};",
-                f"                if ({db_name}_{msg_c_name}_unpack(&decoded, data, dlc) == 0) {{",
-                f"                    std_msgs::msg::Float32 out;"
+                f"                lart_msgs::msg::{class_name} out = {{}};",
+                f"                bool decoded_any = false;"
             ])
             
-            for sig in m_info["msg"].signals:
-                sig_slug = _ros_name(sig.name)
-                sig_c_name = _to_c_name(sig.name)
-                pub_name = f"pub_{db_name}_{msg_slug}_{sig_slug}"
-                
-                # Form the C decode function
-                decode_fn = f"{db_name}_{msg_c_name}_{sig_c_name}_decode"
+            for m_info in m_list:
+                db_name = m_info["db_name"]
+                msg_c_name = m_info["msg_c_name"]
                 
                 cpp_lines.extend([
-                    f"                    out.data = {decode_fn}(decoded.{sig_c_name});",
-                    f"                    {pub_name}->publish(out);"
+                    f"                {{",
+                    f"                    struct {db_name}_{msg_c_name}_t decoded = {{}};",
+                    f"                    if ({db_name}_{msg_c_name}_unpack(&decoded, data, dlc) == 0) {{"
+                ])
+                
+                for sig in m_info["msg"].signals:
+                    sig_slug = _ros_name(sig.name)
+                    sig_c_name = _to_c_name(sig.name)
+                    decode_fn = f"{db_name}_{msg_c_name}_{sig_c_name}_decode"
+                    cpp_lines.append(f"                        out.{sig_slug} = {decode_fn}(decoded.{sig_c_name});")
+                    
+                cpp_lines.extend([
+                    f"                        decoded_any = true;",
+                    f"                    }}",
+                    f"                }}"
                 ])
                 
             cpp_lines.extend([
+                f"                if (decoded_any) {{",
+                f"                    pub_{msg_slug}->publish(out);",
                 f"                }}",
                 f"            }}"
             ])

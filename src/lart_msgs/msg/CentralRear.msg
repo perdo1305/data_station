@@ -1,0 +1,3 @@
+float32 brake_disk_temp
+float32 tire_temp
+float32 wheel_speed

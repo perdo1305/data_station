@@ -133,22 +133,35 @@ class CanBridgeNode(Node):
             self._db = cantools.database.Database()
 
         total_signals = 0
+        import importlib
+        try:
+            msg_module = importlib.import_module('lart_msgs.msg')
+        except ImportError:
+            self.get_logger().error("lart_msgs not found! CAN bridge will not work.")
+            return
+
         for msg in self._db.messages:
             if not msg.signals:
                 continue
             msg_slug = _ros_name(msg.name)
-            self._dbc_pubs[msg.frame_id] = {}
-            for sig in msg.signals:
-                sig_slug = _ros_name(sig.name)
-                topic = f'/can/dbc/{msg_slug}/{sig_slug}'
-                pub = self.create_publisher(Float32, topic, _BEST_EFFORT)
-                self._dbc_pubs[msg.frame_id][sig.name] = pub
-                total_signals += 1
+            msg_class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
+            try:
+                msg_class = getattr(msg_module, msg_class_name)
+                topic = f'/can/dbc/{msg_slug}'
+                pub = self.create_publisher(msg_class, topic, _BEST_EFFORT)
+                self._dbc_pubs[msg.frame_id] = {
+                    'class': msg_class,
+                    'pub': pub,
+                    'signals': {sig.name: _ros_name(sig.name) for sig in msg.signals}
+                }
+                total_signals += len(msg.signals)
+            except AttributeError:
+                self.get_logger().error(f"Message class {msg_class_name} not found in lart_msgs.msg!")
 
         self.get_logger().info(
             f'DBC loaded from: {dbc_path}\n'
             f'  → {len(self._dbc_pubs)} messages, {total_signals} signals\n'
-            f'  → Publishing on /can/dbc/<msg>/<signal>'
+            f'  → Publishing on /can/dbc/<msg>'
         )
 
     # ──────────────────────────────────────────────────────────────────────
@@ -194,14 +207,13 @@ class CanBridgeNode(Node):
             )
             return
 
-        pubs = self._dbc_pubs[msg.arbitration_id]
+        pub_info = self._dbc_pubs[msg.arbitration_id]
+        out = pub_info['class']()
         for sig_name, value in decoded.items():
-            pub = pubs.get(sig_name)
-            if pub is None:
-                continue
-            out = Float32()
-            out.data = float(value)
-            pub.publish(out)
+            sig_slug = pub_info['signals'].get(sig_name)
+            if sig_slug is not None:
+                setattr(out, sig_slug, float(value))
+        pub_info['pub'].publish(out)
 
     # ──────────────────────────────────────────────────────────────────────
 

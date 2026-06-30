@@ -1,0 +1,4 @@
+float32 cmd_setdigoutput1
+float32 cmd_setdigoutput2
+float32 cmd_setdigoutput3
+float32 cmd_setdigoutput4

@@ -30,9 +30,12 @@ file(GLOB_RECURSE LVGL_SOURCES CONFIGURE_DEPENDS
 # CREATE ROS2 SUBSCRIBER LIBRARY
 # ============================================================================
 
+file(GLOB DBC_API_SUB_SOURCES CONFIGURE_DEPENDS "dbc_api_sub_*.cpp")
+
 add_library(ros2subscriber STATIC
     ros2subscriber.cpp
     dbc_api.cpp
+    ${DBC_API_SUB_SOURCES}
 )
 
 target_compile_features(ros2subscriber PUBLIC cxx_std_17)
@@ -52,7 +55,7 @@ if(ament_cmake_FOUND)
     ament_target_dependencies(ros2subscriber rclcpp std_msgs)
 endif()
 if(lart_msgs_FOUND)
-    target_compile_definitions(ros2subscriber PRIVATE LART_HAVE_DASHBOARD_STATE_MSG=1)
+    target_compile_definitions(ros2subscriber PRIVATE LART_HAVE_DASHBOARD_STATE_MSG=1 LART_HAVE_LART_MSGS=1)
     if(ament_cmake_FOUND)
         ament_target_dependencies(ros2subscriber lart_msgs)
     endif()

@@ -1,0 +1,5 @@
+float32 precharge_ctc_air_min_state
+float32 precharge_ctc_air_pos_state
+float32 precharge_ctc_charge_state
+float32 precharge_ctc_discharge_state
+float32 precharge_state
