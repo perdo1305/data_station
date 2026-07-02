@@ -231,20 +231,20 @@ LART_WEAK int ros2subscriber_init(void) {
     SUB_FLOAT_MAP(ctc_charge, master_precharge_id_1.precharge_ctc_charge_state, "/can/dbc/master_precharge_id_1/precharge_ctc_charge_state");
     SUB_FLOAT_MAP(ctc_discharge, master_precharge_id_1.precharge_ctc_discharge_state, "/can/dbc/master_precharge_id_1/precharge_ctc_discharge_state");
 
-    // Inverter DTI HV500
-    SUB_FLOAT_MAP(inv_erpm, hv500_erpm_duty_voltage.actual_erpm, "/can/dbc/hv500_erpm_duty_voltage/actual_erpm");
-    SUB_FLOAT_MAP(inv_duty, hv500_erpm_duty_voltage.actual_duty, "/can/dbc/hv500_erpm_duty_voltage/actual_duty");
-    SUB_FLOAT_MAP(inv_vin, hv500_erpm_duty_voltage.actual_inputvoltage, "/can/dbc/hv500_erpm_duty_voltage/actual_inputvoltage");
-    SUB_FLOAT_MAP(inv_fault, hv500_temperatures.actual_faultcode, "/can/dbc/hv500_temperatures/actual_faultcode");
-    SUB_FLOAT_MAP(inv_ac_curr, hv500_ac_dc_current.actual_accurrent, "/can/dbc/hv500_ac_dc_current/actual_accurrent");
-    SUB_FLOAT_MAP(inv_dc_curr, hv500_ac_dc_current.actual_dccurrent, "/can/dbc/hv500_ac_dc_current/actual_dccurrent");
-    SUB_FLOAT_MAP(inv_temp_ctrl, hv500_temperatures.actual_tempcontroller, "/can/dbc/hv500_temperatures/actual_tempcontroller");
-    SUB_FLOAT_MAP(inv_temp_mot, hv500_temperatures.actual_tempmotor, "/can/dbc/hv500_temperatures/actual_tempmotor");
-    SUB_FLOAT_MAP(inv_throttle, hv500_misc.actual_throttle, "/can/dbc/hv500_misc/actual_throttle");
-    SUB_FLOAT_MAP(inv_brake, hv500_misc.actual_brake, "/can/dbc/hv500_misc/actual_brake");
-    SUB_FLOAT_MAP(inv_foc_id, hv500_foc.actual_foc_id, "/can/dbc/hv500_foc/actual_foc_id");
-    SUB_FLOAT_MAP(inv_foc_iq, hv500_foc.actual_foc_iq, "/can/dbc/hv500_foc/actual_foc_iq");
-    SUB_FLOAT_MAP(inv_drive_en, hv500_misc.drive_enable, "/can/dbc/hv500_misc/drive_enable");
+    // Inverter DTI INV1 (motor 1; INV2 exists in DBC but not yet surfaced in UI)
+    SUB_FLOAT_MAP(inv_erpm, inv1_erpm_duty_voltage.inv1_actual_erpm, "/can/dbc/inv1_erpm_duty_voltage/inv1_actual_erpm");
+    SUB_FLOAT_MAP(inv_duty, inv1_erpm_duty_voltage.inv1_actual_duty, "/can/dbc/inv1_erpm_duty_voltage/inv1_actual_duty");
+    SUB_FLOAT_MAP(inv_vin, inv1_erpm_duty_voltage.inv1_actual_inputvoltage, "/can/dbc/inv1_erpm_duty_voltage/inv1_actual_inputvoltage");
+    SUB_FLOAT_MAP(inv_fault, inv1_temperatures.inv1_actual_faultcode, "/can/dbc/inv1_temperatures/inv1_actual_faultcode");
+    SUB_FLOAT_MAP(inv_ac_curr, inv1_ac_dc_current.inv1_actual_accurrent, "/can/dbc/inv1_ac_dc_current/inv1_actual_accurrent");
+    SUB_FLOAT_MAP(inv_dc_curr, inv1_ac_dc_current.inv1_actual_dccurrent, "/can/dbc/inv1_ac_dc_current/inv1_actual_dccurrent");
+    SUB_FLOAT_MAP(inv_temp_ctrl, inv1_temperatures.inv1_actual_tempcontroller, "/can/dbc/inv1_temperatures/inv1_actual_tempcontroller");
+    SUB_FLOAT_MAP(inv_temp_mot, inv1_temperatures.inv1_actual_tempmotor, "/can/dbc/inv1_temperatures/inv1_actual_tempmotor");
+    SUB_FLOAT_MAP(inv_throttle, inv1_misc.inv1_actual_throttle, "/can/dbc/inv1_misc/inv1_actual_throttle");
+    SUB_FLOAT_MAP(inv_brake, inv1_misc.inv1_actual_brake, "/can/dbc/inv1_misc/inv1_actual_brake");
+    SUB_FLOAT_MAP(inv_foc_id, inv1_foc.inv1_actual_foc_id, "/can/dbc/inv1_foc/inv1_actual_foc_id");
+    SUB_FLOAT_MAP(inv_foc_iq, inv1_foc.inv1_actual_foc_iq, "/can/dbc/inv1_foc/inv1_actual_foc_iq");
+    SUB_FLOAT_MAP(inv_drive_en, inv1_misc.inv1_drive_enable, "/can/dbc/inv1_misc/inv1_drive_enable");
 
     // IVT
     SUB_FLOAT_MAP(ivt_current, ivt_msg_result_i.ivt_result_i, "/can/dbc/ivt_msg_result_i/ivt_result_i");

@@ -25,11 +25,17 @@ public:
 private:
     rclcpp::Node* node_;
 
-    // Publishers for message: HV500_SetAcCurrent (0x24)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_setaccurrent_cmd_targetaccurrent;
+    // Publishers for message: INV1_SetAcCurrent (0x24)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_setaccurrent_inv1_cmd_targetaccurrent;
 
-    // Publishers for message: HV500_SetBrakeCurrent (0x44)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_setbrakecurrent_cmd_targetbrakecurrent;
+    // Publishers for message: INV2_SetAcCurrent (0x25)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_setaccurrent_inv2_cmd_targetaccurrent;
+
+    // Publishers for message: INV1_SetBrakeCurrent (0x44)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_setbrakecurrent_inv1_cmd_targetbrakecurrent;
+
+    // Publishers for message: INV2_SetBrakeCurrent (0x45)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_setbrakecurrent_inv2_cmd_targetbrakecurrent;
 
     // Publishers for message: ACU (0x51)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_acu_assi_state;
@@ -50,8 +56,11 @@ private:
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_jetson_gpu;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_jetson_emergency_cause;
 
-    // Publishers for message: HV500_SetERPM (0x64)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_seterpm_cmd_targetspeed;
+    // Publishers for message: INV1_SetERPM (0x64)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_seterpm_inv1_cmd_targetspeed;
+
+    // Publishers for message: INV2_SetERPM (0x65)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_seterpm_inv2_cmd_targetspeed;
 
     // Publishers for message: Start_Charging (0x81)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_start_charging_charging_request;
@@ -67,562 +76,93 @@ private:
     // Publishers for message: Start_PreCharge (0x83)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_start_precharge_precharge_request;
 
-    // Publishers for message: HV500_SetPosition (0x84)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_setposition_cmd_targetposition;
+    // Publishers for message: INV1_SetPosition (0x84)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_setposition_inv1_cmd_targetposition;
 
-    // Publishers for message: HV500_SetRelCurrent (0xA4)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_setrelcurrent_cmd_targetrelativecurrent;
+    // Publishers for message: INV2_SetPosition (0x85)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_setposition_inv2_cmd_targetposition;
 
-    // Publishers for message: HV500_SetRelBrakeCurrent (0xC4)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_setrelbrakecurrent_cmd_targerelativebrakecurrent;
+    // Publishers for message: INV1_SetRelCurrent (0xA4)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_setrelcurrent_inv1_cmd_targetrelativecurrent;
+
+    // Publishers for message: INV2_SetRelCurrent (0xA5)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_setrelcurrent_inv2_cmd_targetrelativecurrent;
+
+    // Publishers for message: INV1_SetRelBrakeCurrent (0xC4)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_setrelbrakecurrent_inv1_cmd_tgtrelbrakecurrent;
+
+    // Publishers for message: INV2_SetRelBrakeCurrent (0xC5)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_setrelbrakecurrent_inv2_cmd_tgtrelbrakecurrent;
 
     // Publishers for message: Start_Programmer (0xDC)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_start_programmer_programming_request;
 
-    // Publishers for message: HV500_SetDigOutput (0xE4)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_setdigoutput_cmd_setdigoutput4;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_setdigoutput_cmd_setdigoutput3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_setdigoutput_cmd_setdigoutput2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_setdigoutput_cmd_setdigoutput1;
+    // Publishers for message: INV1_SetDigOutput (0xE4)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_setdigoutput_inv1_cmd_setdigoutput4;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_setdigoutput_inv1_cmd_setdigoutput3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_setdigoutput_inv1_cmd_setdigoutput2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_setdigoutput_inv1_cmd_setdigoutput1;
 
-    // Publishers for message: Slave_01_Voltage_ID_1 (0x100)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_4;
+    // Publishers for message: INV2_SetDigOutput (0xE5)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_setdigoutput_inv2_cmd_setdigoutput4;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_setdigoutput_inv2_cmd_setdigoutput3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_setdigoutput_inv2_cmd_setdigoutput2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_setdigoutput_inv2_cmd_setdigoutput1;
 
-    // Publishers for message: Slave_01_Voltage_ID_2 (0x101)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_7;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_8;
+    // Publishers for message: INV1_SetMaxAcCurrent (0x104)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_setmaxaccurrent_inv1_cmd_maxaccurrent;
 
-    // Publishers for message: Slave_01_Voltage_ID_3 (0x102)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_9;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_10;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_11;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_12;
+    // Publishers for message: INV2_SetMaxAcCurrent (0x105)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_setmaxaccurrent_inv2_cmd_maxaccurrent;
 
-    // Publishers for message: Slave_01_Temperature_ID_1 (0x103)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_4;
+    // Publishers for message: INV1_SetMaxAcBrakeCurrent (0x124)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_setmaxacbrakecurrent_inv1_cmd_maxacbrakecurrent;
 
-    // Publishers for message: HV500_SetMaxAcCurrent (0x104)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_setmaxaccurrent_cmd_maxaccurrent;
+    // Publishers for message: INV2_SetMaxAcBrakeCurrent (0x125)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_setmaxacbrakecurrent_inv2_cmd_maxacbrakecurrent;
 
-    // Publishers for message: Slave_01_MSC_ID_1 (0x105)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_1_module_voltage_sum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_1_module_voltage_avg;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_1_module_voltage_min;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_1_module_voltage_max;
+    // Publishers for message: INV1_SetMaxDcCurrent (0x144)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_setmaxdccurrent_inv1_cmd_maxdccurrent;
 
-    // Publishers for message: Slave_01_MSC_ID_2 (0x106)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_2_module_voltage_delta;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_2_module_ic_voltage;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_2_module_open_wire;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_2_module_ic_temperature;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_2_module_overvoltage;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_2_module_undervoltage;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_2_module_under_over_identifier;
+    // Publishers for message: INV2_SetMaxDcCurrent (0x145)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_setmaxdccurrent_inv2_cmd_maxdccurrent;
 
-    // Publishers for message: Slave_02_Voltage_ID_1 (0x107)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_4;
+    // Publishers for message: INV1_SetMaxDcBrakeCurrent (0x164)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_setmaxdcbrakecurrent_inv1_cmd_maxdcbrakecurrent;
 
-    // Publishers for message: Slave_02_Voltage_ID_2 (0x108)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_7;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_8;
+    // Publishers for message: INV2_SetMaxDcBrakeCurrent (0x165)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_setmaxdcbrakecurrent_inv2_cmd_maxdcbrakecurrent;
 
-    // Publishers for message: Slave_02_Voltage_ID_3 (0x109)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_9;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_10;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_11;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_12;
+    // Publishers for message: INV1_SetDriveEnable (0x184)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_setdriveenable_inv1_cmd_driveenable;
 
-    // Publishers for message: Slave_02_Temperature_ID_1 (0x10A)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_4;
-
-    // Publishers for message: Slave_02_Temperature_ID_2 (0x10B)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_temperature_id_2_temperature_value_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_temperature_id_2_temperature_value_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_temperature_id_2_temperature_maximum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_temperature_id_2_temperature_delta;
-
-    // Publishers for message: Slave_02_MSC_ID_1 (0x10C)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_1_module_voltage_sum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_1_module_voltage_avg;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_1_module_voltage_min;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_1_module_voltage_max;
-
-    // Publishers for message: Slave_02_MSC_ID_2 (0x10D)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_2_module_voltage_delta;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_2_module_ic_voltage;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_2_module_open_wire;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_2_module_ic_temperature;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_2_module_overvoltage;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_2_module_undervoltage;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_2_module_under_over_identifier;
-
-    // Publishers for message: Slave_03_Voltage_ID_1 (0x10E)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_4;
-
-    // Publishers for message: Slave_03_Voltage_ID_2 (0x10F)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_7;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_8;
-
-    // Publishers for message: Slave_03_Voltage_ID_3 (0x110)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_9;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_10;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_11;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_12;
-
-    // Publishers for message: Slave_03_Temperature_ID_1 (0x111)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_4;
-
-    // Publishers for message: Slave_03_Temperature_ID_2 (0x112)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_temperature_id_2_temperature_value_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_temperature_id_2_temperature_value_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_temperature_id_2_temperature_maximum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_temperature_id_2_temperature_delta;
-
-    // Publishers for message: Slave_03_MSC_ID_1 (0x113)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_msc_id_1_module_voltage_sum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_msc_id_1_module_voltage_avg;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_msc_id_1_module_voltage_min;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_msc_id_1_module_voltage_max;
-
-    // Publishers for message: Slave_03_MSC_ID_2 (0x114)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_msc_id_2_module_voltage_delta;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_msc_id_2_module_ic_voltage;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_msc_id_2_module_open_wire;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_msc_id_2_module_ic_temperature;
-
-    // Publishers for message: Slave_04_Voltage_ID_1 (0x115)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_4;
-
-    // Publishers for message: Slave_04_Voltage_ID_2 (0x116)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_7;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_8;
-
-    // Publishers for message: Slave_04_Voltage_ID_3 (0x117)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_9;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_10;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_11;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_12;
-
-    // Publishers for message: Slave_04_Temperature_ID_1 (0x118)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_4;
-
-    // Publishers for message: Slave_04_Temperature_ID_2 (0x119)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_temperature_id_2_temperature_value_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_temperature_id_2_temperature_value_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_temperature_id_2_temperature_maximum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_temperature_id_2_temperature_delta;
-
-    // Publishers for message: Slave_04_MSC_ID_1 (0x11A)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_msc_id_1_module_voltage_sum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_msc_id_1_module_voltage_avg;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_msc_id_1_module_voltage_min;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_msc_id_1_module_voltage_max;
-
-    // Publishers for message: Slave_04_MSC_ID_2 (0x11B)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_msc_id_2_module_voltage_delta;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_msc_id_2_module_ic_voltage;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_msc_id_2_module_open_wire;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_msc_id_2_module_ic_temperature;
-
-    // Publishers for message: Slave_05_Voltage_ID_1 (0x11C)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_4;
-
-    // Publishers for message: Slave_05_Voltage_ID_2 (0x11D)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_7;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_8;
-
-    // Publishers for message: Slave_05_Voltage_ID_3 (0x11E)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_9;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_10;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_11;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_12;
-
-    // Publishers for message: Slave_05_Temperature_ID_1 (0x11F)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_4;
-
-    // Publishers for message: Slave_05_Temperature_ID_2 (0x120)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_temperature_id_2_temperature_value_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_temperature_id_2_temperature_value_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_temperature_id_2_temperature_maximum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_temperature_id_2_temperature_delta;
-
-    // Publishers for message: Slave_05_MSC_ID_1 (0x121)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_msc_id_1_module_voltage_sum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_msc_id_1_module_voltage_avg;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_msc_id_1_module_voltage_min;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_msc_id_1_module_voltage_max;
-
-    // Publishers for message: Slave_05_MSC_ID_2 (0x122)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_msc_id_2_module_voltage_delta;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_msc_id_2_module_ic_voltage;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_msc_id_2_module_open_wire;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_msc_id_2_module_ic_temperature;
-
-    // Publishers for message: Slave_06_Voltage_ID_1 (0x123)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_4;
-
-    // Publishers for message: HV500_SetMaxAcBrakeCurrent (0x124)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_setmaxacbrakecurrent_cmd_maxacbrakecurrent;
-
-    // Publishers for message: Slave_06_Voltage_ID_3 (0x125)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_9;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_10;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_11;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_12;
-
-    // Publishers for message: Slave_06_Temperature_ID_1 (0x126)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_4;
-
-    // Publishers for message: Slave_06_Temperature_ID_2 (0x127)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_temperature_id_2_temperature_value_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_temperature_id_2_temperature_value_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_temperature_id_2_temperature_maximum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_temperature_id_2_temperature_delta;
-
-    // Publishers for message: Slave_06_MSC_ID_1 (0x128)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_msc_id_1_module_voltage_sum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_msc_id_1_module_voltage_avg;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_msc_id_1_module_voltage_min;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_msc_id_1_module_voltage_max;
-
-    // Publishers for message: Slave_06_MSC_ID_2 (0x129)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_msc_id_2_module_voltage_delta;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_msc_id_2_module_ic_voltage;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_msc_id_2_module_open_wire;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_msc_id_2_module_ic_temperature;
-
-    // Publishers for message: Slave_07_Voltage_ID_1 (0x12A)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_4;
-
-    // Publishers for message: Slave_07_Voltage_ID_2 (0x12B)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_7;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_8;
-
-    // Publishers for message: Slave_07_Voltage_ID_3 (0x12C)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_9;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_10;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_11;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_12;
-
-    // Publishers for message: Slave_07_Temperature_ID_1 (0x12D)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_4;
-
-    // Publishers for message: Slave_07_Temperature_ID_2 (0x12E)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_temperature_id_2_temperature_value_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_temperature_id_2_temperature_value_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_temperature_id_2_temperature_maximum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_temperature_id_2_temperature_delta;
-
-    // Publishers for message: Slave_07_MSC_ID_1 (0x12F)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_msc_id_1_module_voltage_sum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_msc_id_1_module_voltage_avg;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_msc_id_1_module_voltage_min;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_msc_id_1_module_voltage_max;
-
-    // Publishers for message: Slave_07_MSC_ID_2 (0x130)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_msc_id_2_module_voltage_delta;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_msc_id_2_module_ic_voltage;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_msc_id_2_module_open_wire;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_msc_id_2_module_ic_temperature;
-
-    // Publishers for message: Slave_08_Voltage_ID_1 (0x131)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_4;
-
-    // Publishers for message: Slave_08_Voltage_ID_2 (0x132)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_7;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_8;
-
-    // Publishers for message: Slave_08_Voltage_ID_3 (0x133)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_9;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_10;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_11;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_12;
-
-    // Publishers for message: Slave_08_Temperature_ID_1 (0x134)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_4;
-
-    // Publishers for message: Slave_08_Temperature_ID_2 (0x135)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_temperature_id_2_temperature_value_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_temperature_id_2_temperature_value_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_temperature_id_2_temperature_maximum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_temperature_id_2_temperature_delta;
-
-    // Publishers for message: Slave_08_MSC_ID_1 (0x136)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_msc_id_1_module_voltage_sum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_msc_id_1_module_voltage_avg;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_msc_id_1_module_voltage_min;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_msc_id_1_module_voltage_max;
-
-    // Publishers for message: Slave_08_MSC_ID_2 (0x137)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_msc_id_2_module_voltage_delta;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_msc_id_2_module_ic_voltage;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_msc_id_2_module_open_wire;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_msc_id_2_module_ic_temperature;
-
-    // Publishers for message: Slave_09_Voltage_ID_1 (0x138)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_4;
-
-    // Publishers for message: Slave_09_Voltage_ID_2 (0x139)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_7;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_8;
-
-    // Publishers for message: Slave_09_Voltage_ID_3 (0x13A)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_9;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_10;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_11;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_12;
-
-    // Publishers for message: Slave_09_Temperature_ID_1 (0x13B)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_4;
-
-    // Publishers for message: Slave_09_Temperature_ID_2 (0x13C)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_temperature_id_2_temperature_value_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_temperature_id_2_temperature_value_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_temperature_id_2_temperature_maximum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_temperature_id_2_temperature_delta;
-
-    // Publishers for message: Slave_09_MSC_ID_1 (0x13D)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_msc_id_1_module_voltage_sum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_msc_id_1_module_voltage_avg;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_msc_id_1_module_voltage_min;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_msc_id_1_module_voltage_max;
-
-    // Publishers for message: Slave_09_MSC_ID_2 (0x13E)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_msc_id_2_module_voltage_delta;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_msc_id_2_module_ic_voltage;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_msc_id_2_module_open_wire;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_msc_id_2_module_ic_temperature;
-
-    // Publishers for message: Slave_10_Voltage_ID_1 (0x13F)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_4;
-
-    // Publishers for message: Slave_10_Voltage_ID_2 (0x140)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_7;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_8;
-
-    // Publishers for message: Slave_10_Voltage_ID_3 (0x141)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_9;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_10;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_11;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_12;
-
-    // Publishers for message: Slave_10_Temperature_ID_1 (0x142)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_4;
-
-    // Publishers for message: Slave_10_Temperature_ID_2 (0x143)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_temperature_id_2_temperature_value_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_temperature_id_2_temperature_value_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_temperature_id_2_temperature_maximum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_temperature_id_2_temperature_delta;
-
-    // Publishers for message: HV500_SetMaxDcCurrent (0x144)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_setmaxdccurrent_cmd_maxdccurrent;
-
-    // Publishers for message: Slave_10_MSC_ID_2 (0x145)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_msc_id_2_module_voltage_delta;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_msc_id_2_module_ic_voltage;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_msc_id_2_module_open_wire;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_msc_id_2_module_ic_temperature;
-
-    // Publishers for message: Slave_11_Voltage_ID_1 (0x146)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_4;
-
-    // Publishers for message: Slave_11_Voltage_ID_2 (0x147)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_7;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_8;
-
-    // Publishers for message: Slave_11_Voltage_ID_3 (0x148)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_9;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_10;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_11;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_12;
-
-    // Publishers for message: Slave_11_Temperature_ID_1 (0x149)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_4;
-
-    // Publishers for message: Slave_11_Temperature_ID_2 (0x14A)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_temperature_id_2_temperature_value_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_temperature_id_2_temperature_value_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_temperature_id_2_temperature_maximum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_temperature_id_2_temperature_delta;
-
-    // Publishers for message: Slave_11_MSC_ID_1 (0x14B)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_msc_id_1_module_voltage_sum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_msc_id_1_module_voltage_avg;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_msc_id_1_module_voltage_min;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_msc_id_1_module_voltage_max;
-
-    // Publishers for message: Slave_11_MSC_ID_2 (0x14C)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_msc_id_2_module_voltage_delta;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_msc_id_2_module_ic_voltage;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_msc_id_2_module_open_wire;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_msc_id_2_module_ic_temperature;
-
-    // Publishers for message: Slave_12_Voltage_ID_1 (0x14D)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_4;
-
-    // Publishers for message: Slave_12_Voltage_ID_2 (0x14E)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_7;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_8;
-
-    // Publishers for message: Slave_12_Voltage_ID_3 (0x14F)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_9;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_10;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_11;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_12;
-
-    // Publishers for message: Slave_12_Temperature_ID_1 (0x150)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_4;
-
-    // Publishers for message: Slave_12_Temperature_ID_2 (0x151)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_temperature_id_2_temperature_value_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_temperature_id_2_temperature_value_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_temperature_id_2_temperature_maximum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_temperature_id_2_temperature_delta;
-
-    // Publishers for message: Slave_12_MSC_ID_1 (0x152)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_msc_id_1_module_voltage_sum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_msc_id_1_module_voltage_avg;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_msc_id_1_module_voltage_min;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_msc_id_1_module_voltage_max;
-
-    // Publishers for message: Slave_12_MSC_ID_2 (0x153)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_msc_id_2_module_voltage_delta;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_msc_id_2_module_ic_voltage;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_msc_id_2_module_open_wire;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_msc_id_2_module_ic_temperature;
-
-    // Publishers for message: HV500_SetMaxDcBrakeCurrent (0x164)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_setmaxdcbrakecurrent_cmd_maxdcbrakecurrent;
-
-    // Publishers for message: HV500_SetDriveEnable (0x184)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_setdriveenable_cmd_driveenable;
+    // Publishers for message: INV2_SetDriveEnable (0x185)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_setdriveenable_inv2_cmd_driveenable;
 
     // Publishers for message: RES (0x191)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_res_signal;
 
-    // Publishers for message: Slave_06_Voltage_ID_2 (0x1A4)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_7;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_8;
+    // Publishers for message: INV1_TargetIq (0x3E4)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_targetiq_inv1_controlmode;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_targetiq_inv1_targetiq;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_targetiq_inv1_motorposition;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_targetiq_inv1_ismotorstill;
 
-    // Publishers for message: Slave_10_MSC_ID_1 (0x1B4)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_msc_id_1_module_voltage_sum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_msc_id_1_module_voltage_avg;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_msc_id_1_module_voltage_min;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_msc_id_1_module_voltage_max;
+    // Publishers for message: INV2_TargetIq (0x3E5)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_targetiq_inv2_controlmode;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_targetiq_inv2_targetiq;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_targetiq_inv2_motorposition;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_targetiq_inv2_ismotorstill;
 
-    // Publishers for message: Slave_01_Temperature_ID_2 (0x1C4)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_temperature_id_2_temperature_value_5;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_temperature_id_2_temperature_value_6;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_temperature_id_2_temperature_maximum;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_temperature_id_2_temperature_delta;
+    // Publishers for message: INV1_ERPM_DUTY_VOLTAGE (0x404)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_erpm_duty_voltage_inv1_actual_erpm;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_erpm_duty_voltage_inv1_actual_duty;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_erpm_duty_voltage_inv1_actual_inputvoltage;
 
-    // Publishers for message: HV500_TargetIq (0x3E4)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_targetiq_controlmode;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_targetiq_targetiq;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_targetiq_motorposition;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_targetiq_ismotorstill;
-
-    // Publishers for message: HV500_ERPM_DUTY_VOLTAGE (0x404)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_erpm_duty_voltage_actual_erpm;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_erpm_duty_voltage_actual_duty;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_erpm_duty_voltage_actual_inputvoltage;
+    // Publishers for message: INV2_ERPM_DUTY_VOLTAGE (0x405)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_erpm_duty_voltage_inv2_actual_erpm;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_erpm_duty_voltage_inv2_actual_duty;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_erpm_duty_voltage_inv2_actual_inputvoltage;
 
     // Publishers for message: IVT_Msg_Cmd (0x411)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_ivt_msg_cmd_ivt_id_cmd;
@@ -732,46 +272,84 @@ private:
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_ivt_msg_cmd_val_5d_get_can_id_sn_command;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_ivt_msg_cmd_val_5f_get_can_id_sn_response;
 
-    // Publishers for message: HV500_AC_DC_current (0x424)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_ac_dc_current_actual_accurrent;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_ac_dc_current_actual_dccurrent;
+    // Publishers for message: INV1_AC_DC_current (0x424)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_ac_dc_current_inv1_actual_accurrent;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_ac_dc_current_inv1_actual_dccurrent;
 
-    // Publishers for message: HV500_Temperatures (0x444)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_temperatures_actual_tempcontroller;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_temperatures_actual_tempmotor;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_temperatures_actual_faultcode;
+    // Publishers for message: INV2_AC_DC_current (0x425)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_ac_dc_current_inv2_actual_accurrent;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_ac_dc_current_inv2_actual_dccurrent;
 
-    // Publishers for message: HV500_FOC (0x464)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_foc_actual_foc_id;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_foc_actual_foc_iq;
+    // Publishers for message: INV1_Temperatures (0x444)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_temperatures_inv1_actual_tempcontroller;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_temperatures_inv1_actual_tempmotor;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_temperatures_inv1_actual_faultcode;
+
+    // Publishers for message: INV2_Temperatures (0x445)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_temperatures_inv2_actual_tempcontroller;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_temperatures_inv2_actual_tempmotor;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_temperatures_inv2_actual_faultcode;
+
+    // Publishers for message: INV1_FOC (0x464)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_foc_inv1_actual_foc_id;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_foc_inv1_actual_foc_iq;
+
+    // Publishers for message: INV2_FOC (0x465)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_foc_inv2_actual_foc_id;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_foc_inv2_actual_foc_iq;
 
     // Publishers for message: CubeMars_position_loop (0x468)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_cubemars_position_loop_position;
 
-    // Publishers for message: HV500_MISC (0x484)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_actual_throttle;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_actual_brake;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_digital_output_4;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_digital_output_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_digital_output_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_digital_output_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_digital_input_4;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_digital_input_3;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_digital_input_2;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_digital_input_1;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_drive_enable;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_motor_temp_limit;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_motor_accel_limit;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_input_voltage_limit;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_igbt_temp_limit;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_igbt_accel_limit;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_drive_enable_limit;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_dc_current_limit;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_capacitor_temp_limit;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_power_limit;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_rpm_max_limit;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_rpm_min_limit;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_misc_can_map_version;
+    // Publishers for message: INV1_MISC (0x484)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_actual_throttle;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_actual_brake;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_digital_output_4;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_digital_output_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_digital_output_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_digital_output_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_digital_input_4;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_digital_input_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_digital_input_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_digital_input_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_drive_enable;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_motor_temp_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_motor_accel_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_input_voltage_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_igbt_temp_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_igbt_accel_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_drive_enable_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_dc_current_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_capacitor_temp_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_power_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_rpm_max_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_rpm_min_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_misc_inv1_can_map_version;
+
+    // Publishers for message: INV2_MISC (0x485)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_actual_throttle;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_actual_brake;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_digital_output_4;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_digital_output_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_digital_output_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_digital_output_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_digital_input_4;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_digital_input_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_digital_input_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_digital_input_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_drive_enable;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_motor_temp_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_motor_accel_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_input_voltage_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_igbt_temp_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_igbt_accel_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_drive_enable_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_dc_current_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_capacitor_temp_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_power_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_rpm_max_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_rpm_min_limit;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_misc_inv2_can_map_version;
 
     // Publishers for message: VCU_RPM_TARGET (0x499)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_rpm_target_rpm_target;
@@ -779,17 +357,29 @@ private:
     // Publishers for message: VCU_TORQUE_TARGET (0x49A)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_torque_target_torque_target;
 
-    // Publishers for message: HV500_MinMaxAcCurrent (0x4A4)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_minmaxaccurrent_maxaccurrent;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_minmaxaccurrent_availablemaxaccurrent;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_minmaxaccurrent_minaccurrent;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_minmaxaccurrent_availableminaccurrent;
+    // Publishers for message: INV1_MinMaxAcCurrent (0x4A4)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_minmaxaccurrent_inv1_maxaccurrent;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_minmaxaccurrent_inv1_availablemaxaccurrent;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_minmaxaccurrent_inv1_minaccurrent;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_minmaxaccurrent_inv1_availableminaccurrent;
 
-    // Publishers for message: HV500_MinMaxDcCurrent (0x4C4)
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_minmaxdccurrent_maxdccurrent;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_minmaxdccurrent_availablemaxdccurrent;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_minmaxdccurrent_mindccurrent;
-    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_hv500_minmaxdccurrent_availablemindccurrent;
+    // Publishers for message: INV2_MinMaxAcCurrent (0x4A5)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_minmaxaccurrent_inv2_maxaccurrent;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_minmaxaccurrent_inv2_availablemaxaccurrent;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_minmaxaccurrent_inv2_minaccurrent;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_minmaxaccurrent_inv2_availableminaccurrent;
+
+    // Publishers for message: INV1_MinMaxDcCurrent (0x4C4)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_minmaxdccurrent_inv1_maxdccurrent;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_minmaxdccurrent_inv1_availablemaxdccurrent;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_minmaxdccurrent_inv1_mindccurrent;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv1_minmaxdccurrent_inv1_availablemindccurrent;
+
+    // Publishers for message: INV2_MinMaxDcCurrent (0x4C5)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_minmaxdccurrent_inv2_maxdccurrent;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_minmaxdccurrent_inv2_availablemaxdccurrent;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_minmaxdccurrent_inv2_mindccurrent;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_inv2_minmaxdccurrent_inv2_availablemindccurrent;
 
     // Publishers for message: DV_dynamics_1 (0x500)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_dv_dynamics_1_speed_actual;
@@ -1007,6 +597,12 @@ private:
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_ivt_msg_result_wh_ivt_msgcount_result_wh;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_ivt_msg_result_wh_ivt_result_wh;
 
+    // Publishers for message: Slave_01_Voltage_ID_1 (0x600)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_4;
+
     // Publishers for message: VCU_IGN_R2D (0x600)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_ign_r2d_ignition_manual;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_ign_r2d_r2d_manual;
@@ -1016,6 +612,510 @@ private:
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_ign_r2d_vcu_state;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_ign_r2d_r2d_button_raw;
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_autonomous_t26_vcu_ign_r2d_ignition_switch_raw;
+
+    // Publishers for message: Slave_01_Voltage_ID_2 (0x601)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_7;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_8;
+
+    // Publishers for message: Slave_01_Voltage_ID_3 (0x602)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_9;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_10;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_11;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_12;
+
+    // Publishers for message: Slave_01_Temperature_ID_1 (0x603)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_4;
+
+    // Publishers for message: Slave_01_Temperature_ID_2 (0x604)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_temperature_id_2_temperature_value_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_temperature_id_2_temperature_value_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_temperature_id_2_temperature_maximum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_temperature_id_2_temperature_delta;
+
+    // Publishers for message: Slave_01_MSC_ID_1 (0x605)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_1_module_voltage_sum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_1_module_voltage_avg;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_1_module_voltage_min;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_1_module_voltage_max;
+
+    // Publishers for message: Slave_01_MSC_ID_2 (0x606)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_2_module_voltage_delta;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_2_module_ic_voltage;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_2_module_open_wire;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_2_module_ic_temperature;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_2_module_overvoltage;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_2_module_undervoltage;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_01_msc_id_2_module_under_over_identifier;
+
+    // Publishers for message: Slave_02_Voltage_ID_1 (0x607)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_4;
+
+    // Publishers for message: Slave_02_Voltage_ID_2 (0x608)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_7;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_8;
+
+    // Publishers for message: Slave_02_Voltage_ID_3 (0x609)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_9;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_10;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_11;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_12;
+
+    // Publishers for message: Slave_02_Temperature_ID_1 (0x60A)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_4;
+
+    // Publishers for message: Slave_02_Temperature_ID_2 (0x60B)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_temperature_id_2_temperature_value_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_temperature_id_2_temperature_value_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_temperature_id_2_temperature_maximum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_temperature_id_2_temperature_delta;
+
+    // Publishers for message: Slave_02_MSC_ID_1 (0x60C)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_1_module_voltage_sum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_1_module_voltage_avg;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_1_module_voltage_min;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_1_module_voltage_max;
+
+    // Publishers for message: Slave_02_MSC_ID_2 (0x60D)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_2_module_voltage_delta;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_2_module_ic_voltage;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_2_module_open_wire;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_2_module_ic_temperature;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_2_module_overvoltage;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_2_module_undervoltage;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_02_msc_id_2_module_under_over_identifier;
+
+    // Publishers for message: Slave_03_Voltage_ID_1 (0x60E)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_4;
+
+    // Publishers for message: Slave_03_Voltage_ID_2 (0x60F)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_7;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_8;
+
+    // Publishers for message: Slave_03_Voltage_ID_3 (0x610)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_9;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_10;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_11;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_12;
+
+    // Publishers for message: Slave_03_Temperature_ID_1 (0x611)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_4;
+
+    // Publishers for message: Slave_03_Temperature_ID_2 (0x612)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_temperature_id_2_temperature_value_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_temperature_id_2_temperature_value_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_temperature_id_2_temperature_maximum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_temperature_id_2_temperature_delta;
+
+    // Publishers for message: Slave_03_MSC_ID_1 (0x613)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_msc_id_1_module_voltage_sum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_msc_id_1_module_voltage_avg;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_msc_id_1_module_voltage_min;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_msc_id_1_module_voltage_max;
+
+    // Publishers for message: Slave_03_MSC_ID_2 (0x614)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_msc_id_2_module_voltage_delta;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_msc_id_2_module_ic_voltage;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_msc_id_2_module_open_wire;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_03_msc_id_2_module_ic_temperature;
+
+    // Publishers for message: Slave_04_Voltage_ID_1 (0x615)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_4;
+
+    // Publishers for message: Slave_04_Voltage_ID_2 (0x616)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_7;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_8;
+
+    // Publishers for message: Slave_04_Voltage_ID_3 (0x617)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_9;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_10;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_11;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_12;
+
+    // Publishers for message: Slave_04_Temperature_ID_1 (0x618)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_4;
+
+    // Publishers for message: Slave_04_Temperature_ID_2 (0x619)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_temperature_id_2_temperature_value_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_temperature_id_2_temperature_value_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_temperature_id_2_temperature_maximum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_temperature_id_2_temperature_delta;
+
+    // Publishers for message: Slave_04_MSC_ID_1 (0x61A)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_msc_id_1_module_voltage_sum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_msc_id_1_module_voltage_avg;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_msc_id_1_module_voltage_min;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_msc_id_1_module_voltage_max;
+
+    // Publishers for message: Slave_04_MSC_ID_2 (0x61B)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_msc_id_2_module_voltage_delta;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_msc_id_2_module_ic_voltage;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_msc_id_2_module_open_wire;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_04_msc_id_2_module_ic_temperature;
+
+    // Publishers for message: Slave_05_Voltage_ID_1 (0x61C)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_4;
+
+    // Publishers for message: Slave_05_Voltage_ID_2 (0x61D)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_7;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_8;
+
+    // Publishers for message: Slave_05_Voltage_ID_3 (0x61E)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_9;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_10;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_11;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_12;
+
+    // Publishers for message: Slave_05_Temperature_ID_1 (0x61F)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_4;
+
+    // Publishers for message: Slave_05_Temperature_ID_2 (0x620)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_temperature_id_2_temperature_value_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_temperature_id_2_temperature_value_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_temperature_id_2_temperature_maximum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_temperature_id_2_temperature_delta;
+
+    // Publishers for message: Slave_05_MSC_ID_1 (0x621)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_msc_id_1_module_voltage_sum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_msc_id_1_module_voltage_avg;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_msc_id_1_module_voltage_min;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_msc_id_1_module_voltage_max;
+
+    // Publishers for message: Slave_05_MSC_ID_2 (0x622)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_msc_id_2_module_voltage_delta;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_msc_id_2_module_ic_voltage;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_msc_id_2_module_open_wire;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_05_msc_id_2_module_ic_temperature;
+
+    // Publishers for message: Slave_06_Voltage_ID_1 (0x623)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_4;
+
+    // Publishers for message: Slave_06_Voltage_ID_2 (0x624)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_7;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_8;
+
+    // Publishers for message: Slave_06_Voltage_ID_3 (0x625)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_9;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_10;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_11;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_12;
+
+    // Publishers for message: Slave_06_Temperature_ID_1 (0x626)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_4;
+
+    // Publishers for message: Slave_06_Temperature_ID_2 (0x627)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_temperature_id_2_temperature_value_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_temperature_id_2_temperature_value_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_temperature_id_2_temperature_maximum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_temperature_id_2_temperature_delta;
+
+    // Publishers for message: Slave_06_MSC_ID_1 (0x628)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_msc_id_1_module_voltage_sum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_msc_id_1_module_voltage_avg;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_msc_id_1_module_voltage_min;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_msc_id_1_module_voltage_max;
+
+    // Publishers for message: Slave_06_MSC_ID_2 (0x629)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_msc_id_2_module_voltage_delta;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_msc_id_2_module_ic_voltage;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_msc_id_2_module_open_wire;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_06_msc_id_2_module_ic_temperature;
+
+    // Publishers for message: Slave_07_Voltage_ID_1 (0x62A)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_4;
+
+    // Publishers for message: Slave_07_Voltage_ID_2 (0x62B)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_7;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_8;
+
+    // Publishers for message: Slave_07_Voltage_ID_3 (0x62C)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_9;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_10;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_11;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_12;
+
+    // Publishers for message: Slave_07_Temperature_ID_1 (0x62D)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_4;
+
+    // Publishers for message: Slave_07_Temperature_ID_2 (0x62E)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_temperature_id_2_temperature_value_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_temperature_id_2_temperature_value_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_temperature_id_2_temperature_maximum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_temperature_id_2_temperature_delta;
+
+    // Publishers for message: Slave_07_MSC_ID_1 (0x62F)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_msc_id_1_module_voltage_sum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_msc_id_1_module_voltage_avg;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_msc_id_1_module_voltage_min;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_msc_id_1_module_voltage_max;
+
+    // Publishers for message: Slave_07_MSC_ID_2 (0x630)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_msc_id_2_module_voltage_delta;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_msc_id_2_module_ic_voltage;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_msc_id_2_module_open_wire;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_07_msc_id_2_module_ic_temperature;
+
+    // Publishers for message: Slave_08_Voltage_ID_1 (0x631)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_4;
+
+    // Publishers for message: Slave_08_Voltage_ID_2 (0x632)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_7;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_8;
+
+    // Publishers for message: Slave_08_Voltage_ID_3 (0x633)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_9;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_10;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_11;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_12;
+
+    // Publishers for message: Slave_08_Temperature_ID_1 (0x634)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_4;
+
+    // Publishers for message: Slave_08_Temperature_ID_2 (0x635)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_temperature_id_2_temperature_value_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_temperature_id_2_temperature_value_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_temperature_id_2_temperature_maximum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_temperature_id_2_temperature_delta;
+
+    // Publishers for message: Slave_08_MSC_ID_1 (0x636)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_msc_id_1_module_voltage_sum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_msc_id_1_module_voltage_avg;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_msc_id_1_module_voltage_min;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_msc_id_1_module_voltage_max;
+
+    // Publishers for message: Slave_08_MSC_ID_2 (0x637)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_msc_id_2_module_voltage_delta;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_msc_id_2_module_ic_voltage;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_msc_id_2_module_open_wire;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_08_msc_id_2_module_ic_temperature;
+
+    // Publishers for message: Slave_09_Voltage_ID_1 (0x638)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_4;
+
+    // Publishers for message: Slave_09_Voltage_ID_2 (0x639)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_7;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_8;
+
+    // Publishers for message: Slave_09_Voltage_ID_3 (0x63A)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_9;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_10;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_11;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_12;
+
+    // Publishers for message: Slave_09_Temperature_ID_1 (0x63B)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_4;
+
+    // Publishers for message: Slave_09_Temperature_ID_2 (0x63C)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_temperature_id_2_temperature_value_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_temperature_id_2_temperature_value_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_temperature_id_2_temperature_maximum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_temperature_id_2_temperature_delta;
+
+    // Publishers for message: Slave_09_MSC_ID_1 (0x63D)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_msc_id_1_module_voltage_sum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_msc_id_1_module_voltage_avg;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_msc_id_1_module_voltage_min;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_msc_id_1_module_voltage_max;
+
+    // Publishers for message: Slave_09_MSC_ID_2 (0x63E)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_msc_id_2_module_voltage_delta;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_msc_id_2_module_ic_voltage;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_msc_id_2_module_open_wire;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_09_msc_id_2_module_ic_temperature;
+
+    // Publishers for message: Slave_10_Voltage_ID_1 (0x63F)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_4;
+
+    // Publishers for message: Slave_10_Voltage_ID_2 (0x640)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_7;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_8;
+
+    // Publishers for message: Slave_10_Voltage_ID_3 (0x641)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_9;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_10;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_11;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_12;
+
+    // Publishers for message: Slave_10_Temperature_ID_1 (0x642)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_4;
+
+    // Publishers for message: Slave_10_Temperature_ID_2 (0x643)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_temperature_id_2_temperature_value_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_temperature_id_2_temperature_value_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_temperature_id_2_temperature_maximum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_temperature_id_2_temperature_delta;
+
+    // Publishers for message: Slave_10_MSC_ID_1 (0x644)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_msc_id_1_module_voltage_sum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_msc_id_1_module_voltage_avg;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_msc_id_1_module_voltage_min;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_msc_id_1_module_voltage_max;
+
+    // Publishers for message: Slave_10_MSC_ID_2 (0x645)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_msc_id_2_module_voltage_delta;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_msc_id_2_module_ic_voltage;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_msc_id_2_module_open_wire;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_10_msc_id_2_module_ic_temperature;
+
+    // Publishers for message: Slave_11_Voltage_ID_1 (0x646)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_4;
+
+    // Publishers for message: Slave_11_Voltage_ID_2 (0x647)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_7;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_8;
+
+    // Publishers for message: Slave_11_Voltage_ID_3 (0x648)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_9;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_10;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_11;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_12;
+
+    // Publishers for message: Slave_11_Temperature_ID_1 (0x649)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_4;
+
+    // Publishers for message: Slave_11_Temperature_ID_2 (0x64A)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_temperature_id_2_temperature_value_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_temperature_id_2_temperature_value_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_temperature_id_2_temperature_maximum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_temperature_id_2_temperature_delta;
+
+    // Publishers for message: Slave_11_MSC_ID_1 (0x64B)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_msc_id_1_module_voltage_sum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_msc_id_1_module_voltage_avg;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_msc_id_1_module_voltage_min;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_msc_id_1_module_voltage_max;
+
+    // Publishers for message: Slave_11_MSC_ID_2 (0x64C)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_msc_id_2_module_voltage_delta;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_msc_id_2_module_ic_voltage;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_msc_id_2_module_open_wire;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_11_msc_id_2_module_ic_temperature;
+
+    // Publishers for message: Slave_12_Voltage_ID_1 (0x64D)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_4;
+
+    // Publishers for message: Slave_12_Voltage_ID_2 (0x64E)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_7;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_8;
+
+    // Publishers for message: Slave_12_Voltage_ID_3 (0x64F)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_9;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_10;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_11;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_12;
+
+    // Publishers for message: Slave_12_Temperature_ID_1 (0x650)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_1;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_2;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_3;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_4;
+
+    // Publishers for message: Slave_12_Temperature_ID_2 (0x651)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_temperature_id_2_temperature_value_5;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_temperature_id_2_temperature_value_6;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_temperature_id_2_temperature_maximum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_temperature_id_2_temperature_delta;
+
+    // Publishers for message: Slave_12_MSC_ID_1 (0x652)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_msc_id_1_module_voltage_sum;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_msc_id_1_module_voltage_avg;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_msc_id_1_module_voltage_min;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_msc_id_1_module_voltage_max;
+
+    // Publishers for message: Slave_12_MSC_ID_2 (0x653)
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_msc_id_2_module_voltage_delta;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_msc_id_2_module_ic_voltage;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_msc_id_2_module_open_wire;
+    rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_slave_12_msc_id_2_module_ic_temperature;
 
     // Publishers for message: Master_MSC_ID_1 (0x701)
     rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr pub_powertrain_t26_master_msc_id_1_mcu_vref;

@@ -4,8 +4,10 @@
 CanBridgeImpl::CanBridgeImpl(rclcpp::Node* node) : node_(node) {
     auto sensor_qos = rclcpp::QoS(10).best_effort();
 
-    pub_powertrain_t26_hv500_setaccurrent_cmd_targetaccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_setaccurrent/cmd_targetaccurrent", sensor_qos);
-    pub_powertrain_t26_hv500_setbrakecurrent_cmd_targetbrakecurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_setbrakecurrent/cmd_targetbrakecurrent", sensor_qos);
+    pub_powertrain_t26_inv1_setaccurrent_inv1_cmd_targetaccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_setaccurrent/inv1_cmd_targetaccurrent", sensor_qos);
+    pub_powertrain_t26_inv2_setaccurrent_inv2_cmd_targetaccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_setaccurrent/inv2_cmd_targetaccurrent", sensor_qos);
+    pub_powertrain_t26_inv1_setbrakecurrent_inv1_cmd_targetbrakecurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_setbrakecurrent/inv1_cmd_targetbrakecurrent", sensor_qos);
+    pub_powertrain_t26_inv2_setbrakecurrent_inv2_cmd_targetbrakecurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_setbrakecurrent/inv2_cmd_targetbrakecurrent", sensor_qos);
     pub_autonomous_t26_acu_assi_state = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/acu/assi_state", sensor_qos);
     pub_autonomous_t26_acu_acu_state = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/acu/acu_state", sensor_qos);
     pub_autonomous_t26_acu_acu_cpu_temp = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/acu/acu_cpu_temp", sensor_qos);
@@ -21,376 +23,54 @@ CanBridgeImpl::CanBridgeImpl(rclcpp::Node* node) : node_(node) {
     pub_autonomous_t26_jetson_cpu = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/jetson/cpu", sensor_qos);
     pub_autonomous_t26_jetson_gpu = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/jetson/gpu", sensor_qos);
     pub_autonomous_t26_jetson_emergency_cause = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/jetson/emergency_cause", sensor_qos);
-    pub_powertrain_t26_hv500_seterpm_cmd_targetspeed = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_seterpm/cmd_targetspeed", sensor_qos);
+    pub_powertrain_t26_inv1_seterpm_inv1_cmd_targetspeed = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_seterpm/inv1_cmd_targetspeed", sensor_qos);
+    pub_powertrain_t26_inv2_seterpm_inv2_cmd_targetspeed = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_seterpm/inv2_cmd_targetspeed", sensor_qos);
     pub_powertrain_t26_start_charging_charging_request = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/start_charging/charging_request", sensor_qos);
     pub_autonomous_t26_vcu_hv_hv = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/vcu_hv/hv", sensor_qos);
     pub_autonomous_t26_vcu_hv_brake_pressure_front = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/vcu_hv/brake_pressure_front", sensor_qos);
     pub_autonomous_t26_vcu_hv_brake_pressure_rear = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/vcu_hv/brake_pressure_rear", sensor_qos);
     pub_powertrain_t26_start_balancing_balancing_request = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/start_balancing/balancing_request", sensor_qos);
     pub_powertrain_t26_start_precharge_precharge_request = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/start_precharge/precharge_request", sensor_qos);
-    pub_powertrain_t26_hv500_setposition_cmd_targetposition = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_setposition/cmd_targetposition", sensor_qos);
-    pub_powertrain_t26_hv500_setrelcurrent_cmd_targetrelativecurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_setrelcurrent/cmd_targetrelativecurrent", sensor_qos);
-    pub_powertrain_t26_hv500_setrelbrakecurrent_cmd_targerelativebrakecurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_setrelbrakecurrent/cmd_targerelativebrakecurrent", sensor_qos);
+    pub_powertrain_t26_inv1_setposition_inv1_cmd_targetposition = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_setposition/inv1_cmd_targetposition", sensor_qos);
+    pub_powertrain_t26_inv2_setposition_inv2_cmd_targetposition = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_setposition/inv2_cmd_targetposition", sensor_qos);
+    pub_powertrain_t26_inv1_setrelcurrent_inv1_cmd_targetrelativecurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_setrelcurrent/inv1_cmd_targetrelativecurrent", sensor_qos);
+    pub_powertrain_t26_inv2_setrelcurrent_inv2_cmd_targetrelativecurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_setrelcurrent/inv2_cmd_targetrelativecurrent", sensor_qos);
+    pub_powertrain_t26_inv1_setrelbrakecurrent_inv1_cmd_tgtrelbrakecurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_setrelbrakecurrent/inv1_cmd_tgtrelbrakecurrent", sensor_qos);
+    pub_powertrain_t26_inv2_setrelbrakecurrent_inv2_cmd_tgtrelbrakecurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_setrelbrakecurrent/inv2_cmd_tgtrelbrakecurrent", sensor_qos);
     pub_powertrain_t26_start_programmer_programming_request = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/start_programmer/programming_request", sensor_qos);
-    pub_powertrain_t26_hv500_setdigoutput_cmd_setdigoutput4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_setdigoutput/cmd_setdigoutput4", sensor_qos);
-    pub_powertrain_t26_hv500_setdigoutput_cmd_setdigoutput3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_setdigoutput/cmd_setdigoutput3", sensor_qos);
-    pub_powertrain_t26_hv500_setdigoutput_cmd_setdigoutput2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_setdigoutput/cmd_setdigoutput2", sensor_qos);
-    pub_powertrain_t26_hv500_setdigoutput_cmd_setdigoutput1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_setdigoutput/cmd_setdigoutput1", sensor_qos);
-    pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_1/cell_voltage_1", sensor_qos);
-    pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_1/cell_voltage_2", sensor_qos);
-    pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_1/cell_voltage_3", sensor_qos);
-    pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_1/cell_voltage_4", sensor_qos);
-    pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_2/cell_voltage_5", sensor_qos);
-    pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_2/cell_voltage_6", sensor_qos);
-    pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_2/cell_voltage_7", sensor_qos);
-    pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_2/cell_voltage_8", sensor_qos);
-    pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_3/cell_voltage_9", sensor_qos);
-    pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_3/cell_voltage_10", sensor_qos);
-    pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_3/cell_voltage_11", sensor_qos);
-    pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_3/cell_voltage_12", sensor_qos);
-    pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_temperature_id_1/temperature_value_1", sensor_qos);
-    pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_temperature_id_1/temperature_value_2", sensor_qos);
-    pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_temperature_id_1/temperature_value_3", sensor_qos);
-    pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_temperature_id_1/temperature_value_4", sensor_qos);
-    pub_powertrain_t26_hv500_setmaxaccurrent_cmd_maxaccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_setmaxaccurrent/cmd_maxaccurrent", sensor_qos);
-    pub_powertrain_t26_slave_01_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_1/module_voltage_sum", sensor_qos);
-    pub_powertrain_t26_slave_01_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_1/module_voltage_avg", sensor_qos);
-    pub_powertrain_t26_slave_01_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_1/module_voltage_min", sensor_qos);
-    pub_powertrain_t26_slave_01_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_1/module_voltage_max", sensor_qos);
-    pub_powertrain_t26_slave_01_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_2/module_voltage_delta", sensor_qos);
-    pub_powertrain_t26_slave_01_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_2/module_ic_voltage", sensor_qos);
-    pub_powertrain_t26_slave_01_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_2/module_open_wire", sensor_qos);
-    pub_powertrain_t26_slave_01_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_2/module_ic_temperature", sensor_qos);
-    pub_powertrain_t26_slave_01_msc_id_2_module_overvoltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_2/module_overvoltage", sensor_qos);
-    pub_powertrain_t26_slave_01_msc_id_2_module_undervoltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_2/module_undervoltage", sensor_qos);
-    pub_powertrain_t26_slave_01_msc_id_2_module_under_over_identifier = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_2/module_under_over_identifier", sensor_qos);
-    pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_1/cell_voltage_1", sensor_qos);
-    pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_1/cell_voltage_2", sensor_qos);
-    pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_1/cell_voltage_3", sensor_qos);
-    pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_1/cell_voltage_4", sensor_qos);
-    pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_2/cell_voltage_5", sensor_qos);
-    pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_2/cell_voltage_6", sensor_qos);
-    pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_2/cell_voltage_7", sensor_qos);
-    pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_2/cell_voltage_8", sensor_qos);
-    pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_3/cell_voltage_9", sensor_qos);
-    pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_3/cell_voltage_10", sensor_qos);
-    pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_3/cell_voltage_11", sensor_qos);
-    pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_3/cell_voltage_12", sensor_qos);
-    pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_temperature_id_1/temperature_value_1", sensor_qos);
-    pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_temperature_id_1/temperature_value_2", sensor_qos);
-    pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_temperature_id_1/temperature_value_3", sensor_qos);
-    pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_temperature_id_1/temperature_value_4", sensor_qos);
-    pub_powertrain_t26_slave_02_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_temperature_id_2/temperature_value_5", sensor_qos);
-    pub_powertrain_t26_slave_02_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_temperature_id_2/temperature_value_6", sensor_qos);
-    pub_powertrain_t26_slave_02_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_temperature_id_2/temperature_maximum", sensor_qos);
-    pub_powertrain_t26_slave_02_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_temperature_id_2/temperature_delta", sensor_qos);
-    pub_powertrain_t26_slave_02_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_1/module_voltage_sum", sensor_qos);
-    pub_powertrain_t26_slave_02_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_1/module_voltage_avg", sensor_qos);
-    pub_powertrain_t26_slave_02_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_1/module_voltage_min", sensor_qos);
-    pub_powertrain_t26_slave_02_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_1/module_voltage_max", sensor_qos);
-    pub_powertrain_t26_slave_02_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_2/module_voltage_delta", sensor_qos);
-    pub_powertrain_t26_slave_02_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_2/module_ic_voltage", sensor_qos);
-    pub_powertrain_t26_slave_02_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_2/module_open_wire", sensor_qos);
-    pub_powertrain_t26_slave_02_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_2/module_ic_temperature", sensor_qos);
-    pub_powertrain_t26_slave_02_msc_id_2_module_overvoltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_2/module_overvoltage", sensor_qos);
-    pub_powertrain_t26_slave_02_msc_id_2_module_undervoltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_2/module_undervoltage", sensor_qos);
-    pub_powertrain_t26_slave_02_msc_id_2_module_under_over_identifier = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_2/module_under_over_identifier", sensor_qos);
-    pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_1/cell_voltage_1", sensor_qos);
-    pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_1/cell_voltage_2", sensor_qos);
-    pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_1/cell_voltage_3", sensor_qos);
-    pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_1/cell_voltage_4", sensor_qos);
-    pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_2/cell_voltage_5", sensor_qos);
-    pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_2/cell_voltage_6", sensor_qos);
-    pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_2/cell_voltage_7", sensor_qos);
-    pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_2/cell_voltage_8", sensor_qos);
-    pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_3/cell_voltage_9", sensor_qos);
-    pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_3/cell_voltage_10", sensor_qos);
-    pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_3/cell_voltage_11", sensor_qos);
-    pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_3/cell_voltage_12", sensor_qos);
-    pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_temperature_id_1/temperature_value_1", sensor_qos);
-    pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_temperature_id_1/temperature_value_2", sensor_qos);
-    pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_temperature_id_1/temperature_value_3", sensor_qos);
-    pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_temperature_id_1/temperature_value_4", sensor_qos);
-    pub_powertrain_t26_slave_03_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_temperature_id_2/temperature_value_5", sensor_qos);
-    pub_powertrain_t26_slave_03_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_temperature_id_2/temperature_value_6", sensor_qos);
-    pub_powertrain_t26_slave_03_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_temperature_id_2/temperature_maximum", sensor_qos);
-    pub_powertrain_t26_slave_03_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_temperature_id_2/temperature_delta", sensor_qos);
-    pub_powertrain_t26_slave_03_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_msc_id_1/module_voltage_sum", sensor_qos);
-    pub_powertrain_t26_slave_03_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_msc_id_1/module_voltage_avg", sensor_qos);
-    pub_powertrain_t26_slave_03_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_msc_id_1/module_voltage_min", sensor_qos);
-    pub_powertrain_t26_slave_03_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_msc_id_1/module_voltage_max", sensor_qos);
-    pub_powertrain_t26_slave_03_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_msc_id_2/module_voltage_delta", sensor_qos);
-    pub_powertrain_t26_slave_03_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_msc_id_2/module_ic_voltage", sensor_qos);
-    pub_powertrain_t26_slave_03_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_msc_id_2/module_open_wire", sensor_qos);
-    pub_powertrain_t26_slave_03_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_msc_id_2/module_ic_temperature", sensor_qos);
-    pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_1/cell_voltage_1", sensor_qos);
-    pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_1/cell_voltage_2", sensor_qos);
-    pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_1/cell_voltage_3", sensor_qos);
-    pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_1/cell_voltage_4", sensor_qos);
-    pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_2/cell_voltage_5", sensor_qos);
-    pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_2/cell_voltage_6", sensor_qos);
-    pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_2/cell_voltage_7", sensor_qos);
-    pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_2/cell_voltage_8", sensor_qos);
-    pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_3/cell_voltage_9", sensor_qos);
-    pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_3/cell_voltage_10", sensor_qos);
-    pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_3/cell_voltage_11", sensor_qos);
-    pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_3/cell_voltage_12", sensor_qos);
-    pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_temperature_id_1/temperature_value_1", sensor_qos);
-    pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_temperature_id_1/temperature_value_2", sensor_qos);
-    pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_temperature_id_1/temperature_value_3", sensor_qos);
-    pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_temperature_id_1/temperature_value_4", sensor_qos);
-    pub_powertrain_t26_slave_04_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_temperature_id_2/temperature_value_5", sensor_qos);
-    pub_powertrain_t26_slave_04_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_temperature_id_2/temperature_value_6", sensor_qos);
-    pub_powertrain_t26_slave_04_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_temperature_id_2/temperature_maximum", sensor_qos);
-    pub_powertrain_t26_slave_04_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_temperature_id_2/temperature_delta", sensor_qos);
-    pub_powertrain_t26_slave_04_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_msc_id_1/module_voltage_sum", sensor_qos);
-    pub_powertrain_t26_slave_04_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_msc_id_1/module_voltage_avg", sensor_qos);
-    pub_powertrain_t26_slave_04_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_msc_id_1/module_voltage_min", sensor_qos);
-    pub_powertrain_t26_slave_04_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_msc_id_1/module_voltage_max", sensor_qos);
-    pub_powertrain_t26_slave_04_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_msc_id_2/module_voltage_delta", sensor_qos);
-    pub_powertrain_t26_slave_04_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_msc_id_2/module_ic_voltage", sensor_qos);
-    pub_powertrain_t26_slave_04_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_msc_id_2/module_open_wire", sensor_qos);
-    pub_powertrain_t26_slave_04_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_msc_id_2/module_ic_temperature", sensor_qos);
-    pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_1/cell_voltage_1", sensor_qos);
-    pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_1/cell_voltage_2", sensor_qos);
-    pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_1/cell_voltage_3", sensor_qos);
-    pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_1/cell_voltage_4", sensor_qos);
-    pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_2/cell_voltage_5", sensor_qos);
-    pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_2/cell_voltage_6", sensor_qos);
-    pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_2/cell_voltage_7", sensor_qos);
-    pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_2/cell_voltage_8", sensor_qos);
-    pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_3/cell_voltage_9", sensor_qos);
-    pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_3/cell_voltage_10", sensor_qos);
-    pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_3/cell_voltage_11", sensor_qos);
-    pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_3/cell_voltage_12", sensor_qos);
-    pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_temperature_id_1/temperature_value_1", sensor_qos);
-    pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_temperature_id_1/temperature_value_2", sensor_qos);
-    pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_temperature_id_1/temperature_value_3", sensor_qos);
-    pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_temperature_id_1/temperature_value_4", sensor_qos);
-    pub_powertrain_t26_slave_05_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_temperature_id_2/temperature_value_5", sensor_qos);
-    pub_powertrain_t26_slave_05_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_temperature_id_2/temperature_value_6", sensor_qos);
-    pub_powertrain_t26_slave_05_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_temperature_id_2/temperature_maximum", sensor_qos);
-    pub_powertrain_t26_slave_05_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_temperature_id_2/temperature_delta", sensor_qos);
-    pub_powertrain_t26_slave_05_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_msc_id_1/module_voltage_sum", sensor_qos);
-    pub_powertrain_t26_slave_05_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_msc_id_1/module_voltage_avg", sensor_qos);
-    pub_powertrain_t26_slave_05_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_msc_id_1/module_voltage_min", sensor_qos);
-    pub_powertrain_t26_slave_05_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_msc_id_1/module_voltage_max", sensor_qos);
-    pub_powertrain_t26_slave_05_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_msc_id_2/module_voltage_delta", sensor_qos);
-    pub_powertrain_t26_slave_05_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_msc_id_2/module_ic_voltage", sensor_qos);
-    pub_powertrain_t26_slave_05_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_msc_id_2/module_open_wire", sensor_qos);
-    pub_powertrain_t26_slave_05_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_msc_id_2/module_ic_temperature", sensor_qos);
-    pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_1/cell_voltage_1", sensor_qos);
-    pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_1/cell_voltage_2", sensor_qos);
-    pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_1/cell_voltage_3", sensor_qos);
-    pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_1/cell_voltage_4", sensor_qos);
-    pub_powertrain_t26_hv500_setmaxacbrakecurrent_cmd_maxacbrakecurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_setmaxacbrakecurrent/cmd_maxacbrakecurrent", sensor_qos);
-    pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_3/cell_voltage_9", sensor_qos);
-    pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_3/cell_voltage_10", sensor_qos);
-    pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_3/cell_voltage_11", sensor_qos);
-    pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_3/cell_voltage_12", sensor_qos);
-    pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_temperature_id_1/temperature_value_1", sensor_qos);
-    pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_temperature_id_1/temperature_value_2", sensor_qos);
-    pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_temperature_id_1/temperature_value_3", sensor_qos);
-    pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_temperature_id_1/temperature_value_4", sensor_qos);
-    pub_powertrain_t26_slave_06_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_temperature_id_2/temperature_value_5", sensor_qos);
-    pub_powertrain_t26_slave_06_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_temperature_id_2/temperature_value_6", sensor_qos);
-    pub_powertrain_t26_slave_06_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_temperature_id_2/temperature_maximum", sensor_qos);
-    pub_powertrain_t26_slave_06_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_temperature_id_2/temperature_delta", sensor_qos);
-    pub_powertrain_t26_slave_06_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_msc_id_1/module_voltage_sum", sensor_qos);
-    pub_powertrain_t26_slave_06_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_msc_id_1/module_voltage_avg", sensor_qos);
-    pub_powertrain_t26_slave_06_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_msc_id_1/module_voltage_min", sensor_qos);
-    pub_powertrain_t26_slave_06_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_msc_id_1/module_voltage_max", sensor_qos);
-    pub_powertrain_t26_slave_06_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_msc_id_2/module_voltage_delta", sensor_qos);
-    pub_powertrain_t26_slave_06_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_msc_id_2/module_ic_voltage", sensor_qos);
-    pub_powertrain_t26_slave_06_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_msc_id_2/module_open_wire", sensor_qos);
-    pub_powertrain_t26_slave_06_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_msc_id_2/module_ic_temperature", sensor_qos);
-    pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_1/cell_voltage_1", sensor_qos);
-    pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_1/cell_voltage_2", sensor_qos);
-    pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_1/cell_voltage_3", sensor_qos);
-    pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_1/cell_voltage_4", sensor_qos);
-    pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_2/cell_voltage_5", sensor_qos);
-    pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_2/cell_voltage_6", sensor_qos);
-    pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_2/cell_voltage_7", sensor_qos);
-    pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_2/cell_voltage_8", sensor_qos);
-    pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_3/cell_voltage_9", sensor_qos);
-    pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_3/cell_voltage_10", sensor_qos);
-    pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_3/cell_voltage_11", sensor_qos);
-    pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_3/cell_voltage_12", sensor_qos);
-    pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_temperature_id_1/temperature_value_1", sensor_qos);
-    pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_temperature_id_1/temperature_value_2", sensor_qos);
-    pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_temperature_id_1/temperature_value_3", sensor_qos);
-    pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_temperature_id_1/temperature_value_4", sensor_qos);
-    pub_powertrain_t26_slave_07_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_temperature_id_2/temperature_value_5", sensor_qos);
-    pub_powertrain_t26_slave_07_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_temperature_id_2/temperature_value_6", sensor_qos);
-    pub_powertrain_t26_slave_07_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_temperature_id_2/temperature_maximum", sensor_qos);
-    pub_powertrain_t26_slave_07_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_temperature_id_2/temperature_delta", sensor_qos);
-    pub_powertrain_t26_slave_07_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_msc_id_1/module_voltage_sum", sensor_qos);
-    pub_powertrain_t26_slave_07_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_msc_id_1/module_voltage_avg", sensor_qos);
-    pub_powertrain_t26_slave_07_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_msc_id_1/module_voltage_min", sensor_qos);
-    pub_powertrain_t26_slave_07_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_msc_id_1/module_voltage_max", sensor_qos);
-    pub_powertrain_t26_slave_07_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_msc_id_2/module_voltage_delta", sensor_qos);
-    pub_powertrain_t26_slave_07_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_msc_id_2/module_ic_voltage", sensor_qos);
-    pub_powertrain_t26_slave_07_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_msc_id_2/module_open_wire", sensor_qos);
-    pub_powertrain_t26_slave_07_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_msc_id_2/module_ic_temperature", sensor_qos);
-    pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_1/cell_voltage_1", sensor_qos);
-    pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_1/cell_voltage_2", sensor_qos);
-    pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_1/cell_voltage_3", sensor_qos);
-    pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_1/cell_voltage_4", sensor_qos);
-    pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_2/cell_voltage_5", sensor_qos);
-    pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_2/cell_voltage_6", sensor_qos);
-    pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_2/cell_voltage_7", sensor_qos);
-    pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_2/cell_voltage_8", sensor_qos);
-    pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_3/cell_voltage_9", sensor_qos);
-    pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_3/cell_voltage_10", sensor_qos);
-    pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_3/cell_voltage_11", sensor_qos);
-    pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_3/cell_voltage_12", sensor_qos);
-    pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_temperature_id_1/temperature_value_1", sensor_qos);
-    pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_temperature_id_1/temperature_value_2", sensor_qos);
-    pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_temperature_id_1/temperature_value_3", sensor_qos);
-    pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_temperature_id_1/temperature_value_4", sensor_qos);
-    pub_powertrain_t26_slave_08_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_temperature_id_2/temperature_value_5", sensor_qos);
-    pub_powertrain_t26_slave_08_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_temperature_id_2/temperature_value_6", sensor_qos);
-    pub_powertrain_t26_slave_08_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_temperature_id_2/temperature_maximum", sensor_qos);
-    pub_powertrain_t26_slave_08_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_temperature_id_2/temperature_delta", sensor_qos);
-    pub_powertrain_t26_slave_08_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_msc_id_1/module_voltage_sum", sensor_qos);
-    pub_powertrain_t26_slave_08_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_msc_id_1/module_voltage_avg", sensor_qos);
-    pub_powertrain_t26_slave_08_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_msc_id_1/module_voltage_min", sensor_qos);
-    pub_powertrain_t26_slave_08_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_msc_id_1/module_voltage_max", sensor_qos);
-    pub_powertrain_t26_slave_08_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_msc_id_2/module_voltage_delta", sensor_qos);
-    pub_powertrain_t26_slave_08_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_msc_id_2/module_ic_voltage", sensor_qos);
-    pub_powertrain_t26_slave_08_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_msc_id_2/module_open_wire", sensor_qos);
-    pub_powertrain_t26_slave_08_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_msc_id_2/module_ic_temperature", sensor_qos);
-    pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_1/cell_voltage_1", sensor_qos);
-    pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_1/cell_voltage_2", sensor_qos);
-    pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_1/cell_voltage_3", sensor_qos);
-    pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_1/cell_voltage_4", sensor_qos);
-    pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_2/cell_voltage_5", sensor_qos);
-    pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_2/cell_voltage_6", sensor_qos);
-    pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_2/cell_voltage_7", sensor_qos);
-    pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_2/cell_voltage_8", sensor_qos);
-    pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_3/cell_voltage_9", sensor_qos);
-    pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_3/cell_voltage_10", sensor_qos);
-    pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_3/cell_voltage_11", sensor_qos);
-    pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_3/cell_voltage_12", sensor_qos);
-    pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_temperature_id_1/temperature_value_1", sensor_qos);
-    pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_temperature_id_1/temperature_value_2", sensor_qos);
-    pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_temperature_id_1/temperature_value_3", sensor_qos);
-    pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_temperature_id_1/temperature_value_4", sensor_qos);
-    pub_powertrain_t26_slave_09_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_temperature_id_2/temperature_value_5", sensor_qos);
-    pub_powertrain_t26_slave_09_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_temperature_id_2/temperature_value_6", sensor_qos);
-    pub_powertrain_t26_slave_09_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_temperature_id_2/temperature_maximum", sensor_qos);
-    pub_powertrain_t26_slave_09_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_temperature_id_2/temperature_delta", sensor_qos);
-    pub_powertrain_t26_slave_09_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_msc_id_1/module_voltage_sum", sensor_qos);
-    pub_powertrain_t26_slave_09_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_msc_id_1/module_voltage_avg", sensor_qos);
-    pub_powertrain_t26_slave_09_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_msc_id_1/module_voltage_min", sensor_qos);
-    pub_powertrain_t26_slave_09_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_msc_id_1/module_voltage_max", sensor_qos);
-    pub_powertrain_t26_slave_09_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_msc_id_2/module_voltage_delta", sensor_qos);
-    pub_powertrain_t26_slave_09_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_msc_id_2/module_ic_voltage", sensor_qos);
-    pub_powertrain_t26_slave_09_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_msc_id_2/module_open_wire", sensor_qos);
-    pub_powertrain_t26_slave_09_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_msc_id_2/module_ic_temperature", sensor_qos);
-    pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_1/cell_voltage_1", sensor_qos);
-    pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_1/cell_voltage_2", sensor_qos);
-    pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_1/cell_voltage_3", sensor_qos);
-    pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_1/cell_voltage_4", sensor_qos);
-    pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_2/cell_voltage_5", sensor_qos);
-    pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_2/cell_voltage_6", sensor_qos);
-    pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_2/cell_voltage_7", sensor_qos);
-    pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_2/cell_voltage_8", sensor_qos);
-    pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_3/cell_voltage_9", sensor_qos);
-    pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_3/cell_voltage_10", sensor_qos);
-    pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_3/cell_voltage_11", sensor_qos);
-    pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_3/cell_voltage_12", sensor_qos);
-    pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_temperature_id_1/temperature_value_1", sensor_qos);
-    pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_temperature_id_1/temperature_value_2", sensor_qos);
-    pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_temperature_id_1/temperature_value_3", sensor_qos);
-    pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_temperature_id_1/temperature_value_4", sensor_qos);
-    pub_powertrain_t26_slave_10_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_temperature_id_2/temperature_value_5", sensor_qos);
-    pub_powertrain_t26_slave_10_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_temperature_id_2/temperature_value_6", sensor_qos);
-    pub_powertrain_t26_slave_10_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_temperature_id_2/temperature_maximum", sensor_qos);
-    pub_powertrain_t26_slave_10_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_temperature_id_2/temperature_delta", sensor_qos);
-    pub_powertrain_t26_hv500_setmaxdccurrent_cmd_maxdccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_setmaxdccurrent/cmd_maxdccurrent", sensor_qos);
-    pub_powertrain_t26_slave_10_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_msc_id_2/module_voltage_delta", sensor_qos);
-    pub_powertrain_t26_slave_10_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_msc_id_2/module_ic_voltage", sensor_qos);
-    pub_powertrain_t26_slave_10_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_msc_id_2/module_open_wire", sensor_qos);
-    pub_powertrain_t26_slave_10_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_msc_id_2/module_ic_temperature", sensor_qos);
-    pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_1/cell_voltage_1", sensor_qos);
-    pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_1/cell_voltage_2", sensor_qos);
-    pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_1/cell_voltage_3", sensor_qos);
-    pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_1/cell_voltage_4", sensor_qos);
-    pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_2/cell_voltage_5", sensor_qos);
-    pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_2/cell_voltage_6", sensor_qos);
-    pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_2/cell_voltage_7", sensor_qos);
-    pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_2/cell_voltage_8", sensor_qos);
-    pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_3/cell_voltage_9", sensor_qos);
-    pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_3/cell_voltage_10", sensor_qos);
-    pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_3/cell_voltage_11", sensor_qos);
-    pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_3/cell_voltage_12", sensor_qos);
-    pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_temperature_id_1/temperature_value_1", sensor_qos);
-    pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_temperature_id_1/temperature_value_2", sensor_qos);
-    pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_temperature_id_1/temperature_value_3", sensor_qos);
-    pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_temperature_id_1/temperature_value_4", sensor_qos);
-    pub_powertrain_t26_slave_11_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_temperature_id_2/temperature_value_5", sensor_qos);
-    pub_powertrain_t26_slave_11_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_temperature_id_2/temperature_value_6", sensor_qos);
-    pub_powertrain_t26_slave_11_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_temperature_id_2/temperature_maximum", sensor_qos);
-    pub_powertrain_t26_slave_11_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_temperature_id_2/temperature_delta", sensor_qos);
-    pub_powertrain_t26_slave_11_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_msc_id_1/module_voltage_sum", sensor_qos);
-    pub_powertrain_t26_slave_11_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_msc_id_1/module_voltage_avg", sensor_qos);
-    pub_powertrain_t26_slave_11_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_msc_id_1/module_voltage_min", sensor_qos);
-    pub_powertrain_t26_slave_11_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_msc_id_1/module_voltage_max", sensor_qos);
-    pub_powertrain_t26_slave_11_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_msc_id_2/module_voltage_delta", sensor_qos);
-    pub_powertrain_t26_slave_11_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_msc_id_2/module_ic_voltage", sensor_qos);
-    pub_powertrain_t26_slave_11_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_msc_id_2/module_open_wire", sensor_qos);
-    pub_powertrain_t26_slave_11_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_msc_id_2/module_ic_temperature", sensor_qos);
-    pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_1/cell_voltage_1", sensor_qos);
-    pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_1/cell_voltage_2", sensor_qos);
-    pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_1/cell_voltage_3", sensor_qos);
-    pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_1/cell_voltage_4", sensor_qos);
-    pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_2/cell_voltage_5", sensor_qos);
-    pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_2/cell_voltage_6", sensor_qos);
-    pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_2/cell_voltage_7", sensor_qos);
-    pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_2/cell_voltage_8", sensor_qos);
-    pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_3/cell_voltage_9", sensor_qos);
-    pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_3/cell_voltage_10", sensor_qos);
-    pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_3/cell_voltage_11", sensor_qos);
-    pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_3/cell_voltage_12", sensor_qos);
-    pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_temperature_id_1/temperature_value_1", sensor_qos);
-    pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_temperature_id_1/temperature_value_2", sensor_qos);
-    pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_temperature_id_1/temperature_value_3", sensor_qos);
-    pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_temperature_id_1/temperature_value_4", sensor_qos);
-    pub_powertrain_t26_slave_12_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_temperature_id_2/temperature_value_5", sensor_qos);
-    pub_powertrain_t26_slave_12_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_temperature_id_2/temperature_value_6", sensor_qos);
-    pub_powertrain_t26_slave_12_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_temperature_id_2/temperature_maximum", sensor_qos);
-    pub_powertrain_t26_slave_12_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_temperature_id_2/temperature_delta", sensor_qos);
-    pub_powertrain_t26_slave_12_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_msc_id_1/module_voltage_sum", sensor_qos);
-    pub_powertrain_t26_slave_12_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_msc_id_1/module_voltage_avg", sensor_qos);
-    pub_powertrain_t26_slave_12_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_msc_id_1/module_voltage_min", sensor_qos);
-    pub_powertrain_t26_slave_12_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_msc_id_1/module_voltage_max", sensor_qos);
-    pub_powertrain_t26_slave_12_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_msc_id_2/module_voltage_delta", sensor_qos);
-    pub_powertrain_t26_slave_12_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_msc_id_2/module_ic_voltage", sensor_qos);
-    pub_powertrain_t26_slave_12_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_msc_id_2/module_open_wire", sensor_qos);
-    pub_powertrain_t26_slave_12_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_msc_id_2/module_ic_temperature", sensor_qos);
-    pub_powertrain_t26_hv500_setmaxdcbrakecurrent_cmd_maxdcbrakecurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_setmaxdcbrakecurrent/cmd_maxdcbrakecurrent", sensor_qos);
-    pub_powertrain_t26_hv500_setdriveenable_cmd_driveenable = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_setdriveenable/cmd_driveenable", sensor_qos);
+    pub_powertrain_t26_inv1_setdigoutput_inv1_cmd_setdigoutput4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_setdigoutput/inv1_cmd_setdigoutput4", sensor_qos);
+    pub_powertrain_t26_inv1_setdigoutput_inv1_cmd_setdigoutput3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_setdigoutput/inv1_cmd_setdigoutput3", sensor_qos);
+    pub_powertrain_t26_inv1_setdigoutput_inv1_cmd_setdigoutput2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_setdigoutput/inv1_cmd_setdigoutput2", sensor_qos);
+    pub_powertrain_t26_inv1_setdigoutput_inv1_cmd_setdigoutput1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_setdigoutput/inv1_cmd_setdigoutput1", sensor_qos);
+    pub_powertrain_t26_inv2_setdigoutput_inv2_cmd_setdigoutput4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_setdigoutput/inv2_cmd_setdigoutput4", sensor_qos);
+    pub_powertrain_t26_inv2_setdigoutput_inv2_cmd_setdigoutput3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_setdigoutput/inv2_cmd_setdigoutput3", sensor_qos);
+    pub_powertrain_t26_inv2_setdigoutput_inv2_cmd_setdigoutput2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_setdigoutput/inv2_cmd_setdigoutput2", sensor_qos);
+    pub_powertrain_t26_inv2_setdigoutput_inv2_cmd_setdigoutput1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_setdigoutput/inv2_cmd_setdigoutput1", sensor_qos);
+    pub_powertrain_t26_inv1_setmaxaccurrent_inv1_cmd_maxaccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_setmaxaccurrent/inv1_cmd_maxaccurrent", sensor_qos);
+    pub_powertrain_t26_inv2_setmaxaccurrent_inv2_cmd_maxaccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_setmaxaccurrent/inv2_cmd_maxaccurrent", sensor_qos);
+    pub_powertrain_t26_inv1_setmaxacbrakecurrent_inv1_cmd_maxacbrakecurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_setmaxacbrakecurrent/inv1_cmd_maxacbrakecurrent", sensor_qos);
+    pub_powertrain_t26_inv2_setmaxacbrakecurrent_inv2_cmd_maxacbrakecurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_setmaxacbrakecurrent/inv2_cmd_maxacbrakecurrent", sensor_qos);
+    pub_powertrain_t26_inv1_setmaxdccurrent_inv1_cmd_maxdccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_setmaxdccurrent/inv1_cmd_maxdccurrent", sensor_qos);
+    pub_powertrain_t26_inv2_setmaxdccurrent_inv2_cmd_maxdccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_setmaxdccurrent/inv2_cmd_maxdccurrent", sensor_qos);
+    pub_powertrain_t26_inv1_setmaxdcbrakecurrent_inv1_cmd_maxdcbrakecurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_setmaxdcbrakecurrent/inv1_cmd_maxdcbrakecurrent", sensor_qos);
+    pub_powertrain_t26_inv2_setmaxdcbrakecurrent_inv2_cmd_maxdcbrakecurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_setmaxdcbrakecurrent/inv2_cmd_maxdcbrakecurrent", sensor_qos);
+    pub_powertrain_t26_inv1_setdriveenable_inv1_cmd_driveenable = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_setdriveenable/inv1_cmd_driveenable", sensor_qos);
+    pub_powertrain_t26_inv2_setdriveenable_inv2_cmd_driveenable = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_setdriveenable/inv2_cmd_driveenable", sensor_qos);
     pub_autonomous_t26_res_signal = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/res/signal", sensor_qos);
-    pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_2/cell_voltage_5", sensor_qos);
-    pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_2/cell_voltage_6", sensor_qos);
-    pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_2/cell_voltage_7", sensor_qos);
-    pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_2/cell_voltage_8", sensor_qos);
-    pub_powertrain_t26_slave_10_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_msc_id_1/module_voltage_sum", sensor_qos);
-    pub_powertrain_t26_slave_10_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_msc_id_1/module_voltage_avg", sensor_qos);
-    pub_powertrain_t26_slave_10_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_msc_id_1/module_voltage_min", sensor_qos);
-    pub_powertrain_t26_slave_10_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_msc_id_1/module_voltage_max", sensor_qos);
-    pub_powertrain_t26_slave_01_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_temperature_id_2/temperature_value_5", sensor_qos);
-    pub_powertrain_t26_slave_01_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_temperature_id_2/temperature_value_6", sensor_qos);
-    pub_powertrain_t26_slave_01_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_temperature_id_2/temperature_maximum", sensor_qos);
-    pub_powertrain_t26_slave_01_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_temperature_id_2/temperature_delta", sensor_qos);
-    pub_powertrain_t26_hv500_targetiq_controlmode = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_targetiq/controlmode", sensor_qos);
-    pub_powertrain_t26_hv500_targetiq_targetiq = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_targetiq/targetiq", sensor_qos);
-    pub_powertrain_t26_hv500_targetiq_motorposition = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_targetiq/motorposition", sensor_qos);
-    pub_powertrain_t26_hv500_targetiq_ismotorstill = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_targetiq/ismotorstill", sensor_qos);
-    pub_powertrain_t26_hv500_erpm_duty_voltage_actual_erpm = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_erpm_duty_voltage/actual_erpm", sensor_qos);
-    pub_powertrain_t26_hv500_erpm_duty_voltage_actual_duty = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_erpm_duty_voltage/actual_duty", sensor_qos);
-    pub_powertrain_t26_hv500_erpm_duty_voltage_actual_inputvoltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_erpm_duty_voltage/actual_inputvoltage", sensor_qos);
+    pub_powertrain_t26_inv1_targetiq_inv1_controlmode = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_targetiq/inv1_controlmode", sensor_qos);
+    pub_powertrain_t26_inv1_targetiq_inv1_targetiq = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_targetiq/inv1_targetiq", sensor_qos);
+    pub_powertrain_t26_inv1_targetiq_inv1_motorposition = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_targetiq/inv1_motorposition", sensor_qos);
+    pub_powertrain_t26_inv1_targetiq_inv1_ismotorstill = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_targetiq/inv1_ismotorstill", sensor_qos);
+    pub_powertrain_t26_inv2_targetiq_inv2_controlmode = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_targetiq/inv2_controlmode", sensor_qos);
+    pub_powertrain_t26_inv2_targetiq_inv2_targetiq = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_targetiq/inv2_targetiq", sensor_qos);
+    pub_powertrain_t26_inv2_targetiq_inv2_motorposition = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_targetiq/inv2_motorposition", sensor_qos);
+    pub_powertrain_t26_inv2_targetiq_inv2_ismotorstill = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_targetiq/inv2_ismotorstill", sensor_qos);
+    pub_powertrain_t26_inv1_erpm_duty_voltage_inv1_actual_erpm = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_erpm_duty_voltage/inv1_actual_erpm", sensor_qos);
+    pub_powertrain_t26_inv1_erpm_duty_voltage_inv1_actual_duty = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_erpm_duty_voltage/inv1_actual_duty", sensor_qos);
+    pub_powertrain_t26_inv1_erpm_duty_voltage_inv1_actual_inputvoltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_erpm_duty_voltage/inv1_actual_inputvoltage", sensor_qos);
+    pub_powertrain_t26_inv2_erpm_duty_voltage_inv2_actual_erpm = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_erpm_duty_voltage/inv2_actual_erpm", sensor_qos);
+    pub_powertrain_t26_inv2_erpm_duty_voltage_inv2_actual_duty = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_erpm_duty_voltage/inv2_actual_duty", sensor_qos);
+    pub_powertrain_t26_inv2_erpm_duty_voltage_inv2_actual_inputvoltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_erpm_duty_voltage/inv2_actual_inputvoltage", sensor_qos);
     pub_powertrain_t26_ivt_msg_cmd_ivt_id_cmd = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/ivt_msg_cmd/ivt_id_cmd", sensor_qos);
     pub_powertrain_t26_ivt_msg_cmd_val_31_trigger_spare = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/ivt_msg_cmd/val_31_trigger_spare", sensor_qos);
     pub_powertrain_t26_ivt_msg_cmd_val_10_set_can_id_val_i = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/ivt_msg_cmd/val_10_set_can_id_val_i", sensor_qos);
@@ -497,47 +177,85 @@ CanBridgeImpl::CanBridgeImpl(rclcpp::Node* node) : node_(node) {
     pub_powertrain_t26_ivt_msg_cmd_val_57_get_can_id_sn_wh = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/ivt_msg_cmd/val_57_get_can_id_sn_wh", sensor_qos);
     pub_powertrain_t26_ivt_msg_cmd_val_5d_get_can_id_sn_command = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/ivt_msg_cmd/val_5d_get_can_id_sn_command", sensor_qos);
     pub_powertrain_t26_ivt_msg_cmd_val_5f_get_can_id_sn_response = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/ivt_msg_cmd/val_5f_get_can_id_sn_response", sensor_qos);
-    pub_powertrain_t26_hv500_ac_dc_current_actual_accurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_ac_dc_current/actual_accurrent", sensor_qos);
-    pub_powertrain_t26_hv500_ac_dc_current_actual_dccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_ac_dc_current/actual_dccurrent", sensor_qos);
-    pub_powertrain_t26_hv500_temperatures_actual_tempcontroller = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_temperatures/actual_tempcontroller", sensor_qos);
-    pub_powertrain_t26_hv500_temperatures_actual_tempmotor = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_temperatures/actual_tempmotor", sensor_qos);
-    pub_powertrain_t26_hv500_temperatures_actual_faultcode = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_temperatures/actual_faultcode", sensor_qos);
-    pub_powertrain_t26_hv500_foc_actual_foc_id = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_foc/actual_foc_id", sensor_qos);
-    pub_powertrain_t26_hv500_foc_actual_foc_iq = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_foc/actual_foc_iq", sensor_qos);
+    pub_powertrain_t26_inv1_ac_dc_current_inv1_actual_accurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_ac_dc_current/inv1_actual_accurrent", sensor_qos);
+    pub_powertrain_t26_inv1_ac_dc_current_inv1_actual_dccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_ac_dc_current/inv1_actual_dccurrent", sensor_qos);
+    pub_powertrain_t26_inv2_ac_dc_current_inv2_actual_accurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_ac_dc_current/inv2_actual_accurrent", sensor_qos);
+    pub_powertrain_t26_inv2_ac_dc_current_inv2_actual_dccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_ac_dc_current/inv2_actual_dccurrent", sensor_qos);
+    pub_powertrain_t26_inv1_temperatures_inv1_actual_tempcontroller = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_temperatures/inv1_actual_tempcontroller", sensor_qos);
+    pub_powertrain_t26_inv1_temperatures_inv1_actual_tempmotor = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_temperatures/inv1_actual_tempmotor", sensor_qos);
+    pub_powertrain_t26_inv1_temperatures_inv1_actual_faultcode = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_temperatures/inv1_actual_faultcode", sensor_qos);
+    pub_powertrain_t26_inv2_temperatures_inv2_actual_tempcontroller = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_temperatures/inv2_actual_tempcontroller", sensor_qos);
+    pub_powertrain_t26_inv2_temperatures_inv2_actual_tempmotor = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_temperatures/inv2_actual_tempmotor", sensor_qos);
+    pub_powertrain_t26_inv2_temperatures_inv2_actual_faultcode = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_temperatures/inv2_actual_faultcode", sensor_qos);
+    pub_powertrain_t26_inv1_foc_inv1_actual_foc_id = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_foc/inv1_actual_foc_id", sensor_qos);
+    pub_powertrain_t26_inv1_foc_inv1_actual_foc_iq = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_foc/inv1_actual_foc_iq", sensor_qos);
+    pub_powertrain_t26_inv2_foc_inv2_actual_foc_id = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_foc/inv2_actual_foc_id", sensor_qos);
+    pub_powertrain_t26_inv2_foc_inv2_actual_foc_iq = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_foc/inv2_actual_foc_iq", sensor_qos);
     pub_autonomous_t26_cubemars_position_loop_position = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/cubemars_position_loop/position", sensor_qos);
-    pub_powertrain_t26_hv500_misc_actual_throttle = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/actual_throttle", sensor_qos);
-    pub_powertrain_t26_hv500_misc_actual_brake = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/actual_brake", sensor_qos);
-    pub_powertrain_t26_hv500_misc_digital_output_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/digital_output_4", sensor_qos);
-    pub_powertrain_t26_hv500_misc_digital_output_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/digital_output_3", sensor_qos);
-    pub_powertrain_t26_hv500_misc_digital_output_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/digital_output_2", sensor_qos);
-    pub_powertrain_t26_hv500_misc_digital_output_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/digital_output_1", sensor_qos);
-    pub_powertrain_t26_hv500_misc_digital_input_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/digital_input_4", sensor_qos);
-    pub_powertrain_t26_hv500_misc_digital_input_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/digital_input_3", sensor_qos);
-    pub_powertrain_t26_hv500_misc_digital_input_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/digital_input_2", sensor_qos);
-    pub_powertrain_t26_hv500_misc_digital_input_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/digital_input_1", sensor_qos);
-    pub_powertrain_t26_hv500_misc_drive_enable = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/drive_enable", sensor_qos);
-    pub_powertrain_t26_hv500_misc_motor_temp_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/motor_temp_limit", sensor_qos);
-    pub_powertrain_t26_hv500_misc_motor_accel_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/motor_accel_limit", sensor_qos);
-    pub_powertrain_t26_hv500_misc_input_voltage_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/input_voltage_limit", sensor_qos);
-    pub_powertrain_t26_hv500_misc_igbt_temp_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/igbt_temp_limit", sensor_qos);
-    pub_powertrain_t26_hv500_misc_igbt_accel_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/igbt_accel_limit", sensor_qos);
-    pub_powertrain_t26_hv500_misc_drive_enable_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/drive_enable_limit", sensor_qos);
-    pub_powertrain_t26_hv500_misc_dc_current_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/dc_current_limit", sensor_qos);
-    pub_powertrain_t26_hv500_misc_capacitor_temp_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/capacitor_temp_limit", sensor_qos);
-    pub_powertrain_t26_hv500_misc_power_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/power_limit", sensor_qos);
-    pub_powertrain_t26_hv500_misc_rpm_max_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/rpm_max_limit", sensor_qos);
-    pub_powertrain_t26_hv500_misc_rpm_min_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/rpm_min_limit", sensor_qos);
-    pub_powertrain_t26_hv500_misc_can_map_version = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_misc/can_map_version", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_actual_throttle = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_actual_throttle", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_actual_brake = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_actual_brake", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_digital_output_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_digital_output_4", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_digital_output_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_digital_output_3", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_digital_output_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_digital_output_2", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_digital_output_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_digital_output_1", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_digital_input_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_digital_input_4", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_digital_input_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_digital_input_3", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_digital_input_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_digital_input_2", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_digital_input_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_digital_input_1", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_drive_enable = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_drive_enable", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_motor_temp_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_motor_temp_limit", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_motor_accel_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_motor_accel_limit", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_input_voltage_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_input_voltage_limit", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_igbt_temp_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_igbt_temp_limit", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_igbt_accel_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_igbt_accel_limit", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_drive_enable_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_drive_enable_limit", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_dc_current_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_dc_current_limit", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_capacitor_temp_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_capacitor_temp_limit", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_power_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_power_limit", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_rpm_max_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_rpm_max_limit", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_rpm_min_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_rpm_min_limit", sensor_qos);
+    pub_powertrain_t26_inv1_misc_inv1_can_map_version = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_misc/inv1_can_map_version", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_actual_throttle = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_actual_throttle", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_actual_brake = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_actual_brake", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_digital_output_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_digital_output_4", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_digital_output_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_digital_output_3", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_digital_output_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_digital_output_2", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_digital_output_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_digital_output_1", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_digital_input_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_digital_input_4", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_digital_input_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_digital_input_3", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_digital_input_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_digital_input_2", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_digital_input_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_digital_input_1", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_drive_enable = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_drive_enable", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_motor_temp_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_motor_temp_limit", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_motor_accel_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_motor_accel_limit", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_input_voltage_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_input_voltage_limit", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_igbt_temp_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_igbt_temp_limit", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_igbt_accel_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_igbt_accel_limit", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_drive_enable_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_drive_enable_limit", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_dc_current_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_dc_current_limit", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_capacitor_temp_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_capacitor_temp_limit", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_power_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_power_limit", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_rpm_max_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_rpm_max_limit", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_rpm_min_limit = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_rpm_min_limit", sensor_qos);
+    pub_powertrain_t26_inv2_misc_inv2_can_map_version = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_misc/inv2_can_map_version", sensor_qos);
     pub_autonomous_t26_vcu_rpm_target_rpm_target = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/vcu_rpm_target/rpm_target", sensor_qos);
     pub_autonomous_t26_vcu_torque_target_torque_target = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/vcu_torque_target/torque_target", sensor_qos);
-    pub_powertrain_t26_hv500_minmaxaccurrent_maxaccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_minmaxaccurrent/maxaccurrent", sensor_qos);
-    pub_powertrain_t26_hv500_minmaxaccurrent_availablemaxaccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_minmaxaccurrent/availablemaxaccurrent", sensor_qos);
-    pub_powertrain_t26_hv500_minmaxaccurrent_minaccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_minmaxaccurrent/minaccurrent", sensor_qos);
-    pub_powertrain_t26_hv500_minmaxaccurrent_availableminaccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_minmaxaccurrent/availableminaccurrent", sensor_qos);
-    pub_powertrain_t26_hv500_minmaxdccurrent_maxdccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_minmaxdccurrent/maxdccurrent", sensor_qos);
-    pub_powertrain_t26_hv500_minmaxdccurrent_availablemaxdccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_minmaxdccurrent/availablemaxdccurrent", sensor_qos);
-    pub_powertrain_t26_hv500_minmaxdccurrent_mindccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_minmaxdccurrent/mindccurrent", sensor_qos);
-    pub_powertrain_t26_hv500_minmaxdccurrent_availablemindccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/hv500_minmaxdccurrent/availablemindccurrent", sensor_qos);
+    pub_powertrain_t26_inv1_minmaxaccurrent_inv1_maxaccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_minmaxaccurrent/inv1_maxaccurrent", sensor_qos);
+    pub_powertrain_t26_inv1_minmaxaccurrent_inv1_availablemaxaccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_minmaxaccurrent/inv1_availablemaxaccurrent", sensor_qos);
+    pub_powertrain_t26_inv1_minmaxaccurrent_inv1_minaccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_minmaxaccurrent/inv1_minaccurrent", sensor_qos);
+    pub_powertrain_t26_inv1_minmaxaccurrent_inv1_availableminaccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_minmaxaccurrent/inv1_availableminaccurrent", sensor_qos);
+    pub_powertrain_t26_inv2_minmaxaccurrent_inv2_maxaccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_minmaxaccurrent/inv2_maxaccurrent", sensor_qos);
+    pub_powertrain_t26_inv2_minmaxaccurrent_inv2_availablemaxaccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_minmaxaccurrent/inv2_availablemaxaccurrent", sensor_qos);
+    pub_powertrain_t26_inv2_minmaxaccurrent_inv2_minaccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_minmaxaccurrent/inv2_minaccurrent", sensor_qos);
+    pub_powertrain_t26_inv2_minmaxaccurrent_inv2_availableminaccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_minmaxaccurrent/inv2_availableminaccurrent", sensor_qos);
+    pub_powertrain_t26_inv1_minmaxdccurrent_inv1_maxdccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_minmaxdccurrent/inv1_maxdccurrent", sensor_qos);
+    pub_powertrain_t26_inv1_minmaxdccurrent_inv1_availablemaxdccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_minmaxdccurrent/inv1_availablemaxdccurrent", sensor_qos);
+    pub_powertrain_t26_inv1_minmaxdccurrent_inv1_mindccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_minmaxdccurrent/inv1_mindccurrent", sensor_qos);
+    pub_powertrain_t26_inv1_minmaxdccurrent_inv1_availablemindccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv1_minmaxdccurrent/inv1_availablemindccurrent", sensor_qos);
+    pub_powertrain_t26_inv2_minmaxdccurrent_inv2_maxdccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_minmaxdccurrent/inv2_maxdccurrent", sensor_qos);
+    pub_powertrain_t26_inv2_minmaxdccurrent_inv2_availablemaxdccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_minmaxdccurrent/inv2_availablemaxdccurrent", sensor_qos);
+    pub_powertrain_t26_inv2_minmaxdccurrent_inv2_mindccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_minmaxdccurrent/inv2_mindccurrent", sensor_qos);
+    pub_powertrain_t26_inv2_minmaxdccurrent_inv2_availablemindccurrent = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/inv2_minmaxdccurrent/inv2_availablemindccurrent", sensor_qos);
     pub_autonomous_t26_dv_dynamics_1_speed_actual = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/dv_dynamics_1/speed_actual", sensor_qos);
     pub_autonomous_t26_dv_dynamics_1_speed_target = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/dv_dynamics_1/speed_target", sensor_qos);
     pub_autonomous_t26_dv_dynamics_1_steering_angle_actual = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/dv_dynamics_1/steering_angle_actual", sensor_qos);
@@ -724,6 +442,10 @@ CanBridgeImpl::CanBridgeImpl(rclcpp::Node* node) : node_(node) {
     pub_powertrain_t26_ivt_msg_result_wh_ivt_result_wh_ocs = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/ivt_msg_result_wh/ivt_result_wh_ocs", sensor_qos);
     pub_powertrain_t26_ivt_msg_result_wh_ivt_msgcount_result_wh = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/ivt_msg_result_wh/ivt_msgcount_result_wh", sensor_qos);
     pub_powertrain_t26_ivt_msg_result_wh_ivt_result_wh = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/ivt_msg_result_wh/ivt_result_wh", sensor_qos);
+    pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_1/cell_voltage_1", sensor_qos);
+    pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_1/cell_voltage_2", sensor_qos);
+    pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_1/cell_voltage_3", sensor_qos);
+    pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_1/cell_voltage_4", sensor_qos);
     pub_autonomous_t26_vcu_ign_r2d_ignition_manual = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/vcu_ign_r2d/ignition_manual", sensor_qos);
     pub_autonomous_t26_vcu_ign_r2d_r2d_manual = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/vcu_ign_r2d/r2d_manual", sensor_qos);
     pub_autonomous_t26_vcu_ign_r2d_ignition_auto = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/vcu_ign_r2d/ignition_auto", sensor_qos);
@@ -732,6 +454,344 @@ CanBridgeImpl::CanBridgeImpl(rclcpp::Node* node) : node_(node) {
     pub_autonomous_t26_vcu_ign_r2d_vcu_state = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/vcu_ign_r2d/vcu_state", sensor_qos);
     pub_autonomous_t26_vcu_ign_r2d_r2d_button_raw = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/vcu_ign_r2d/r2d_button_raw", sensor_qos);
     pub_autonomous_t26_vcu_ign_r2d_ignition_switch_raw = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/vcu_ign_r2d/ignition_switch_raw", sensor_qos);
+    pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_2/cell_voltage_5", sensor_qos);
+    pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_2/cell_voltage_6", sensor_qos);
+    pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_2/cell_voltage_7", sensor_qos);
+    pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_2/cell_voltage_8", sensor_qos);
+    pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_3/cell_voltage_9", sensor_qos);
+    pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_3/cell_voltage_10", sensor_qos);
+    pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_3/cell_voltage_11", sensor_qos);
+    pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_voltage_id_3/cell_voltage_12", sensor_qos);
+    pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_temperature_id_1/temperature_value_1", sensor_qos);
+    pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_temperature_id_1/temperature_value_2", sensor_qos);
+    pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_temperature_id_1/temperature_value_3", sensor_qos);
+    pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_temperature_id_1/temperature_value_4", sensor_qos);
+    pub_powertrain_t26_slave_01_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_temperature_id_2/temperature_value_5", sensor_qos);
+    pub_powertrain_t26_slave_01_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_temperature_id_2/temperature_value_6", sensor_qos);
+    pub_powertrain_t26_slave_01_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_temperature_id_2/temperature_maximum", sensor_qos);
+    pub_powertrain_t26_slave_01_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_temperature_id_2/temperature_delta", sensor_qos);
+    pub_powertrain_t26_slave_01_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_1/module_voltage_sum", sensor_qos);
+    pub_powertrain_t26_slave_01_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_1/module_voltage_avg", sensor_qos);
+    pub_powertrain_t26_slave_01_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_1/module_voltage_min", sensor_qos);
+    pub_powertrain_t26_slave_01_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_1/module_voltage_max", sensor_qos);
+    pub_powertrain_t26_slave_01_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_2/module_voltage_delta", sensor_qos);
+    pub_powertrain_t26_slave_01_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_2/module_ic_voltage", sensor_qos);
+    pub_powertrain_t26_slave_01_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_2/module_open_wire", sensor_qos);
+    pub_powertrain_t26_slave_01_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_2/module_ic_temperature", sensor_qos);
+    pub_powertrain_t26_slave_01_msc_id_2_module_overvoltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_2/module_overvoltage", sensor_qos);
+    pub_powertrain_t26_slave_01_msc_id_2_module_undervoltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_2/module_undervoltage", sensor_qos);
+    pub_powertrain_t26_slave_01_msc_id_2_module_under_over_identifier = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_01_msc_id_2/module_under_over_identifier", sensor_qos);
+    pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_1/cell_voltage_1", sensor_qos);
+    pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_1/cell_voltage_2", sensor_qos);
+    pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_1/cell_voltage_3", sensor_qos);
+    pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_1/cell_voltage_4", sensor_qos);
+    pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_2/cell_voltage_5", sensor_qos);
+    pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_2/cell_voltage_6", sensor_qos);
+    pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_2/cell_voltage_7", sensor_qos);
+    pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_2/cell_voltage_8", sensor_qos);
+    pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_3/cell_voltage_9", sensor_qos);
+    pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_3/cell_voltage_10", sensor_qos);
+    pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_3/cell_voltage_11", sensor_qos);
+    pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_voltage_id_3/cell_voltage_12", sensor_qos);
+    pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_temperature_id_1/temperature_value_1", sensor_qos);
+    pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_temperature_id_1/temperature_value_2", sensor_qos);
+    pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_temperature_id_1/temperature_value_3", sensor_qos);
+    pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_temperature_id_1/temperature_value_4", sensor_qos);
+    pub_powertrain_t26_slave_02_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_temperature_id_2/temperature_value_5", sensor_qos);
+    pub_powertrain_t26_slave_02_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_temperature_id_2/temperature_value_6", sensor_qos);
+    pub_powertrain_t26_slave_02_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_temperature_id_2/temperature_maximum", sensor_qos);
+    pub_powertrain_t26_slave_02_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_temperature_id_2/temperature_delta", sensor_qos);
+    pub_powertrain_t26_slave_02_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_1/module_voltage_sum", sensor_qos);
+    pub_powertrain_t26_slave_02_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_1/module_voltage_avg", sensor_qos);
+    pub_powertrain_t26_slave_02_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_1/module_voltage_min", sensor_qos);
+    pub_powertrain_t26_slave_02_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_1/module_voltage_max", sensor_qos);
+    pub_powertrain_t26_slave_02_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_2/module_voltage_delta", sensor_qos);
+    pub_powertrain_t26_slave_02_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_2/module_ic_voltage", sensor_qos);
+    pub_powertrain_t26_slave_02_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_2/module_open_wire", sensor_qos);
+    pub_powertrain_t26_slave_02_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_2/module_ic_temperature", sensor_qos);
+    pub_powertrain_t26_slave_02_msc_id_2_module_overvoltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_2/module_overvoltage", sensor_qos);
+    pub_powertrain_t26_slave_02_msc_id_2_module_undervoltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_2/module_undervoltage", sensor_qos);
+    pub_powertrain_t26_slave_02_msc_id_2_module_under_over_identifier = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_02_msc_id_2/module_under_over_identifier", sensor_qos);
+    pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_1/cell_voltage_1", sensor_qos);
+    pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_1/cell_voltage_2", sensor_qos);
+    pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_1/cell_voltage_3", sensor_qos);
+    pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_1/cell_voltage_4", sensor_qos);
+    pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_2/cell_voltage_5", sensor_qos);
+    pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_2/cell_voltage_6", sensor_qos);
+    pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_2/cell_voltage_7", sensor_qos);
+    pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_2/cell_voltage_8", sensor_qos);
+    pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_3/cell_voltage_9", sensor_qos);
+    pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_3/cell_voltage_10", sensor_qos);
+    pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_3/cell_voltage_11", sensor_qos);
+    pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_voltage_id_3/cell_voltage_12", sensor_qos);
+    pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_temperature_id_1/temperature_value_1", sensor_qos);
+    pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_temperature_id_1/temperature_value_2", sensor_qos);
+    pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_temperature_id_1/temperature_value_3", sensor_qos);
+    pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_temperature_id_1/temperature_value_4", sensor_qos);
+    pub_powertrain_t26_slave_03_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_temperature_id_2/temperature_value_5", sensor_qos);
+    pub_powertrain_t26_slave_03_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_temperature_id_2/temperature_value_6", sensor_qos);
+    pub_powertrain_t26_slave_03_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_temperature_id_2/temperature_maximum", sensor_qos);
+    pub_powertrain_t26_slave_03_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_temperature_id_2/temperature_delta", sensor_qos);
+    pub_powertrain_t26_slave_03_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_msc_id_1/module_voltage_sum", sensor_qos);
+    pub_powertrain_t26_slave_03_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_msc_id_1/module_voltage_avg", sensor_qos);
+    pub_powertrain_t26_slave_03_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_msc_id_1/module_voltage_min", sensor_qos);
+    pub_powertrain_t26_slave_03_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_msc_id_1/module_voltage_max", sensor_qos);
+    pub_powertrain_t26_slave_03_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_msc_id_2/module_voltage_delta", sensor_qos);
+    pub_powertrain_t26_slave_03_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_msc_id_2/module_ic_voltage", sensor_qos);
+    pub_powertrain_t26_slave_03_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_msc_id_2/module_open_wire", sensor_qos);
+    pub_powertrain_t26_slave_03_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_03_msc_id_2/module_ic_temperature", sensor_qos);
+    pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_1/cell_voltage_1", sensor_qos);
+    pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_1/cell_voltage_2", sensor_qos);
+    pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_1/cell_voltage_3", sensor_qos);
+    pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_1/cell_voltage_4", sensor_qos);
+    pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_2/cell_voltage_5", sensor_qos);
+    pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_2/cell_voltage_6", sensor_qos);
+    pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_2/cell_voltage_7", sensor_qos);
+    pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_2/cell_voltage_8", sensor_qos);
+    pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_3/cell_voltage_9", sensor_qos);
+    pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_3/cell_voltage_10", sensor_qos);
+    pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_3/cell_voltage_11", sensor_qos);
+    pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_voltage_id_3/cell_voltage_12", sensor_qos);
+    pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_temperature_id_1/temperature_value_1", sensor_qos);
+    pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_temperature_id_1/temperature_value_2", sensor_qos);
+    pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_temperature_id_1/temperature_value_3", sensor_qos);
+    pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_temperature_id_1/temperature_value_4", sensor_qos);
+    pub_powertrain_t26_slave_04_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_temperature_id_2/temperature_value_5", sensor_qos);
+    pub_powertrain_t26_slave_04_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_temperature_id_2/temperature_value_6", sensor_qos);
+    pub_powertrain_t26_slave_04_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_temperature_id_2/temperature_maximum", sensor_qos);
+    pub_powertrain_t26_slave_04_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_temperature_id_2/temperature_delta", sensor_qos);
+    pub_powertrain_t26_slave_04_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_msc_id_1/module_voltage_sum", sensor_qos);
+    pub_powertrain_t26_slave_04_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_msc_id_1/module_voltage_avg", sensor_qos);
+    pub_powertrain_t26_slave_04_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_msc_id_1/module_voltage_min", sensor_qos);
+    pub_powertrain_t26_slave_04_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_msc_id_1/module_voltage_max", sensor_qos);
+    pub_powertrain_t26_slave_04_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_msc_id_2/module_voltage_delta", sensor_qos);
+    pub_powertrain_t26_slave_04_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_msc_id_2/module_ic_voltage", sensor_qos);
+    pub_powertrain_t26_slave_04_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_msc_id_2/module_open_wire", sensor_qos);
+    pub_powertrain_t26_slave_04_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_04_msc_id_2/module_ic_temperature", sensor_qos);
+    pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_1/cell_voltage_1", sensor_qos);
+    pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_1/cell_voltage_2", sensor_qos);
+    pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_1/cell_voltage_3", sensor_qos);
+    pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_1/cell_voltage_4", sensor_qos);
+    pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_2/cell_voltage_5", sensor_qos);
+    pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_2/cell_voltage_6", sensor_qos);
+    pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_2/cell_voltage_7", sensor_qos);
+    pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_2/cell_voltage_8", sensor_qos);
+    pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_3/cell_voltage_9", sensor_qos);
+    pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_3/cell_voltage_10", sensor_qos);
+    pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_3/cell_voltage_11", sensor_qos);
+    pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_voltage_id_3/cell_voltage_12", sensor_qos);
+    pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_temperature_id_1/temperature_value_1", sensor_qos);
+    pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_temperature_id_1/temperature_value_2", sensor_qos);
+    pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_temperature_id_1/temperature_value_3", sensor_qos);
+    pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_temperature_id_1/temperature_value_4", sensor_qos);
+    pub_powertrain_t26_slave_05_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_temperature_id_2/temperature_value_5", sensor_qos);
+    pub_powertrain_t26_slave_05_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_temperature_id_2/temperature_value_6", sensor_qos);
+    pub_powertrain_t26_slave_05_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_temperature_id_2/temperature_maximum", sensor_qos);
+    pub_powertrain_t26_slave_05_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_temperature_id_2/temperature_delta", sensor_qos);
+    pub_powertrain_t26_slave_05_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_msc_id_1/module_voltage_sum", sensor_qos);
+    pub_powertrain_t26_slave_05_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_msc_id_1/module_voltage_avg", sensor_qos);
+    pub_powertrain_t26_slave_05_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_msc_id_1/module_voltage_min", sensor_qos);
+    pub_powertrain_t26_slave_05_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_msc_id_1/module_voltage_max", sensor_qos);
+    pub_powertrain_t26_slave_05_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_msc_id_2/module_voltage_delta", sensor_qos);
+    pub_powertrain_t26_slave_05_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_msc_id_2/module_ic_voltage", sensor_qos);
+    pub_powertrain_t26_slave_05_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_msc_id_2/module_open_wire", sensor_qos);
+    pub_powertrain_t26_slave_05_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_05_msc_id_2/module_ic_temperature", sensor_qos);
+    pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_1/cell_voltage_1", sensor_qos);
+    pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_1/cell_voltage_2", sensor_qos);
+    pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_1/cell_voltage_3", sensor_qos);
+    pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_1/cell_voltage_4", sensor_qos);
+    pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_2/cell_voltage_5", sensor_qos);
+    pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_2/cell_voltage_6", sensor_qos);
+    pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_2/cell_voltage_7", sensor_qos);
+    pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_2/cell_voltage_8", sensor_qos);
+    pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_3/cell_voltage_9", sensor_qos);
+    pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_3/cell_voltage_10", sensor_qos);
+    pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_3/cell_voltage_11", sensor_qos);
+    pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_voltage_id_3/cell_voltage_12", sensor_qos);
+    pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_temperature_id_1/temperature_value_1", sensor_qos);
+    pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_temperature_id_1/temperature_value_2", sensor_qos);
+    pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_temperature_id_1/temperature_value_3", sensor_qos);
+    pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_temperature_id_1/temperature_value_4", sensor_qos);
+    pub_powertrain_t26_slave_06_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_temperature_id_2/temperature_value_5", sensor_qos);
+    pub_powertrain_t26_slave_06_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_temperature_id_2/temperature_value_6", sensor_qos);
+    pub_powertrain_t26_slave_06_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_temperature_id_2/temperature_maximum", sensor_qos);
+    pub_powertrain_t26_slave_06_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_temperature_id_2/temperature_delta", sensor_qos);
+    pub_powertrain_t26_slave_06_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_msc_id_1/module_voltage_sum", sensor_qos);
+    pub_powertrain_t26_slave_06_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_msc_id_1/module_voltage_avg", sensor_qos);
+    pub_powertrain_t26_slave_06_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_msc_id_1/module_voltage_min", sensor_qos);
+    pub_powertrain_t26_slave_06_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_msc_id_1/module_voltage_max", sensor_qos);
+    pub_powertrain_t26_slave_06_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_msc_id_2/module_voltage_delta", sensor_qos);
+    pub_powertrain_t26_slave_06_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_msc_id_2/module_ic_voltage", sensor_qos);
+    pub_powertrain_t26_slave_06_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_msc_id_2/module_open_wire", sensor_qos);
+    pub_powertrain_t26_slave_06_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_06_msc_id_2/module_ic_temperature", sensor_qos);
+    pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_1/cell_voltage_1", sensor_qos);
+    pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_1/cell_voltage_2", sensor_qos);
+    pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_1/cell_voltage_3", sensor_qos);
+    pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_1/cell_voltage_4", sensor_qos);
+    pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_2/cell_voltage_5", sensor_qos);
+    pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_2/cell_voltage_6", sensor_qos);
+    pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_2/cell_voltage_7", sensor_qos);
+    pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_2/cell_voltage_8", sensor_qos);
+    pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_3/cell_voltage_9", sensor_qos);
+    pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_3/cell_voltage_10", sensor_qos);
+    pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_3/cell_voltage_11", sensor_qos);
+    pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_voltage_id_3/cell_voltage_12", sensor_qos);
+    pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_temperature_id_1/temperature_value_1", sensor_qos);
+    pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_temperature_id_1/temperature_value_2", sensor_qos);
+    pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_temperature_id_1/temperature_value_3", sensor_qos);
+    pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_temperature_id_1/temperature_value_4", sensor_qos);
+    pub_powertrain_t26_slave_07_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_temperature_id_2/temperature_value_5", sensor_qos);
+    pub_powertrain_t26_slave_07_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_temperature_id_2/temperature_value_6", sensor_qos);
+    pub_powertrain_t26_slave_07_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_temperature_id_2/temperature_maximum", sensor_qos);
+    pub_powertrain_t26_slave_07_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_temperature_id_2/temperature_delta", sensor_qos);
+    pub_powertrain_t26_slave_07_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_msc_id_1/module_voltage_sum", sensor_qos);
+    pub_powertrain_t26_slave_07_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_msc_id_1/module_voltage_avg", sensor_qos);
+    pub_powertrain_t26_slave_07_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_msc_id_1/module_voltage_min", sensor_qos);
+    pub_powertrain_t26_slave_07_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_msc_id_1/module_voltage_max", sensor_qos);
+    pub_powertrain_t26_slave_07_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_msc_id_2/module_voltage_delta", sensor_qos);
+    pub_powertrain_t26_slave_07_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_msc_id_2/module_ic_voltage", sensor_qos);
+    pub_powertrain_t26_slave_07_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_msc_id_2/module_open_wire", sensor_qos);
+    pub_powertrain_t26_slave_07_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_07_msc_id_2/module_ic_temperature", sensor_qos);
+    pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_1/cell_voltage_1", sensor_qos);
+    pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_1/cell_voltage_2", sensor_qos);
+    pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_1/cell_voltage_3", sensor_qos);
+    pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_1/cell_voltage_4", sensor_qos);
+    pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_2/cell_voltage_5", sensor_qos);
+    pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_2/cell_voltage_6", sensor_qos);
+    pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_2/cell_voltage_7", sensor_qos);
+    pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_2/cell_voltage_8", sensor_qos);
+    pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_3/cell_voltage_9", sensor_qos);
+    pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_3/cell_voltage_10", sensor_qos);
+    pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_3/cell_voltage_11", sensor_qos);
+    pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_voltage_id_3/cell_voltage_12", sensor_qos);
+    pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_temperature_id_1/temperature_value_1", sensor_qos);
+    pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_temperature_id_1/temperature_value_2", sensor_qos);
+    pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_temperature_id_1/temperature_value_3", sensor_qos);
+    pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_temperature_id_1/temperature_value_4", sensor_qos);
+    pub_powertrain_t26_slave_08_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_temperature_id_2/temperature_value_5", sensor_qos);
+    pub_powertrain_t26_slave_08_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_temperature_id_2/temperature_value_6", sensor_qos);
+    pub_powertrain_t26_slave_08_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_temperature_id_2/temperature_maximum", sensor_qos);
+    pub_powertrain_t26_slave_08_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_temperature_id_2/temperature_delta", sensor_qos);
+    pub_powertrain_t26_slave_08_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_msc_id_1/module_voltage_sum", sensor_qos);
+    pub_powertrain_t26_slave_08_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_msc_id_1/module_voltage_avg", sensor_qos);
+    pub_powertrain_t26_slave_08_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_msc_id_1/module_voltage_min", sensor_qos);
+    pub_powertrain_t26_slave_08_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_msc_id_1/module_voltage_max", sensor_qos);
+    pub_powertrain_t26_slave_08_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_msc_id_2/module_voltage_delta", sensor_qos);
+    pub_powertrain_t26_slave_08_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_msc_id_2/module_ic_voltage", sensor_qos);
+    pub_powertrain_t26_slave_08_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_msc_id_2/module_open_wire", sensor_qos);
+    pub_powertrain_t26_slave_08_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_08_msc_id_2/module_ic_temperature", sensor_qos);
+    pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_1/cell_voltage_1", sensor_qos);
+    pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_1/cell_voltage_2", sensor_qos);
+    pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_1/cell_voltage_3", sensor_qos);
+    pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_1/cell_voltage_4", sensor_qos);
+    pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_2/cell_voltage_5", sensor_qos);
+    pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_2/cell_voltage_6", sensor_qos);
+    pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_2/cell_voltage_7", sensor_qos);
+    pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_2/cell_voltage_8", sensor_qos);
+    pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_3/cell_voltage_9", sensor_qos);
+    pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_3/cell_voltage_10", sensor_qos);
+    pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_3/cell_voltage_11", sensor_qos);
+    pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_voltage_id_3/cell_voltage_12", sensor_qos);
+    pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_temperature_id_1/temperature_value_1", sensor_qos);
+    pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_temperature_id_1/temperature_value_2", sensor_qos);
+    pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_temperature_id_1/temperature_value_3", sensor_qos);
+    pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_temperature_id_1/temperature_value_4", sensor_qos);
+    pub_powertrain_t26_slave_09_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_temperature_id_2/temperature_value_5", sensor_qos);
+    pub_powertrain_t26_slave_09_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_temperature_id_2/temperature_value_6", sensor_qos);
+    pub_powertrain_t26_slave_09_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_temperature_id_2/temperature_maximum", sensor_qos);
+    pub_powertrain_t26_slave_09_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_temperature_id_2/temperature_delta", sensor_qos);
+    pub_powertrain_t26_slave_09_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_msc_id_1/module_voltage_sum", sensor_qos);
+    pub_powertrain_t26_slave_09_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_msc_id_1/module_voltage_avg", sensor_qos);
+    pub_powertrain_t26_slave_09_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_msc_id_1/module_voltage_min", sensor_qos);
+    pub_powertrain_t26_slave_09_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_msc_id_1/module_voltage_max", sensor_qos);
+    pub_powertrain_t26_slave_09_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_msc_id_2/module_voltage_delta", sensor_qos);
+    pub_powertrain_t26_slave_09_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_msc_id_2/module_ic_voltage", sensor_qos);
+    pub_powertrain_t26_slave_09_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_msc_id_2/module_open_wire", sensor_qos);
+    pub_powertrain_t26_slave_09_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_09_msc_id_2/module_ic_temperature", sensor_qos);
+    pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_1/cell_voltage_1", sensor_qos);
+    pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_1/cell_voltage_2", sensor_qos);
+    pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_1/cell_voltage_3", sensor_qos);
+    pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_1/cell_voltage_4", sensor_qos);
+    pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_2/cell_voltage_5", sensor_qos);
+    pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_2/cell_voltage_6", sensor_qos);
+    pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_2/cell_voltage_7", sensor_qos);
+    pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_2/cell_voltage_8", sensor_qos);
+    pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_3/cell_voltage_9", sensor_qos);
+    pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_3/cell_voltage_10", sensor_qos);
+    pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_3/cell_voltage_11", sensor_qos);
+    pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_voltage_id_3/cell_voltage_12", sensor_qos);
+    pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_temperature_id_1/temperature_value_1", sensor_qos);
+    pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_temperature_id_1/temperature_value_2", sensor_qos);
+    pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_temperature_id_1/temperature_value_3", sensor_qos);
+    pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_temperature_id_1/temperature_value_4", sensor_qos);
+    pub_powertrain_t26_slave_10_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_temperature_id_2/temperature_value_5", sensor_qos);
+    pub_powertrain_t26_slave_10_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_temperature_id_2/temperature_value_6", sensor_qos);
+    pub_powertrain_t26_slave_10_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_temperature_id_2/temperature_maximum", sensor_qos);
+    pub_powertrain_t26_slave_10_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_temperature_id_2/temperature_delta", sensor_qos);
+    pub_powertrain_t26_slave_10_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_msc_id_1/module_voltage_sum", sensor_qos);
+    pub_powertrain_t26_slave_10_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_msc_id_1/module_voltage_avg", sensor_qos);
+    pub_powertrain_t26_slave_10_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_msc_id_1/module_voltage_min", sensor_qos);
+    pub_powertrain_t26_slave_10_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_msc_id_1/module_voltage_max", sensor_qos);
+    pub_powertrain_t26_slave_10_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_msc_id_2/module_voltage_delta", sensor_qos);
+    pub_powertrain_t26_slave_10_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_msc_id_2/module_ic_voltage", sensor_qos);
+    pub_powertrain_t26_slave_10_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_msc_id_2/module_open_wire", sensor_qos);
+    pub_powertrain_t26_slave_10_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_10_msc_id_2/module_ic_temperature", sensor_qos);
+    pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_1/cell_voltage_1", sensor_qos);
+    pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_1/cell_voltage_2", sensor_qos);
+    pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_1/cell_voltage_3", sensor_qos);
+    pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_1/cell_voltage_4", sensor_qos);
+    pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_2/cell_voltage_5", sensor_qos);
+    pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_2/cell_voltage_6", sensor_qos);
+    pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_2/cell_voltage_7", sensor_qos);
+    pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_2/cell_voltage_8", sensor_qos);
+    pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_3/cell_voltage_9", sensor_qos);
+    pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_3/cell_voltage_10", sensor_qos);
+    pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_3/cell_voltage_11", sensor_qos);
+    pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_voltage_id_3/cell_voltage_12", sensor_qos);
+    pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_temperature_id_1/temperature_value_1", sensor_qos);
+    pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_temperature_id_1/temperature_value_2", sensor_qos);
+    pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_temperature_id_1/temperature_value_3", sensor_qos);
+    pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_temperature_id_1/temperature_value_4", sensor_qos);
+    pub_powertrain_t26_slave_11_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_temperature_id_2/temperature_value_5", sensor_qos);
+    pub_powertrain_t26_slave_11_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_temperature_id_2/temperature_value_6", sensor_qos);
+    pub_powertrain_t26_slave_11_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_temperature_id_2/temperature_maximum", sensor_qos);
+    pub_powertrain_t26_slave_11_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_temperature_id_2/temperature_delta", sensor_qos);
+    pub_powertrain_t26_slave_11_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_msc_id_1/module_voltage_sum", sensor_qos);
+    pub_powertrain_t26_slave_11_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_msc_id_1/module_voltage_avg", sensor_qos);
+    pub_powertrain_t26_slave_11_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_msc_id_1/module_voltage_min", sensor_qos);
+    pub_powertrain_t26_slave_11_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_msc_id_1/module_voltage_max", sensor_qos);
+    pub_powertrain_t26_slave_11_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_msc_id_2/module_voltage_delta", sensor_qos);
+    pub_powertrain_t26_slave_11_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_msc_id_2/module_ic_voltage", sensor_qos);
+    pub_powertrain_t26_slave_11_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_msc_id_2/module_open_wire", sensor_qos);
+    pub_powertrain_t26_slave_11_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_11_msc_id_2/module_ic_temperature", sensor_qos);
+    pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_1/cell_voltage_1", sensor_qos);
+    pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_1/cell_voltage_2", sensor_qos);
+    pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_1/cell_voltage_3", sensor_qos);
+    pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_1/cell_voltage_4", sensor_qos);
+    pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_2/cell_voltage_5", sensor_qos);
+    pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_2/cell_voltage_6", sensor_qos);
+    pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_7 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_2/cell_voltage_7", sensor_qos);
+    pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_8 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_2/cell_voltage_8", sensor_qos);
+    pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_9 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_3/cell_voltage_9", sensor_qos);
+    pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_10 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_3/cell_voltage_10", sensor_qos);
+    pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_11 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_3/cell_voltage_11", sensor_qos);
+    pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_12 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_voltage_id_3/cell_voltage_12", sensor_qos);
+    pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_1 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_temperature_id_1/temperature_value_1", sensor_qos);
+    pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_2 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_temperature_id_1/temperature_value_2", sensor_qos);
+    pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_3 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_temperature_id_1/temperature_value_3", sensor_qos);
+    pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_4 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_temperature_id_1/temperature_value_4", sensor_qos);
+    pub_powertrain_t26_slave_12_temperature_id_2_temperature_value_5 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_temperature_id_2/temperature_value_5", sensor_qos);
+    pub_powertrain_t26_slave_12_temperature_id_2_temperature_value_6 = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_temperature_id_2/temperature_value_6", sensor_qos);
+    pub_powertrain_t26_slave_12_temperature_id_2_temperature_maximum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_temperature_id_2/temperature_maximum", sensor_qos);
+    pub_powertrain_t26_slave_12_temperature_id_2_temperature_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_temperature_id_2/temperature_delta", sensor_qos);
+    pub_powertrain_t26_slave_12_msc_id_1_module_voltage_sum = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_msc_id_1/module_voltage_sum", sensor_qos);
+    pub_powertrain_t26_slave_12_msc_id_1_module_voltage_avg = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_msc_id_1/module_voltage_avg", sensor_qos);
+    pub_powertrain_t26_slave_12_msc_id_1_module_voltage_min = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_msc_id_1/module_voltage_min", sensor_qos);
+    pub_powertrain_t26_slave_12_msc_id_1_module_voltage_max = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_msc_id_1/module_voltage_max", sensor_qos);
+    pub_powertrain_t26_slave_12_msc_id_2_module_voltage_delta = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_msc_id_2/module_voltage_delta", sensor_qos);
+    pub_powertrain_t26_slave_12_msc_id_2_module_ic_voltage = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_msc_id_2/module_ic_voltage", sensor_qos);
+    pub_powertrain_t26_slave_12_msc_id_2_module_open_wire = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_msc_id_2/module_open_wire", sensor_qos);
+    pub_powertrain_t26_slave_12_msc_id_2_module_ic_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/slave_12_msc_id_2/module_ic_temperature", sensor_qos);
     pub_powertrain_t26_master_msc_id_1_mcu_vref = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/master_msc_id_1/mcu_vref", sensor_qos);
     pub_powertrain_t26_master_msc_id_1_mcu_temperature = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/master_msc_id_1/mcu_temperature", sensor_qos);
     pub_powertrain_t26_master_msc_id_1_ams_current_draw = node_->create_publisher<std_msgs::msg::Float32>("/can/dbc/master_msc_id_1/ams_current_draw", sensor_qos);
@@ -801,22 +861,44 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
     switch (can_id) {
         case 36u: {
             {
-                struct powertrain_t26_hv500_set_ac_current_t decoded = {};
-                if (powertrain_t26_hv500_set_ac_current_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_set_ac_current_t decoded = {};
+                if (powertrain_t26_inv1_set_ac_current_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_set_ac_current_cmd_target_ac_current_decode(decoded.cmd_target_ac_current);
-                    pub_powertrain_t26_hv500_setaccurrent_cmd_targetaccurrent->publish(out);
+                    out.data = powertrain_t26_inv1_set_ac_current_inv1_cmd_target_ac_current_decode(decoded.inv1_cmd_target_ac_current);
+                    pub_powertrain_t26_inv1_setaccurrent_inv1_cmd_targetaccurrent->publish(out);
+                }
+            }
+            return true;
+        }
+        case 37u: {
+            {
+                struct powertrain_t26_inv2_set_ac_current_t decoded = {};
+                if (powertrain_t26_inv2_set_ac_current_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_inv2_set_ac_current_inv2_cmd_target_ac_current_decode(decoded.inv2_cmd_target_ac_current);
+                    pub_powertrain_t26_inv2_setaccurrent_inv2_cmd_targetaccurrent->publish(out);
                 }
             }
             return true;
         }
         case 68u: {
             {
-                struct powertrain_t26_hv500_set_brake_current_t decoded = {};
-                if (powertrain_t26_hv500_set_brake_current_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_set_brake_current_t decoded = {};
+                if (powertrain_t26_inv1_set_brake_current_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_set_brake_current_cmd_target_brake_current_decode(decoded.cmd_target_brake_current);
-                    pub_powertrain_t26_hv500_setbrakecurrent_cmd_targetbrakecurrent->publish(out);
+                    out.data = powertrain_t26_inv1_set_brake_current_inv1_cmd_target_brake_current_decode(decoded.inv1_cmd_target_brake_current);
+                    pub_powertrain_t26_inv1_setbrakecurrent_inv1_cmd_targetbrakecurrent->publish(out);
+                }
+            }
+            return true;
+        }
+        case 69u: {
+            {
+                struct powertrain_t26_inv2_set_brake_current_t decoded = {};
+                if (powertrain_t26_inv2_set_brake_current_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_inv2_set_brake_current_inv2_cmd_target_brake_current_decode(decoded.inv2_cmd_target_brake_current);
+                    pub_powertrain_t26_inv2_setbrakecurrent_inv2_cmd_targetbrakecurrent->publish(out);
                 }
             }
             return true;
@@ -871,11 +953,22 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
         }
         case 100u: {
             {
-                struct powertrain_t26_hv500_set_erpm_t decoded = {};
-                if (powertrain_t26_hv500_set_erpm_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_set_erpm_t decoded = {};
+                if (powertrain_t26_inv1_set_erpm_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_set_erpm_cmd_target_speed_decode(decoded.cmd_target_speed);
-                    pub_powertrain_t26_hv500_seterpm_cmd_targetspeed->publish(out);
+                    out.data = powertrain_t26_inv1_set_erpm_inv1_cmd_target_speed_decode(decoded.inv1_cmd_target_speed);
+                    pub_powertrain_t26_inv1_seterpm_inv1_cmd_targetspeed->publish(out);
+                }
+            }
+            return true;
+        }
+        case 101u: {
+            {
+                struct powertrain_t26_inv2_set_erpm_t decoded = {};
+                if (powertrain_t26_inv2_set_erpm_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_inv2_set_erpm_inv2_cmd_target_speed_decode(decoded.inv2_cmd_target_speed);
+                    pub_powertrain_t26_inv2_seterpm_inv2_cmd_targetspeed->publish(out);
                 }
             }
             return true;
@@ -927,33 +1020,66 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
         }
         case 132u: {
             {
-                struct powertrain_t26_hv500_set_position_t decoded = {};
-                if (powertrain_t26_hv500_set_position_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_set_position_t decoded = {};
+                if (powertrain_t26_inv1_set_position_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_set_position_cmd_target_position_decode(decoded.cmd_target_position);
-                    pub_powertrain_t26_hv500_setposition_cmd_targetposition->publish(out);
+                    out.data = powertrain_t26_inv1_set_position_inv1_cmd_target_position_decode(decoded.inv1_cmd_target_position);
+                    pub_powertrain_t26_inv1_setposition_inv1_cmd_targetposition->publish(out);
+                }
+            }
+            return true;
+        }
+        case 133u: {
+            {
+                struct powertrain_t26_inv2_set_position_t decoded = {};
+                if (powertrain_t26_inv2_set_position_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_inv2_set_position_inv2_cmd_target_position_decode(decoded.inv2_cmd_target_position);
+                    pub_powertrain_t26_inv2_setposition_inv2_cmd_targetposition->publish(out);
                 }
             }
             return true;
         }
         case 164u: {
             {
-                struct powertrain_t26_hv500_set_rel_current_t decoded = {};
-                if (powertrain_t26_hv500_set_rel_current_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_set_rel_current_t decoded = {};
+                if (powertrain_t26_inv1_set_rel_current_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_set_rel_current_cmd_target_relative_current_decode(decoded.cmd_target_relative_current);
-                    pub_powertrain_t26_hv500_setrelcurrent_cmd_targetrelativecurrent->publish(out);
+                    out.data = powertrain_t26_inv1_set_rel_current_inv1_cmd_target_relative_current_decode(decoded.inv1_cmd_target_relative_current);
+                    pub_powertrain_t26_inv1_setrelcurrent_inv1_cmd_targetrelativecurrent->publish(out);
+                }
+            }
+            return true;
+        }
+        case 165u: {
+            {
+                struct powertrain_t26_inv2_set_rel_current_t decoded = {};
+                if (powertrain_t26_inv2_set_rel_current_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_inv2_set_rel_current_inv2_cmd_target_relative_current_decode(decoded.inv2_cmd_target_relative_current);
+                    pub_powertrain_t26_inv2_setrelcurrent_inv2_cmd_targetrelativecurrent->publish(out);
                 }
             }
             return true;
         }
         case 196u: {
             {
-                struct powertrain_t26_hv500_set_rel_brake_current_t decoded = {};
-                if (powertrain_t26_hv500_set_rel_brake_current_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_set_rel_brake_current_t decoded = {};
+                if (powertrain_t26_inv1_set_rel_brake_current_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_set_rel_brake_current_cmd_targe_relative_brake_current_decode(decoded.cmd_targe_relative_brake_current);
-                    pub_powertrain_t26_hv500_setrelbrakecurrent_cmd_targerelativebrakecurrent->publish(out);
+                    out.data = powertrain_t26_inv1_set_rel_brake_current_inv1_cmd_tgt_rel_brake_current_decode(decoded.inv1_cmd_tgt_rel_brake_current);
+                    pub_powertrain_t26_inv1_setrelbrakecurrent_inv1_cmd_tgtrelbrakecurrent->publish(out);
+                }
+            }
+            return true;
+        }
+        case 197u: {
+            {
+                struct powertrain_t26_inv2_set_rel_brake_current_t decoded = {};
+                if (powertrain_t26_inv2_set_rel_brake_current_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_inv2_set_rel_brake_current_inv2_cmd_tgt_rel_brake_current_decode(decoded.inv2_cmd_tgt_rel_brake_current);
+                    pub_powertrain_t26_inv2_setrelbrakecurrent_inv2_cmd_tgtrelbrakecurrent->publish(out);
                 }
             }
             return true;
@@ -971,1461 +1097,144 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
         }
         case 228u: {
             {
-                struct powertrain_t26_hv500_set_dig_output_t decoded = {};
-                if (powertrain_t26_hv500_set_dig_output_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_set_dig_output_t decoded = {};
+                if (powertrain_t26_inv1_set_dig_output_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_set_dig_output_cmd_set_dig_output4_decode(decoded.cmd_set_dig_output4);
-                    pub_powertrain_t26_hv500_setdigoutput_cmd_setdigoutput4->publish(out);
-                    out.data = powertrain_t26_hv500_set_dig_output_cmd_set_dig_output3_decode(decoded.cmd_set_dig_output3);
-                    pub_powertrain_t26_hv500_setdigoutput_cmd_setdigoutput3->publish(out);
-                    out.data = powertrain_t26_hv500_set_dig_output_cmd_set_dig_output2_decode(decoded.cmd_set_dig_output2);
-                    pub_powertrain_t26_hv500_setdigoutput_cmd_setdigoutput2->publish(out);
-                    out.data = powertrain_t26_hv500_set_dig_output_cmd_set_dig_output1_decode(decoded.cmd_set_dig_output1);
-                    pub_powertrain_t26_hv500_setdigoutput_cmd_setdigoutput1->publish(out);
+                    out.data = powertrain_t26_inv1_set_dig_output_inv1_cmd_set_dig_output4_decode(decoded.inv1_cmd_set_dig_output4);
+                    pub_powertrain_t26_inv1_setdigoutput_inv1_cmd_setdigoutput4->publish(out);
+                    out.data = powertrain_t26_inv1_set_dig_output_inv1_cmd_set_dig_output3_decode(decoded.inv1_cmd_set_dig_output3);
+                    pub_powertrain_t26_inv1_setdigoutput_inv1_cmd_setdigoutput3->publish(out);
+                    out.data = powertrain_t26_inv1_set_dig_output_inv1_cmd_set_dig_output2_decode(decoded.inv1_cmd_set_dig_output2);
+                    pub_powertrain_t26_inv1_setdigoutput_inv1_cmd_setdigoutput2->publish(out);
+                    out.data = powertrain_t26_inv1_set_dig_output_inv1_cmd_set_dig_output1_decode(decoded.inv1_cmd_set_dig_output1);
+                    pub_powertrain_t26_inv1_setdigoutput_inv1_cmd_setdigoutput1->publish(out);
                 }
             }
             return true;
         }
-        case 256u: {
+        case 229u: {
             {
-                struct powertrain_t26_slave_01_voltage_id_1_t decoded = {};
-                if (powertrain_t26_slave_01_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv2_set_dig_output_t decoded = {};
+                if (powertrain_t26_inv2_set_dig_output_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_01_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
-                    pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_1->publish(out);
-                    out.data = powertrain_t26_slave_01_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
-                    pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_2->publish(out);
-                    out.data = powertrain_t26_slave_01_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
-                    pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_3->publish(out);
-                    out.data = powertrain_t26_slave_01_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
-                    pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 257u: {
-            {
-                struct powertrain_t26_slave_01_voltage_id_2_t decoded = {};
-                if (powertrain_t26_slave_01_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_01_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
-                    pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_5->publish(out);
-                    out.data = powertrain_t26_slave_01_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
-                    pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_6->publish(out);
-                    out.data = powertrain_t26_slave_01_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
-                    pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_7->publish(out);
-                    out.data = powertrain_t26_slave_01_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
-                    pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_8->publish(out);
-                }
-            }
-            return true;
-        }
-        case 258u: {
-            {
-                struct powertrain_t26_slave_01_voltage_id_3_t decoded = {};
-                if (powertrain_t26_slave_01_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_01_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
-                    pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_9->publish(out);
-                    out.data = powertrain_t26_slave_01_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
-                    pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_10->publish(out);
-                    out.data = powertrain_t26_slave_01_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
-                    pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_11->publish(out);
-                    out.data = powertrain_t26_slave_01_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
-                    pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_12->publish(out);
-                }
-            }
-            return true;
-        }
-        case 259u: {
-            {
-                struct powertrain_t26_slave_01_temperature_id_1_t decoded = {};
-                if (powertrain_t26_slave_01_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_01_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
-                    pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_1->publish(out);
-                    out.data = powertrain_t26_slave_01_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
-                    pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_2->publish(out);
-                    out.data = powertrain_t26_slave_01_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
-                    pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_3->publish(out);
-                    out.data = powertrain_t26_slave_01_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
-                    pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_4->publish(out);
+                    out.data = powertrain_t26_inv2_set_dig_output_inv2_cmd_set_dig_output4_decode(decoded.inv2_cmd_set_dig_output4);
+                    pub_powertrain_t26_inv2_setdigoutput_inv2_cmd_setdigoutput4->publish(out);
+                    out.data = powertrain_t26_inv2_set_dig_output_inv2_cmd_set_dig_output3_decode(decoded.inv2_cmd_set_dig_output3);
+                    pub_powertrain_t26_inv2_setdigoutput_inv2_cmd_setdigoutput3->publish(out);
+                    out.data = powertrain_t26_inv2_set_dig_output_inv2_cmd_set_dig_output2_decode(decoded.inv2_cmd_set_dig_output2);
+                    pub_powertrain_t26_inv2_setdigoutput_inv2_cmd_setdigoutput2->publish(out);
+                    out.data = powertrain_t26_inv2_set_dig_output_inv2_cmd_set_dig_output1_decode(decoded.inv2_cmd_set_dig_output1);
+                    pub_powertrain_t26_inv2_setdigoutput_inv2_cmd_setdigoutput1->publish(out);
                 }
             }
             return true;
         }
         case 260u: {
             {
-                struct powertrain_t26_hv500_set_max_ac_current_t decoded = {};
-                if (powertrain_t26_hv500_set_max_ac_current_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_set_max_ac_current_t decoded = {};
+                if (powertrain_t26_inv1_set_max_ac_current_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_set_max_ac_current_cmd_max_ac_current_decode(decoded.cmd_max_ac_current);
-                    pub_powertrain_t26_hv500_setmaxaccurrent_cmd_maxaccurrent->publish(out);
+                    out.data = powertrain_t26_inv1_set_max_ac_current_inv1_cmd_max_ac_current_decode(decoded.inv1_cmd_max_ac_current);
+                    pub_powertrain_t26_inv1_setmaxaccurrent_inv1_cmd_maxaccurrent->publish(out);
                 }
             }
             return true;
         }
         case 261u: {
             {
-                struct powertrain_t26_slave_01_msc_id_1_t decoded = {};
-                if (powertrain_t26_slave_01_msc_id_1_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv2_set_max_ac_current_t decoded = {};
+                if (powertrain_t26_inv2_set_max_ac_current_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_01_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
-                    pub_powertrain_t26_slave_01_msc_id_1_module_voltage_sum->publish(out);
-                    out.data = powertrain_t26_slave_01_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
-                    pub_powertrain_t26_slave_01_msc_id_1_module_voltage_avg->publish(out);
-                    out.data = powertrain_t26_slave_01_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
-                    pub_powertrain_t26_slave_01_msc_id_1_module_voltage_min->publish(out);
-                    out.data = powertrain_t26_slave_01_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
-                    pub_powertrain_t26_slave_01_msc_id_1_module_voltage_max->publish(out);
-                }
-            }
-            return true;
-        }
-        case 262u: {
-            {
-                struct powertrain_t26_slave_01_msc_id_2_t decoded = {};
-                if (powertrain_t26_slave_01_msc_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_01_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
-                    pub_powertrain_t26_slave_01_msc_id_2_module_voltage_delta->publish(out);
-                    out.data = powertrain_t26_slave_01_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
-                    pub_powertrain_t26_slave_01_msc_id_2_module_ic_voltage->publish(out);
-                    out.data = powertrain_t26_slave_01_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
-                    pub_powertrain_t26_slave_01_msc_id_2_module_open_wire->publish(out);
-                    out.data = powertrain_t26_slave_01_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
-                    pub_powertrain_t26_slave_01_msc_id_2_module_ic_temperature->publish(out);
-                    out.data = powertrain_t26_slave_01_msc_id_2_module_overvoltage_decode(decoded.module_overvoltage);
-                    pub_powertrain_t26_slave_01_msc_id_2_module_overvoltage->publish(out);
-                    out.data = powertrain_t26_slave_01_msc_id_2_module_undervoltage_decode(decoded.module_undervoltage);
-                    pub_powertrain_t26_slave_01_msc_id_2_module_undervoltage->publish(out);
-                    out.data = powertrain_t26_slave_01_msc_id_2_module_under_over_identifier_decode(decoded.module_under_over_identifier);
-                    pub_powertrain_t26_slave_01_msc_id_2_module_under_over_identifier->publish(out);
-                }
-            }
-            return true;
-        }
-        case 263u: {
-            {
-                struct powertrain_t26_slave_02_voltage_id_1_t decoded = {};
-                if (powertrain_t26_slave_02_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_02_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
-                    pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_1->publish(out);
-                    out.data = powertrain_t26_slave_02_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
-                    pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_2->publish(out);
-                    out.data = powertrain_t26_slave_02_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
-                    pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_3->publish(out);
-                    out.data = powertrain_t26_slave_02_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
-                    pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 264u: {
-            {
-                struct powertrain_t26_slave_02_voltage_id_2_t decoded = {};
-                if (powertrain_t26_slave_02_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_02_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
-                    pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_5->publish(out);
-                    out.data = powertrain_t26_slave_02_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
-                    pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_6->publish(out);
-                    out.data = powertrain_t26_slave_02_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
-                    pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_7->publish(out);
-                    out.data = powertrain_t26_slave_02_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
-                    pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_8->publish(out);
-                }
-            }
-            return true;
-        }
-        case 265u: {
-            {
-                struct powertrain_t26_slave_02_voltage_id_3_t decoded = {};
-                if (powertrain_t26_slave_02_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_02_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
-                    pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_9->publish(out);
-                    out.data = powertrain_t26_slave_02_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
-                    pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_10->publish(out);
-                    out.data = powertrain_t26_slave_02_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
-                    pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_11->publish(out);
-                    out.data = powertrain_t26_slave_02_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
-                    pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_12->publish(out);
-                }
-            }
-            return true;
-        }
-        case 266u: {
-            {
-                struct powertrain_t26_slave_02_temperature_id_1_t decoded = {};
-                if (powertrain_t26_slave_02_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_02_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
-                    pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_1->publish(out);
-                    out.data = powertrain_t26_slave_02_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
-                    pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_2->publish(out);
-                    out.data = powertrain_t26_slave_02_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
-                    pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_3->publish(out);
-                    out.data = powertrain_t26_slave_02_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
-                    pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 267u: {
-            {
-                struct powertrain_t26_slave_02_temperature_id_2_t decoded = {};
-                if (powertrain_t26_slave_02_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_02_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
-                    pub_powertrain_t26_slave_02_temperature_id_2_temperature_value_5->publish(out);
-                    out.data = powertrain_t26_slave_02_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
-                    pub_powertrain_t26_slave_02_temperature_id_2_temperature_value_6->publish(out);
-                    out.data = powertrain_t26_slave_02_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
-                    pub_powertrain_t26_slave_02_temperature_id_2_temperature_maximum->publish(out);
-                    out.data = powertrain_t26_slave_02_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
-                    pub_powertrain_t26_slave_02_temperature_id_2_temperature_delta->publish(out);
-                }
-            }
-            return true;
-        }
-        case 268u: {
-            {
-                struct powertrain_t26_slave_02_msc_id_1_t decoded = {};
-                if (powertrain_t26_slave_02_msc_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_02_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
-                    pub_powertrain_t26_slave_02_msc_id_1_module_voltage_sum->publish(out);
-                    out.data = powertrain_t26_slave_02_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
-                    pub_powertrain_t26_slave_02_msc_id_1_module_voltage_avg->publish(out);
-                    out.data = powertrain_t26_slave_02_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
-                    pub_powertrain_t26_slave_02_msc_id_1_module_voltage_min->publish(out);
-                    out.data = powertrain_t26_slave_02_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
-                    pub_powertrain_t26_slave_02_msc_id_1_module_voltage_max->publish(out);
-                }
-            }
-            return true;
-        }
-        case 269u: {
-            {
-                struct powertrain_t26_slave_02_msc_id_2_t decoded = {};
-                if (powertrain_t26_slave_02_msc_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_02_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
-                    pub_powertrain_t26_slave_02_msc_id_2_module_voltage_delta->publish(out);
-                    out.data = powertrain_t26_slave_02_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
-                    pub_powertrain_t26_slave_02_msc_id_2_module_ic_voltage->publish(out);
-                    out.data = powertrain_t26_slave_02_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
-                    pub_powertrain_t26_slave_02_msc_id_2_module_open_wire->publish(out);
-                    out.data = powertrain_t26_slave_02_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
-                    pub_powertrain_t26_slave_02_msc_id_2_module_ic_temperature->publish(out);
-                    out.data = powertrain_t26_slave_02_msc_id_2_module_overvoltage_decode(decoded.module_overvoltage);
-                    pub_powertrain_t26_slave_02_msc_id_2_module_overvoltage->publish(out);
-                    out.data = powertrain_t26_slave_02_msc_id_2_module_undervoltage_decode(decoded.module_undervoltage);
-                    pub_powertrain_t26_slave_02_msc_id_2_module_undervoltage->publish(out);
-                    out.data = powertrain_t26_slave_02_msc_id_2_module_under_over_identifier_decode(decoded.module_under_over_identifier);
-                    pub_powertrain_t26_slave_02_msc_id_2_module_under_over_identifier->publish(out);
-                }
-            }
-            return true;
-        }
-        case 270u: {
-            {
-                struct powertrain_t26_slave_03_voltage_id_1_t decoded = {};
-                if (powertrain_t26_slave_03_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_03_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
-                    pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_1->publish(out);
-                    out.data = powertrain_t26_slave_03_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
-                    pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_2->publish(out);
-                    out.data = powertrain_t26_slave_03_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
-                    pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_3->publish(out);
-                    out.data = powertrain_t26_slave_03_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
-                    pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 271u: {
-            {
-                struct powertrain_t26_slave_03_voltage_id_2_t decoded = {};
-                if (powertrain_t26_slave_03_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_03_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
-                    pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_5->publish(out);
-                    out.data = powertrain_t26_slave_03_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
-                    pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_6->publish(out);
-                    out.data = powertrain_t26_slave_03_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
-                    pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_7->publish(out);
-                    out.data = powertrain_t26_slave_03_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
-                    pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_8->publish(out);
-                }
-            }
-            return true;
-        }
-        case 272u: {
-            {
-                struct powertrain_t26_slave_03_voltage_id_3_t decoded = {};
-                if (powertrain_t26_slave_03_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_03_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
-                    pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_9->publish(out);
-                    out.data = powertrain_t26_slave_03_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
-                    pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_10->publish(out);
-                    out.data = powertrain_t26_slave_03_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
-                    pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_11->publish(out);
-                    out.data = powertrain_t26_slave_03_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
-                    pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_12->publish(out);
-                }
-            }
-            return true;
-        }
-        case 273u: {
-            {
-                struct powertrain_t26_slave_03_temperature_id_1_t decoded = {};
-                if (powertrain_t26_slave_03_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_03_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
-                    pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_1->publish(out);
-                    out.data = powertrain_t26_slave_03_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
-                    pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_2->publish(out);
-                    out.data = powertrain_t26_slave_03_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
-                    pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_3->publish(out);
-                    out.data = powertrain_t26_slave_03_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
-                    pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 274u: {
-            {
-                struct powertrain_t26_slave_03_temperature_id_2_t decoded = {};
-                if (powertrain_t26_slave_03_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_03_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
-                    pub_powertrain_t26_slave_03_temperature_id_2_temperature_value_5->publish(out);
-                    out.data = powertrain_t26_slave_03_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
-                    pub_powertrain_t26_slave_03_temperature_id_2_temperature_value_6->publish(out);
-                    out.data = powertrain_t26_slave_03_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
-                    pub_powertrain_t26_slave_03_temperature_id_2_temperature_maximum->publish(out);
-                    out.data = powertrain_t26_slave_03_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
-                    pub_powertrain_t26_slave_03_temperature_id_2_temperature_delta->publish(out);
-                }
-            }
-            return true;
-        }
-        case 275u: {
-            {
-                struct powertrain_t26_slave_03_msc_id_1_t decoded = {};
-                if (powertrain_t26_slave_03_msc_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_03_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
-                    pub_powertrain_t26_slave_03_msc_id_1_module_voltage_sum->publish(out);
-                    out.data = powertrain_t26_slave_03_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
-                    pub_powertrain_t26_slave_03_msc_id_1_module_voltage_avg->publish(out);
-                    out.data = powertrain_t26_slave_03_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
-                    pub_powertrain_t26_slave_03_msc_id_1_module_voltage_min->publish(out);
-                    out.data = powertrain_t26_slave_03_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
-                    pub_powertrain_t26_slave_03_msc_id_1_module_voltage_max->publish(out);
-                }
-            }
-            return true;
-        }
-        case 276u: {
-            {
-                struct powertrain_t26_slave_03_msc_id_2_t decoded = {};
-                if (powertrain_t26_slave_03_msc_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_03_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
-                    pub_powertrain_t26_slave_03_msc_id_2_module_voltage_delta->publish(out);
-                    out.data = powertrain_t26_slave_03_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
-                    pub_powertrain_t26_slave_03_msc_id_2_module_ic_voltage->publish(out);
-                    out.data = powertrain_t26_slave_03_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
-                    pub_powertrain_t26_slave_03_msc_id_2_module_open_wire->publish(out);
-                    out.data = powertrain_t26_slave_03_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
-                    pub_powertrain_t26_slave_03_msc_id_2_module_ic_temperature->publish(out);
-                }
-            }
-            return true;
-        }
-        case 277u: {
-            {
-                struct powertrain_t26_slave_04_voltage_id_1_t decoded = {};
-                if (powertrain_t26_slave_04_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_04_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
-                    pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_1->publish(out);
-                    out.data = powertrain_t26_slave_04_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
-                    pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_2->publish(out);
-                    out.data = powertrain_t26_slave_04_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
-                    pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_3->publish(out);
-                    out.data = powertrain_t26_slave_04_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
-                    pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 278u: {
-            {
-                struct powertrain_t26_slave_04_voltage_id_2_t decoded = {};
-                if (powertrain_t26_slave_04_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_04_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
-                    pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_5->publish(out);
-                    out.data = powertrain_t26_slave_04_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
-                    pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_6->publish(out);
-                    out.data = powertrain_t26_slave_04_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
-                    pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_7->publish(out);
-                    out.data = powertrain_t26_slave_04_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
-                    pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_8->publish(out);
-                }
-            }
-            return true;
-        }
-        case 279u: {
-            {
-                struct powertrain_t26_slave_04_voltage_id_3_t decoded = {};
-                if (powertrain_t26_slave_04_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_04_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
-                    pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_9->publish(out);
-                    out.data = powertrain_t26_slave_04_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
-                    pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_10->publish(out);
-                    out.data = powertrain_t26_slave_04_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
-                    pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_11->publish(out);
-                    out.data = powertrain_t26_slave_04_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
-                    pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_12->publish(out);
-                }
-            }
-            return true;
-        }
-        case 280u: {
-            {
-                struct powertrain_t26_slave_04_temperature_id_1_t decoded = {};
-                if (powertrain_t26_slave_04_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_04_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
-                    pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_1->publish(out);
-                    out.data = powertrain_t26_slave_04_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
-                    pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_2->publish(out);
-                    out.data = powertrain_t26_slave_04_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
-                    pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_3->publish(out);
-                    out.data = powertrain_t26_slave_04_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
-                    pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 281u: {
-            {
-                struct powertrain_t26_slave_04_temperature_id_2_t decoded = {};
-                if (powertrain_t26_slave_04_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_04_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
-                    pub_powertrain_t26_slave_04_temperature_id_2_temperature_value_5->publish(out);
-                    out.data = powertrain_t26_slave_04_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
-                    pub_powertrain_t26_slave_04_temperature_id_2_temperature_value_6->publish(out);
-                    out.data = powertrain_t26_slave_04_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
-                    pub_powertrain_t26_slave_04_temperature_id_2_temperature_maximum->publish(out);
-                    out.data = powertrain_t26_slave_04_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
-                    pub_powertrain_t26_slave_04_temperature_id_2_temperature_delta->publish(out);
-                }
-            }
-            return true;
-        }
-        case 282u: {
-            {
-                struct powertrain_t26_slave_04_msc_id_1_t decoded = {};
-                if (powertrain_t26_slave_04_msc_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_04_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
-                    pub_powertrain_t26_slave_04_msc_id_1_module_voltage_sum->publish(out);
-                    out.data = powertrain_t26_slave_04_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
-                    pub_powertrain_t26_slave_04_msc_id_1_module_voltage_avg->publish(out);
-                    out.data = powertrain_t26_slave_04_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
-                    pub_powertrain_t26_slave_04_msc_id_1_module_voltage_min->publish(out);
-                    out.data = powertrain_t26_slave_04_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
-                    pub_powertrain_t26_slave_04_msc_id_1_module_voltage_max->publish(out);
-                }
-            }
-            return true;
-        }
-        case 283u: {
-            {
-                struct powertrain_t26_slave_04_msc_id_2_t decoded = {};
-                if (powertrain_t26_slave_04_msc_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_04_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
-                    pub_powertrain_t26_slave_04_msc_id_2_module_voltage_delta->publish(out);
-                    out.data = powertrain_t26_slave_04_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
-                    pub_powertrain_t26_slave_04_msc_id_2_module_ic_voltage->publish(out);
-                    out.data = powertrain_t26_slave_04_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
-                    pub_powertrain_t26_slave_04_msc_id_2_module_open_wire->publish(out);
-                    out.data = powertrain_t26_slave_04_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
-                    pub_powertrain_t26_slave_04_msc_id_2_module_ic_temperature->publish(out);
-                }
-            }
-            return true;
-        }
-        case 284u: {
-            {
-                struct powertrain_t26_slave_05_voltage_id_1_t decoded = {};
-                if (powertrain_t26_slave_05_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_05_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
-                    pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_1->publish(out);
-                    out.data = powertrain_t26_slave_05_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
-                    pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_2->publish(out);
-                    out.data = powertrain_t26_slave_05_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
-                    pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_3->publish(out);
-                    out.data = powertrain_t26_slave_05_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
-                    pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 285u: {
-            {
-                struct powertrain_t26_slave_05_voltage_id_2_t decoded = {};
-                if (powertrain_t26_slave_05_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_05_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
-                    pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_5->publish(out);
-                    out.data = powertrain_t26_slave_05_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
-                    pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_6->publish(out);
-                    out.data = powertrain_t26_slave_05_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
-                    pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_7->publish(out);
-                    out.data = powertrain_t26_slave_05_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
-                    pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_8->publish(out);
-                }
-            }
-            return true;
-        }
-        case 286u: {
-            {
-                struct powertrain_t26_slave_05_voltage_id_3_t decoded = {};
-                if (powertrain_t26_slave_05_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_05_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
-                    pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_9->publish(out);
-                    out.data = powertrain_t26_slave_05_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
-                    pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_10->publish(out);
-                    out.data = powertrain_t26_slave_05_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
-                    pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_11->publish(out);
-                    out.data = powertrain_t26_slave_05_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
-                    pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_12->publish(out);
-                }
-            }
-            return true;
-        }
-        case 287u: {
-            {
-                struct powertrain_t26_slave_05_temperature_id_1_t decoded = {};
-                if (powertrain_t26_slave_05_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_05_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
-                    pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_1->publish(out);
-                    out.data = powertrain_t26_slave_05_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
-                    pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_2->publish(out);
-                    out.data = powertrain_t26_slave_05_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
-                    pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_3->publish(out);
-                    out.data = powertrain_t26_slave_05_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
-                    pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 288u: {
-            {
-                struct powertrain_t26_slave_05_temperature_id_2_t decoded = {};
-                if (powertrain_t26_slave_05_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_05_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
-                    pub_powertrain_t26_slave_05_temperature_id_2_temperature_value_5->publish(out);
-                    out.data = powertrain_t26_slave_05_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
-                    pub_powertrain_t26_slave_05_temperature_id_2_temperature_value_6->publish(out);
-                    out.data = powertrain_t26_slave_05_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
-                    pub_powertrain_t26_slave_05_temperature_id_2_temperature_maximum->publish(out);
-                    out.data = powertrain_t26_slave_05_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
-                    pub_powertrain_t26_slave_05_temperature_id_2_temperature_delta->publish(out);
-                }
-            }
-            return true;
-        }
-        case 289u: {
-            {
-                struct powertrain_t26_slave_05_msc_id_1_t decoded = {};
-                if (powertrain_t26_slave_05_msc_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_05_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
-                    pub_powertrain_t26_slave_05_msc_id_1_module_voltage_sum->publish(out);
-                    out.data = powertrain_t26_slave_05_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
-                    pub_powertrain_t26_slave_05_msc_id_1_module_voltage_avg->publish(out);
-                    out.data = powertrain_t26_slave_05_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
-                    pub_powertrain_t26_slave_05_msc_id_1_module_voltage_min->publish(out);
-                    out.data = powertrain_t26_slave_05_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
-                    pub_powertrain_t26_slave_05_msc_id_1_module_voltage_max->publish(out);
-                }
-            }
-            return true;
-        }
-        case 290u: {
-            {
-                struct powertrain_t26_slave_05_msc_id_2_t decoded = {};
-                if (powertrain_t26_slave_05_msc_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_05_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
-                    pub_powertrain_t26_slave_05_msc_id_2_module_voltage_delta->publish(out);
-                    out.data = powertrain_t26_slave_05_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
-                    pub_powertrain_t26_slave_05_msc_id_2_module_ic_voltage->publish(out);
-                    out.data = powertrain_t26_slave_05_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
-                    pub_powertrain_t26_slave_05_msc_id_2_module_open_wire->publish(out);
-                    out.data = powertrain_t26_slave_05_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
-                    pub_powertrain_t26_slave_05_msc_id_2_module_ic_temperature->publish(out);
-                }
-            }
-            return true;
-        }
-        case 291u: {
-            {
-                struct powertrain_t26_slave_06_voltage_id_1_t decoded = {};
-                if (powertrain_t26_slave_06_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_06_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
-                    pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_1->publish(out);
-                    out.data = powertrain_t26_slave_06_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
-                    pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_2->publish(out);
-                    out.data = powertrain_t26_slave_06_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
-                    pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_3->publish(out);
-                    out.data = powertrain_t26_slave_06_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
-                    pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_4->publish(out);
+                    out.data = powertrain_t26_inv2_set_max_ac_current_inv2_cmd_max_ac_current_decode(decoded.inv2_cmd_max_ac_current);
+                    pub_powertrain_t26_inv2_setmaxaccurrent_inv2_cmd_maxaccurrent->publish(out);
                 }
             }
             return true;
         }
         case 292u: {
             {
-                struct powertrain_t26_hv500_set_max_ac_brake_current_t decoded = {};
-                if (powertrain_t26_hv500_set_max_ac_brake_current_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_set_max_ac_brake_current_t decoded = {};
+                if (powertrain_t26_inv1_set_max_ac_brake_current_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_set_max_ac_brake_current_cmd_max_ac_brake_current_decode(decoded.cmd_max_ac_brake_current);
-                    pub_powertrain_t26_hv500_setmaxacbrakecurrent_cmd_maxacbrakecurrent->publish(out);
+                    out.data = powertrain_t26_inv1_set_max_ac_brake_current_inv1_cmd_max_ac_brake_current_decode(decoded.inv1_cmd_max_ac_brake_current);
+                    pub_powertrain_t26_inv1_setmaxacbrakecurrent_inv1_cmd_maxacbrakecurrent->publish(out);
                 }
             }
             return true;
         }
         case 293u: {
             {
-                struct powertrain_t26_slave_06_voltage_id_3_t decoded = {};
-                if (powertrain_t26_slave_06_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv2_set_max_ac_brake_current_t decoded = {};
+                if (powertrain_t26_inv2_set_max_ac_brake_current_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_06_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
-                    pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_9->publish(out);
-                    out.data = powertrain_t26_slave_06_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
-                    pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_10->publish(out);
-                    out.data = powertrain_t26_slave_06_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
-                    pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_11->publish(out);
-                    out.data = powertrain_t26_slave_06_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
-                    pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_12->publish(out);
-                }
-            }
-            return true;
-        }
-        case 294u: {
-            {
-                struct powertrain_t26_slave_06_temperature_id_1_t decoded = {};
-                if (powertrain_t26_slave_06_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_06_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
-                    pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_1->publish(out);
-                    out.data = powertrain_t26_slave_06_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
-                    pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_2->publish(out);
-                    out.data = powertrain_t26_slave_06_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
-                    pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_3->publish(out);
-                    out.data = powertrain_t26_slave_06_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
-                    pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 295u: {
-            {
-                struct powertrain_t26_slave_06_temperature_id_2_t decoded = {};
-                if (powertrain_t26_slave_06_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_06_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
-                    pub_powertrain_t26_slave_06_temperature_id_2_temperature_value_5->publish(out);
-                    out.data = powertrain_t26_slave_06_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
-                    pub_powertrain_t26_slave_06_temperature_id_2_temperature_value_6->publish(out);
-                    out.data = powertrain_t26_slave_06_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
-                    pub_powertrain_t26_slave_06_temperature_id_2_temperature_maximum->publish(out);
-                    out.data = powertrain_t26_slave_06_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
-                    pub_powertrain_t26_slave_06_temperature_id_2_temperature_delta->publish(out);
-                }
-            }
-            return true;
-        }
-        case 296u: {
-            {
-                struct powertrain_t26_slave_06_msc_id_1_t decoded = {};
-                if (powertrain_t26_slave_06_msc_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_06_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
-                    pub_powertrain_t26_slave_06_msc_id_1_module_voltage_sum->publish(out);
-                    out.data = powertrain_t26_slave_06_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
-                    pub_powertrain_t26_slave_06_msc_id_1_module_voltage_avg->publish(out);
-                    out.data = powertrain_t26_slave_06_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
-                    pub_powertrain_t26_slave_06_msc_id_1_module_voltage_min->publish(out);
-                    out.data = powertrain_t26_slave_06_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
-                    pub_powertrain_t26_slave_06_msc_id_1_module_voltage_max->publish(out);
-                }
-            }
-            return true;
-        }
-        case 297u: {
-            {
-                struct powertrain_t26_slave_06_msc_id_2_t decoded = {};
-                if (powertrain_t26_slave_06_msc_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_06_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
-                    pub_powertrain_t26_slave_06_msc_id_2_module_voltage_delta->publish(out);
-                    out.data = powertrain_t26_slave_06_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
-                    pub_powertrain_t26_slave_06_msc_id_2_module_ic_voltage->publish(out);
-                    out.data = powertrain_t26_slave_06_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
-                    pub_powertrain_t26_slave_06_msc_id_2_module_open_wire->publish(out);
-                    out.data = powertrain_t26_slave_06_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
-                    pub_powertrain_t26_slave_06_msc_id_2_module_ic_temperature->publish(out);
-                }
-            }
-            return true;
-        }
-        case 298u: {
-            {
-                struct powertrain_t26_slave_07_voltage_id_1_t decoded = {};
-                if (powertrain_t26_slave_07_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_07_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
-                    pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_1->publish(out);
-                    out.data = powertrain_t26_slave_07_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
-                    pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_2->publish(out);
-                    out.data = powertrain_t26_slave_07_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
-                    pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_3->publish(out);
-                    out.data = powertrain_t26_slave_07_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
-                    pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 299u: {
-            {
-                struct powertrain_t26_slave_07_voltage_id_2_t decoded = {};
-                if (powertrain_t26_slave_07_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_07_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
-                    pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_5->publish(out);
-                    out.data = powertrain_t26_slave_07_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
-                    pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_6->publish(out);
-                    out.data = powertrain_t26_slave_07_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
-                    pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_7->publish(out);
-                    out.data = powertrain_t26_slave_07_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
-                    pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_8->publish(out);
-                }
-            }
-            return true;
-        }
-        case 300u: {
-            {
-                struct powertrain_t26_slave_07_voltage_id_3_t decoded = {};
-                if (powertrain_t26_slave_07_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_07_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
-                    pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_9->publish(out);
-                    out.data = powertrain_t26_slave_07_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
-                    pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_10->publish(out);
-                    out.data = powertrain_t26_slave_07_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
-                    pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_11->publish(out);
-                    out.data = powertrain_t26_slave_07_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
-                    pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_12->publish(out);
-                }
-            }
-            return true;
-        }
-        case 301u: {
-            {
-                struct powertrain_t26_slave_07_temperature_id_1_t decoded = {};
-                if (powertrain_t26_slave_07_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_07_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
-                    pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_1->publish(out);
-                    out.data = powertrain_t26_slave_07_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
-                    pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_2->publish(out);
-                    out.data = powertrain_t26_slave_07_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
-                    pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_3->publish(out);
-                    out.data = powertrain_t26_slave_07_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
-                    pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 302u: {
-            {
-                struct powertrain_t26_slave_07_temperature_id_2_t decoded = {};
-                if (powertrain_t26_slave_07_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_07_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
-                    pub_powertrain_t26_slave_07_temperature_id_2_temperature_value_5->publish(out);
-                    out.data = powertrain_t26_slave_07_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
-                    pub_powertrain_t26_slave_07_temperature_id_2_temperature_value_6->publish(out);
-                    out.data = powertrain_t26_slave_07_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
-                    pub_powertrain_t26_slave_07_temperature_id_2_temperature_maximum->publish(out);
-                    out.data = powertrain_t26_slave_07_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
-                    pub_powertrain_t26_slave_07_temperature_id_2_temperature_delta->publish(out);
-                }
-            }
-            return true;
-        }
-        case 303u: {
-            {
-                struct powertrain_t26_slave_07_msc_id_1_t decoded = {};
-                if (powertrain_t26_slave_07_msc_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_07_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
-                    pub_powertrain_t26_slave_07_msc_id_1_module_voltage_sum->publish(out);
-                    out.data = powertrain_t26_slave_07_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
-                    pub_powertrain_t26_slave_07_msc_id_1_module_voltage_avg->publish(out);
-                    out.data = powertrain_t26_slave_07_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
-                    pub_powertrain_t26_slave_07_msc_id_1_module_voltage_min->publish(out);
-                    out.data = powertrain_t26_slave_07_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
-                    pub_powertrain_t26_slave_07_msc_id_1_module_voltage_max->publish(out);
-                }
-            }
-            return true;
-        }
-        case 304u: {
-            {
-                struct powertrain_t26_slave_07_msc_id_2_t decoded = {};
-                if (powertrain_t26_slave_07_msc_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_07_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
-                    pub_powertrain_t26_slave_07_msc_id_2_module_voltage_delta->publish(out);
-                    out.data = powertrain_t26_slave_07_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
-                    pub_powertrain_t26_slave_07_msc_id_2_module_ic_voltage->publish(out);
-                    out.data = powertrain_t26_slave_07_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
-                    pub_powertrain_t26_slave_07_msc_id_2_module_open_wire->publish(out);
-                    out.data = powertrain_t26_slave_07_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
-                    pub_powertrain_t26_slave_07_msc_id_2_module_ic_temperature->publish(out);
-                }
-            }
-            return true;
-        }
-        case 305u: {
-            {
-                struct powertrain_t26_slave_08_voltage_id_1_t decoded = {};
-                if (powertrain_t26_slave_08_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_08_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
-                    pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_1->publish(out);
-                    out.data = powertrain_t26_slave_08_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
-                    pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_2->publish(out);
-                    out.data = powertrain_t26_slave_08_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
-                    pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_3->publish(out);
-                    out.data = powertrain_t26_slave_08_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
-                    pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 306u: {
-            {
-                struct powertrain_t26_slave_08_voltage_id_2_t decoded = {};
-                if (powertrain_t26_slave_08_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_08_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
-                    pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_5->publish(out);
-                    out.data = powertrain_t26_slave_08_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
-                    pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_6->publish(out);
-                    out.data = powertrain_t26_slave_08_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
-                    pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_7->publish(out);
-                    out.data = powertrain_t26_slave_08_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
-                    pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_8->publish(out);
-                }
-            }
-            return true;
-        }
-        case 307u: {
-            {
-                struct powertrain_t26_slave_08_voltage_id_3_t decoded = {};
-                if (powertrain_t26_slave_08_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_08_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
-                    pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_9->publish(out);
-                    out.data = powertrain_t26_slave_08_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
-                    pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_10->publish(out);
-                    out.data = powertrain_t26_slave_08_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
-                    pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_11->publish(out);
-                    out.data = powertrain_t26_slave_08_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
-                    pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_12->publish(out);
-                }
-            }
-            return true;
-        }
-        case 308u: {
-            {
-                struct powertrain_t26_slave_08_temperature_id_1_t decoded = {};
-                if (powertrain_t26_slave_08_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_08_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
-                    pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_1->publish(out);
-                    out.data = powertrain_t26_slave_08_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
-                    pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_2->publish(out);
-                    out.data = powertrain_t26_slave_08_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
-                    pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_3->publish(out);
-                    out.data = powertrain_t26_slave_08_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
-                    pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 309u: {
-            {
-                struct powertrain_t26_slave_08_temperature_id_2_t decoded = {};
-                if (powertrain_t26_slave_08_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_08_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
-                    pub_powertrain_t26_slave_08_temperature_id_2_temperature_value_5->publish(out);
-                    out.data = powertrain_t26_slave_08_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
-                    pub_powertrain_t26_slave_08_temperature_id_2_temperature_value_6->publish(out);
-                    out.data = powertrain_t26_slave_08_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
-                    pub_powertrain_t26_slave_08_temperature_id_2_temperature_maximum->publish(out);
-                    out.data = powertrain_t26_slave_08_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
-                    pub_powertrain_t26_slave_08_temperature_id_2_temperature_delta->publish(out);
-                }
-            }
-            return true;
-        }
-        case 310u: {
-            {
-                struct powertrain_t26_slave_08_msc_id_1_t decoded = {};
-                if (powertrain_t26_slave_08_msc_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_08_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
-                    pub_powertrain_t26_slave_08_msc_id_1_module_voltage_sum->publish(out);
-                    out.data = powertrain_t26_slave_08_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
-                    pub_powertrain_t26_slave_08_msc_id_1_module_voltage_avg->publish(out);
-                    out.data = powertrain_t26_slave_08_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
-                    pub_powertrain_t26_slave_08_msc_id_1_module_voltage_min->publish(out);
-                    out.data = powertrain_t26_slave_08_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
-                    pub_powertrain_t26_slave_08_msc_id_1_module_voltage_max->publish(out);
-                }
-            }
-            return true;
-        }
-        case 311u: {
-            {
-                struct powertrain_t26_slave_08_msc_id_2_t decoded = {};
-                if (powertrain_t26_slave_08_msc_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_08_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
-                    pub_powertrain_t26_slave_08_msc_id_2_module_voltage_delta->publish(out);
-                    out.data = powertrain_t26_slave_08_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
-                    pub_powertrain_t26_slave_08_msc_id_2_module_ic_voltage->publish(out);
-                    out.data = powertrain_t26_slave_08_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
-                    pub_powertrain_t26_slave_08_msc_id_2_module_open_wire->publish(out);
-                    out.data = powertrain_t26_slave_08_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
-                    pub_powertrain_t26_slave_08_msc_id_2_module_ic_temperature->publish(out);
-                }
-            }
-            return true;
-        }
-        case 312u: {
-            {
-                struct powertrain_t26_slave_09_voltage_id_1_t decoded = {};
-                if (powertrain_t26_slave_09_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_09_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
-                    pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_1->publish(out);
-                    out.data = powertrain_t26_slave_09_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
-                    pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_2->publish(out);
-                    out.data = powertrain_t26_slave_09_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
-                    pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_3->publish(out);
-                    out.data = powertrain_t26_slave_09_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
-                    pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 313u: {
-            {
-                struct powertrain_t26_slave_09_voltage_id_2_t decoded = {};
-                if (powertrain_t26_slave_09_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_09_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
-                    pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_5->publish(out);
-                    out.data = powertrain_t26_slave_09_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
-                    pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_6->publish(out);
-                    out.data = powertrain_t26_slave_09_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
-                    pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_7->publish(out);
-                    out.data = powertrain_t26_slave_09_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
-                    pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_8->publish(out);
-                }
-            }
-            return true;
-        }
-        case 314u: {
-            {
-                struct powertrain_t26_slave_09_voltage_id_3_t decoded = {};
-                if (powertrain_t26_slave_09_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_09_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
-                    pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_9->publish(out);
-                    out.data = powertrain_t26_slave_09_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
-                    pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_10->publish(out);
-                    out.data = powertrain_t26_slave_09_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
-                    pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_11->publish(out);
-                    out.data = powertrain_t26_slave_09_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
-                    pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_12->publish(out);
-                }
-            }
-            return true;
-        }
-        case 315u: {
-            {
-                struct powertrain_t26_slave_09_temperature_id_1_t decoded = {};
-                if (powertrain_t26_slave_09_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_09_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
-                    pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_1->publish(out);
-                    out.data = powertrain_t26_slave_09_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
-                    pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_2->publish(out);
-                    out.data = powertrain_t26_slave_09_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
-                    pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_3->publish(out);
-                    out.data = powertrain_t26_slave_09_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
-                    pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 316u: {
-            {
-                struct powertrain_t26_slave_09_temperature_id_2_t decoded = {};
-                if (powertrain_t26_slave_09_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_09_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
-                    pub_powertrain_t26_slave_09_temperature_id_2_temperature_value_5->publish(out);
-                    out.data = powertrain_t26_slave_09_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
-                    pub_powertrain_t26_slave_09_temperature_id_2_temperature_value_6->publish(out);
-                    out.data = powertrain_t26_slave_09_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
-                    pub_powertrain_t26_slave_09_temperature_id_2_temperature_maximum->publish(out);
-                    out.data = powertrain_t26_slave_09_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
-                    pub_powertrain_t26_slave_09_temperature_id_2_temperature_delta->publish(out);
-                }
-            }
-            return true;
-        }
-        case 317u: {
-            {
-                struct powertrain_t26_slave_09_msc_id_1_t decoded = {};
-                if (powertrain_t26_slave_09_msc_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_09_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
-                    pub_powertrain_t26_slave_09_msc_id_1_module_voltage_sum->publish(out);
-                    out.data = powertrain_t26_slave_09_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
-                    pub_powertrain_t26_slave_09_msc_id_1_module_voltage_avg->publish(out);
-                    out.data = powertrain_t26_slave_09_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
-                    pub_powertrain_t26_slave_09_msc_id_1_module_voltage_min->publish(out);
-                    out.data = powertrain_t26_slave_09_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
-                    pub_powertrain_t26_slave_09_msc_id_1_module_voltage_max->publish(out);
-                }
-            }
-            return true;
-        }
-        case 318u: {
-            {
-                struct powertrain_t26_slave_09_msc_id_2_t decoded = {};
-                if (powertrain_t26_slave_09_msc_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_09_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
-                    pub_powertrain_t26_slave_09_msc_id_2_module_voltage_delta->publish(out);
-                    out.data = powertrain_t26_slave_09_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
-                    pub_powertrain_t26_slave_09_msc_id_2_module_ic_voltage->publish(out);
-                    out.data = powertrain_t26_slave_09_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
-                    pub_powertrain_t26_slave_09_msc_id_2_module_open_wire->publish(out);
-                    out.data = powertrain_t26_slave_09_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
-                    pub_powertrain_t26_slave_09_msc_id_2_module_ic_temperature->publish(out);
-                }
-            }
-            return true;
-        }
-        case 319u: {
-            {
-                struct powertrain_t26_slave_10_voltage_id_1_t decoded = {};
-                if (powertrain_t26_slave_10_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_10_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
-                    pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_1->publish(out);
-                    out.data = powertrain_t26_slave_10_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
-                    pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_2->publish(out);
-                    out.data = powertrain_t26_slave_10_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
-                    pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_3->publish(out);
-                    out.data = powertrain_t26_slave_10_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
-                    pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 320u: {
-            {
-                struct powertrain_t26_slave_10_voltage_id_2_t decoded = {};
-                if (powertrain_t26_slave_10_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_10_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
-                    pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_5->publish(out);
-                    out.data = powertrain_t26_slave_10_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
-                    pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_6->publish(out);
-                    out.data = powertrain_t26_slave_10_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
-                    pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_7->publish(out);
-                    out.data = powertrain_t26_slave_10_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
-                    pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_8->publish(out);
-                }
-            }
-            return true;
-        }
-        case 321u: {
-            {
-                struct powertrain_t26_slave_10_voltage_id_3_t decoded = {};
-                if (powertrain_t26_slave_10_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_10_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
-                    pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_9->publish(out);
-                    out.data = powertrain_t26_slave_10_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
-                    pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_10->publish(out);
-                    out.data = powertrain_t26_slave_10_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
-                    pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_11->publish(out);
-                    out.data = powertrain_t26_slave_10_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
-                    pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_12->publish(out);
-                }
-            }
-            return true;
-        }
-        case 322u: {
-            {
-                struct powertrain_t26_slave_10_temperature_id_1_t decoded = {};
-                if (powertrain_t26_slave_10_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_10_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
-                    pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_1->publish(out);
-                    out.data = powertrain_t26_slave_10_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
-                    pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_2->publish(out);
-                    out.data = powertrain_t26_slave_10_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
-                    pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_3->publish(out);
-                    out.data = powertrain_t26_slave_10_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
-                    pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 323u: {
-            {
-                struct powertrain_t26_slave_10_temperature_id_2_t decoded = {};
-                if (powertrain_t26_slave_10_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_10_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
-                    pub_powertrain_t26_slave_10_temperature_id_2_temperature_value_5->publish(out);
-                    out.data = powertrain_t26_slave_10_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
-                    pub_powertrain_t26_slave_10_temperature_id_2_temperature_value_6->publish(out);
-                    out.data = powertrain_t26_slave_10_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
-                    pub_powertrain_t26_slave_10_temperature_id_2_temperature_maximum->publish(out);
-                    out.data = powertrain_t26_slave_10_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
-                    pub_powertrain_t26_slave_10_temperature_id_2_temperature_delta->publish(out);
+                    out.data = powertrain_t26_inv2_set_max_ac_brake_current_inv2_cmd_max_ac_brake_current_decode(decoded.inv2_cmd_max_ac_brake_current);
+                    pub_powertrain_t26_inv2_setmaxacbrakecurrent_inv2_cmd_maxacbrakecurrent->publish(out);
                 }
             }
             return true;
         }
         case 324u: {
             {
-                struct powertrain_t26_hv500_set_max_dc_current_t decoded = {};
-                if (powertrain_t26_hv500_set_max_dc_current_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_set_max_dc_current_t decoded = {};
+                if (powertrain_t26_inv1_set_max_dc_current_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_set_max_dc_current_cmd_max_dc_current_decode(decoded.cmd_max_dc_current);
-                    pub_powertrain_t26_hv500_setmaxdccurrent_cmd_maxdccurrent->publish(out);
+                    out.data = powertrain_t26_inv1_set_max_dc_current_inv1_cmd_max_dc_current_decode(decoded.inv1_cmd_max_dc_current);
+                    pub_powertrain_t26_inv1_setmaxdccurrent_inv1_cmd_maxdccurrent->publish(out);
                 }
             }
             return true;
         }
         case 325u: {
             {
-                struct powertrain_t26_slave_10_msc_id_2_t decoded = {};
-                if (powertrain_t26_slave_10_msc_id_2_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv2_set_max_dc_current_t decoded = {};
+                if (powertrain_t26_inv2_set_max_dc_current_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_10_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
-                    pub_powertrain_t26_slave_10_msc_id_2_module_voltage_delta->publish(out);
-                    out.data = powertrain_t26_slave_10_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
-                    pub_powertrain_t26_slave_10_msc_id_2_module_ic_voltage->publish(out);
-                    out.data = powertrain_t26_slave_10_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
-                    pub_powertrain_t26_slave_10_msc_id_2_module_open_wire->publish(out);
-                    out.data = powertrain_t26_slave_10_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
-                    pub_powertrain_t26_slave_10_msc_id_2_module_ic_temperature->publish(out);
-                }
-            }
-            return true;
-        }
-        case 326u: {
-            {
-                struct powertrain_t26_slave_11_voltage_id_1_t decoded = {};
-                if (powertrain_t26_slave_11_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_11_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
-                    pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_1->publish(out);
-                    out.data = powertrain_t26_slave_11_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
-                    pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_2->publish(out);
-                    out.data = powertrain_t26_slave_11_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
-                    pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_3->publish(out);
-                    out.data = powertrain_t26_slave_11_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
-                    pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 327u: {
-            {
-                struct powertrain_t26_slave_11_voltage_id_2_t decoded = {};
-                if (powertrain_t26_slave_11_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_11_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
-                    pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_5->publish(out);
-                    out.data = powertrain_t26_slave_11_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
-                    pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_6->publish(out);
-                    out.data = powertrain_t26_slave_11_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
-                    pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_7->publish(out);
-                    out.data = powertrain_t26_slave_11_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
-                    pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_8->publish(out);
-                }
-            }
-            return true;
-        }
-        case 328u: {
-            {
-                struct powertrain_t26_slave_11_voltage_id_3_t decoded = {};
-                if (powertrain_t26_slave_11_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_11_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
-                    pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_9->publish(out);
-                    out.data = powertrain_t26_slave_11_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
-                    pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_10->publish(out);
-                    out.data = powertrain_t26_slave_11_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
-                    pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_11->publish(out);
-                    out.data = powertrain_t26_slave_11_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
-                    pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_12->publish(out);
-                }
-            }
-            return true;
-        }
-        case 329u: {
-            {
-                struct powertrain_t26_slave_11_temperature_id_1_t decoded = {};
-                if (powertrain_t26_slave_11_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_11_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
-                    pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_1->publish(out);
-                    out.data = powertrain_t26_slave_11_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
-                    pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_2->publish(out);
-                    out.data = powertrain_t26_slave_11_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
-                    pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_3->publish(out);
-                    out.data = powertrain_t26_slave_11_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
-                    pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 330u: {
-            {
-                struct powertrain_t26_slave_11_temperature_id_2_t decoded = {};
-                if (powertrain_t26_slave_11_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_11_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
-                    pub_powertrain_t26_slave_11_temperature_id_2_temperature_value_5->publish(out);
-                    out.data = powertrain_t26_slave_11_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
-                    pub_powertrain_t26_slave_11_temperature_id_2_temperature_value_6->publish(out);
-                    out.data = powertrain_t26_slave_11_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
-                    pub_powertrain_t26_slave_11_temperature_id_2_temperature_maximum->publish(out);
-                    out.data = powertrain_t26_slave_11_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
-                    pub_powertrain_t26_slave_11_temperature_id_2_temperature_delta->publish(out);
-                }
-            }
-            return true;
-        }
-        case 331u: {
-            {
-                struct powertrain_t26_slave_11_msc_id_1_t decoded = {};
-                if (powertrain_t26_slave_11_msc_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_11_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
-                    pub_powertrain_t26_slave_11_msc_id_1_module_voltage_sum->publish(out);
-                    out.data = powertrain_t26_slave_11_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
-                    pub_powertrain_t26_slave_11_msc_id_1_module_voltage_avg->publish(out);
-                    out.data = powertrain_t26_slave_11_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
-                    pub_powertrain_t26_slave_11_msc_id_1_module_voltage_min->publish(out);
-                    out.data = powertrain_t26_slave_11_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
-                    pub_powertrain_t26_slave_11_msc_id_1_module_voltage_max->publish(out);
-                }
-            }
-            return true;
-        }
-        case 332u: {
-            {
-                struct powertrain_t26_slave_11_msc_id_2_t decoded = {};
-                if (powertrain_t26_slave_11_msc_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_11_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
-                    pub_powertrain_t26_slave_11_msc_id_2_module_voltage_delta->publish(out);
-                    out.data = powertrain_t26_slave_11_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
-                    pub_powertrain_t26_slave_11_msc_id_2_module_ic_voltage->publish(out);
-                    out.data = powertrain_t26_slave_11_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
-                    pub_powertrain_t26_slave_11_msc_id_2_module_open_wire->publish(out);
-                    out.data = powertrain_t26_slave_11_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
-                    pub_powertrain_t26_slave_11_msc_id_2_module_ic_temperature->publish(out);
-                }
-            }
-            return true;
-        }
-        case 333u: {
-            {
-                struct powertrain_t26_slave_12_voltage_id_1_t decoded = {};
-                if (powertrain_t26_slave_12_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_12_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
-                    pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_1->publish(out);
-                    out.data = powertrain_t26_slave_12_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
-                    pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_2->publish(out);
-                    out.data = powertrain_t26_slave_12_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
-                    pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_3->publish(out);
-                    out.data = powertrain_t26_slave_12_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
-                    pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 334u: {
-            {
-                struct powertrain_t26_slave_12_voltage_id_2_t decoded = {};
-                if (powertrain_t26_slave_12_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_12_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
-                    pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_5->publish(out);
-                    out.data = powertrain_t26_slave_12_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
-                    pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_6->publish(out);
-                    out.data = powertrain_t26_slave_12_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
-                    pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_7->publish(out);
-                    out.data = powertrain_t26_slave_12_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
-                    pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_8->publish(out);
-                }
-            }
-            return true;
-        }
-        case 335u: {
-            {
-                struct powertrain_t26_slave_12_voltage_id_3_t decoded = {};
-                if (powertrain_t26_slave_12_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_12_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
-                    pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_9->publish(out);
-                    out.data = powertrain_t26_slave_12_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
-                    pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_10->publish(out);
-                    out.data = powertrain_t26_slave_12_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
-                    pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_11->publish(out);
-                    out.data = powertrain_t26_slave_12_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
-                    pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_12->publish(out);
-                }
-            }
-            return true;
-        }
-        case 336u: {
-            {
-                struct powertrain_t26_slave_12_temperature_id_1_t decoded = {};
-                if (powertrain_t26_slave_12_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_12_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
-                    pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_1->publish(out);
-                    out.data = powertrain_t26_slave_12_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
-                    pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_2->publish(out);
-                    out.data = powertrain_t26_slave_12_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
-                    pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_3->publish(out);
-                    out.data = powertrain_t26_slave_12_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
-                    pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_4->publish(out);
-                }
-            }
-            return true;
-        }
-        case 337u: {
-            {
-                struct powertrain_t26_slave_12_temperature_id_2_t decoded = {};
-                if (powertrain_t26_slave_12_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_12_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
-                    pub_powertrain_t26_slave_12_temperature_id_2_temperature_value_5->publish(out);
-                    out.data = powertrain_t26_slave_12_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
-                    pub_powertrain_t26_slave_12_temperature_id_2_temperature_value_6->publish(out);
-                    out.data = powertrain_t26_slave_12_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
-                    pub_powertrain_t26_slave_12_temperature_id_2_temperature_maximum->publish(out);
-                    out.data = powertrain_t26_slave_12_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
-                    pub_powertrain_t26_slave_12_temperature_id_2_temperature_delta->publish(out);
-                }
-            }
-            return true;
-        }
-        case 338u: {
-            {
-                struct powertrain_t26_slave_12_msc_id_1_t decoded = {};
-                if (powertrain_t26_slave_12_msc_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_12_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
-                    pub_powertrain_t26_slave_12_msc_id_1_module_voltage_sum->publish(out);
-                    out.data = powertrain_t26_slave_12_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
-                    pub_powertrain_t26_slave_12_msc_id_1_module_voltage_avg->publish(out);
-                    out.data = powertrain_t26_slave_12_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
-                    pub_powertrain_t26_slave_12_msc_id_1_module_voltage_min->publish(out);
-                    out.data = powertrain_t26_slave_12_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
-                    pub_powertrain_t26_slave_12_msc_id_1_module_voltage_max->publish(out);
-                }
-            }
-            return true;
-        }
-        case 339u: {
-            {
-                struct powertrain_t26_slave_12_msc_id_2_t decoded = {};
-                if (powertrain_t26_slave_12_msc_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_12_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
-                    pub_powertrain_t26_slave_12_msc_id_2_module_voltage_delta->publish(out);
-                    out.data = powertrain_t26_slave_12_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
-                    pub_powertrain_t26_slave_12_msc_id_2_module_ic_voltage->publish(out);
-                    out.data = powertrain_t26_slave_12_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
-                    pub_powertrain_t26_slave_12_msc_id_2_module_open_wire->publish(out);
-                    out.data = powertrain_t26_slave_12_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
-                    pub_powertrain_t26_slave_12_msc_id_2_module_ic_temperature->publish(out);
+                    out.data = powertrain_t26_inv2_set_max_dc_current_inv2_cmd_max_dc_current_decode(decoded.inv2_cmd_max_dc_current);
+                    pub_powertrain_t26_inv2_setmaxdccurrent_inv2_cmd_maxdccurrent->publish(out);
                 }
             }
             return true;
         }
         case 356u: {
             {
-                struct powertrain_t26_hv500_set_max_dc_brake_current_t decoded = {};
-                if (powertrain_t26_hv500_set_max_dc_brake_current_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_set_max_dc_brake_current_t decoded = {};
+                if (powertrain_t26_inv1_set_max_dc_brake_current_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_set_max_dc_brake_current_cmd_max_dc_brake_current_decode(decoded.cmd_max_dc_brake_current);
-                    pub_powertrain_t26_hv500_setmaxdcbrakecurrent_cmd_maxdcbrakecurrent->publish(out);
+                    out.data = powertrain_t26_inv1_set_max_dc_brake_current_inv1_cmd_max_dc_brake_current_decode(decoded.inv1_cmd_max_dc_brake_current);
+                    pub_powertrain_t26_inv1_setmaxdcbrakecurrent_inv1_cmd_maxdcbrakecurrent->publish(out);
+                }
+            }
+            return true;
+        }
+        case 357u: {
+            {
+                struct powertrain_t26_inv2_set_max_dc_brake_current_t decoded = {};
+                if (powertrain_t26_inv2_set_max_dc_brake_current_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_inv2_set_max_dc_brake_current_inv2_cmd_max_dc_brake_current_decode(decoded.inv2_cmd_max_dc_brake_current);
+                    pub_powertrain_t26_inv2_setmaxdcbrakecurrent_inv2_cmd_maxdcbrakecurrent->publish(out);
                 }
             }
             return true;
         }
         case 388u: {
             {
-                struct powertrain_t26_hv500_set_drive_enable_t decoded = {};
-                if (powertrain_t26_hv500_set_drive_enable_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_set_drive_enable_t decoded = {};
+                if (powertrain_t26_inv1_set_drive_enable_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_set_drive_enable_cmd_drive_enable_decode(decoded.cmd_drive_enable);
-                    pub_powertrain_t26_hv500_setdriveenable_cmd_driveenable->publish(out);
+                    out.data = powertrain_t26_inv1_set_drive_enable_inv1_cmd_drive_enable_decode(decoded.inv1_cmd_drive_enable);
+                    pub_powertrain_t26_inv1_setdriveenable_inv1_cmd_driveenable->publish(out);
+                }
+            }
+            return true;
+        }
+        case 389u: {
+            {
+                struct powertrain_t26_inv2_set_drive_enable_t decoded = {};
+                if (powertrain_t26_inv2_set_drive_enable_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_inv2_set_drive_enable_inv2_cmd_drive_enable_decode(decoded.inv2_cmd_drive_enable);
+                    pub_powertrain_t26_inv2_setdriveenable_inv2_cmd_driveenable->publish(out);
                 }
             }
             return true;
@@ -2441,85 +1250,66 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
             }
             return true;
         }
-        case 420u: {
-            {
-                struct powertrain_t26_slave_06_voltage_id_2_t decoded = {};
-                if (powertrain_t26_slave_06_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_06_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
-                    pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_5->publish(out);
-                    out.data = powertrain_t26_slave_06_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
-                    pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_6->publish(out);
-                    out.data = powertrain_t26_slave_06_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
-                    pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_7->publish(out);
-                    out.data = powertrain_t26_slave_06_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
-                    pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_8->publish(out);
-                }
-            }
-            return true;
-        }
-        case 436u: {
-            {
-                struct powertrain_t26_slave_10_msc_id_1_t decoded = {};
-                if (powertrain_t26_slave_10_msc_id_1_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_10_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
-                    pub_powertrain_t26_slave_10_msc_id_1_module_voltage_sum->publish(out);
-                    out.data = powertrain_t26_slave_10_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
-                    pub_powertrain_t26_slave_10_msc_id_1_module_voltage_avg->publish(out);
-                    out.data = powertrain_t26_slave_10_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
-                    pub_powertrain_t26_slave_10_msc_id_1_module_voltage_min->publish(out);
-                    out.data = powertrain_t26_slave_10_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
-                    pub_powertrain_t26_slave_10_msc_id_1_module_voltage_max->publish(out);
-                }
-            }
-            return true;
-        }
-        case 452u: {
-            {
-                struct powertrain_t26_slave_01_temperature_id_2_t decoded = {};
-                if (powertrain_t26_slave_01_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
-                    std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_slave_01_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
-                    pub_powertrain_t26_slave_01_temperature_id_2_temperature_value_5->publish(out);
-                    out.data = powertrain_t26_slave_01_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
-                    pub_powertrain_t26_slave_01_temperature_id_2_temperature_value_6->publish(out);
-                    out.data = powertrain_t26_slave_01_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
-                    pub_powertrain_t26_slave_01_temperature_id_2_temperature_maximum->publish(out);
-                    out.data = powertrain_t26_slave_01_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
-                    pub_powertrain_t26_slave_01_temperature_id_2_temperature_delta->publish(out);
-                }
-            }
-            return true;
-        }
         case 996u: {
             {
-                struct powertrain_t26_hv500_target_iq_t decoded = {};
-                if (powertrain_t26_hv500_target_iq_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_target_iq_t decoded = {};
+                if (powertrain_t26_inv1_target_iq_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_target_iq_control_mode_decode(decoded.control_mode);
-                    pub_powertrain_t26_hv500_targetiq_controlmode->publish(out);
-                    out.data = powertrain_t26_hv500_target_iq_target_iq_decode(decoded.target_iq);
-                    pub_powertrain_t26_hv500_targetiq_targetiq->publish(out);
-                    out.data = powertrain_t26_hv500_target_iq_motor_position_decode(decoded.motor_position);
-                    pub_powertrain_t26_hv500_targetiq_motorposition->publish(out);
-                    out.data = powertrain_t26_hv500_target_iq_is_motor_still_decode(decoded.is_motor_still);
-                    pub_powertrain_t26_hv500_targetiq_ismotorstill->publish(out);
+                    out.data = powertrain_t26_inv1_target_iq_inv1_control_mode_decode(decoded.inv1_control_mode);
+                    pub_powertrain_t26_inv1_targetiq_inv1_controlmode->publish(out);
+                    out.data = powertrain_t26_inv1_target_iq_inv1_target_iq_decode(decoded.inv1_target_iq);
+                    pub_powertrain_t26_inv1_targetiq_inv1_targetiq->publish(out);
+                    out.data = powertrain_t26_inv1_target_iq_inv1_motor_position_decode(decoded.inv1_motor_position);
+                    pub_powertrain_t26_inv1_targetiq_inv1_motorposition->publish(out);
+                    out.data = powertrain_t26_inv1_target_iq_inv1_is_motor_still_decode(decoded.inv1_is_motor_still);
+                    pub_powertrain_t26_inv1_targetiq_inv1_ismotorstill->publish(out);
+                }
+            }
+            return true;
+        }
+        case 997u: {
+            {
+                struct powertrain_t26_inv2_target_iq_t decoded = {};
+                if (powertrain_t26_inv2_target_iq_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_inv2_target_iq_inv2_control_mode_decode(decoded.inv2_control_mode);
+                    pub_powertrain_t26_inv2_targetiq_inv2_controlmode->publish(out);
+                    out.data = powertrain_t26_inv2_target_iq_inv2_target_iq_decode(decoded.inv2_target_iq);
+                    pub_powertrain_t26_inv2_targetiq_inv2_targetiq->publish(out);
+                    out.data = powertrain_t26_inv2_target_iq_inv2_motor_position_decode(decoded.inv2_motor_position);
+                    pub_powertrain_t26_inv2_targetiq_inv2_motorposition->publish(out);
+                    out.data = powertrain_t26_inv2_target_iq_inv2_is_motor_still_decode(decoded.inv2_is_motor_still);
+                    pub_powertrain_t26_inv2_targetiq_inv2_ismotorstill->publish(out);
                 }
             }
             return true;
         }
         case 1028u: {
             {
-                struct powertrain_t26_hv500_erpm_duty_voltage_t decoded = {};
-                if (powertrain_t26_hv500_erpm_duty_voltage_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_erpm_duty_voltage_t decoded = {};
+                if (powertrain_t26_inv1_erpm_duty_voltage_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_erpm_duty_voltage_actual_erpm_decode(decoded.actual_erpm);
-                    pub_powertrain_t26_hv500_erpm_duty_voltage_actual_erpm->publish(out);
-                    out.data = powertrain_t26_hv500_erpm_duty_voltage_actual_duty_decode(decoded.actual_duty);
-                    pub_powertrain_t26_hv500_erpm_duty_voltage_actual_duty->publish(out);
-                    out.data = powertrain_t26_hv500_erpm_duty_voltage_actual_input_voltage_decode(decoded.actual_input_voltage);
-                    pub_powertrain_t26_hv500_erpm_duty_voltage_actual_inputvoltage->publish(out);
+                    out.data = powertrain_t26_inv1_erpm_duty_voltage_inv1_actual_erpm_decode(decoded.inv1_actual_erpm);
+                    pub_powertrain_t26_inv1_erpm_duty_voltage_inv1_actual_erpm->publish(out);
+                    out.data = powertrain_t26_inv1_erpm_duty_voltage_inv1_actual_duty_decode(decoded.inv1_actual_duty);
+                    pub_powertrain_t26_inv1_erpm_duty_voltage_inv1_actual_duty->publish(out);
+                    out.data = powertrain_t26_inv1_erpm_duty_voltage_inv1_actual_input_voltage_decode(decoded.inv1_actual_input_voltage);
+                    pub_powertrain_t26_inv1_erpm_duty_voltage_inv1_actual_inputvoltage->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1029u: {
+            {
+                struct powertrain_t26_inv2_erpm_duty_voltage_t decoded = {};
+                if (powertrain_t26_inv2_erpm_duty_voltage_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_inv2_erpm_duty_voltage_inv2_actual_erpm_decode(decoded.inv2_actual_erpm);
+                    pub_powertrain_t26_inv2_erpm_duty_voltage_inv2_actual_erpm->publish(out);
+                    out.data = powertrain_t26_inv2_erpm_duty_voltage_inv2_actual_duty_decode(decoded.inv2_actual_duty);
+                    pub_powertrain_t26_inv2_erpm_duty_voltage_inv2_actual_duty->publish(out);
+                    out.data = powertrain_t26_inv2_erpm_duty_voltage_inv2_actual_input_voltage_decode(decoded.inv2_actual_input_voltage);
+                    pub_powertrain_t26_inv2_erpm_duty_voltage_inv2_actual_inputvoltage->publish(out);
                 }
             }
             return true;
@@ -2747,41 +1537,82 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
         }
         case 1060u: {
             {
-                struct powertrain_t26_hv500_ac_dc_current_t decoded = {};
-                if (powertrain_t26_hv500_ac_dc_current_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_ac_dc_current_t decoded = {};
+                if (powertrain_t26_inv1_ac_dc_current_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_ac_dc_current_actual_ac_current_decode(decoded.actual_ac_current);
-                    pub_powertrain_t26_hv500_ac_dc_current_actual_accurrent->publish(out);
-                    out.data = powertrain_t26_hv500_ac_dc_current_actual_dc_current_decode(decoded.actual_dc_current);
-                    pub_powertrain_t26_hv500_ac_dc_current_actual_dccurrent->publish(out);
+                    out.data = powertrain_t26_inv1_ac_dc_current_inv1_actual_ac_current_decode(decoded.inv1_actual_ac_current);
+                    pub_powertrain_t26_inv1_ac_dc_current_inv1_actual_accurrent->publish(out);
+                    out.data = powertrain_t26_inv1_ac_dc_current_inv1_actual_dc_current_decode(decoded.inv1_actual_dc_current);
+                    pub_powertrain_t26_inv1_ac_dc_current_inv1_actual_dccurrent->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1061u: {
+            {
+                struct powertrain_t26_inv2_ac_dc_current_t decoded = {};
+                if (powertrain_t26_inv2_ac_dc_current_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_inv2_ac_dc_current_inv2_actual_ac_current_decode(decoded.inv2_actual_ac_current);
+                    pub_powertrain_t26_inv2_ac_dc_current_inv2_actual_accurrent->publish(out);
+                    out.data = powertrain_t26_inv2_ac_dc_current_inv2_actual_dc_current_decode(decoded.inv2_actual_dc_current);
+                    pub_powertrain_t26_inv2_ac_dc_current_inv2_actual_dccurrent->publish(out);
                 }
             }
             return true;
         }
         case 1092u: {
             {
-                struct powertrain_t26_hv500_temperatures_t decoded = {};
-                if (powertrain_t26_hv500_temperatures_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_temperatures_t decoded = {};
+                if (powertrain_t26_inv1_temperatures_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_temperatures_actual_temp_controller_decode(decoded.actual_temp_controller);
-                    pub_powertrain_t26_hv500_temperatures_actual_tempcontroller->publish(out);
-                    out.data = powertrain_t26_hv500_temperatures_actual_temp_motor_decode(decoded.actual_temp_motor);
-                    pub_powertrain_t26_hv500_temperatures_actual_tempmotor->publish(out);
-                    out.data = powertrain_t26_hv500_temperatures_actual_fault_code_decode(decoded.actual_fault_code);
-                    pub_powertrain_t26_hv500_temperatures_actual_faultcode->publish(out);
+                    out.data = powertrain_t26_inv1_temperatures_inv1_actual_temp_controller_decode(decoded.inv1_actual_temp_controller);
+                    pub_powertrain_t26_inv1_temperatures_inv1_actual_tempcontroller->publish(out);
+                    out.data = powertrain_t26_inv1_temperatures_inv1_actual_temp_motor_decode(decoded.inv1_actual_temp_motor);
+                    pub_powertrain_t26_inv1_temperatures_inv1_actual_tempmotor->publish(out);
+                    out.data = powertrain_t26_inv1_temperatures_inv1_actual_fault_code_decode(decoded.inv1_actual_fault_code);
+                    pub_powertrain_t26_inv1_temperatures_inv1_actual_faultcode->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1093u: {
+            {
+                struct powertrain_t26_inv2_temperatures_t decoded = {};
+                if (powertrain_t26_inv2_temperatures_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_inv2_temperatures_inv2_actual_temp_controller_decode(decoded.inv2_actual_temp_controller);
+                    pub_powertrain_t26_inv2_temperatures_inv2_actual_tempcontroller->publish(out);
+                    out.data = powertrain_t26_inv2_temperatures_inv2_actual_temp_motor_decode(decoded.inv2_actual_temp_motor);
+                    pub_powertrain_t26_inv2_temperatures_inv2_actual_tempmotor->publish(out);
+                    out.data = powertrain_t26_inv2_temperatures_inv2_actual_fault_code_decode(decoded.inv2_actual_fault_code);
+                    pub_powertrain_t26_inv2_temperatures_inv2_actual_faultcode->publish(out);
                 }
             }
             return true;
         }
         case 1124u: {
             {
-                struct powertrain_t26_hv500_foc_t decoded = {};
-                if (powertrain_t26_hv500_foc_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_foc_t decoded = {};
+                if (powertrain_t26_inv1_foc_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_foc_actual_foc_id_decode(decoded.actual_foc_id);
-                    pub_powertrain_t26_hv500_foc_actual_foc_id->publish(out);
-                    out.data = powertrain_t26_hv500_foc_actual_foc_iq_decode(decoded.actual_foc_iq);
-                    pub_powertrain_t26_hv500_foc_actual_foc_iq->publish(out);
+                    out.data = powertrain_t26_inv1_foc_inv1_actual_foc_id_decode(decoded.inv1_actual_foc_id);
+                    pub_powertrain_t26_inv1_foc_inv1_actual_foc_id->publish(out);
+                    out.data = powertrain_t26_inv1_foc_inv1_actual_foc_iq_decode(decoded.inv1_actual_foc_iq);
+                    pub_powertrain_t26_inv1_foc_inv1_actual_foc_iq->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1125u: {
+            {
+                struct powertrain_t26_inv2_foc_t decoded = {};
+                if (powertrain_t26_inv2_foc_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_inv2_foc_inv2_actual_foc_id_decode(decoded.inv2_actual_foc_id);
+                    pub_powertrain_t26_inv2_foc_inv2_actual_foc_id->publish(out);
+                    out.data = powertrain_t26_inv2_foc_inv2_actual_foc_iq_decode(decoded.inv2_actual_foc_iq);
+                    pub_powertrain_t26_inv2_foc_inv2_actual_foc_iq->publish(out);
                 }
             }
             return true;
@@ -2799,55 +1630,110 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
         }
         case 1156u: {
             {
-                struct powertrain_t26_hv500_misc_t decoded = {};
-                if (powertrain_t26_hv500_misc_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_misc_t decoded = {};
+                if (powertrain_t26_inv1_misc_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_misc_actual_throttle_decode(decoded.actual_throttle);
-                    pub_powertrain_t26_hv500_misc_actual_throttle->publish(out);
-                    out.data = powertrain_t26_hv500_misc_actual_brake_decode(decoded.actual_brake);
-                    pub_powertrain_t26_hv500_misc_actual_brake->publish(out);
-                    out.data = powertrain_t26_hv500_misc_digital_output_4_decode(decoded.digital_output_4);
-                    pub_powertrain_t26_hv500_misc_digital_output_4->publish(out);
-                    out.data = powertrain_t26_hv500_misc_digital_output_3_decode(decoded.digital_output_3);
-                    pub_powertrain_t26_hv500_misc_digital_output_3->publish(out);
-                    out.data = powertrain_t26_hv500_misc_digital_output_2_decode(decoded.digital_output_2);
-                    pub_powertrain_t26_hv500_misc_digital_output_2->publish(out);
-                    out.data = powertrain_t26_hv500_misc_digital_output_1_decode(decoded.digital_output_1);
-                    pub_powertrain_t26_hv500_misc_digital_output_1->publish(out);
-                    out.data = powertrain_t26_hv500_misc_digital_input_4_decode(decoded.digital_input_4);
-                    pub_powertrain_t26_hv500_misc_digital_input_4->publish(out);
-                    out.data = powertrain_t26_hv500_misc_digital_input_3_decode(decoded.digital_input_3);
-                    pub_powertrain_t26_hv500_misc_digital_input_3->publish(out);
-                    out.data = powertrain_t26_hv500_misc_digital_input_2_decode(decoded.digital_input_2);
-                    pub_powertrain_t26_hv500_misc_digital_input_2->publish(out);
-                    out.data = powertrain_t26_hv500_misc_digital_input_1_decode(decoded.digital_input_1);
-                    pub_powertrain_t26_hv500_misc_digital_input_1->publish(out);
-                    out.data = powertrain_t26_hv500_misc_drive_enable_decode(decoded.drive_enable);
-                    pub_powertrain_t26_hv500_misc_drive_enable->publish(out);
-                    out.data = powertrain_t26_hv500_misc_motor_temp_limit_decode(decoded.motor_temp_limit);
-                    pub_powertrain_t26_hv500_misc_motor_temp_limit->publish(out);
-                    out.data = powertrain_t26_hv500_misc_motor_accel_limit_decode(decoded.motor_accel_limit);
-                    pub_powertrain_t26_hv500_misc_motor_accel_limit->publish(out);
-                    out.data = powertrain_t26_hv500_misc_input_voltage_limit_decode(decoded.input_voltage_limit);
-                    pub_powertrain_t26_hv500_misc_input_voltage_limit->publish(out);
-                    out.data = powertrain_t26_hv500_misc_igbt_temp_limit_decode(decoded.igbt_temp_limit);
-                    pub_powertrain_t26_hv500_misc_igbt_temp_limit->publish(out);
-                    out.data = powertrain_t26_hv500_misc_igbt_accel_limit_decode(decoded.igbt_accel_limit);
-                    pub_powertrain_t26_hv500_misc_igbt_accel_limit->publish(out);
-                    out.data = powertrain_t26_hv500_misc_drive_enable_limit_decode(decoded.drive_enable_limit);
-                    pub_powertrain_t26_hv500_misc_drive_enable_limit->publish(out);
-                    out.data = powertrain_t26_hv500_misc_dc_current_limit_decode(decoded.dc_current_limit);
-                    pub_powertrain_t26_hv500_misc_dc_current_limit->publish(out);
-                    out.data = powertrain_t26_hv500_misc_capacitor_temp_limit_decode(decoded.capacitor_temp_limit);
-                    pub_powertrain_t26_hv500_misc_capacitor_temp_limit->publish(out);
-                    out.data = powertrain_t26_hv500_misc_power_limit_decode(decoded.power_limit);
-                    pub_powertrain_t26_hv500_misc_power_limit->publish(out);
-                    out.data = powertrain_t26_hv500_misc_rpm_max_limit_decode(decoded.rpm_max_limit);
-                    pub_powertrain_t26_hv500_misc_rpm_max_limit->publish(out);
-                    out.data = powertrain_t26_hv500_misc_rpm_min_limit_decode(decoded.rpm_min_limit);
-                    pub_powertrain_t26_hv500_misc_rpm_min_limit->publish(out);
-                    out.data = powertrain_t26_hv500_misc_can_map_version_decode(decoded.can_map_version);
-                    pub_powertrain_t26_hv500_misc_can_map_version->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_actual_throttle_decode(decoded.inv1_actual_throttle);
+                    pub_powertrain_t26_inv1_misc_inv1_actual_throttle->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_actual_brake_decode(decoded.inv1_actual_brake);
+                    pub_powertrain_t26_inv1_misc_inv1_actual_brake->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_digital_output_4_decode(decoded.inv1_digital_output_4);
+                    pub_powertrain_t26_inv1_misc_inv1_digital_output_4->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_digital_output_3_decode(decoded.inv1_digital_output_3);
+                    pub_powertrain_t26_inv1_misc_inv1_digital_output_3->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_digital_output_2_decode(decoded.inv1_digital_output_2);
+                    pub_powertrain_t26_inv1_misc_inv1_digital_output_2->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_digital_output_1_decode(decoded.inv1_digital_output_1);
+                    pub_powertrain_t26_inv1_misc_inv1_digital_output_1->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_digital_input_4_decode(decoded.inv1_digital_input_4);
+                    pub_powertrain_t26_inv1_misc_inv1_digital_input_4->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_digital_input_3_decode(decoded.inv1_digital_input_3);
+                    pub_powertrain_t26_inv1_misc_inv1_digital_input_3->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_digital_input_2_decode(decoded.inv1_digital_input_2);
+                    pub_powertrain_t26_inv1_misc_inv1_digital_input_2->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_digital_input_1_decode(decoded.inv1_digital_input_1);
+                    pub_powertrain_t26_inv1_misc_inv1_digital_input_1->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_drive_enable_decode(decoded.inv1_drive_enable);
+                    pub_powertrain_t26_inv1_misc_inv1_drive_enable->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_motor_temp_limit_decode(decoded.inv1_motor_temp_limit);
+                    pub_powertrain_t26_inv1_misc_inv1_motor_temp_limit->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_motor_accel_limit_decode(decoded.inv1_motor_accel_limit);
+                    pub_powertrain_t26_inv1_misc_inv1_motor_accel_limit->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_input_voltage_limit_decode(decoded.inv1_input_voltage_limit);
+                    pub_powertrain_t26_inv1_misc_inv1_input_voltage_limit->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_igbt_temp_limit_decode(decoded.inv1_igbt_temp_limit);
+                    pub_powertrain_t26_inv1_misc_inv1_igbt_temp_limit->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_igbt_accel_limit_decode(decoded.inv1_igbt_accel_limit);
+                    pub_powertrain_t26_inv1_misc_inv1_igbt_accel_limit->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_drive_enable_limit_decode(decoded.inv1_drive_enable_limit);
+                    pub_powertrain_t26_inv1_misc_inv1_drive_enable_limit->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_dc_current_limit_decode(decoded.inv1_dc_current_limit);
+                    pub_powertrain_t26_inv1_misc_inv1_dc_current_limit->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_capacitor_temp_limit_decode(decoded.inv1_capacitor_temp_limit);
+                    pub_powertrain_t26_inv1_misc_inv1_capacitor_temp_limit->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_power_limit_decode(decoded.inv1_power_limit);
+                    pub_powertrain_t26_inv1_misc_inv1_power_limit->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_rpm_max_limit_decode(decoded.inv1_rpm_max_limit);
+                    pub_powertrain_t26_inv1_misc_inv1_rpm_max_limit->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_rpm_min_limit_decode(decoded.inv1_rpm_min_limit);
+                    pub_powertrain_t26_inv1_misc_inv1_rpm_min_limit->publish(out);
+                    out.data = powertrain_t26_inv1_misc_inv1_can_map_version_decode(decoded.inv1_can_map_version);
+                    pub_powertrain_t26_inv1_misc_inv1_can_map_version->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1157u: {
+            {
+                struct powertrain_t26_inv2_misc_t decoded = {};
+                if (powertrain_t26_inv2_misc_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_inv2_misc_inv2_actual_throttle_decode(decoded.inv2_actual_throttle);
+                    pub_powertrain_t26_inv2_misc_inv2_actual_throttle->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_actual_brake_decode(decoded.inv2_actual_brake);
+                    pub_powertrain_t26_inv2_misc_inv2_actual_brake->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_digital_output_4_decode(decoded.inv2_digital_output_4);
+                    pub_powertrain_t26_inv2_misc_inv2_digital_output_4->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_digital_output_3_decode(decoded.inv2_digital_output_3);
+                    pub_powertrain_t26_inv2_misc_inv2_digital_output_3->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_digital_output_2_decode(decoded.inv2_digital_output_2);
+                    pub_powertrain_t26_inv2_misc_inv2_digital_output_2->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_digital_output_1_decode(decoded.inv2_digital_output_1);
+                    pub_powertrain_t26_inv2_misc_inv2_digital_output_1->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_digital_input_4_decode(decoded.inv2_digital_input_4);
+                    pub_powertrain_t26_inv2_misc_inv2_digital_input_4->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_digital_input_3_decode(decoded.inv2_digital_input_3);
+                    pub_powertrain_t26_inv2_misc_inv2_digital_input_3->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_digital_input_2_decode(decoded.inv2_digital_input_2);
+                    pub_powertrain_t26_inv2_misc_inv2_digital_input_2->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_digital_input_1_decode(decoded.inv2_digital_input_1);
+                    pub_powertrain_t26_inv2_misc_inv2_digital_input_1->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_drive_enable_decode(decoded.inv2_drive_enable);
+                    pub_powertrain_t26_inv2_misc_inv2_drive_enable->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_motor_temp_limit_decode(decoded.inv2_motor_temp_limit);
+                    pub_powertrain_t26_inv2_misc_inv2_motor_temp_limit->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_motor_accel_limit_decode(decoded.inv2_motor_accel_limit);
+                    pub_powertrain_t26_inv2_misc_inv2_motor_accel_limit->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_input_voltage_limit_decode(decoded.inv2_input_voltage_limit);
+                    pub_powertrain_t26_inv2_misc_inv2_input_voltage_limit->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_igbt_temp_limit_decode(decoded.inv2_igbt_temp_limit);
+                    pub_powertrain_t26_inv2_misc_inv2_igbt_temp_limit->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_igbt_accel_limit_decode(decoded.inv2_igbt_accel_limit);
+                    pub_powertrain_t26_inv2_misc_inv2_igbt_accel_limit->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_drive_enable_limit_decode(decoded.inv2_drive_enable_limit);
+                    pub_powertrain_t26_inv2_misc_inv2_drive_enable_limit->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_dc_current_limit_decode(decoded.inv2_dc_current_limit);
+                    pub_powertrain_t26_inv2_misc_inv2_dc_current_limit->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_capacitor_temp_limit_decode(decoded.inv2_capacitor_temp_limit);
+                    pub_powertrain_t26_inv2_misc_inv2_capacitor_temp_limit->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_power_limit_decode(decoded.inv2_power_limit);
+                    pub_powertrain_t26_inv2_misc_inv2_power_limit->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_rpm_max_limit_decode(decoded.inv2_rpm_max_limit);
+                    pub_powertrain_t26_inv2_misc_inv2_rpm_max_limit->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_rpm_min_limit_decode(decoded.inv2_rpm_min_limit);
+                    pub_powertrain_t26_inv2_misc_inv2_rpm_min_limit->publish(out);
+                    out.data = powertrain_t26_inv2_misc_inv2_can_map_version_decode(decoded.inv2_can_map_version);
+                    pub_powertrain_t26_inv2_misc_inv2_can_map_version->publish(out);
                 }
             }
             return true;
@@ -2876,34 +1762,68 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
         }
         case 1188u: {
             {
-                struct powertrain_t26_hv500_min_max_ac_current_t decoded = {};
-                if (powertrain_t26_hv500_min_max_ac_current_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_min_max_ac_current_t decoded = {};
+                if (powertrain_t26_inv1_min_max_ac_current_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_min_max_ac_current_max_ac_current_decode(decoded.max_ac_current);
-                    pub_powertrain_t26_hv500_minmaxaccurrent_maxaccurrent->publish(out);
-                    out.data = powertrain_t26_hv500_min_max_ac_current_available_max_ac_current_decode(decoded.available_max_ac_current);
-                    pub_powertrain_t26_hv500_minmaxaccurrent_availablemaxaccurrent->publish(out);
-                    out.data = powertrain_t26_hv500_min_max_ac_current_min_ac_current_decode(decoded.min_ac_current);
-                    pub_powertrain_t26_hv500_minmaxaccurrent_minaccurrent->publish(out);
-                    out.data = powertrain_t26_hv500_min_max_ac_current_available_min_ac_current_decode(decoded.available_min_ac_current);
-                    pub_powertrain_t26_hv500_minmaxaccurrent_availableminaccurrent->publish(out);
+                    out.data = powertrain_t26_inv1_min_max_ac_current_inv1_max_ac_current_decode(decoded.inv1_max_ac_current);
+                    pub_powertrain_t26_inv1_minmaxaccurrent_inv1_maxaccurrent->publish(out);
+                    out.data = powertrain_t26_inv1_min_max_ac_current_inv1_available_max_ac_current_decode(decoded.inv1_available_max_ac_current);
+                    pub_powertrain_t26_inv1_minmaxaccurrent_inv1_availablemaxaccurrent->publish(out);
+                    out.data = powertrain_t26_inv1_min_max_ac_current_inv1_min_ac_current_decode(decoded.inv1_min_ac_current);
+                    pub_powertrain_t26_inv1_minmaxaccurrent_inv1_minaccurrent->publish(out);
+                    out.data = powertrain_t26_inv1_min_max_ac_current_inv1_available_min_ac_current_decode(decoded.inv1_available_min_ac_current);
+                    pub_powertrain_t26_inv1_minmaxaccurrent_inv1_availableminaccurrent->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1189u: {
+            {
+                struct powertrain_t26_inv2_min_max_ac_current_t decoded = {};
+                if (powertrain_t26_inv2_min_max_ac_current_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_inv2_min_max_ac_current_inv2_max_ac_current_decode(decoded.inv2_max_ac_current);
+                    pub_powertrain_t26_inv2_minmaxaccurrent_inv2_maxaccurrent->publish(out);
+                    out.data = powertrain_t26_inv2_min_max_ac_current_inv2_available_max_ac_current_decode(decoded.inv2_available_max_ac_current);
+                    pub_powertrain_t26_inv2_minmaxaccurrent_inv2_availablemaxaccurrent->publish(out);
+                    out.data = powertrain_t26_inv2_min_max_ac_current_inv2_min_ac_current_decode(decoded.inv2_min_ac_current);
+                    pub_powertrain_t26_inv2_minmaxaccurrent_inv2_minaccurrent->publish(out);
+                    out.data = powertrain_t26_inv2_min_max_ac_current_inv2_available_min_ac_current_decode(decoded.inv2_available_min_ac_current);
+                    pub_powertrain_t26_inv2_minmaxaccurrent_inv2_availableminaccurrent->publish(out);
                 }
             }
             return true;
         }
         case 1220u: {
             {
-                struct powertrain_t26_hv500_min_max_dc_current_t decoded = {};
-                if (powertrain_t26_hv500_min_max_dc_current_unpack(&decoded, data, dlc) == 0) {
+                struct powertrain_t26_inv1_min_max_dc_current_t decoded = {};
+                if (powertrain_t26_inv1_min_max_dc_current_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
-                    out.data = powertrain_t26_hv500_min_max_dc_current_max_dc_current_decode(decoded.max_dc_current);
-                    pub_powertrain_t26_hv500_minmaxdccurrent_maxdccurrent->publish(out);
-                    out.data = powertrain_t26_hv500_min_max_dc_current_available_max_dc_current_decode(decoded.available_max_dc_current);
-                    pub_powertrain_t26_hv500_minmaxdccurrent_availablemaxdccurrent->publish(out);
-                    out.data = powertrain_t26_hv500_min_max_dc_current_min_dc_current_decode(decoded.min_dc_current);
-                    pub_powertrain_t26_hv500_minmaxdccurrent_mindccurrent->publish(out);
-                    out.data = powertrain_t26_hv500_min_max_dc_current_available_min_dc_current_decode(decoded.available_min_dc_current);
-                    pub_powertrain_t26_hv500_minmaxdccurrent_availablemindccurrent->publish(out);
+                    out.data = powertrain_t26_inv1_min_max_dc_current_inv1_max_dc_current_decode(decoded.inv1_max_dc_current);
+                    pub_powertrain_t26_inv1_minmaxdccurrent_inv1_maxdccurrent->publish(out);
+                    out.data = powertrain_t26_inv1_min_max_dc_current_inv1_available_max_dc_current_decode(decoded.inv1_available_max_dc_current);
+                    pub_powertrain_t26_inv1_minmaxdccurrent_inv1_availablemaxdccurrent->publish(out);
+                    out.data = powertrain_t26_inv1_min_max_dc_current_inv1_min_dc_current_decode(decoded.inv1_min_dc_current);
+                    pub_powertrain_t26_inv1_minmaxdccurrent_inv1_mindccurrent->publish(out);
+                    out.data = powertrain_t26_inv1_min_max_dc_current_inv1_available_min_dc_current_decode(decoded.inv1_available_min_dc_current);
+                    pub_powertrain_t26_inv1_minmaxdccurrent_inv1_availablemindccurrent->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1221u: {
+            {
+                struct powertrain_t26_inv2_min_max_dc_current_t decoded = {};
+                if (powertrain_t26_inv2_min_max_dc_current_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_inv2_min_max_dc_current_inv2_max_dc_current_decode(decoded.inv2_max_dc_current);
+                    pub_powertrain_t26_inv2_minmaxdccurrent_inv2_maxdccurrent->publish(out);
+                    out.data = powertrain_t26_inv2_min_max_dc_current_inv2_available_max_dc_current_decode(decoded.inv2_available_max_dc_current);
+                    pub_powertrain_t26_inv2_minmaxdccurrent_inv2_availablemaxdccurrent->publish(out);
+                    out.data = powertrain_t26_inv2_min_max_dc_current_inv2_min_dc_current_decode(decoded.inv2_min_dc_current);
+                    pub_powertrain_t26_inv2_minmaxdccurrent_inv2_mindccurrent->publish(out);
+                    out.data = powertrain_t26_inv2_min_max_dc_current_inv2_available_min_dc_current_decode(decoded.inv2_available_min_dc_current);
+                    pub_powertrain_t26_inv2_minmaxdccurrent_inv2_availablemindccurrent->publish(out);
                 }
             }
             return true;
@@ -3414,6 +2334,20 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
         }
         case 1536u: {
             {
+                struct powertrain_t26_slave_01_voltage_id_1_t decoded = {};
+                if (powertrain_t26_slave_01_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_01_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
+                    pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_1->publish(out);
+                    out.data = powertrain_t26_slave_01_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
+                    pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_2->publish(out);
+                    out.data = powertrain_t26_slave_01_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
+                    pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_3->publish(out);
+                    out.data = powertrain_t26_slave_01_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
+                    pub_powertrain_t26_slave_01_voltage_id_1_cell_voltage_4->publish(out);
+                }
+            }
+            {
                 struct autonomous_t26_vcu_ign_r2_d_t decoded = {};
                 if (autonomous_t26_vcu_ign_r2_d_unpack(&decoded, data, dlc) == 0) {
                     std_msgs::msg::Float32 out;
@@ -3433,6 +2367,1429 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
                     pub_autonomous_t26_vcu_ign_r2d_r2d_button_raw->publish(out);
                     out.data = autonomous_t26_vcu_ign_r2_d_ignition_switch_raw_decode(decoded.ignition_switch_raw);
                     pub_autonomous_t26_vcu_ign_r2d_ignition_switch_raw->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1537u: {
+            {
+                struct powertrain_t26_slave_01_voltage_id_2_t decoded = {};
+                if (powertrain_t26_slave_01_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_01_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
+                    pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_5->publish(out);
+                    out.data = powertrain_t26_slave_01_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
+                    pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_6->publish(out);
+                    out.data = powertrain_t26_slave_01_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
+                    pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_7->publish(out);
+                    out.data = powertrain_t26_slave_01_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
+                    pub_powertrain_t26_slave_01_voltage_id_2_cell_voltage_8->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1538u: {
+            {
+                struct powertrain_t26_slave_01_voltage_id_3_t decoded = {};
+                if (powertrain_t26_slave_01_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_01_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
+                    pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_9->publish(out);
+                    out.data = powertrain_t26_slave_01_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
+                    pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_10->publish(out);
+                    out.data = powertrain_t26_slave_01_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
+                    pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_11->publish(out);
+                    out.data = powertrain_t26_slave_01_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
+                    pub_powertrain_t26_slave_01_voltage_id_3_cell_voltage_12->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1539u: {
+            {
+                struct powertrain_t26_slave_01_temperature_id_1_t decoded = {};
+                if (powertrain_t26_slave_01_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_01_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
+                    pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_1->publish(out);
+                    out.data = powertrain_t26_slave_01_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
+                    pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_2->publish(out);
+                    out.data = powertrain_t26_slave_01_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
+                    pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_3->publish(out);
+                    out.data = powertrain_t26_slave_01_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
+                    pub_powertrain_t26_slave_01_temperature_id_1_temperature_value_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1540u: {
+            {
+                struct powertrain_t26_slave_01_temperature_id_2_t decoded = {};
+                if (powertrain_t26_slave_01_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_01_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
+                    pub_powertrain_t26_slave_01_temperature_id_2_temperature_value_5->publish(out);
+                    out.data = powertrain_t26_slave_01_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
+                    pub_powertrain_t26_slave_01_temperature_id_2_temperature_value_6->publish(out);
+                    out.data = powertrain_t26_slave_01_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
+                    pub_powertrain_t26_slave_01_temperature_id_2_temperature_maximum->publish(out);
+                    out.data = powertrain_t26_slave_01_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
+                    pub_powertrain_t26_slave_01_temperature_id_2_temperature_delta->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1541u: {
+            {
+                struct powertrain_t26_slave_01_msc_id_1_t decoded = {};
+                if (powertrain_t26_slave_01_msc_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_01_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
+                    pub_powertrain_t26_slave_01_msc_id_1_module_voltage_sum->publish(out);
+                    out.data = powertrain_t26_slave_01_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
+                    pub_powertrain_t26_slave_01_msc_id_1_module_voltage_avg->publish(out);
+                    out.data = powertrain_t26_slave_01_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
+                    pub_powertrain_t26_slave_01_msc_id_1_module_voltage_min->publish(out);
+                    out.data = powertrain_t26_slave_01_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
+                    pub_powertrain_t26_slave_01_msc_id_1_module_voltage_max->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1542u: {
+            {
+                struct powertrain_t26_slave_01_msc_id_2_t decoded = {};
+                if (powertrain_t26_slave_01_msc_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_01_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
+                    pub_powertrain_t26_slave_01_msc_id_2_module_voltage_delta->publish(out);
+                    out.data = powertrain_t26_slave_01_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
+                    pub_powertrain_t26_slave_01_msc_id_2_module_ic_voltage->publish(out);
+                    out.data = powertrain_t26_slave_01_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
+                    pub_powertrain_t26_slave_01_msc_id_2_module_open_wire->publish(out);
+                    out.data = powertrain_t26_slave_01_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
+                    pub_powertrain_t26_slave_01_msc_id_2_module_ic_temperature->publish(out);
+                    out.data = powertrain_t26_slave_01_msc_id_2_module_overvoltage_decode(decoded.module_overvoltage);
+                    pub_powertrain_t26_slave_01_msc_id_2_module_overvoltage->publish(out);
+                    out.data = powertrain_t26_slave_01_msc_id_2_module_undervoltage_decode(decoded.module_undervoltage);
+                    pub_powertrain_t26_slave_01_msc_id_2_module_undervoltage->publish(out);
+                    out.data = powertrain_t26_slave_01_msc_id_2_module_under_over_identifier_decode(decoded.module_under_over_identifier);
+                    pub_powertrain_t26_slave_01_msc_id_2_module_under_over_identifier->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1543u: {
+            {
+                struct powertrain_t26_slave_02_voltage_id_1_t decoded = {};
+                if (powertrain_t26_slave_02_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_02_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
+                    pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_1->publish(out);
+                    out.data = powertrain_t26_slave_02_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
+                    pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_2->publish(out);
+                    out.data = powertrain_t26_slave_02_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
+                    pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_3->publish(out);
+                    out.data = powertrain_t26_slave_02_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
+                    pub_powertrain_t26_slave_02_voltage_id_1_cell_voltage_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1544u: {
+            {
+                struct powertrain_t26_slave_02_voltage_id_2_t decoded = {};
+                if (powertrain_t26_slave_02_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_02_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
+                    pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_5->publish(out);
+                    out.data = powertrain_t26_slave_02_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
+                    pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_6->publish(out);
+                    out.data = powertrain_t26_slave_02_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
+                    pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_7->publish(out);
+                    out.data = powertrain_t26_slave_02_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
+                    pub_powertrain_t26_slave_02_voltage_id_2_cell_voltage_8->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1545u: {
+            {
+                struct powertrain_t26_slave_02_voltage_id_3_t decoded = {};
+                if (powertrain_t26_slave_02_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_02_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
+                    pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_9->publish(out);
+                    out.data = powertrain_t26_slave_02_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
+                    pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_10->publish(out);
+                    out.data = powertrain_t26_slave_02_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
+                    pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_11->publish(out);
+                    out.data = powertrain_t26_slave_02_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
+                    pub_powertrain_t26_slave_02_voltage_id_3_cell_voltage_12->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1546u: {
+            {
+                struct powertrain_t26_slave_02_temperature_id_1_t decoded = {};
+                if (powertrain_t26_slave_02_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_02_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
+                    pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_1->publish(out);
+                    out.data = powertrain_t26_slave_02_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
+                    pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_2->publish(out);
+                    out.data = powertrain_t26_slave_02_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
+                    pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_3->publish(out);
+                    out.data = powertrain_t26_slave_02_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
+                    pub_powertrain_t26_slave_02_temperature_id_1_temperature_value_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1547u: {
+            {
+                struct powertrain_t26_slave_02_temperature_id_2_t decoded = {};
+                if (powertrain_t26_slave_02_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_02_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
+                    pub_powertrain_t26_slave_02_temperature_id_2_temperature_value_5->publish(out);
+                    out.data = powertrain_t26_slave_02_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
+                    pub_powertrain_t26_slave_02_temperature_id_2_temperature_value_6->publish(out);
+                    out.data = powertrain_t26_slave_02_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
+                    pub_powertrain_t26_slave_02_temperature_id_2_temperature_maximum->publish(out);
+                    out.data = powertrain_t26_slave_02_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
+                    pub_powertrain_t26_slave_02_temperature_id_2_temperature_delta->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1548u: {
+            {
+                struct powertrain_t26_slave_02_msc_id_1_t decoded = {};
+                if (powertrain_t26_slave_02_msc_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_02_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
+                    pub_powertrain_t26_slave_02_msc_id_1_module_voltage_sum->publish(out);
+                    out.data = powertrain_t26_slave_02_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
+                    pub_powertrain_t26_slave_02_msc_id_1_module_voltage_avg->publish(out);
+                    out.data = powertrain_t26_slave_02_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
+                    pub_powertrain_t26_slave_02_msc_id_1_module_voltage_min->publish(out);
+                    out.data = powertrain_t26_slave_02_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
+                    pub_powertrain_t26_slave_02_msc_id_1_module_voltage_max->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1549u: {
+            {
+                struct powertrain_t26_slave_02_msc_id_2_t decoded = {};
+                if (powertrain_t26_slave_02_msc_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_02_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
+                    pub_powertrain_t26_slave_02_msc_id_2_module_voltage_delta->publish(out);
+                    out.data = powertrain_t26_slave_02_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
+                    pub_powertrain_t26_slave_02_msc_id_2_module_ic_voltage->publish(out);
+                    out.data = powertrain_t26_slave_02_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
+                    pub_powertrain_t26_slave_02_msc_id_2_module_open_wire->publish(out);
+                    out.data = powertrain_t26_slave_02_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
+                    pub_powertrain_t26_slave_02_msc_id_2_module_ic_temperature->publish(out);
+                    out.data = powertrain_t26_slave_02_msc_id_2_module_overvoltage_decode(decoded.module_overvoltage);
+                    pub_powertrain_t26_slave_02_msc_id_2_module_overvoltage->publish(out);
+                    out.data = powertrain_t26_slave_02_msc_id_2_module_undervoltage_decode(decoded.module_undervoltage);
+                    pub_powertrain_t26_slave_02_msc_id_2_module_undervoltage->publish(out);
+                    out.data = powertrain_t26_slave_02_msc_id_2_module_under_over_identifier_decode(decoded.module_under_over_identifier);
+                    pub_powertrain_t26_slave_02_msc_id_2_module_under_over_identifier->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1550u: {
+            {
+                struct powertrain_t26_slave_03_voltage_id_1_t decoded = {};
+                if (powertrain_t26_slave_03_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_03_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
+                    pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_1->publish(out);
+                    out.data = powertrain_t26_slave_03_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
+                    pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_2->publish(out);
+                    out.data = powertrain_t26_slave_03_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
+                    pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_3->publish(out);
+                    out.data = powertrain_t26_slave_03_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
+                    pub_powertrain_t26_slave_03_voltage_id_1_cell_voltage_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1551u: {
+            {
+                struct powertrain_t26_slave_03_voltage_id_2_t decoded = {};
+                if (powertrain_t26_slave_03_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_03_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
+                    pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_5->publish(out);
+                    out.data = powertrain_t26_slave_03_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
+                    pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_6->publish(out);
+                    out.data = powertrain_t26_slave_03_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
+                    pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_7->publish(out);
+                    out.data = powertrain_t26_slave_03_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
+                    pub_powertrain_t26_slave_03_voltage_id_2_cell_voltage_8->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1552u: {
+            {
+                struct powertrain_t26_slave_03_voltage_id_3_t decoded = {};
+                if (powertrain_t26_slave_03_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_03_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
+                    pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_9->publish(out);
+                    out.data = powertrain_t26_slave_03_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
+                    pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_10->publish(out);
+                    out.data = powertrain_t26_slave_03_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
+                    pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_11->publish(out);
+                    out.data = powertrain_t26_slave_03_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
+                    pub_powertrain_t26_slave_03_voltage_id_3_cell_voltage_12->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1553u: {
+            {
+                struct powertrain_t26_slave_03_temperature_id_1_t decoded = {};
+                if (powertrain_t26_slave_03_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_03_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
+                    pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_1->publish(out);
+                    out.data = powertrain_t26_slave_03_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
+                    pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_2->publish(out);
+                    out.data = powertrain_t26_slave_03_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
+                    pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_3->publish(out);
+                    out.data = powertrain_t26_slave_03_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
+                    pub_powertrain_t26_slave_03_temperature_id_1_temperature_value_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1554u: {
+            {
+                struct powertrain_t26_slave_03_temperature_id_2_t decoded = {};
+                if (powertrain_t26_slave_03_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_03_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
+                    pub_powertrain_t26_slave_03_temperature_id_2_temperature_value_5->publish(out);
+                    out.data = powertrain_t26_slave_03_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
+                    pub_powertrain_t26_slave_03_temperature_id_2_temperature_value_6->publish(out);
+                    out.data = powertrain_t26_slave_03_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
+                    pub_powertrain_t26_slave_03_temperature_id_2_temperature_maximum->publish(out);
+                    out.data = powertrain_t26_slave_03_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
+                    pub_powertrain_t26_slave_03_temperature_id_2_temperature_delta->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1555u: {
+            {
+                struct powertrain_t26_slave_03_msc_id_1_t decoded = {};
+                if (powertrain_t26_slave_03_msc_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_03_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
+                    pub_powertrain_t26_slave_03_msc_id_1_module_voltage_sum->publish(out);
+                    out.data = powertrain_t26_slave_03_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
+                    pub_powertrain_t26_slave_03_msc_id_1_module_voltage_avg->publish(out);
+                    out.data = powertrain_t26_slave_03_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
+                    pub_powertrain_t26_slave_03_msc_id_1_module_voltage_min->publish(out);
+                    out.data = powertrain_t26_slave_03_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
+                    pub_powertrain_t26_slave_03_msc_id_1_module_voltage_max->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1556u: {
+            {
+                struct powertrain_t26_slave_03_msc_id_2_t decoded = {};
+                if (powertrain_t26_slave_03_msc_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_03_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
+                    pub_powertrain_t26_slave_03_msc_id_2_module_voltage_delta->publish(out);
+                    out.data = powertrain_t26_slave_03_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
+                    pub_powertrain_t26_slave_03_msc_id_2_module_ic_voltage->publish(out);
+                    out.data = powertrain_t26_slave_03_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
+                    pub_powertrain_t26_slave_03_msc_id_2_module_open_wire->publish(out);
+                    out.data = powertrain_t26_slave_03_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
+                    pub_powertrain_t26_slave_03_msc_id_2_module_ic_temperature->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1557u: {
+            {
+                struct powertrain_t26_slave_04_voltage_id_1_t decoded = {};
+                if (powertrain_t26_slave_04_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_04_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
+                    pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_1->publish(out);
+                    out.data = powertrain_t26_slave_04_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
+                    pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_2->publish(out);
+                    out.data = powertrain_t26_slave_04_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
+                    pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_3->publish(out);
+                    out.data = powertrain_t26_slave_04_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
+                    pub_powertrain_t26_slave_04_voltage_id_1_cell_voltage_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1558u: {
+            {
+                struct powertrain_t26_slave_04_voltage_id_2_t decoded = {};
+                if (powertrain_t26_slave_04_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_04_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
+                    pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_5->publish(out);
+                    out.data = powertrain_t26_slave_04_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
+                    pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_6->publish(out);
+                    out.data = powertrain_t26_slave_04_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
+                    pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_7->publish(out);
+                    out.data = powertrain_t26_slave_04_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
+                    pub_powertrain_t26_slave_04_voltage_id_2_cell_voltage_8->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1559u: {
+            {
+                struct powertrain_t26_slave_04_voltage_id_3_t decoded = {};
+                if (powertrain_t26_slave_04_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_04_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
+                    pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_9->publish(out);
+                    out.data = powertrain_t26_slave_04_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
+                    pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_10->publish(out);
+                    out.data = powertrain_t26_slave_04_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
+                    pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_11->publish(out);
+                    out.data = powertrain_t26_slave_04_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
+                    pub_powertrain_t26_slave_04_voltage_id_3_cell_voltage_12->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1560u: {
+            {
+                struct powertrain_t26_slave_04_temperature_id_1_t decoded = {};
+                if (powertrain_t26_slave_04_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_04_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
+                    pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_1->publish(out);
+                    out.data = powertrain_t26_slave_04_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
+                    pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_2->publish(out);
+                    out.data = powertrain_t26_slave_04_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
+                    pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_3->publish(out);
+                    out.data = powertrain_t26_slave_04_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
+                    pub_powertrain_t26_slave_04_temperature_id_1_temperature_value_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1561u: {
+            {
+                struct powertrain_t26_slave_04_temperature_id_2_t decoded = {};
+                if (powertrain_t26_slave_04_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_04_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
+                    pub_powertrain_t26_slave_04_temperature_id_2_temperature_value_5->publish(out);
+                    out.data = powertrain_t26_slave_04_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
+                    pub_powertrain_t26_slave_04_temperature_id_2_temperature_value_6->publish(out);
+                    out.data = powertrain_t26_slave_04_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
+                    pub_powertrain_t26_slave_04_temperature_id_2_temperature_maximum->publish(out);
+                    out.data = powertrain_t26_slave_04_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
+                    pub_powertrain_t26_slave_04_temperature_id_2_temperature_delta->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1562u: {
+            {
+                struct powertrain_t26_slave_04_msc_id_1_t decoded = {};
+                if (powertrain_t26_slave_04_msc_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_04_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
+                    pub_powertrain_t26_slave_04_msc_id_1_module_voltage_sum->publish(out);
+                    out.data = powertrain_t26_slave_04_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
+                    pub_powertrain_t26_slave_04_msc_id_1_module_voltage_avg->publish(out);
+                    out.data = powertrain_t26_slave_04_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
+                    pub_powertrain_t26_slave_04_msc_id_1_module_voltage_min->publish(out);
+                    out.data = powertrain_t26_slave_04_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
+                    pub_powertrain_t26_slave_04_msc_id_1_module_voltage_max->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1563u: {
+            {
+                struct powertrain_t26_slave_04_msc_id_2_t decoded = {};
+                if (powertrain_t26_slave_04_msc_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_04_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
+                    pub_powertrain_t26_slave_04_msc_id_2_module_voltage_delta->publish(out);
+                    out.data = powertrain_t26_slave_04_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
+                    pub_powertrain_t26_slave_04_msc_id_2_module_ic_voltage->publish(out);
+                    out.data = powertrain_t26_slave_04_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
+                    pub_powertrain_t26_slave_04_msc_id_2_module_open_wire->publish(out);
+                    out.data = powertrain_t26_slave_04_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
+                    pub_powertrain_t26_slave_04_msc_id_2_module_ic_temperature->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1564u: {
+            {
+                struct powertrain_t26_slave_05_voltage_id_1_t decoded = {};
+                if (powertrain_t26_slave_05_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_05_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
+                    pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_1->publish(out);
+                    out.data = powertrain_t26_slave_05_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
+                    pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_2->publish(out);
+                    out.data = powertrain_t26_slave_05_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
+                    pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_3->publish(out);
+                    out.data = powertrain_t26_slave_05_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
+                    pub_powertrain_t26_slave_05_voltage_id_1_cell_voltage_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1565u: {
+            {
+                struct powertrain_t26_slave_05_voltage_id_2_t decoded = {};
+                if (powertrain_t26_slave_05_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_05_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
+                    pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_5->publish(out);
+                    out.data = powertrain_t26_slave_05_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
+                    pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_6->publish(out);
+                    out.data = powertrain_t26_slave_05_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
+                    pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_7->publish(out);
+                    out.data = powertrain_t26_slave_05_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
+                    pub_powertrain_t26_slave_05_voltage_id_2_cell_voltage_8->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1566u: {
+            {
+                struct powertrain_t26_slave_05_voltage_id_3_t decoded = {};
+                if (powertrain_t26_slave_05_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_05_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
+                    pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_9->publish(out);
+                    out.data = powertrain_t26_slave_05_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
+                    pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_10->publish(out);
+                    out.data = powertrain_t26_slave_05_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
+                    pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_11->publish(out);
+                    out.data = powertrain_t26_slave_05_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
+                    pub_powertrain_t26_slave_05_voltage_id_3_cell_voltage_12->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1567u: {
+            {
+                struct powertrain_t26_slave_05_temperature_id_1_t decoded = {};
+                if (powertrain_t26_slave_05_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_05_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
+                    pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_1->publish(out);
+                    out.data = powertrain_t26_slave_05_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
+                    pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_2->publish(out);
+                    out.data = powertrain_t26_slave_05_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
+                    pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_3->publish(out);
+                    out.data = powertrain_t26_slave_05_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
+                    pub_powertrain_t26_slave_05_temperature_id_1_temperature_value_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1568u: {
+            {
+                struct powertrain_t26_slave_05_temperature_id_2_t decoded = {};
+                if (powertrain_t26_slave_05_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_05_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
+                    pub_powertrain_t26_slave_05_temperature_id_2_temperature_value_5->publish(out);
+                    out.data = powertrain_t26_slave_05_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
+                    pub_powertrain_t26_slave_05_temperature_id_2_temperature_value_6->publish(out);
+                    out.data = powertrain_t26_slave_05_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
+                    pub_powertrain_t26_slave_05_temperature_id_2_temperature_maximum->publish(out);
+                    out.data = powertrain_t26_slave_05_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
+                    pub_powertrain_t26_slave_05_temperature_id_2_temperature_delta->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1569u: {
+            {
+                struct powertrain_t26_slave_05_msc_id_1_t decoded = {};
+                if (powertrain_t26_slave_05_msc_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_05_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
+                    pub_powertrain_t26_slave_05_msc_id_1_module_voltage_sum->publish(out);
+                    out.data = powertrain_t26_slave_05_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
+                    pub_powertrain_t26_slave_05_msc_id_1_module_voltage_avg->publish(out);
+                    out.data = powertrain_t26_slave_05_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
+                    pub_powertrain_t26_slave_05_msc_id_1_module_voltage_min->publish(out);
+                    out.data = powertrain_t26_slave_05_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
+                    pub_powertrain_t26_slave_05_msc_id_1_module_voltage_max->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1570u: {
+            {
+                struct powertrain_t26_slave_05_msc_id_2_t decoded = {};
+                if (powertrain_t26_slave_05_msc_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_05_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
+                    pub_powertrain_t26_slave_05_msc_id_2_module_voltage_delta->publish(out);
+                    out.data = powertrain_t26_slave_05_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
+                    pub_powertrain_t26_slave_05_msc_id_2_module_ic_voltage->publish(out);
+                    out.data = powertrain_t26_slave_05_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
+                    pub_powertrain_t26_slave_05_msc_id_2_module_open_wire->publish(out);
+                    out.data = powertrain_t26_slave_05_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
+                    pub_powertrain_t26_slave_05_msc_id_2_module_ic_temperature->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1571u: {
+            {
+                struct powertrain_t26_slave_06_voltage_id_1_t decoded = {};
+                if (powertrain_t26_slave_06_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_06_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
+                    pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_1->publish(out);
+                    out.data = powertrain_t26_slave_06_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
+                    pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_2->publish(out);
+                    out.data = powertrain_t26_slave_06_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
+                    pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_3->publish(out);
+                    out.data = powertrain_t26_slave_06_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
+                    pub_powertrain_t26_slave_06_voltage_id_1_cell_voltage_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1572u: {
+            {
+                struct powertrain_t26_slave_06_voltage_id_2_t decoded = {};
+                if (powertrain_t26_slave_06_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_06_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
+                    pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_5->publish(out);
+                    out.data = powertrain_t26_slave_06_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
+                    pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_6->publish(out);
+                    out.data = powertrain_t26_slave_06_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
+                    pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_7->publish(out);
+                    out.data = powertrain_t26_slave_06_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
+                    pub_powertrain_t26_slave_06_voltage_id_2_cell_voltage_8->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1573u: {
+            {
+                struct powertrain_t26_slave_06_voltage_id_3_t decoded = {};
+                if (powertrain_t26_slave_06_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_06_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
+                    pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_9->publish(out);
+                    out.data = powertrain_t26_slave_06_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
+                    pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_10->publish(out);
+                    out.data = powertrain_t26_slave_06_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
+                    pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_11->publish(out);
+                    out.data = powertrain_t26_slave_06_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
+                    pub_powertrain_t26_slave_06_voltage_id_3_cell_voltage_12->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1574u: {
+            {
+                struct powertrain_t26_slave_06_temperature_id_1_t decoded = {};
+                if (powertrain_t26_slave_06_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_06_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
+                    pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_1->publish(out);
+                    out.data = powertrain_t26_slave_06_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
+                    pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_2->publish(out);
+                    out.data = powertrain_t26_slave_06_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
+                    pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_3->publish(out);
+                    out.data = powertrain_t26_slave_06_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
+                    pub_powertrain_t26_slave_06_temperature_id_1_temperature_value_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1575u: {
+            {
+                struct powertrain_t26_slave_06_temperature_id_2_t decoded = {};
+                if (powertrain_t26_slave_06_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_06_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
+                    pub_powertrain_t26_slave_06_temperature_id_2_temperature_value_5->publish(out);
+                    out.data = powertrain_t26_slave_06_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
+                    pub_powertrain_t26_slave_06_temperature_id_2_temperature_value_6->publish(out);
+                    out.data = powertrain_t26_slave_06_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
+                    pub_powertrain_t26_slave_06_temperature_id_2_temperature_maximum->publish(out);
+                    out.data = powertrain_t26_slave_06_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
+                    pub_powertrain_t26_slave_06_temperature_id_2_temperature_delta->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1576u: {
+            {
+                struct powertrain_t26_slave_06_msc_id_1_t decoded = {};
+                if (powertrain_t26_slave_06_msc_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_06_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
+                    pub_powertrain_t26_slave_06_msc_id_1_module_voltage_sum->publish(out);
+                    out.data = powertrain_t26_slave_06_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
+                    pub_powertrain_t26_slave_06_msc_id_1_module_voltage_avg->publish(out);
+                    out.data = powertrain_t26_slave_06_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
+                    pub_powertrain_t26_slave_06_msc_id_1_module_voltage_min->publish(out);
+                    out.data = powertrain_t26_slave_06_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
+                    pub_powertrain_t26_slave_06_msc_id_1_module_voltage_max->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1577u: {
+            {
+                struct powertrain_t26_slave_06_msc_id_2_t decoded = {};
+                if (powertrain_t26_slave_06_msc_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_06_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
+                    pub_powertrain_t26_slave_06_msc_id_2_module_voltage_delta->publish(out);
+                    out.data = powertrain_t26_slave_06_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
+                    pub_powertrain_t26_slave_06_msc_id_2_module_ic_voltage->publish(out);
+                    out.data = powertrain_t26_slave_06_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
+                    pub_powertrain_t26_slave_06_msc_id_2_module_open_wire->publish(out);
+                    out.data = powertrain_t26_slave_06_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
+                    pub_powertrain_t26_slave_06_msc_id_2_module_ic_temperature->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1578u: {
+            {
+                struct powertrain_t26_slave_07_voltage_id_1_t decoded = {};
+                if (powertrain_t26_slave_07_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_07_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
+                    pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_1->publish(out);
+                    out.data = powertrain_t26_slave_07_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
+                    pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_2->publish(out);
+                    out.data = powertrain_t26_slave_07_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
+                    pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_3->publish(out);
+                    out.data = powertrain_t26_slave_07_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
+                    pub_powertrain_t26_slave_07_voltage_id_1_cell_voltage_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1579u: {
+            {
+                struct powertrain_t26_slave_07_voltage_id_2_t decoded = {};
+                if (powertrain_t26_slave_07_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_07_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
+                    pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_5->publish(out);
+                    out.data = powertrain_t26_slave_07_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
+                    pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_6->publish(out);
+                    out.data = powertrain_t26_slave_07_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
+                    pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_7->publish(out);
+                    out.data = powertrain_t26_slave_07_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
+                    pub_powertrain_t26_slave_07_voltage_id_2_cell_voltage_8->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1580u: {
+            {
+                struct powertrain_t26_slave_07_voltage_id_3_t decoded = {};
+                if (powertrain_t26_slave_07_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_07_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
+                    pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_9->publish(out);
+                    out.data = powertrain_t26_slave_07_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
+                    pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_10->publish(out);
+                    out.data = powertrain_t26_slave_07_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
+                    pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_11->publish(out);
+                    out.data = powertrain_t26_slave_07_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
+                    pub_powertrain_t26_slave_07_voltage_id_3_cell_voltage_12->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1581u: {
+            {
+                struct powertrain_t26_slave_07_temperature_id_1_t decoded = {};
+                if (powertrain_t26_slave_07_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_07_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
+                    pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_1->publish(out);
+                    out.data = powertrain_t26_slave_07_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
+                    pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_2->publish(out);
+                    out.data = powertrain_t26_slave_07_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
+                    pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_3->publish(out);
+                    out.data = powertrain_t26_slave_07_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
+                    pub_powertrain_t26_slave_07_temperature_id_1_temperature_value_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1582u: {
+            {
+                struct powertrain_t26_slave_07_temperature_id_2_t decoded = {};
+                if (powertrain_t26_slave_07_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_07_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
+                    pub_powertrain_t26_slave_07_temperature_id_2_temperature_value_5->publish(out);
+                    out.data = powertrain_t26_slave_07_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
+                    pub_powertrain_t26_slave_07_temperature_id_2_temperature_value_6->publish(out);
+                    out.data = powertrain_t26_slave_07_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
+                    pub_powertrain_t26_slave_07_temperature_id_2_temperature_maximum->publish(out);
+                    out.data = powertrain_t26_slave_07_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
+                    pub_powertrain_t26_slave_07_temperature_id_2_temperature_delta->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1583u: {
+            {
+                struct powertrain_t26_slave_07_msc_id_1_t decoded = {};
+                if (powertrain_t26_slave_07_msc_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_07_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
+                    pub_powertrain_t26_slave_07_msc_id_1_module_voltage_sum->publish(out);
+                    out.data = powertrain_t26_slave_07_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
+                    pub_powertrain_t26_slave_07_msc_id_1_module_voltage_avg->publish(out);
+                    out.data = powertrain_t26_slave_07_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
+                    pub_powertrain_t26_slave_07_msc_id_1_module_voltage_min->publish(out);
+                    out.data = powertrain_t26_slave_07_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
+                    pub_powertrain_t26_slave_07_msc_id_1_module_voltage_max->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1584u: {
+            {
+                struct powertrain_t26_slave_07_msc_id_2_t decoded = {};
+                if (powertrain_t26_slave_07_msc_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_07_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
+                    pub_powertrain_t26_slave_07_msc_id_2_module_voltage_delta->publish(out);
+                    out.data = powertrain_t26_slave_07_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
+                    pub_powertrain_t26_slave_07_msc_id_2_module_ic_voltage->publish(out);
+                    out.data = powertrain_t26_slave_07_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
+                    pub_powertrain_t26_slave_07_msc_id_2_module_open_wire->publish(out);
+                    out.data = powertrain_t26_slave_07_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
+                    pub_powertrain_t26_slave_07_msc_id_2_module_ic_temperature->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1585u: {
+            {
+                struct powertrain_t26_slave_08_voltage_id_1_t decoded = {};
+                if (powertrain_t26_slave_08_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_08_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
+                    pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_1->publish(out);
+                    out.data = powertrain_t26_slave_08_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
+                    pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_2->publish(out);
+                    out.data = powertrain_t26_slave_08_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
+                    pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_3->publish(out);
+                    out.data = powertrain_t26_slave_08_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
+                    pub_powertrain_t26_slave_08_voltage_id_1_cell_voltage_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1586u: {
+            {
+                struct powertrain_t26_slave_08_voltage_id_2_t decoded = {};
+                if (powertrain_t26_slave_08_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_08_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
+                    pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_5->publish(out);
+                    out.data = powertrain_t26_slave_08_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
+                    pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_6->publish(out);
+                    out.data = powertrain_t26_slave_08_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
+                    pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_7->publish(out);
+                    out.data = powertrain_t26_slave_08_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
+                    pub_powertrain_t26_slave_08_voltage_id_2_cell_voltage_8->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1587u: {
+            {
+                struct powertrain_t26_slave_08_voltage_id_3_t decoded = {};
+                if (powertrain_t26_slave_08_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_08_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
+                    pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_9->publish(out);
+                    out.data = powertrain_t26_slave_08_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
+                    pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_10->publish(out);
+                    out.data = powertrain_t26_slave_08_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
+                    pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_11->publish(out);
+                    out.data = powertrain_t26_slave_08_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
+                    pub_powertrain_t26_slave_08_voltage_id_3_cell_voltage_12->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1588u: {
+            {
+                struct powertrain_t26_slave_08_temperature_id_1_t decoded = {};
+                if (powertrain_t26_slave_08_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_08_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
+                    pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_1->publish(out);
+                    out.data = powertrain_t26_slave_08_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
+                    pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_2->publish(out);
+                    out.data = powertrain_t26_slave_08_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
+                    pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_3->publish(out);
+                    out.data = powertrain_t26_slave_08_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
+                    pub_powertrain_t26_slave_08_temperature_id_1_temperature_value_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1589u: {
+            {
+                struct powertrain_t26_slave_08_temperature_id_2_t decoded = {};
+                if (powertrain_t26_slave_08_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_08_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
+                    pub_powertrain_t26_slave_08_temperature_id_2_temperature_value_5->publish(out);
+                    out.data = powertrain_t26_slave_08_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
+                    pub_powertrain_t26_slave_08_temperature_id_2_temperature_value_6->publish(out);
+                    out.data = powertrain_t26_slave_08_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
+                    pub_powertrain_t26_slave_08_temperature_id_2_temperature_maximum->publish(out);
+                    out.data = powertrain_t26_slave_08_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
+                    pub_powertrain_t26_slave_08_temperature_id_2_temperature_delta->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1590u: {
+            {
+                struct powertrain_t26_slave_08_msc_id_1_t decoded = {};
+                if (powertrain_t26_slave_08_msc_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_08_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
+                    pub_powertrain_t26_slave_08_msc_id_1_module_voltage_sum->publish(out);
+                    out.data = powertrain_t26_slave_08_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
+                    pub_powertrain_t26_slave_08_msc_id_1_module_voltage_avg->publish(out);
+                    out.data = powertrain_t26_slave_08_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
+                    pub_powertrain_t26_slave_08_msc_id_1_module_voltage_min->publish(out);
+                    out.data = powertrain_t26_slave_08_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
+                    pub_powertrain_t26_slave_08_msc_id_1_module_voltage_max->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1591u: {
+            {
+                struct powertrain_t26_slave_08_msc_id_2_t decoded = {};
+                if (powertrain_t26_slave_08_msc_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_08_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
+                    pub_powertrain_t26_slave_08_msc_id_2_module_voltage_delta->publish(out);
+                    out.data = powertrain_t26_slave_08_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
+                    pub_powertrain_t26_slave_08_msc_id_2_module_ic_voltage->publish(out);
+                    out.data = powertrain_t26_slave_08_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
+                    pub_powertrain_t26_slave_08_msc_id_2_module_open_wire->publish(out);
+                    out.data = powertrain_t26_slave_08_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
+                    pub_powertrain_t26_slave_08_msc_id_2_module_ic_temperature->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1592u: {
+            {
+                struct powertrain_t26_slave_09_voltage_id_1_t decoded = {};
+                if (powertrain_t26_slave_09_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_09_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
+                    pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_1->publish(out);
+                    out.data = powertrain_t26_slave_09_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
+                    pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_2->publish(out);
+                    out.data = powertrain_t26_slave_09_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
+                    pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_3->publish(out);
+                    out.data = powertrain_t26_slave_09_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
+                    pub_powertrain_t26_slave_09_voltage_id_1_cell_voltage_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1593u: {
+            {
+                struct powertrain_t26_slave_09_voltage_id_2_t decoded = {};
+                if (powertrain_t26_slave_09_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_09_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
+                    pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_5->publish(out);
+                    out.data = powertrain_t26_slave_09_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
+                    pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_6->publish(out);
+                    out.data = powertrain_t26_slave_09_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
+                    pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_7->publish(out);
+                    out.data = powertrain_t26_slave_09_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
+                    pub_powertrain_t26_slave_09_voltage_id_2_cell_voltage_8->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1594u: {
+            {
+                struct powertrain_t26_slave_09_voltage_id_3_t decoded = {};
+                if (powertrain_t26_slave_09_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_09_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
+                    pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_9->publish(out);
+                    out.data = powertrain_t26_slave_09_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
+                    pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_10->publish(out);
+                    out.data = powertrain_t26_slave_09_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
+                    pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_11->publish(out);
+                    out.data = powertrain_t26_slave_09_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
+                    pub_powertrain_t26_slave_09_voltage_id_3_cell_voltage_12->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1595u: {
+            {
+                struct powertrain_t26_slave_09_temperature_id_1_t decoded = {};
+                if (powertrain_t26_slave_09_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_09_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
+                    pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_1->publish(out);
+                    out.data = powertrain_t26_slave_09_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
+                    pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_2->publish(out);
+                    out.data = powertrain_t26_slave_09_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
+                    pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_3->publish(out);
+                    out.data = powertrain_t26_slave_09_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
+                    pub_powertrain_t26_slave_09_temperature_id_1_temperature_value_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1596u: {
+            {
+                struct powertrain_t26_slave_09_temperature_id_2_t decoded = {};
+                if (powertrain_t26_slave_09_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_09_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
+                    pub_powertrain_t26_slave_09_temperature_id_2_temperature_value_5->publish(out);
+                    out.data = powertrain_t26_slave_09_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
+                    pub_powertrain_t26_slave_09_temperature_id_2_temperature_value_6->publish(out);
+                    out.data = powertrain_t26_slave_09_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
+                    pub_powertrain_t26_slave_09_temperature_id_2_temperature_maximum->publish(out);
+                    out.data = powertrain_t26_slave_09_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
+                    pub_powertrain_t26_slave_09_temperature_id_2_temperature_delta->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1597u: {
+            {
+                struct powertrain_t26_slave_09_msc_id_1_t decoded = {};
+                if (powertrain_t26_slave_09_msc_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_09_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
+                    pub_powertrain_t26_slave_09_msc_id_1_module_voltage_sum->publish(out);
+                    out.data = powertrain_t26_slave_09_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
+                    pub_powertrain_t26_slave_09_msc_id_1_module_voltage_avg->publish(out);
+                    out.data = powertrain_t26_slave_09_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
+                    pub_powertrain_t26_slave_09_msc_id_1_module_voltage_min->publish(out);
+                    out.data = powertrain_t26_slave_09_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
+                    pub_powertrain_t26_slave_09_msc_id_1_module_voltage_max->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1598u: {
+            {
+                struct powertrain_t26_slave_09_msc_id_2_t decoded = {};
+                if (powertrain_t26_slave_09_msc_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_09_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
+                    pub_powertrain_t26_slave_09_msc_id_2_module_voltage_delta->publish(out);
+                    out.data = powertrain_t26_slave_09_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
+                    pub_powertrain_t26_slave_09_msc_id_2_module_ic_voltage->publish(out);
+                    out.data = powertrain_t26_slave_09_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
+                    pub_powertrain_t26_slave_09_msc_id_2_module_open_wire->publish(out);
+                    out.data = powertrain_t26_slave_09_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
+                    pub_powertrain_t26_slave_09_msc_id_2_module_ic_temperature->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1599u: {
+            {
+                struct powertrain_t26_slave_10_voltage_id_1_t decoded = {};
+                if (powertrain_t26_slave_10_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_10_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
+                    pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_1->publish(out);
+                    out.data = powertrain_t26_slave_10_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
+                    pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_2->publish(out);
+                    out.data = powertrain_t26_slave_10_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
+                    pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_3->publish(out);
+                    out.data = powertrain_t26_slave_10_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
+                    pub_powertrain_t26_slave_10_voltage_id_1_cell_voltage_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1600u: {
+            {
+                struct powertrain_t26_slave_10_voltage_id_2_t decoded = {};
+                if (powertrain_t26_slave_10_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_10_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
+                    pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_5->publish(out);
+                    out.data = powertrain_t26_slave_10_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
+                    pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_6->publish(out);
+                    out.data = powertrain_t26_slave_10_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
+                    pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_7->publish(out);
+                    out.data = powertrain_t26_slave_10_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
+                    pub_powertrain_t26_slave_10_voltage_id_2_cell_voltage_8->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1601u: {
+            {
+                struct powertrain_t26_slave_10_voltage_id_3_t decoded = {};
+                if (powertrain_t26_slave_10_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_10_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
+                    pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_9->publish(out);
+                    out.data = powertrain_t26_slave_10_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
+                    pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_10->publish(out);
+                    out.data = powertrain_t26_slave_10_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
+                    pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_11->publish(out);
+                    out.data = powertrain_t26_slave_10_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
+                    pub_powertrain_t26_slave_10_voltage_id_3_cell_voltage_12->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1602u: {
+            {
+                struct powertrain_t26_slave_10_temperature_id_1_t decoded = {};
+                if (powertrain_t26_slave_10_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_10_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
+                    pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_1->publish(out);
+                    out.data = powertrain_t26_slave_10_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
+                    pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_2->publish(out);
+                    out.data = powertrain_t26_slave_10_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
+                    pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_3->publish(out);
+                    out.data = powertrain_t26_slave_10_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
+                    pub_powertrain_t26_slave_10_temperature_id_1_temperature_value_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1603u: {
+            {
+                struct powertrain_t26_slave_10_temperature_id_2_t decoded = {};
+                if (powertrain_t26_slave_10_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_10_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
+                    pub_powertrain_t26_slave_10_temperature_id_2_temperature_value_5->publish(out);
+                    out.data = powertrain_t26_slave_10_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
+                    pub_powertrain_t26_slave_10_temperature_id_2_temperature_value_6->publish(out);
+                    out.data = powertrain_t26_slave_10_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
+                    pub_powertrain_t26_slave_10_temperature_id_2_temperature_maximum->publish(out);
+                    out.data = powertrain_t26_slave_10_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
+                    pub_powertrain_t26_slave_10_temperature_id_2_temperature_delta->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1604u: {
+            {
+                struct powertrain_t26_slave_10_msc_id_1_t decoded = {};
+                if (powertrain_t26_slave_10_msc_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_10_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
+                    pub_powertrain_t26_slave_10_msc_id_1_module_voltage_sum->publish(out);
+                    out.data = powertrain_t26_slave_10_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
+                    pub_powertrain_t26_slave_10_msc_id_1_module_voltage_avg->publish(out);
+                    out.data = powertrain_t26_slave_10_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
+                    pub_powertrain_t26_slave_10_msc_id_1_module_voltage_min->publish(out);
+                    out.data = powertrain_t26_slave_10_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
+                    pub_powertrain_t26_slave_10_msc_id_1_module_voltage_max->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1605u: {
+            {
+                struct powertrain_t26_slave_10_msc_id_2_t decoded = {};
+                if (powertrain_t26_slave_10_msc_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_10_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
+                    pub_powertrain_t26_slave_10_msc_id_2_module_voltage_delta->publish(out);
+                    out.data = powertrain_t26_slave_10_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
+                    pub_powertrain_t26_slave_10_msc_id_2_module_ic_voltage->publish(out);
+                    out.data = powertrain_t26_slave_10_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
+                    pub_powertrain_t26_slave_10_msc_id_2_module_open_wire->publish(out);
+                    out.data = powertrain_t26_slave_10_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
+                    pub_powertrain_t26_slave_10_msc_id_2_module_ic_temperature->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1606u: {
+            {
+                struct powertrain_t26_slave_11_voltage_id_1_t decoded = {};
+                if (powertrain_t26_slave_11_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_11_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
+                    pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_1->publish(out);
+                    out.data = powertrain_t26_slave_11_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
+                    pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_2->publish(out);
+                    out.data = powertrain_t26_slave_11_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
+                    pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_3->publish(out);
+                    out.data = powertrain_t26_slave_11_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
+                    pub_powertrain_t26_slave_11_voltage_id_1_cell_voltage_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1607u: {
+            {
+                struct powertrain_t26_slave_11_voltage_id_2_t decoded = {};
+                if (powertrain_t26_slave_11_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_11_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
+                    pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_5->publish(out);
+                    out.data = powertrain_t26_slave_11_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
+                    pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_6->publish(out);
+                    out.data = powertrain_t26_slave_11_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
+                    pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_7->publish(out);
+                    out.data = powertrain_t26_slave_11_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
+                    pub_powertrain_t26_slave_11_voltage_id_2_cell_voltage_8->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1608u: {
+            {
+                struct powertrain_t26_slave_11_voltage_id_3_t decoded = {};
+                if (powertrain_t26_slave_11_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_11_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
+                    pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_9->publish(out);
+                    out.data = powertrain_t26_slave_11_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
+                    pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_10->publish(out);
+                    out.data = powertrain_t26_slave_11_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
+                    pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_11->publish(out);
+                    out.data = powertrain_t26_slave_11_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
+                    pub_powertrain_t26_slave_11_voltage_id_3_cell_voltage_12->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1609u: {
+            {
+                struct powertrain_t26_slave_11_temperature_id_1_t decoded = {};
+                if (powertrain_t26_slave_11_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_11_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
+                    pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_1->publish(out);
+                    out.data = powertrain_t26_slave_11_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
+                    pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_2->publish(out);
+                    out.data = powertrain_t26_slave_11_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
+                    pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_3->publish(out);
+                    out.data = powertrain_t26_slave_11_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
+                    pub_powertrain_t26_slave_11_temperature_id_1_temperature_value_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1610u: {
+            {
+                struct powertrain_t26_slave_11_temperature_id_2_t decoded = {};
+                if (powertrain_t26_slave_11_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_11_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
+                    pub_powertrain_t26_slave_11_temperature_id_2_temperature_value_5->publish(out);
+                    out.data = powertrain_t26_slave_11_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
+                    pub_powertrain_t26_slave_11_temperature_id_2_temperature_value_6->publish(out);
+                    out.data = powertrain_t26_slave_11_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
+                    pub_powertrain_t26_slave_11_temperature_id_2_temperature_maximum->publish(out);
+                    out.data = powertrain_t26_slave_11_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
+                    pub_powertrain_t26_slave_11_temperature_id_2_temperature_delta->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1611u: {
+            {
+                struct powertrain_t26_slave_11_msc_id_1_t decoded = {};
+                if (powertrain_t26_slave_11_msc_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_11_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
+                    pub_powertrain_t26_slave_11_msc_id_1_module_voltage_sum->publish(out);
+                    out.data = powertrain_t26_slave_11_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
+                    pub_powertrain_t26_slave_11_msc_id_1_module_voltage_avg->publish(out);
+                    out.data = powertrain_t26_slave_11_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
+                    pub_powertrain_t26_slave_11_msc_id_1_module_voltage_min->publish(out);
+                    out.data = powertrain_t26_slave_11_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
+                    pub_powertrain_t26_slave_11_msc_id_1_module_voltage_max->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1612u: {
+            {
+                struct powertrain_t26_slave_11_msc_id_2_t decoded = {};
+                if (powertrain_t26_slave_11_msc_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_11_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
+                    pub_powertrain_t26_slave_11_msc_id_2_module_voltage_delta->publish(out);
+                    out.data = powertrain_t26_slave_11_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
+                    pub_powertrain_t26_slave_11_msc_id_2_module_ic_voltage->publish(out);
+                    out.data = powertrain_t26_slave_11_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
+                    pub_powertrain_t26_slave_11_msc_id_2_module_open_wire->publish(out);
+                    out.data = powertrain_t26_slave_11_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
+                    pub_powertrain_t26_slave_11_msc_id_2_module_ic_temperature->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1613u: {
+            {
+                struct powertrain_t26_slave_12_voltage_id_1_t decoded = {};
+                if (powertrain_t26_slave_12_voltage_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_12_voltage_id_1_cell_voltage_1_decode(decoded.cell_voltage_1);
+                    pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_1->publish(out);
+                    out.data = powertrain_t26_slave_12_voltage_id_1_cell_voltage_2_decode(decoded.cell_voltage_2);
+                    pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_2->publish(out);
+                    out.data = powertrain_t26_slave_12_voltage_id_1_cell_voltage_3_decode(decoded.cell_voltage_3);
+                    pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_3->publish(out);
+                    out.data = powertrain_t26_slave_12_voltage_id_1_cell_voltage_4_decode(decoded.cell_voltage_4);
+                    pub_powertrain_t26_slave_12_voltage_id_1_cell_voltage_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1614u: {
+            {
+                struct powertrain_t26_slave_12_voltage_id_2_t decoded = {};
+                if (powertrain_t26_slave_12_voltage_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_12_voltage_id_2_cell_voltage_5_decode(decoded.cell_voltage_5);
+                    pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_5->publish(out);
+                    out.data = powertrain_t26_slave_12_voltage_id_2_cell_voltage_6_decode(decoded.cell_voltage_6);
+                    pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_6->publish(out);
+                    out.data = powertrain_t26_slave_12_voltage_id_2_cell_voltage_7_decode(decoded.cell_voltage_7);
+                    pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_7->publish(out);
+                    out.data = powertrain_t26_slave_12_voltage_id_2_cell_voltage_8_decode(decoded.cell_voltage_8);
+                    pub_powertrain_t26_slave_12_voltage_id_2_cell_voltage_8->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1615u: {
+            {
+                struct powertrain_t26_slave_12_voltage_id_3_t decoded = {};
+                if (powertrain_t26_slave_12_voltage_id_3_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_12_voltage_id_3_cell_voltage_9_decode(decoded.cell_voltage_9);
+                    pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_9->publish(out);
+                    out.data = powertrain_t26_slave_12_voltage_id_3_cell_voltage_10_decode(decoded.cell_voltage_10);
+                    pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_10->publish(out);
+                    out.data = powertrain_t26_slave_12_voltage_id_3_cell_voltage_11_decode(decoded.cell_voltage_11);
+                    pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_11->publish(out);
+                    out.data = powertrain_t26_slave_12_voltage_id_3_cell_voltage_12_decode(decoded.cell_voltage_12);
+                    pub_powertrain_t26_slave_12_voltage_id_3_cell_voltage_12->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1616u: {
+            {
+                struct powertrain_t26_slave_12_temperature_id_1_t decoded = {};
+                if (powertrain_t26_slave_12_temperature_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_12_temperature_id_1_temperature_value_1_decode(decoded.temperature_value_1);
+                    pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_1->publish(out);
+                    out.data = powertrain_t26_slave_12_temperature_id_1_temperature_value_2_decode(decoded.temperature_value_2);
+                    pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_2->publish(out);
+                    out.data = powertrain_t26_slave_12_temperature_id_1_temperature_value_3_decode(decoded.temperature_value_3);
+                    pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_3->publish(out);
+                    out.data = powertrain_t26_slave_12_temperature_id_1_temperature_value_4_decode(decoded.temperature_value_4);
+                    pub_powertrain_t26_slave_12_temperature_id_1_temperature_value_4->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1617u: {
+            {
+                struct powertrain_t26_slave_12_temperature_id_2_t decoded = {};
+                if (powertrain_t26_slave_12_temperature_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_12_temperature_id_2_temperature_value_5_decode(decoded.temperature_value_5);
+                    pub_powertrain_t26_slave_12_temperature_id_2_temperature_value_5->publish(out);
+                    out.data = powertrain_t26_slave_12_temperature_id_2_temperature_value_6_decode(decoded.temperature_value_6);
+                    pub_powertrain_t26_slave_12_temperature_id_2_temperature_value_6->publish(out);
+                    out.data = powertrain_t26_slave_12_temperature_id_2_temperature_maximum_decode(decoded.temperature_maximum);
+                    pub_powertrain_t26_slave_12_temperature_id_2_temperature_maximum->publish(out);
+                    out.data = powertrain_t26_slave_12_temperature_id_2_temperature_delta_decode(decoded.temperature_delta);
+                    pub_powertrain_t26_slave_12_temperature_id_2_temperature_delta->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1618u: {
+            {
+                struct powertrain_t26_slave_12_msc_id_1_t decoded = {};
+                if (powertrain_t26_slave_12_msc_id_1_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_12_msc_id_1_module_voltage_sum_decode(decoded.module_voltage_sum);
+                    pub_powertrain_t26_slave_12_msc_id_1_module_voltage_sum->publish(out);
+                    out.data = powertrain_t26_slave_12_msc_id_1_module_voltage_avg_decode(decoded.module_voltage_avg);
+                    pub_powertrain_t26_slave_12_msc_id_1_module_voltage_avg->publish(out);
+                    out.data = powertrain_t26_slave_12_msc_id_1_module_voltage_min_decode(decoded.module_voltage_min);
+                    pub_powertrain_t26_slave_12_msc_id_1_module_voltage_min->publish(out);
+                    out.data = powertrain_t26_slave_12_msc_id_1_module_voltage_max_decode(decoded.module_voltage_max);
+                    pub_powertrain_t26_slave_12_msc_id_1_module_voltage_max->publish(out);
+                }
+            }
+            return true;
+        }
+        case 1619u: {
+            {
+                struct powertrain_t26_slave_12_msc_id_2_t decoded = {};
+                if (powertrain_t26_slave_12_msc_id_2_unpack(&decoded, data, dlc) == 0) {
+                    std_msgs::msg::Float32 out;
+                    out.data = powertrain_t26_slave_12_msc_id_2_module_voltage_delta_decode(decoded.module_voltage_delta);
+                    pub_powertrain_t26_slave_12_msc_id_2_module_voltage_delta->publish(out);
+                    out.data = powertrain_t26_slave_12_msc_id_2_module_ic_voltage_decode(decoded.module_ic_voltage);
+                    pub_powertrain_t26_slave_12_msc_id_2_module_ic_voltage->publish(out);
+                    out.data = powertrain_t26_slave_12_msc_id_2_module_open_wire_decode(decoded.module_open_wire);
+                    pub_powertrain_t26_slave_12_msc_id_2_module_open_wire->publish(out);
+                    out.data = powertrain_t26_slave_12_msc_id_2_module_ic_temperature_decode(decoded.module_ic_temperature);
+                    pub_powertrain_t26_slave_12_msc_id_2_module_ic_temperature->publish(out);
                 }
             }
             return true;
