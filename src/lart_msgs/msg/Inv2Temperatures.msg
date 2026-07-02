@@ -1,0 +1,3 @@
+float32 inv2_actual_faultcode
+float32 inv2_actual_tempcontroller
+float32 inv2_actual_tempmotor

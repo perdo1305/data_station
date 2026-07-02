@@ -1,4 +1,0 @@
-float32 availablemaxdccurrent
-float32 availablemindccurrent
-float32 maxdccurrent
-float32 mindccurrent

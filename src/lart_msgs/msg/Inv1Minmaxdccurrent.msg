@@ -1,0 +1,4 @@
+float32 inv1_availablemaxdccurrent
+float32 inv1_availablemindccurrent
+float32 inv1_maxdccurrent
+float32 inv1_mindccurrent

@@ -1,4 +1,0 @@
-float32 controlmode
-float32 ismotorstill
-float32 motorposition
-float32 targetiq

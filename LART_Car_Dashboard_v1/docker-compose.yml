@@ -24,6 +24,8 @@ services:
       - ${HOME}/.Xauthority:/root/.Xauthority:ro
       - .:/root/lart_ws/LART_Car_Dashboard_v1
       - ${DATA_STATION_PATH:-..}:/root/data_station_ws:ro
+      - display_ds_build:/root/ds_build
+      - display_ui_build:/tmp/lart-ui-build
     command: >
       bash -c "
         source /root/.bashrc &&
@@ -32,7 +34,6 @@ services:
         cd /tmp && COLCON_LOG_PATH=/root/ds_build/log colcon build --build-base /root/ds_build/build --install-base /root/ds_build/install --base-paths /root/data_station_ws/src --packages-select lart_msgs &&
         source /root/ds_build/install/setup.bash &&
         echo 'Building and starting CMake LVGL Interface...' &&
-        rm -rf /tmp/lart-ui-build &&
         cmake -S /root/lart_ws/LART_Car_Dashboard_v1/src/ui -B /tmp/lart-ui-build &&
         cmake --build /tmp/lart-ui-build -j 2 &&
         if [ -x /tmp/lart-ui-build/ui_runner ]; then
@@ -160,3 +161,7 @@ services:
 networks:
   lart-ros2-network:
     driver: bridge
+
+volumes:
+  display_ds_build:
+  display_ui_build:

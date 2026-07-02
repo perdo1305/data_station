@@ -27,15 +27,15 @@ extern std::mutex dbc_api_mutex;
 #include <lart_msgs/msg/dv_status.hpp>
 #include <lart_msgs/msg/front_wheel_l.hpp>
 #include <lart_msgs/msg/front_wheel_r.hpp>
-#include <lart_msgs/msg/hv500_ac_dc_current.hpp>
-#include <lart_msgs/msg/hv500_erpm_duty_voltage.hpp>
-#include <lart_msgs/msg/hv500_foc.hpp>
-#include <lart_msgs/msg/hv500_minmaxaccurrent.hpp>
-#include <lart_msgs/msg/hv500_minmaxdccurrent.hpp>
-#include <lart_msgs/msg/hv500_misc.hpp>
-#include <lart_msgs/msg/hv500_setaccurrent.hpp>
-#include <lart_msgs/msg/hv500_setbrakecurrent.hpp>
-#include <lart_msgs/msg/hv500_setdigoutput.hpp>
+#include <lart_msgs/msg/inv1_ac_dc_current.hpp>
+#include <lart_msgs/msg/inv1_erpm_duty_voltage.hpp>
+#include <lart_msgs/msg/inv1_foc.hpp>
+#include <lart_msgs/msg/inv1_minmaxaccurrent.hpp>
+#include <lart_msgs/msg/inv1_minmaxdccurrent.hpp>
+#include <lart_msgs/msg/inv1_misc.hpp>
+#include <lart_msgs/msg/inv1_setaccurrent.hpp>
+#include <lart_msgs/msg/inv1_setbrakecurrent.hpp>
+#include <lart_msgs/msg/inv1_setdigoutput.hpp>
 
 void init_dbc_api_subscribers_chunk_0(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs) {
     auto sensor_qos = rclcpp::QoS(10).best_effort();
@@ -245,102 +245,102 @@ void init_dbc_api_subscribers_chunk_0(std::shared_ptr<rclcpp::Node> node, std::v
                 dbc_api.front_wheel_r.wheel_speed = msg->wheel_speed;
             }
         }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Hv500AcDcCurrent>(
-        "/can/dbc/hv500_ac_dc_current", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Hv500AcDcCurrent> msg) {
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1AcDcCurrent>(
+        "/can/dbc/inv1_ac_dc_current", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1AcDcCurrent> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.hv500_ac_dc_current.actual_accurrent = msg->actual_accurrent;
-                dbc_api.hv500_ac_dc_current.actual_dccurrent = msg->actual_dccurrent;
+                dbc_api.inv1_ac_dc_current.inv1_actual_accurrent = msg->inv1_actual_accurrent;
+                dbc_api.inv1_ac_dc_current.inv1_actual_dccurrent = msg->inv1_actual_dccurrent;
             }
         }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Hv500ErpmDutyVoltage>(
-        "/can/dbc/hv500_erpm_duty_voltage", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Hv500ErpmDutyVoltage> msg) {
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1ErpmDutyVoltage>(
+        "/can/dbc/inv1_erpm_duty_voltage", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1ErpmDutyVoltage> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.hv500_erpm_duty_voltage.actual_duty = msg->actual_duty;
-                dbc_api.hv500_erpm_duty_voltage.actual_erpm = msg->actual_erpm;
-                dbc_api.hv500_erpm_duty_voltage.actual_inputvoltage = msg->actual_inputvoltage;
+                dbc_api.inv1_erpm_duty_voltage.inv1_actual_duty = msg->inv1_actual_duty;
+                dbc_api.inv1_erpm_duty_voltage.inv1_actual_erpm = msg->inv1_actual_erpm;
+                dbc_api.inv1_erpm_duty_voltage.inv1_actual_inputvoltage = msg->inv1_actual_inputvoltage;
             }
         }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Hv500Foc>(
-        "/can/dbc/hv500_foc", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Hv500Foc> msg) {
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Foc>(
+        "/can/dbc/inv1_foc", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Foc> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.hv500_foc.actual_foc_id = msg->actual_foc_id;
-                dbc_api.hv500_foc.actual_foc_iq = msg->actual_foc_iq;
+                dbc_api.inv1_foc.inv1_actual_foc_id = msg->inv1_actual_foc_id;
+                dbc_api.inv1_foc.inv1_actual_foc_iq = msg->inv1_actual_foc_iq;
             }
         }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Hv500Minmaxaccurrent>(
-        "/can/dbc/hv500_minmaxaccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Hv500Minmaxaccurrent> msg) {
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Minmaxaccurrent>(
+        "/can/dbc/inv1_minmaxaccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Minmaxaccurrent> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.hv500_minmaxaccurrent.availablemaxaccurrent = msg->availablemaxaccurrent;
-                dbc_api.hv500_minmaxaccurrent.availableminaccurrent = msg->availableminaccurrent;
-                dbc_api.hv500_minmaxaccurrent.maxaccurrent = msg->maxaccurrent;
-                dbc_api.hv500_minmaxaccurrent.minaccurrent = msg->minaccurrent;
+                dbc_api.inv1_minmaxaccurrent.inv1_availablemaxaccurrent = msg->inv1_availablemaxaccurrent;
+                dbc_api.inv1_minmaxaccurrent.inv1_availableminaccurrent = msg->inv1_availableminaccurrent;
+                dbc_api.inv1_minmaxaccurrent.inv1_maxaccurrent = msg->inv1_maxaccurrent;
+                dbc_api.inv1_minmaxaccurrent.inv1_minaccurrent = msg->inv1_minaccurrent;
             }
         }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Hv500Minmaxdccurrent>(
-        "/can/dbc/hv500_minmaxdccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Hv500Minmaxdccurrent> msg) {
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Minmaxdccurrent>(
+        "/can/dbc/inv1_minmaxdccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Minmaxdccurrent> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.hv500_minmaxdccurrent.availablemaxdccurrent = msg->availablemaxdccurrent;
-                dbc_api.hv500_minmaxdccurrent.availablemindccurrent = msg->availablemindccurrent;
-                dbc_api.hv500_minmaxdccurrent.maxdccurrent = msg->maxdccurrent;
-                dbc_api.hv500_minmaxdccurrent.mindccurrent = msg->mindccurrent;
+                dbc_api.inv1_minmaxdccurrent.inv1_availablemaxdccurrent = msg->inv1_availablemaxdccurrent;
+                dbc_api.inv1_minmaxdccurrent.inv1_availablemindccurrent = msg->inv1_availablemindccurrent;
+                dbc_api.inv1_minmaxdccurrent.inv1_maxdccurrent = msg->inv1_maxdccurrent;
+                dbc_api.inv1_minmaxdccurrent.inv1_mindccurrent = msg->inv1_mindccurrent;
             }
         }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Hv500Misc>(
-        "/can/dbc/hv500_misc", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Hv500Misc> msg) {
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Misc>(
+        "/can/dbc/inv1_misc", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Misc> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.hv500_misc.actual_brake = msg->actual_brake;
-                dbc_api.hv500_misc.actual_throttle = msg->actual_throttle;
-                dbc_api.hv500_misc.can_map_version = msg->can_map_version;
-                dbc_api.hv500_misc.capacitor_temp_limit = msg->capacitor_temp_limit;
-                dbc_api.hv500_misc.dc_current_limit = msg->dc_current_limit;
-                dbc_api.hv500_misc.digital_input_1 = msg->digital_input_1;
-                dbc_api.hv500_misc.digital_input_2 = msg->digital_input_2;
-                dbc_api.hv500_misc.digital_input_3 = msg->digital_input_3;
-                dbc_api.hv500_misc.digital_input_4 = msg->digital_input_4;
-                dbc_api.hv500_misc.digital_output_1 = msg->digital_output_1;
-                dbc_api.hv500_misc.digital_output_2 = msg->digital_output_2;
-                dbc_api.hv500_misc.digital_output_3 = msg->digital_output_3;
-                dbc_api.hv500_misc.digital_output_4 = msg->digital_output_4;
-                dbc_api.hv500_misc.drive_enable = msg->drive_enable;
-                dbc_api.hv500_misc.drive_enable_limit = msg->drive_enable_limit;
-                dbc_api.hv500_misc.igbt_accel_limit = msg->igbt_accel_limit;
-                dbc_api.hv500_misc.igbt_temp_limit = msg->igbt_temp_limit;
-                dbc_api.hv500_misc.input_voltage_limit = msg->input_voltage_limit;
-                dbc_api.hv500_misc.motor_accel_limit = msg->motor_accel_limit;
-                dbc_api.hv500_misc.motor_temp_limit = msg->motor_temp_limit;
-                dbc_api.hv500_misc.power_limit = msg->power_limit;
-                dbc_api.hv500_misc.rpm_max_limit = msg->rpm_max_limit;
-                dbc_api.hv500_misc.rpm_min_limit = msg->rpm_min_limit;
+                dbc_api.inv1_misc.inv1_actual_brake = msg->inv1_actual_brake;
+                dbc_api.inv1_misc.inv1_actual_throttle = msg->inv1_actual_throttle;
+                dbc_api.inv1_misc.inv1_can_map_version = msg->inv1_can_map_version;
+                dbc_api.inv1_misc.inv1_capacitor_temp_limit = msg->inv1_capacitor_temp_limit;
+                dbc_api.inv1_misc.inv1_dc_current_limit = msg->inv1_dc_current_limit;
+                dbc_api.inv1_misc.inv1_digital_input_1 = msg->inv1_digital_input_1;
+                dbc_api.inv1_misc.inv1_digital_input_2 = msg->inv1_digital_input_2;
+                dbc_api.inv1_misc.inv1_digital_input_3 = msg->inv1_digital_input_3;
+                dbc_api.inv1_misc.inv1_digital_input_4 = msg->inv1_digital_input_4;
+                dbc_api.inv1_misc.inv1_digital_output_1 = msg->inv1_digital_output_1;
+                dbc_api.inv1_misc.inv1_digital_output_2 = msg->inv1_digital_output_2;
+                dbc_api.inv1_misc.inv1_digital_output_3 = msg->inv1_digital_output_3;
+                dbc_api.inv1_misc.inv1_digital_output_4 = msg->inv1_digital_output_4;
+                dbc_api.inv1_misc.inv1_drive_enable = msg->inv1_drive_enable;
+                dbc_api.inv1_misc.inv1_drive_enable_limit = msg->inv1_drive_enable_limit;
+                dbc_api.inv1_misc.inv1_igbt_accel_limit = msg->inv1_igbt_accel_limit;
+                dbc_api.inv1_misc.inv1_igbt_temp_limit = msg->inv1_igbt_temp_limit;
+                dbc_api.inv1_misc.inv1_input_voltage_limit = msg->inv1_input_voltage_limit;
+                dbc_api.inv1_misc.inv1_motor_accel_limit = msg->inv1_motor_accel_limit;
+                dbc_api.inv1_misc.inv1_motor_temp_limit = msg->inv1_motor_temp_limit;
+                dbc_api.inv1_misc.inv1_power_limit = msg->inv1_power_limit;
+                dbc_api.inv1_misc.inv1_rpm_max_limit = msg->inv1_rpm_max_limit;
+                dbc_api.inv1_misc.inv1_rpm_min_limit = msg->inv1_rpm_min_limit;
             }
         }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Hv500Setaccurrent>(
-        "/can/dbc/hv500_setaccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Hv500Setaccurrent> msg) {
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setaccurrent>(
+        "/can/dbc/inv1_setaccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setaccurrent> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.hv500_setaccurrent.cmd_targetaccurrent = msg->cmd_targetaccurrent;
+                dbc_api.inv1_setaccurrent.inv1_cmd_targetaccurrent = msg->inv1_cmd_targetaccurrent;
             }
         }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Hv500Setbrakecurrent>(
-        "/can/dbc/hv500_setbrakecurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Hv500Setbrakecurrent> msg) {
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setbrakecurrent>(
+        "/can/dbc/inv1_setbrakecurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setbrakecurrent> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.hv500_setbrakecurrent.cmd_targetbrakecurrent = msg->cmd_targetbrakecurrent;
+                dbc_api.inv1_setbrakecurrent.inv1_cmd_targetbrakecurrent = msg->inv1_cmd_targetbrakecurrent;
             }
         }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Hv500Setdigoutput>(
-        "/can/dbc/hv500_setdigoutput", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Hv500Setdigoutput> msg) {
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setdigoutput>(
+        "/can/dbc/inv1_setdigoutput", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setdigoutput> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.hv500_setdigoutput.cmd_setdigoutput1 = msg->cmd_setdigoutput1;
-                dbc_api.hv500_setdigoutput.cmd_setdigoutput2 = msg->cmd_setdigoutput2;
-                dbc_api.hv500_setdigoutput.cmd_setdigoutput3 = msg->cmd_setdigoutput3;
-                dbc_api.hv500_setdigoutput.cmd_setdigoutput4 = msg->cmd_setdigoutput4;
+                dbc_api.inv1_setdigoutput.inv1_cmd_setdigoutput1 = msg->inv1_cmd_setdigoutput1;
+                dbc_api.inv1_setdigoutput.inv1_cmd_setdigoutput2 = msg->inv1_cmd_setdigoutput2;
+                dbc_api.inv1_setdigoutput.inv1_cmd_setdigoutput3 = msg->inv1_cmd_setdigoutput3;
+                dbc_api.inv1_setdigoutput.inv1_cmd_setdigoutput4 = msg->inv1_cmd_setdigoutput4;
             }
         }));
 }
