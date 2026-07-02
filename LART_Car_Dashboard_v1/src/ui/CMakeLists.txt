@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 3.8)
 project(speed_subscriber LANGUAGES C CXX)
 
+# Speed up rebuilds on slow/embedded hosts (e.g. Raspberry Pi) by reusing object files
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+endif()
+
 # Compiler flags
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     add_compile_options(-Wall -Wextra -Wpedantic)

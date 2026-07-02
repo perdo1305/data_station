@@ -141,7 +141,7 @@ display: build network
 		-v $(PROJECT_DIR):/root/lart_ws/LART_Car_Dashboard_v1 \
 		--ipc=host \
 		$(IMAGE_NAME) \
-		bash -c "source /root/.bashrc && rm -rf $(CONTAINER_UI_BUILD_DIR) && cmake -S $(CONTAINER_UI_DIR) -B $(CONTAINER_UI_BUILD_DIR) && cmake --build $(CONTAINER_UI_BUILD_DIR) --parallel $$(nproc) && $(CONTAINER_UI_BUILD_DIR)/ui_runner"
+		bash -c "source /root/.bashrc && cmake -S $(CONTAINER_UI_DIR) -B $(CONTAINER_UI_BUILD_DIR) && cmake --build $(CONTAINER_UI_BUILD_DIR) --parallel $$(nproc) && $(CONTAINER_UI_BUILD_DIR)/ui_runner"
 	@echo "✓ Display started: lart-dashboard-display"
 
 listener: build network
