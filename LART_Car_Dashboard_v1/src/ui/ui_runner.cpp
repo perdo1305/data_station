@@ -401,8 +401,8 @@ int main(int argc, char **argv) {
         dbc_api.ivt_msg_result_u3.ivt_result_u3 = 24300.0f;
         dbc_api.vcu_ign_r2d.r2d_manual = 1.0f;
         dbc_api.dv_dynamics_1.speed_actual = 55.4f;
-        dbc_api.hv500_temperatures.actual_tempcontroller = 38.2f;
-        dbc_api.hv500_temperatures.actual_tempmotor = 62.1f;
+        dbc_api.inv1_temperatures.inv1_actual_tempcontroller = 38.2f;
+        dbc_api.inv1_temperatures.inv1_actual_tempmotor = 62.1f;
         dbc_api.slam_stats_can.lap_counter = 3.0f;
         dbc_api.acu.mission_select = 4.0f;
 

@@ -201,10 +201,189 @@ LART_WEAK int ros2subscriber_init(void) {
     g_sub_can_frames = g_node->create_subscription<lart_msgs::msg::CanFrame>("/can/frames", sensor_qos, can_frame_callback);
 #endif
 
-    // Setup dynamic high-density telemetry subscriptions via aggregated DbcApi subscribers
-#if defined(LART_HAVE_LART_MSGS) && LART_HAVE_LART_MSGS
+    // Setup dynamic high-density telemetry subscriptions
+#define SUB_FLOAT_MAP(field, dbcapi_field, topic_name) \
+    g_subs.push_back(g_node->create_subscription<std_msgs::msg::Float32>( \
+        topic_name, sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) { \
+            if (msg) { \
+                std::lock_guard<std::mutex> lock(g_telemetry_mutex); \
+                g_telemetry.field = msg->data; \
+                dbc_api.dbcapi_field = msg->data; \
+            } \
+        }))
+
+    // AMS Status
+    SUB_FLOAT_MAP(ams_state, master_msc_id_1.master_state, "/can/dbc/master_msc_id_1/master_state");
+    SUB_FLOAT_MAP(ams_soc, master_soc_accumulator.soc_float, "/can/dbc/master_soc_accumulator/soc_float");
+    SUB_FLOAT_MAP(ams_runtime, master_msc_id_1.ams_current_draw, "/can/dbc/master_msc_id_1/ams_current_draw");
+    SUB_FLOAT_MAP(ams_fans, master_msc_id_1.master_fan_pwm, "/can/dbc/master_msc_id_1/master_fan_pwm");
+    SUB_FLOAT_MAP(ams_mcu_vref, master_msc_id_1.mcu_vref, "/can/dbc/master_msc_id_1/mcu_vref");
+    SUB_FLOAT_MAP(ams_mcu_temp, master_msc_id_1.mcu_temperature, "/can/dbc/master_msc_id_1/mcu_temperature");
+    SUB_FLOAT_MAP(ams_pec_err, master_msc_id_1.adbms_pec_error, "/can/dbc/master_msc_id_1/adbms_pec_error");
+    SUB_FLOAT_MAP(ams_fault_cnt, master_msc_id_1.fault_counter, "/can/dbc/master_msc_id_1/fault_counter");
+    SUB_FLOAT_MAP(ams_slaves, master_msc_id_4.slaves_detected, "/can/dbc/master_msc_id_4/slaves_detected");
+    SUB_FLOAT_MAP(ams_fw, master_msc_id_1.master_firmware_version, "/can/dbc/master_msc_id_1/master_firmware_version");
+
+    // Precharge
+    SUB_FLOAT_MAP(precharge_state, master_precharge_id_1.precharge_state, "/can/dbc/master_precharge_id_1/precharge_state");
+    SUB_FLOAT_MAP(air_pos, master_precharge_id_1.precharge_ctc_air_pos_state, "/can/dbc/master_precharge_id_1/precharge_ctc_air_pos_state");
+    SUB_FLOAT_MAP(air_min, master_precharge_id_1.precharge_ctc_air_min_state, "/can/dbc/master_precharge_id_1/precharge_ctc_air_min_state");
+    SUB_FLOAT_MAP(ctc_charge, master_precharge_id_1.precharge_ctc_charge_state, "/can/dbc/master_precharge_id_1/precharge_ctc_charge_state");
+    SUB_FLOAT_MAP(ctc_discharge, master_precharge_id_1.precharge_ctc_discharge_state, "/can/dbc/master_precharge_id_1/precharge_ctc_discharge_state");
+
+    // Inverter DTI INV1 (motor 1; INV2 exists in DBC but not yet surfaced in UI)
+    SUB_FLOAT_MAP(inv_erpm, inv1_erpm_duty_voltage.inv1_actual_erpm, "/can/dbc/inv1_erpm_duty_voltage/inv1_actual_erpm");
+    SUB_FLOAT_MAP(inv_duty, inv1_erpm_duty_voltage.inv1_actual_duty, "/can/dbc/inv1_erpm_duty_voltage/inv1_actual_duty");
+    SUB_FLOAT_MAP(inv_vin, inv1_erpm_duty_voltage.inv1_actual_inputvoltage, "/can/dbc/inv1_erpm_duty_voltage/inv1_actual_inputvoltage");
+    SUB_FLOAT_MAP(inv_fault, inv1_temperatures.inv1_actual_faultcode, "/can/dbc/inv1_temperatures/inv1_actual_faultcode");
+    SUB_FLOAT_MAP(inv_ac_curr, inv1_ac_dc_current.inv1_actual_accurrent, "/can/dbc/inv1_ac_dc_current/inv1_actual_accurrent");
+    SUB_FLOAT_MAP(inv_dc_curr, inv1_ac_dc_current.inv1_actual_dccurrent, "/can/dbc/inv1_ac_dc_current/inv1_actual_dccurrent");
+    SUB_FLOAT_MAP(inv_temp_ctrl, inv1_temperatures.inv1_actual_tempcontroller, "/can/dbc/inv1_temperatures/inv1_actual_tempcontroller");
+    SUB_FLOAT_MAP(inv_temp_mot, inv1_temperatures.inv1_actual_tempmotor, "/can/dbc/inv1_temperatures/inv1_actual_tempmotor");
+    SUB_FLOAT_MAP(inv_throttle, inv1_misc.inv1_actual_throttle, "/can/dbc/inv1_misc/inv1_actual_throttle");
+    SUB_FLOAT_MAP(inv_brake, inv1_misc.inv1_actual_brake, "/can/dbc/inv1_misc/inv1_actual_brake");
+    SUB_FLOAT_MAP(inv_foc_id, inv1_foc.inv1_actual_foc_id, "/can/dbc/inv1_foc/inv1_actual_foc_id");
+    SUB_FLOAT_MAP(inv_foc_iq, inv1_foc.inv1_actual_foc_iq, "/can/dbc/inv1_foc/inv1_actual_foc_iq");
+    SUB_FLOAT_MAP(inv_drive_en, inv1_misc.inv1_drive_enable, "/can/dbc/inv1_misc/inv1_drive_enable");
+
+    // IVT
+    SUB_FLOAT_MAP(ivt_current, ivt_msg_result_i.ivt_result_i, "/can/dbc/ivt_msg_result_i/ivt_result_i");
+    SUB_FLOAT_MAP(ivt_u1, ivt_msg_result_u1.ivt_result_u1, "/can/dbc/ivt_msg_result_u1/ivt_result_u1");
+    SUB_FLOAT_MAP(ivt_u2, ivt_msg_result_u2.ivt_result_u2, "/can/dbc/ivt_msg_result_u2/ivt_result_u2");
+    SUB_FLOAT_MAP(ivt_u3, ivt_msg_result_u3.ivt_result_u3, "/can/dbc/ivt_msg_result_u3/ivt_result_u3");
+    SUB_FLOAT_MAP(ivt_temp, ivt_msg_result_t.ivt_result_t, "/can/dbc/ivt_msg_result_t/ivt_result_t");
+    SUB_FLOAT_MAP(ivt_power, ivt_msg_result_w.ivt_result_w, "/can/dbc/ivt_msg_result_w/ivt_result_w");
+    SUB_FLOAT_MAP(ivt_energy, ivt_msg_result_wh.ivt_result_wh, "/can/dbc/ivt_msg_result_wh/ivt_result_wh");
+
+    // Pedals
+    SUB_FLOAT_MAP(apps1, pedal_box.apps1, "/can/dbc/pedal_box/apps1");
+    SUB_FLOAT_MAP(apps2, pedal_box.apps2, "/can/dbc/pedal_box/apps2");
+
+    // Wheels (AQT2/3/5/6)
+    SUB_FLOAT_MAP(spd_fl, aqt2.wheel_spd, "/can/dbc/aqt2/wheel_spd");
+    SUB_FLOAT_MAP(temp_fl, aqt2.tire_temp, "/can/dbc/aqt2/tire_temp");
+    SUB_FLOAT_MAP(brk_fl, aqt2.brake_temp, "/can/dbc/aqt2/brake_temp");
+
+    SUB_FLOAT_MAP(spd_fr, aqt3.wheel_spd, "/can/dbc/aqt3/wheel_spd");
+    SUB_FLOAT_MAP(temp_fr, aqt3.tire_temp, "/can/dbc/aqt3/tire_temp");
+    SUB_FLOAT_MAP(brk_fr, aqt3.brake_temp, "/can/dbc/aqt3/brake_temp");
+
+    // SUB_FLOAT_MAP(spd_rl, aqt5.spd_wheel, "/can/dbc/aqt5/spd_wheel");
+    SUB_FLOAT_MAP(temp_rl, aqt5.tire_temp, "/can/dbc/aqt5/tire_temp");
+    SUB_FLOAT_MAP(brk_rl, aqt5.brake_temp, "/can/dbc/aqt5/brake_temp");
+
+    // SUB_FLOAT_MAP(spd_rr, aqt6.spd_wheel, "/can/dbc/aqt6/spd_wheel");
+    SUB_FLOAT_MAP(temp_rr, aqt6.tire_temp, "/can/dbc/aqt6/tire_temp");
+    SUB_FLOAT_MAP(brk_rr, aqt6.brake_temp, "/can/dbc/aqt6/brake_temp");
+
+    // Rear Sensors (AQT8 and AQT7)
+    SUB_FLOAT_MAP(ntc1, aqt8.ntc1, "/can/dbc/aqt8/ntc1");
+    SUB_FLOAT_MAP(ntc2, aqt8.ntc2, "/can/dbc/aqt8/ntc2");
+    SUB_FLOAT_MAP(ntc3, aqt8.ntc3, "/can/dbc/aqt8/ntc3");
+    SUB_FLOAT_MAP(susp_r, aqt7.susp_r, "/can/dbc/aqt7/susp_r");
+    SUB_FLOAT_MAP(susp_l, aqt7.susp_l, "/can/dbc/aqt7/susp_l");
+
+    // Autonomous: ACU
+    SUB_FLOAT_MAP(acu_state, acu.acu_state, "/can/dbc/acu/acu_state");
+    SUB_FLOAT_MAP(acu_as_state, acu.as_state, "/can/dbc/acu/as_state");
+    SUB_FLOAT_MAP(acu_assi_state, acu.assi_state, "/can/dbc/acu/assi_state");
+    SUB_FLOAT_MAP(acu_mission, acu.mission_select, "/can/dbc/acu/mission_select");
+    SUB_FLOAT_MAP(acu_asms, acu.asms, "/can/dbc/acu/asms");
+    SUB_FLOAT_MAP(acu_ign, acu.ign, "/can/dbc/acu/ign");
+    SUB_FLOAT_MAP(acu_emergency, acu.emergency, "/can/dbc/acu/emergency");
+    SUB_FLOAT_MAP(acu_emerg_cause, acu.emergency_cause, "/can/dbc/acu/emergency_cause");
+    SUB_FLOAT_MAP(acu_cpu_temp, acu.acu_cpu_temp, "/can/dbc/acu/acu_cpu_temp");
+
+    // Jetson
+    SUB_FLOAT_MAP(jetson_as_state, jetson.as_state, "/can/dbc/jetson/as_state");
+    SUB_FLOAT_MAP(jetson_mission, jetson.as_mission, "/can/dbc/jetson/as_mission");
+    SUB_FLOAT_MAP(jetson_temp, jetson.temperature, "/can/dbc/jetson/temperature");
+    SUB_FLOAT_MAP(jetson_cpu, jetson.cpu, "/can/dbc/jetson/cpu");
+    SUB_FLOAT_MAP(jetson_gpu, jetson.gpu, "/can/dbc/jetson/gpu");
+    SUB_FLOAT_MAP(jetson_emerg_cause, jetson.emergency_cause, "/can/dbc/jetson/emergency_cause");
+
+    // VCU
+    SUB_FLOAT_MAP(vcu_ign_man, vcu_ign_r2d.ignition_manual, "/can/dbc/vcu_ign_r2d/ignition_manual");
+    SUB_FLOAT_MAP(vcu_ign_auto, vcu_ign_r2d.ignition_auto, "/can/dbc/vcu_ign_r2d/ignition_auto");
+    SUB_FLOAT_MAP(vcu_r2d_man, vcu_ign_r2d.r2d_manual, "/can/dbc/vcu_ign_r2d/r2d_manual");
+    SUB_FLOAT_MAP(vcu_r2d_auto, vcu_ign_r2d.r2d_auto, "/can/dbc/vcu_ign_r2d/r2d_auto");
+    SUB_FLOAT_MAP(vcu_shutdown, vcu_ign_r2d.shutdown_signal, "/can/dbc/vcu_ign_r2d/shutdown_signal");
+    SUB_FLOAT_MAP(vcu_state, vcu_ign_r2d.vcu_state, "/can/dbc/vcu_ign_r2d/vcu_state");
+    SUB_FLOAT_MAP(vcu_r2d_raw, vcu_ign_r2d.r2d_button_raw, "/can/dbc/vcu_ign_r2d/r2d_button_raw");
+    SUB_FLOAT_MAP(vcu_ign_raw, vcu_ign_r2d.ignition_switch_raw, "/can/dbc/vcu_ign_r2d/ignition_switch_raw");
+    SUB_FLOAT_MAP(vcu_hv, vcu_hv.hv, "/can/dbc/vcu_hv/hv");
+    SUB_FLOAT_MAP(vcu_brkf, vcu_hv.brake_pressure_front, "/can/dbc/vcu_hv/brake_pressure_front");
+    SUB_FLOAT_MAP(vcu_brkr, vcu_hv.brake_pressure_rear, "/can/dbc/vcu_hv/brake_pressure_rear");
+    SUB_FLOAT_MAP(vcu_rpm_act, vcu_rpm.motor_rpm_left, "/can/dbc/vcu_rpm/motor_rpm_left");
+    SUB_FLOAT_MAP(vcu_rpm_tgt, vcu_rpm_target.rpm_target, "/can/dbc/vcu_rpm_target/rpm_target");
+    SUB_FLOAT_MAP(vcu_torque_tgt, vcu_torque_target.torque_target, "/can/dbc/vcu_torque_target/torque_target");
+
+    // DV Dynamics
+    SUB_FLOAT_MAP(dv_spd_act, dv_dynamics_1.speed_actual, "/can/dbc/dv_dynamics_1/speed_actual");
+    SUB_FLOAT_MAP(dv_spd_tgt, dv_dynamics_1.speed_target, "/can/dbc/dv_dynamics_1/speed_target");
+    SUB_FLOAT_MAP(dv_str_act, dv_dynamics_1.steering_angle_actual, "/can/dbc/dv_dynamics_1/steering_angle_actual");
+    SUB_FLOAT_MAP(dv_str_tgt, dv_dynamics_1.steering_angle_target, "/can/dbc/dv_dynamics_1/steering_angle_target");
+    SUB_FLOAT_MAP(dv_brk_act, dv_dynamics_1.brake_hydr_actual, "/can/dbc/dv_dynamics_1/brake_hydr_actual");
+    SUB_FLOAT_MAP(dv_brk_tgt, dv_dynamics_1.brake_hydr_target, "/can/dbc/dv_dynamics_1/brake_hydr_target");
+    SUB_FLOAT_MAP(dv_mot_act, dv_dynamics_1.motor_moment_actual, "/can/dbc/dv_dynamics_1/motor_moment_actual");
+    SUB_FLOAT_MAP(dv_mot_tgt, dv_dynamics_1.motor_moment_target, "/can/dbc/dv_dynamics_1/motor_moment_target");
+    SUB_FLOAT_MAP(dv_acc_lon, dv_dynamics_2.acceleration_longitudinal, "/can/dbc/dv_dynamics_2/acceleration_longitudinal");
+    SUB_FLOAT_MAP(dv_acc_lat, dv_dynamics_2.acceleration_lateral, "/can/dbc/dv_dynamics_2/acceleration_lateral");
+    SUB_FLOAT_MAP(dv_yaw, dv_dynamics_2.yaw_rate, "/can/dbc/dv_dynamics_2/yaw_rate");
+
+    // DV Status
+    SUB_FLOAT_MAP(dv_as_status, dv_status.as_status, "/can/dbc/dv_status/as_status");
+    SUB_FLOAT_MAP(dv_ebs_state, dv_status.asb_ebs_state, "/can/dbc/dv_status/asb_ebs_state");
+    SUB_FLOAT_MAP(dv_ami_state, dv_status.ami_state, "/can/dbc/dv_status/ami_state");
+    SUB_FLOAT_MAP(dv_steer_state, dv_status.steering_state, "/can/dbc/dv_status/steering_state");
+    SUB_FLOAT_MAP(dv_ebs_red_state, dv_status.asb_redundancy_state, "/can/dbc/dv_status/asb_redundancy_state");
+
+    // Pressures
+    SUB_FLOAT_MAP(ebs_tank_f, asf_signals.ebs_pressure_tank_front, "/can/dbc/asf_signals/ebs_pressure_tank_front");
+    SUB_FLOAT_MAP(ebs_tank_r, asf_signals.ebs_pressure_tank_rear, "/can/dbc/asf_signals/ebs_pressure_tank_rear");
+    SUB_FLOAT_MAP(brk_press_f, asf_signals.brake_pressure_front, "/can/dbc/asf_signals/brake_pressure_front");
+    SUB_FLOAT_MAP(brk_press_r, asf_signals.brake_pressure_rear, "/can/dbc/asf_signals/brake_pressure_rear");
+
+    // Steering
+    SUB_FLOAT_MAP(steer_pos, cubemars_feedback.position, "/can/dbc/cubemars_feedback/position");
+    SUB_FLOAT_MAP(steer_spd, cubemars_feedback.speed_rpm, "/can/dbc/cubemars_feedback/speed_rpm");
+    SUB_FLOAT_MAP(steer_curr, cubemars_feedback.current, "/can/dbc/cubemars_feedback/current");
+    SUB_FLOAT_MAP(steer_temp, cubemars_feedback.driver_temp, "/can/dbc/cubemars_feedback/driver_temp");
+    SUB_FLOAT_MAP(steer_err, cubemars_feedback.error_code, "/can/dbc/cubemars_feedback/error_code");
+    SUB_FLOAT_MAP(steer_pos_tgt, cubemars_position_loop.position, "/can/dbc/cubemars_position_loop/position");
+
+    // SLAM
+    SUB_FLOAT_MAP(slam_laps, slam_stats_can.lap_counter, "/can/dbc/slam_stats_can/lap_counter");
+    SUB_FLOAT_MAP(slam_cones, slam_stats_can.cones_count_actual, "/can/dbc/slam_stats_can/cones_count_actual");
+    SUB_FLOAT_MAP(slam_all, slam_stats_can.cones_count_all, "/can/dbc/slam_stats_can/cones_count_all");
+
+    // RES
+    SUB_FLOAT_MAP(res_signal, res.signal, "/can/dbc/res/signal");
+
+    // AQT1
+    SUB_FLOAT_MAP(aqt1_brkp, aqt1.frt_brk_press, "/can/dbc/aqt1/frt_brk_press");
+    SUB_FLOAT_MAP(aqt1_res, aqt1.res, "/can/dbc/aqt1/res");
+    SUB_FLOAT_MAP(aqt1_bots, aqt1.bots, "/can/dbc/aqt1/bots");
+
+    // AQT2 / 3 / 4 / 7
+    // SUB_FLOAT_MAP(aqt2_whl_ang, aqt2.wheel_angle, "/can/dbc/aqt2/wheel_angle");
+    // SUB_FLOAT_MAP(aqt3_whl_ang, aqt3.wheel_angle, "/can/dbc/aqt3/wheel_angle");
+    SUB_FLOAT_MAP(aqt4_st_ang, aqt4.st_angle, "/can/dbc/aqt4/st_angle");
+    SUB_FLOAT_MAP(aqt4_inertia, aqt4.inertia, "/can/dbc/aqt4/inertia");
+    SUB_FLOAT_MAP(aqt4_emer, aqt4.emergency, "/can/dbc/aqt4/emergency");
+    SUB_FLOAT_MAP(aqt7_brkp, aqt7.rear_brk_press, "/can/dbc/aqt7/rear_brk_press");
+
+    // Missing/Additional DBC Subscriptions
+    SUB_FLOAT_MAP(v_max, master_msc_id_3.overall_maximum_voltage, "/can/dbc/master_msc_id_3/overall_maximum_voltage");
+    SUB_FLOAT_MAP(v_min, master_msc_id_3.overall_minimum_voltage, "/can/dbc/master_msc_id_3/overall_minimum_voltage");
+    SUB_FLOAT_MAP(t_max, master_msc_id_3.overall_maximum_temperature, "/can/dbc/master_msc_id_3/overall_maximum_temperature");
+    SUB_FLOAT_MAP(t_min, master_msc_id_3.overall_minimum_temperature, "/can/dbc/master_msc_id_3/overall_minimum_temperature");
+    SUB_FLOAT_MAP(rear_ign, rear_wheel_l.ignition, "/can/dbc/rear_wheel_l/ignition");
+    SUB_FLOAT_MAP(rear_r2d, rear_wheel_l.shutdown_circuit, "/can/dbc/rear_wheel_l/shutdown_circuit");
+
+#undef SUB_FLOAT_MAP
+
     init_dbc_api_subscribers(g_node, g_subs);
-#endif
 
     g_is_initialized.store(1);
     g_has_speed.store(0);
@@ -220,156 +399,6 @@ LART_WEAK int ros2subscriber_spin_some(void) {
 
     try {
         g_exec->spin_some();
-
-        // Update g_telemetry from dbc_api atomically
-        {
-            std::lock_guard<std::mutex> lock(g_telemetry_mutex);
-            g_telemetry.ams_state = dbc_api.master_msc_id_1.master_state;
-            g_telemetry.ams_soc = dbc_api.master_soc_accumulator.soc_float;
-            g_telemetry.ams_runtime = dbc_api.master_msc_id_1.ams_current_draw;
-            g_telemetry.ams_fans = dbc_api.master_msc_id_1.master_fan_pwm;
-            g_telemetry.ams_mcu_vref = dbc_api.master_msc_id_1.mcu_vref;
-            g_telemetry.ams_mcu_temp = dbc_api.master_msc_id_1.mcu_temperature;
-            g_telemetry.ams_pec_err = dbc_api.master_msc_id_1.adbms_pec_error;
-            g_telemetry.ams_fault_cnt = dbc_api.master_msc_id_1.fault_counter;
-            g_telemetry.ams_slaves = dbc_api.master_msc_id_4.slaves_detected;
-            g_telemetry.ams_fw = dbc_api.master_msc_id_1.master_firmware_version;
-
-            g_telemetry.precharge_state = dbc_api.master_precharge_id_1.precharge_state;
-            g_telemetry.air_pos = dbc_api.master_precharge_id_1.precharge_ctc_air_pos_state;
-            g_telemetry.air_min = dbc_api.master_precharge_id_1.precharge_ctc_air_min_state;
-            g_telemetry.ctc_charge = dbc_api.master_precharge_id_1.precharge_ctc_charge_state;
-            g_telemetry.ctc_discharge = dbc_api.master_precharge_id_1.precharge_ctc_discharge_state;
-
-            g_telemetry.inv_erpm = dbc_api.hv500_erpm_duty_voltage.actual_erpm;
-            g_telemetry.inv_duty = dbc_api.hv500_erpm_duty_voltage.actual_duty;
-            g_telemetry.inv_vin = dbc_api.hv500_erpm_duty_voltage.actual_inputvoltage;
-            g_telemetry.inv_fault = dbc_api.hv500_temperatures.actual_faultcode;
-            g_telemetry.inv_ac_curr = dbc_api.hv500_ac_dc_current.actual_accurrent;
-            g_telemetry.inv_dc_curr = dbc_api.hv500_ac_dc_current.actual_dccurrent;
-            g_telemetry.inv_temp_ctrl = dbc_api.hv500_temperatures.actual_tempcontroller;
-            g_telemetry.inv_temp_mot = dbc_api.hv500_temperatures.actual_tempmotor;
-            g_telemetry.inv_throttle = dbc_api.hv500_misc.actual_throttle;
-            g_telemetry.inv_brake = dbc_api.hv500_misc.actual_brake;
-            g_telemetry.inv_foc_id = dbc_api.hv500_foc.actual_foc_id;
-            g_telemetry.inv_foc_iq = dbc_api.hv500_foc.actual_foc_iq;
-            g_telemetry.inv_drive_en = dbc_api.hv500_misc.drive_enable;
-
-            g_telemetry.ivt_current = dbc_api.ivt_msg_result_i.ivt_result_i;
-            g_telemetry.ivt_u1 = dbc_api.ivt_msg_result_u1.ivt_result_u1;
-            g_telemetry.ivt_u2 = dbc_api.ivt_msg_result_u2.ivt_result_u2;
-            g_telemetry.ivt_u3 = dbc_api.ivt_msg_result_u3.ivt_result_u3;
-            g_telemetry.ivt_temp = dbc_api.ivt_msg_result_t.ivt_result_t;
-            g_telemetry.ivt_power = dbc_api.ivt_msg_result_w.ivt_result_w;
-            g_telemetry.ivt_energy = dbc_api.ivt_msg_result_wh.ivt_result_wh;
-
-            g_telemetry.apps1 = dbc_api.pedal_box.apps1;
-            g_telemetry.apps2 = dbc_api.pedal_box.apps2;
-
-            g_telemetry.spd_fl = dbc_api.aqt2.wheel_spd;
-            g_telemetry.temp_fl = dbc_api.aqt2.tire_temp;
-            g_telemetry.brk_fl = dbc_api.aqt2.brake_temp;
-
-            g_telemetry.spd_fr = dbc_api.aqt3.wheel_spd;
-            g_telemetry.temp_fr = dbc_api.aqt3.tire_temp;
-            g_telemetry.brk_fr = dbc_api.aqt3.brake_temp;
-
-            g_telemetry.temp_rl = dbc_api.aqt5.tire_temp;
-            g_telemetry.brk_rl = dbc_api.aqt5.brake_temp;
-
-            g_telemetry.temp_rr = dbc_api.aqt6.tire_temp;
-            g_telemetry.brk_rr = dbc_api.aqt6.brake_temp;
-
-            g_telemetry.ntc1 = dbc_api.aqt8.ntc1;
-            g_telemetry.ntc2 = dbc_api.aqt8.ntc2;
-            g_telemetry.ntc3 = dbc_api.aqt8.ntc3;
-            g_telemetry.susp_r = dbc_api.aqt7.susp_r;
-            g_telemetry.susp_l = dbc_api.aqt7.susp_l;
-
-            g_telemetry.acu_state = dbc_api.acu.acu_state;
-            g_telemetry.acu_as_state = dbc_api.acu.as_state;
-            g_telemetry.acu_assi_state = dbc_api.acu.assi_state;
-            g_telemetry.acu_mission = dbc_api.acu.mission_select;
-            g_telemetry.acu_asms = dbc_api.acu.asms;
-            g_telemetry.acu_ign = dbc_api.acu.ign;
-            g_telemetry.acu_emergency = dbc_api.acu.emergency;
-            g_telemetry.acu_emerg_cause = dbc_api.acu.emergency_cause;
-            g_telemetry.acu_cpu_temp = dbc_api.acu.acu_cpu_temp;
-
-            g_telemetry.jetson_as_state = dbc_api.jetson.as_state;
-            g_telemetry.jetson_mission = dbc_api.jetson.as_mission;
-            g_telemetry.jetson_temp = dbc_api.jetson.temperature;
-            g_telemetry.jetson_cpu = dbc_api.jetson.cpu;
-            g_telemetry.jetson_gpu = dbc_api.jetson.gpu;
-            g_telemetry.jetson_emerg_cause = dbc_api.jetson.emergency_cause;
-
-            g_telemetry.vcu_ign_man = dbc_api.vcu_ign_r2d.ignition_manual;
-            g_telemetry.vcu_ign_auto = dbc_api.vcu_ign_r2d.ignition_auto;
-            g_telemetry.vcu_r2d_man = dbc_api.vcu_ign_r2d.r2d_manual;
-            g_telemetry.vcu_r2d_auto = dbc_api.vcu_ign_r2d.r2d_auto;
-            g_telemetry.vcu_shutdown = dbc_api.vcu_ign_r2d.shutdown_signal;
-            g_telemetry.vcu_state = dbc_api.vcu_ign_r2d.vcu_state;
-            g_telemetry.vcu_r2d_raw = dbc_api.vcu_ign_r2d.r2d_button_raw;
-            g_telemetry.vcu_ign_raw = dbc_api.vcu_ign_r2d.ignition_switch_raw;
-            g_telemetry.vcu_hv = dbc_api.vcu_hv.hv;
-            g_telemetry.vcu_brkf = dbc_api.vcu_hv.brake_pressure_front;
-            g_telemetry.vcu_brkr = dbc_api.vcu_hv.brake_pressure_rear;
-            g_telemetry.vcu_rpm_act = dbc_api.vcu_rpm.motor_rpm_left;
-            g_telemetry.vcu_rpm_tgt = dbc_api.vcu_rpm_target.rpm_target;
-            g_telemetry.vcu_torque_tgt = dbc_api.vcu_torque_target.torque_target;
-
-            g_telemetry.dv_spd_act = dbc_api.dv_dynamics_1.speed_actual;
-            g_telemetry.dv_spd_tgt = dbc_api.dv_dynamics_1.speed_target;
-            g_telemetry.dv_str_act = dbc_api.dv_dynamics_1.steering_angle_actual;
-            g_telemetry.dv_str_tgt = dbc_api.dv_dynamics_1.steering_angle_target;
-            g_telemetry.dv_brk_act = dbc_api.dv_dynamics_1.brake_hydr_actual;
-            g_telemetry.dv_brk_tgt = dbc_api.dv_dynamics_1.brake_hydr_target;
-            g_telemetry.dv_mot_act = dbc_api.dv_dynamics_1.motor_moment_actual;
-            g_telemetry.dv_mot_tgt = dbc_api.dv_dynamics_1.motor_moment_target;
-            g_telemetry.dv_acc_lon = dbc_api.dv_dynamics_2.acceleration_longitudinal;
-            g_telemetry.dv_acc_lat = dbc_api.dv_dynamics_2.acceleration_lateral;
-            g_telemetry.dv_yaw = dbc_api.dv_dynamics_2.yaw_rate;
-
-            g_telemetry.dv_as_status = dbc_api.dv_status.as_status;
-            g_telemetry.dv_ebs_state = dbc_api.dv_status.asb_ebs_state;
-            g_telemetry.dv_ami_state = dbc_api.dv_status.ami_state;
-            g_telemetry.dv_steer_state = dbc_api.dv_status.steering_state;
-            g_telemetry.dv_ebs_red_state = dbc_api.dv_status.asb_redundancy_state;
-
-            g_telemetry.ebs_tank_f = dbc_api.asf_signals.ebs_pressure_tank_front;
-            g_telemetry.ebs_tank_r = dbc_api.asf_signals.ebs_pressure_tank_rear;
-            g_telemetry.brk_press_f = dbc_api.asf_signals.brake_pressure_front;
-            g_telemetry.brk_press_r = dbc_api.asf_signals.brake_pressure_rear;
-
-            g_telemetry.steer_pos = dbc_api.cubemars_feedback.position;
-            g_telemetry.steer_spd = dbc_api.cubemars_feedback.speed_rpm;
-            g_telemetry.steer_curr = dbc_api.cubemars_feedback.current;
-            g_telemetry.steer_temp = dbc_api.cubemars_feedback.driver_temp;
-            g_telemetry.steer_err = dbc_api.cubemars_feedback.error_code;
-            g_telemetry.steer_pos_tgt = dbc_api.cubemars_position_loop.position;
-
-            g_telemetry.slam_laps = dbc_api.slam_stats_can.lap_counter;
-            g_telemetry.slam_cones = dbc_api.slam_stats_can.cones_count_actual;
-            g_telemetry.slam_all = dbc_api.slam_stats_can.cones_count_all;
-
-            g_telemetry.res_signal = dbc_api.res.signal;
-
-            g_telemetry.aqt1_brkp = dbc_api.aqt1.frt_brk_press;
-            g_telemetry.aqt1_res = dbc_api.aqt1.res;
-            g_telemetry.aqt1_bots = dbc_api.aqt1.bots;
-
-            g_telemetry.aqt4_st_ang = dbc_api.aqt4.st_angle;
-            g_telemetry.aqt4_inertia = dbc_api.aqt4.inertia;
-            g_telemetry.aqt4_emer = dbc_api.aqt4.emergency;
-            g_telemetry.aqt7_brkp = dbc_api.aqt7.rear_brk_press;
-
-            g_telemetry.v_max = dbc_api.master_msc_id_3.overall_maximum_voltage;
-            g_telemetry.v_min = dbc_api.master_msc_id_3.overall_minimum_voltage;
-            g_telemetry.t_max = dbc_api.master_msc_id_3.overall_maximum_temperature;
-            g_telemetry.t_min = dbc_api.master_msc_id_3.overall_minimum_temperature;
-            g_telemetry.rear_ign = dbc_api.rear_wheel_l.ignition;
-            g_telemetry.rear_r2d = dbc_api.rear_wheel_l.shutdown_circuit;
-        }
     } catch (...) {
     }
     return 0;

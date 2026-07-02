@@ -33,7 +33,7 @@ NS_ :
 
 BS_:
 
-BU_: AMS VCU HOST ISABELLE DTI Acquisition_Board1 Acquisition_Board4
+BU_: AMS VCU HOST ISABELLE Acquisition_Board1 Acquisition_Board4 DTI_INV1 DTI_INV2 DTI_commands
 
 
 VAL_TABLE_ _B9_Voltage_Channels 3 "3 Channels" 0 "0 Channels" ;
@@ -60,47 +60,111 @@ BO_ 3221225472 VECTOR__INDEPENDENT_SIG_MSG: 0 Vector__XXX
  SG_ NewSignal_0007 : 16|8@1+ (1,0) [0|0] "" Vector__XXX
  SG_ modules_detected : 56|8@1+ (1,0) [0|63] "" Vector__XXX
  SG_ NewSignal_0002 : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ CMD_MaxDcCurrent : 7|16@0- (0.1,0) [0|850] "A"  AMS,VCU,HOST
+ SG_ CMD_MaxAcBrakeCurrent : 7|16@0- (0.1,0) [-850|0] "A"  AMS,VCU,HOST
+ SG_ CMD_MaxAcCurrent : 7|16@0- (0.1,0) [0|850] "A"  AMS,VCU,HOST
+ SG_ CMD_TargeRelativeBrakeCurrent : 7|16@0- (0.1,0) [0|100] "%"  AMS,VCU,HOST
+ SG_ CMD_TargetRelativeCurrent : 7|16@0- (0.1,0) [-100|100] "%"  AMS,VCU,HOST
+ SG_ ControlMode : 7|8@0+ (1,0) [0|7] "#"  AMS,VCU,HOST
+ SG_ TargetIq : 15|16@0- (0.1,0) [-850|850] "Apk"  AMS,VCU,HOST
+ SG_ MotorPosition : 31|16@0+ (0.1,0) [0|359] "degree"  AMS,VCU,HOST
+ SG_ isMotorStill : 47|8@0+ (1,0) [0|1] "#"  AMS,VCU,HOST
+ SG_ CMD_SetDigOutput1 : 0|1@0+ (1,0) [0|1] "#"  AMS,VCU,HOST
+ SG_ CMD_SetDigOutput2 : 1|1@0+ (1,0) [0|1] "#"  AMS,VCU,HOST
+ SG_ CMD_SetDigOutput3 : 2|1@0+ (1,0) [0|1] "#"  AMS,VCU,HOST
+ SG_ CMD_SetDigOutput4 : 3|1@0+ (1,0) [0|1] "#"  AMS,VCU,HOST
+ SG_ CMD_MaxDcBrakeCurrent : 7|16@0- (0.1,0) [-850|0] "A"  AMS,VCU,HOST
+ SG_ MaxAcCurrent : 7|16@0- (0.1,0) [0|850] "Apk"  AMS,VCU,HOST
+ SG_ AvailableMaxAcCurrent : 23|16@0- (0.1,0) [0|850] "Apk"  AMS,VCU,HOST
+ SG_ MinAcCurrent : 39|16@0- (0.1,0) [-850|0] "Apk"  AMS,VCU,HOST
+ SG_ AvailableMinAcCurrent : 55|16@0- (0.1,0) [-850|0] "Apk"  AMS,VCU,HOST
+ SG_ MaxDcCurrent : 7|16@0- (0.1,0) [0|850] "Adc"  AMS,VCU,HOST
+ SG_ AvailableMaxDcCurrent : 23|16@0- (0.1,0) [0|850] "Adc"  AMS,VCU,HOST
+ SG_ MinDcCurrent : 39|16@0- (0.1,0) [-850|0] "Adc"  AMS,VCU,HOST
+ SG_ AvailableMinDcCurrent : 55|16@0- (0.1,0) [-850|0] "Adc"  AMS,VCU,HOST
+ SG_ CMD_TargetSpeed : 7|32@0- (1,0) [-100000|100000] "ERPM"  AMS,VCU,HOST
+ SG_ CMD_TargetBrakeCurrent : 7|16@0- (0.1,0) [0|850] "A"  AMS,VCU,HOST
+ SG_ CMD_TargetPosition : 7|16@0- (0.1,0) [0|359] "degree"  AMS,VCU,HOST
+ SG_ CMD_TargetAcCurrent : 7|16@0- (0.1,0) [-850|850] "A"  AMS,VCU,HOST
+ SG_ Actual_Throttle : 7|8@0- (1,0) [0|100] "%"  AMS,VCU,HOST
+ SG_ Actual_Brake : 15|8@0- (1,0) [0|100] "%"  AMS,VCU,HOST
+ SG_ Digital_input_1 : 16|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ Digital_input_2 : 17|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ Digital_input_3 : 18|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ Digital_input_4 : 19|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ Digital_output_1 : 20|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ Digital_output_2 : 21|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ Digital_output_3 : 22|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ Digital_output_4 : 23|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ Drive_enable : 31|8@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ Capacitor_temp_limit : 32|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ DC_current_limit : 33|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ Drive_enable_limit : 34|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ IGBT_accel_limit : 35|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ IGBT_temp_limit : 36|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ Input_voltage_limit : 37|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ Motor_accel_limit : 38|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ Motor_temp_limit : 39|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ RPM_min_limit : 40|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ RPM_max_limit : 41|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ Power_limit : 42|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ CAN_map_version : 63|8@0+ (0.1,0) [0|255] "Version"  AMS,VCU,HOST
+ SG_ CMD_DriveEnable : 7|8@0+ (1,0) [0|1] ""  AMS,VCU,HOST
+ SG_ Actual_FOC_id : 7|32@0- (0.01,0) [-850|850] "Apk"  AMS,VCU,HOST
+ SG_ Actual_FOC_iq : 39|32@0- (0.01,0) [-850|850] "Apk"  AMS,VCU,HOST
+ SG_ Actual_TempController : 7|16@0- (0.1,0) [-55|200] "C"  AMS,VCU,HOST
+ SG_ Actual_TempMotor : 23|16@0- (0.1,0) [-55|200] "C"  AMS,VCU,HOST
+ SG_ Actual_FaultCode : 39|8@0+ (1,0) [0|255] ""  AMS,VCU,HOST
+ SG_ Actual_ACCurrent : 7|16@0- (0.1,0) [-850|850] "Apk"  AMS,VCU,HOST
+ SG_ Actual_DCCurrent : 23|16@0- (0.1,0) [-850|850] "A"  AMS,VCU,HOST
+ SG_ Actual_ERPM : 7|32@0- (1,0) [-120000|120000] "ERPM"  AMS,VCU,HOST
+ SG_ Actual_Duty : 39|16@0- (0.1,0) [-100|100] "%"  AMS,VCU,HOST
+ SG_ Actual_InputVoltage : 55|16@0- (1,0) [0|1000] "V"  AMS,VCU,HOST
+ SG_ module_voltage_sum : 0|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
+ SG_ module_voltage_avg : 16|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
+ SG_ module_voltage_min : 32|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
+ SG_ module_voltage_max : 48|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
 
 BO_ 131 Start_PreCharge: 1 VCU
  SG_ Precharge_Request : 0|1@0+ (1,0) [0|0] "ON/OFF" Vector__XXX
 
-BO_ 256 Slave_01_Voltage_ID_1: 8 AMS
+BO_ 1536 Slave_01_Voltage_ID_1: 8 AMS
  SG_ cell_voltage_1 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_2 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_3 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_4 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 257 Slave_01_Voltage_ID_2: 8 AMS
+BO_ 1537 Slave_01_Voltage_ID_2: 8 AMS
  SG_ cell_voltage_5 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_6 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_7 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_8 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 258 Slave_01_Voltage_ID_3: 8 AMS
+BO_ 1538 Slave_01_Voltage_ID_3: 8 AMS
  SG_ cell_voltage_9 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_10 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_11 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_12 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 259 Slave_01_Temperature_ID_1: 8 AMS
+BO_ 1539 Slave_01_Temperature_ID_1: 8 AMS
  SG_ temperature_value_1 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_2 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_3 : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_4 : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 452 Slave_01_Temperature_ID_2: 8 AMS
+BO_ 1540 Slave_01_Temperature_ID_2: 8 AMS
  SG_ temperature_value_5 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_6 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_maximum : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_delta : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 261 Slave_01_MSC_ID_1: 8 AMS
+BO_ 1541 Slave_01_MSC_ID_1: 8 AMS
  SG_ module_voltage_sum : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_avg : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_min : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_max : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 262 Slave_01_MSC_ID_2: 8 AMS
+BO_ 1542 Slave_01_MSC_ID_2: 8 AMS
  SG_ module_voltage_delta : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_ic_voltage : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_open_wire : 32|8@1+ (1,0) [0|18] ""  VCU,HOST
@@ -109,43 +173,43 @@ BO_ 262 Slave_01_MSC_ID_2: 8 AMS
  SG_ module_undervoltage : 57|1@1+ (1,0) [0|0] "" Vector__XXX
  SG_ module_under_over_identifier : 58|5@1+ (1,0) [0|0] "" Vector__XXX
 
-BO_ 263 Slave_02_Voltage_ID_1: 8 AMS
+BO_ 1543 Slave_02_Voltage_ID_1: 8 AMS
  SG_ cell_voltage_1 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_2 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_3 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_4 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 264 Slave_02_Voltage_ID_2: 8 AMS
+BO_ 1544 Slave_02_Voltage_ID_2: 8 AMS
  SG_ cell_voltage_5 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_6 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_7 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_8 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 265 Slave_02_Voltage_ID_3: 8 AMS
+BO_ 1545 Slave_02_Voltage_ID_3: 8 AMS
  SG_ cell_voltage_9 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_10 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_11 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_12 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 266 Slave_02_Temperature_ID_1: 8 AMS
+BO_ 1546 Slave_02_Temperature_ID_1: 8 AMS
  SG_ temperature_value_1 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_2 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_3 : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_4 : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 267 Slave_02_Temperature_ID_2: 8 AMS
+BO_ 1547 Slave_02_Temperature_ID_2: 8 AMS
  SG_ temperature_value_5 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_6 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_maximum : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_delta : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 268 Slave_02_MSC_ID_1: 8 AMS
+BO_ 1548 Slave_02_MSC_ID_1: 8 AMS
  SG_ module_voltage_sum : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_avg : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_min : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_max : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 269 Slave_02_MSC_ID_2: 8 AMS
+BO_ 1549 Slave_02_MSC_ID_2: 8 AMS
  SG_ module_voltage_delta : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_ic_voltage : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_open_wire : 32|8@1+ (1,0) [0|18] ""  VCU,HOST
@@ -154,421 +218,415 @@ BO_ 269 Slave_02_MSC_ID_2: 8 AMS
  SG_ module_undervoltage : 57|1@1+ (1,0) [0|0] "" Vector__XXX
  SG_ module_under_over_identifier : 58|5@1+ (1,0) [0|0] "" Vector__XXX
 
-BO_ 270 Slave_03_Voltage_ID_1: 8 AMS
+BO_ 1550 Slave_03_Voltage_ID_1: 8 AMS
  SG_ cell_voltage_1 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_2 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_3 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_4 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 271 Slave_03_Voltage_ID_2: 8 AMS
+BO_ 1551 Slave_03_Voltage_ID_2: 8 AMS
  SG_ cell_voltage_5 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_6 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_7 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_8 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 272 Slave_03_Voltage_ID_3: 8 AMS
+BO_ 1552 Slave_03_Voltage_ID_3: 8 AMS
  SG_ cell_voltage_9 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_10 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_11 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_12 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 273 Slave_03_Temperature_ID_1: 8 AMS
+BO_ 1553 Slave_03_Temperature_ID_1: 8 AMS
  SG_ temperature_value_1 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_2 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_3 : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_4 : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 274 Slave_03_Temperature_ID_2: 8 AMS
+BO_ 1554 Slave_03_Temperature_ID_2: 8 AMS
  SG_ temperature_value_5 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_6 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_maximum : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_delta : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 275 Slave_03_MSC_ID_1: 8 AMS
+BO_ 1555 Slave_03_MSC_ID_1: 8 AMS
  SG_ module_voltage_sum : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_avg : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_min : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_max : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 276 Slave_03_MSC_ID_2: 8 AMS
+BO_ 1556 Slave_03_MSC_ID_2: 8 AMS
  SG_ module_voltage_delta : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_ic_voltage : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_open_wire : 32|8@1+ (1,0) [0|18] ""  VCU,HOST
  SG_ module_ic_temperature : 40|16@1+ (1,0) [0|0] "degC"  VCU,HOST
 
-BO_ 277 Slave_04_Voltage_ID_1: 8 AMS
+BO_ 1557 Slave_04_Voltage_ID_1: 8 AMS
  SG_ cell_voltage_1 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_2 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_3 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_4 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 278 Slave_04_Voltage_ID_2: 8 AMS
+BO_ 1558 Slave_04_Voltage_ID_2: 8 AMS
  SG_ cell_voltage_5 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_6 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_7 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_8 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 279 Slave_04_Voltage_ID_3: 8 AMS
+BO_ 1559 Slave_04_Voltage_ID_3: 8 AMS
  SG_ cell_voltage_9 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_10 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_11 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_12 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 280 Slave_04_Temperature_ID_1: 8 AMS
+BO_ 1560 Slave_04_Temperature_ID_1: 8 AMS
  SG_ temperature_value_1 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_2 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_3 : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_4 : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 281 Slave_04_Temperature_ID_2: 8 AMS
+BO_ 1561 Slave_04_Temperature_ID_2: 8 AMS
  SG_ temperature_value_5 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_6 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_maximum : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_delta : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 282 Slave_04_MSC_ID_1: 8 AMS
+BO_ 1562 Slave_04_MSC_ID_1: 8 AMS
  SG_ module_voltage_sum : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_avg : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_min : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_max : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 283 Slave_04_MSC_ID_2: 8 AMS
+BO_ 1563 Slave_04_MSC_ID_2: 8 AMS
  SG_ module_voltage_delta : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_ic_voltage : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_open_wire : 32|8@1+ (1,0) [0|18] ""  VCU,HOST
  SG_ module_ic_temperature : 40|16@1+ (1,0) [0|0] "degC"  VCU,HOST
 
-BO_ 284 Slave_05_Voltage_ID_1: 8 AMS
+BO_ 1564 Slave_05_Voltage_ID_1: 8 AMS
  SG_ cell_voltage_1 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_2 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_3 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_4 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 285 Slave_05_Voltage_ID_2: 8 AMS
+BO_ 1565 Slave_05_Voltage_ID_2: 8 AMS
  SG_ cell_voltage_5 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_6 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_7 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_8 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 286 Slave_05_Voltage_ID_3: 8 AMS
+BO_ 1566 Slave_05_Voltage_ID_3: 8 AMS
  SG_ cell_voltage_9 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_10 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_11 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_12 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 287 Slave_05_Temperature_ID_1: 8 AMS
+BO_ 1567 Slave_05_Temperature_ID_1: 8 AMS
  SG_ temperature_value_1 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_2 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_3 : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_4 : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 288 Slave_05_Temperature_ID_2: 8 AMS
+BO_ 1568 Slave_05_Temperature_ID_2: 8 AMS
  SG_ temperature_value_5 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_6 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_maximum : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_delta : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 289 Slave_05_MSC_ID_1: 8 AMS
+BO_ 1569 Slave_05_MSC_ID_1: 8 AMS
  SG_ module_voltage_sum : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_avg : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_min : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_max : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 290 Slave_05_MSC_ID_2: 8 AMS
+BO_ 1570 Slave_05_MSC_ID_2: 8 AMS
  SG_ module_voltage_delta : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_ic_voltage : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_open_wire : 32|8@1+ (1,0) [0|18] ""  VCU,HOST
  SG_ module_ic_temperature : 40|16@1+ (1,0) [0|0] "degC"  VCU,HOST
 
-BO_ 291 Slave_06_Voltage_ID_1: 8 AMS
+BO_ 1571 Slave_06_Voltage_ID_1: 8 AMS
  SG_ cell_voltage_1 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_2 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_3 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_4 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 420 Slave_06_Voltage_ID_2: 8 AMS
+BO_ 1572 Slave_06_Voltage_ID_2: 8 AMS
  SG_ cell_voltage_5 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_6 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_7 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_8 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 293 Slave_06_Voltage_ID_3: 8 AMS
+BO_ 1573 Slave_06_Voltage_ID_3: 8 AMS
  SG_ cell_voltage_9 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_10 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_11 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_12 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 294 Slave_06_Temperature_ID_1: 8 AMS
+BO_ 1574 Slave_06_Temperature_ID_1: 8 AMS
  SG_ temperature_value_1 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_2 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_3 : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_4 : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 295 Slave_06_Temperature_ID_2: 8 AMS
+BO_ 1575 Slave_06_Temperature_ID_2: 8 AMS
  SG_ temperature_value_5 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_6 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_maximum : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_delta : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 296 Slave_06_MSC_ID_1: 8 AMS
+BO_ 1576 Slave_06_MSC_ID_1: 8 AMS
  SG_ module_voltage_sum : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_avg : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_min : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_max : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 297 Slave_06_MSC_ID_2: 8 AMS
+BO_ 1577 Slave_06_MSC_ID_2: 8 AMS
  SG_ module_voltage_delta : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_ic_voltage : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_open_wire : 32|8@1+ (1,0) [0|18] ""  VCU,HOST
  SG_ module_ic_temperature : 40|16@1+ (1,0) [0|0] "degC"  VCU,HOST
 
-BO_ 298 Slave_07_Voltage_ID_1: 8 AMS
+BO_ 1578 Slave_07_Voltage_ID_1: 8 AMS
  SG_ cell_voltage_1 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_2 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_3 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_4 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 299 Slave_07_Voltage_ID_2: 8 AMS
+BO_ 1579 Slave_07_Voltage_ID_2: 8 AMS
  SG_ cell_voltage_5 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_6 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_7 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_8 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 300 Slave_07_Voltage_ID_3: 8 AMS
+BO_ 1580 Slave_07_Voltage_ID_3: 8 AMS
  SG_ cell_voltage_9 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_10 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_11 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_12 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 301 Slave_07_Temperature_ID_1: 8 AMS
+BO_ 1581 Slave_07_Temperature_ID_1: 8 AMS
  SG_ temperature_value_1 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_2 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_3 : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_4 : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 302 Slave_07_Temperature_ID_2: 8 AMS
+BO_ 1582 Slave_07_Temperature_ID_2: 8 AMS
  SG_ temperature_value_5 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_6 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_maximum : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_delta : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 303 Slave_07_MSC_ID_1: 8 AMS
+BO_ 1583 Slave_07_MSC_ID_1: 8 AMS
  SG_ module_voltage_sum : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_avg : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_min : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_max : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 304 Slave_07_MSC_ID_2: 8 AMS
+BO_ 1584 Slave_07_MSC_ID_2: 8 AMS
  SG_ module_voltage_delta : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_ic_voltage : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_open_wire : 32|8@1+ (1,0) [0|18] ""  VCU,HOST
  SG_ module_ic_temperature : 40|16@1+ (1,0) [0|0] "degC"  VCU,HOST
 
-BO_ 305 Slave_08_Voltage_ID_1: 8 AMS
+BO_ 1585 Slave_08_Voltage_ID_1: 8 AMS
  SG_ cell_voltage_1 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_2 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_3 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_4 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 306 Slave_08_Voltage_ID_2: 8 AMS
+BO_ 1586 Slave_08_Voltage_ID_2: 8 AMS
  SG_ cell_voltage_5 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_6 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_7 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_8 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 307 Slave_08_Voltage_ID_3: 8 AMS
+BO_ 1587 Slave_08_Voltage_ID_3: 8 AMS
  SG_ cell_voltage_9 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_10 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_11 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_12 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 308 Slave_08_Temperature_ID_1: 8 AMS
+BO_ 1588 Slave_08_Temperature_ID_1: 8 AMS
  SG_ temperature_value_1 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_2 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_3 : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_4 : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 309 Slave_08_Temperature_ID_2: 8 AMS
+BO_ 1589 Slave_08_Temperature_ID_2: 8 AMS
  SG_ temperature_value_5 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_6 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_maximum : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_delta : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 310 Slave_08_MSC_ID_1: 8 AMS
+BO_ 1590 Slave_08_MSC_ID_1: 8 AMS
  SG_ module_voltage_sum : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_avg : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_min : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_max : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 311 Slave_08_MSC_ID_2: 8 AMS
+BO_ 1591 Slave_08_MSC_ID_2: 8 AMS
  SG_ module_voltage_delta : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_ic_voltage : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_open_wire : 32|8@1+ (1,0) [0|18] ""  VCU,HOST
  SG_ module_ic_temperature : 40|16@1+ (1,0) [0|0] "degC"  VCU,HOST
 
-BO_ 312 Slave_09_Voltage_ID_1: 8 AMS
+BO_ 1592 Slave_09_Voltage_ID_1: 8 AMS
  SG_ cell_voltage_1 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_2 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_3 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_4 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 313 Slave_09_Voltage_ID_2: 8 AMS
+BO_ 1593 Slave_09_Voltage_ID_2: 8 AMS
  SG_ cell_voltage_5 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_6 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_7 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_8 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 314 Slave_09_Voltage_ID_3: 8 AMS
+BO_ 1594 Slave_09_Voltage_ID_3: 8 AMS
  SG_ cell_voltage_9 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_10 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_11 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_12 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 315 Slave_09_Temperature_ID_1: 8 AMS
+BO_ 1595 Slave_09_Temperature_ID_1: 8 AMS
  SG_ temperature_value_1 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_2 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_3 : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_4 : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 316 Slave_09_Temperature_ID_2: 8 AMS
+BO_ 1596 Slave_09_Temperature_ID_2: 8 AMS
  SG_ temperature_value_5 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_6 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_maximum : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_delta : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 317 Slave_09_MSC_ID_1: 8 AMS
+BO_ 1597 Slave_09_MSC_ID_1: 8 AMS
  SG_ module_voltage_sum : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_avg : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_min : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_voltage_max : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 318 Slave_09_MSC_ID_2: 8 AMS
+BO_ 1598 Slave_09_MSC_ID_2: 8 AMS
  SG_ module_voltage_delta : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_ic_voltage : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ module_open_wire : 32|8@1+ (1,0) [0|18] ""  VCU,HOST
  SG_ module_ic_temperature : 40|16@1+ (1,0) [0|0] "degC"  VCU,HOST
 
-BO_ 319 Slave_10_Voltage_ID_1: 8 AMS
+BO_ 1599 Slave_10_Voltage_ID_1: 8 AMS
  SG_ cell_voltage_1 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_2 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_3 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_4 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 320 Slave_10_Voltage_ID_2: 8 AMS
+BO_ 1600 Slave_10_Voltage_ID_2: 8 AMS
  SG_ cell_voltage_5 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_6 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_7 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_8 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 321 Slave_10_Voltage_ID_3: 8 AMS
+BO_ 1601 Slave_10_Voltage_ID_3: 8 AMS
  SG_ cell_voltage_9 : 0|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_10 : 16|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_11 : 32|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
  SG_ cell_voltage_12 : 48|16@1+ (0.001,0) [0|0] "V"  VCU,HOST
 
-BO_ 322 Slave_10_Temperature_ID_1: 8 AMS
+BO_ 1602 Slave_10_Temperature_ID_1: 8 AMS
  SG_ temperature_value_1 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_2 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_3 : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_4 : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 323 Slave_10_Temperature_ID_2: 8 AMS
+BO_ 1603 Slave_10_Temperature_ID_2: 8 AMS
  SG_ temperature_value_5 : 0|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_value_6 : 16|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_maximum : 32|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
  SG_ temperature_delta : 48|16@1+ (0.01,0) [0|0] "degC"  VCU,HOST
 
-BO_ 436 Slave_10_MSC_ID_1: 8 AMS
- SG_ module_voltage_sum : 0|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
- SG_ module_voltage_avg : 16|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
- SG_ module_voltage_min : 32|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
- SG_ module_voltage_max : 48|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
-
-BO_ 325 Slave_10_MSC_ID_2: 8 AMS
+BO_ 1605 Slave_10_MSC_ID_2: 8 AMS
  SG_ module_voltage_delta : 0|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ module_ic_voltage : 16|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ module_open_wire : 32|8@1+ (1,0) [0|18] ""  HOST,VCU
  SG_ module_ic_temperature : 40|16@1+ (1,0) [0|0] "degC"  HOST,VCU
 
-BO_ 326 Slave_11_Voltage_ID_1: 8 AMS
+BO_ 1606 Slave_11_Voltage_ID_1: 8 AMS
  SG_ cell_voltage_1 : 0|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ cell_voltage_2 : 16|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ cell_voltage_3 : 32|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ cell_voltage_4 : 48|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
 
-BO_ 327 Slave_11_Voltage_ID_2: 8 AMS
+BO_ 1607 Slave_11_Voltage_ID_2: 8 AMS
  SG_ cell_voltage_5 : 0|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ cell_voltage_6 : 16|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ cell_voltage_7 : 32|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ cell_voltage_8 : 48|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
 
-BO_ 328 Slave_11_Voltage_ID_3: 8 AMS
+BO_ 1608 Slave_11_Voltage_ID_3: 8 AMS
  SG_ cell_voltage_9 : 0|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ cell_voltage_10 : 16|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ cell_voltage_11 : 32|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ cell_voltage_12 : 48|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
 
-BO_ 329 Slave_11_Temperature_ID_1: 8 AMS
+BO_ 1609 Slave_11_Temperature_ID_1: 8 AMS
  SG_ temperature_value_1 : 0|16@1+ (0.01,0) [0|0] "degC"  HOST,VCU
  SG_ temperature_value_2 : 16|16@1+ (0.01,0) [0|0] "degC"  HOST,VCU
  SG_ temperature_value_3 : 32|16@1+ (0.01,0) [0|0] "degC"  HOST,VCU
  SG_ temperature_value_4 : 48|16@1+ (0.01,0) [0|0] "degC"  HOST,VCU
 
-BO_ 330 Slave_11_Temperature_ID_2: 8 AMS
+BO_ 1610 Slave_11_Temperature_ID_2: 8 AMS
  SG_ temperature_value_5 : 0|16@1+ (0.01,0) [0|0] "degC"  HOST,VCU
  SG_ temperature_value_6 : 16|16@1+ (0.01,0) [0|0] "degC"  HOST,VCU
  SG_ temperature_maximum : 32|16@1+ (0.01,0) [0|0] "degC"  HOST,VCU
  SG_ temperature_delta : 48|16@1+ (0.01,0) [0|0] "degC"  HOST,VCU
 
-BO_ 331 Slave_11_MSC_ID_1: 8 AMS
+BO_ 1611 Slave_11_MSC_ID_1: 8 AMS
  SG_ module_voltage_sum : 0|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ module_voltage_avg : 16|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ module_voltage_min : 32|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ module_voltage_max : 48|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
 
-BO_ 332 Slave_11_MSC_ID_2: 8 AMS
+BO_ 1612 Slave_11_MSC_ID_2: 8 AMS
  SG_ module_voltage_delta : 0|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ module_ic_voltage : 16|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ module_open_wire : 32|8@1+ (1,0) [0|18] ""  HOST,VCU
  SG_ module_ic_temperature : 40|16@1+ (1,0) [0|0] "degC"  HOST,VCU
 
-BO_ 333 Slave_12_Voltage_ID_1: 8 AMS
+BO_ 1613 Slave_12_Voltage_ID_1: 8 AMS
  SG_ cell_voltage_1 : 0|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ cell_voltage_2 : 16|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ cell_voltage_3 : 32|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ cell_voltage_4 : 48|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
 
-BO_ 334 Slave_12_Voltage_ID_2: 8 AMS
+BO_ 1614 Slave_12_Voltage_ID_2: 8 AMS
  SG_ cell_voltage_5 : 0|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ cell_voltage_6 : 16|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ cell_voltage_7 : 32|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ cell_voltage_8 : 48|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
 
-BO_ 335 Slave_12_Voltage_ID_3: 8 AMS
+BO_ 1615 Slave_12_Voltage_ID_3: 8 AMS
  SG_ cell_voltage_9 : 0|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ cell_voltage_10 : 16|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ cell_voltage_11 : 32|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ cell_voltage_12 : 48|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
 
-BO_ 336 Slave_12_Temperature_ID_1: 8 AMS
+BO_ 1616 Slave_12_Temperature_ID_1: 8 AMS
  SG_ temperature_value_1 : 0|16@1+ (0.01,0) [0|0] "degC"  HOST,VCU
  SG_ temperature_value_2 : 16|16@1+ (0.01,0) [0|0] "degC"  HOST,VCU
  SG_ temperature_value_3 : 32|16@1+ (0.01,0) [0|0] "degC"  HOST,VCU
  SG_ temperature_value_4 : 48|16@1+ (0.01,0) [0|0] "degC"  HOST,VCU
 
-BO_ 337 Slave_12_Temperature_ID_2: 8 AMS
+BO_ 1617 Slave_12_Temperature_ID_2: 8 AMS
  SG_ temperature_value_5 : 0|16@1+ (0.01,0) [0|0] "degC"  HOST,VCU
  SG_ temperature_value_6 : 16|16@1+ (0.01,0) [0|0] "degC"  HOST,VCU
  SG_ temperature_maximum : 32|16@1+ (0.01,0) [0|0] "degC"  HOST,VCU
  SG_ temperature_delta : 48|16@1+ (0.01,0) [0|0] "degC"  HOST,VCU
 
-BO_ 338 Slave_12_MSC_ID_1: 8 AMS
+BO_ 1618 Slave_12_MSC_ID_1: 8 AMS
  SG_ module_voltage_sum : 0|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ module_voltage_avg : 16|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ module_voltage_min : 32|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ module_voltage_max : 48|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
 
-BO_ 339 Slave_12_MSC_ID_2: 8 AMS
+BO_ 1619 Slave_12_MSC_ID_2: 8 AMS
  SG_ module_voltage_delta : 0|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ module_ic_voltage : 16|16@1+ (0.001,0) [0|0] "V"  HOST,VCU
  SG_ module_open_wire : 32|8@1+ (1,0) [0|18] ""  HOST,VCU
@@ -873,106 +931,6 @@ BO_ 1041 IVT_Msg_Cmd: 8 HOST
  SG_ _7C_Get_Art_Nr_dummy m124 : 15|8@0+ (1,0) [0|0] ""  ISABELLE
  SG_ IVT_ID_Cmd M : 7|8@0+ (1,0) [0|0] ""  ISABELLE
 
-BO_ 1028 HV500_ERPM_DUTY_VOLTAGE: 8 DTI
- SG_ Actual_ERPM : 7|32@0- (1,0) [-120000|120000] "ERPM"  AMS,VCU,HOST
- SG_ Actual_Duty : 39|16@0- (0.1,0) [-100|100] "%"  AMS,VCU,HOST
- SG_ Actual_InputVoltage : 55|16@0- (1,0) [0|1000] "V"  AMS,VCU,HOST
-
-BO_ 1060 HV500_AC_DC_current: 8 DTI
- SG_ Actual_ACCurrent : 7|16@0- (0.1,0) [-850|850] "Apk"  AMS,VCU,HOST
- SG_ Actual_DCCurrent : 23|16@0- (0.1,0) [-850|850] "A"  AMS,VCU,HOST
-
-BO_ 1092 HV500_Temperatures: 8 DTI
- SG_ Actual_TempController : 7|16@0- (0.1,0) [-55|200] "C"  AMS,VCU,HOST
- SG_ Actual_TempMotor : 23|16@0- (0.1,0) [-55|200] "C"  AMS,VCU,HOST
- SG_ Actual_FaultCode : 39|8@0+ (1,0) [0|255] ""  AMS,VCU,HOST
-
-BO_ 1124 HV500_FOC: 8 DTI
- SG_ Actual_FOC_id : 7|32@0- (0.01,0) [-850|850] "Apk"  AMS,VCU,HOST
- SG_ Actual_FOC_iq : 39|32@0- (0.01,0) [-850|850] "Apk"  AMS,VCU,HOST
-
-BO_ 1156 HV500_MISC: 8 DTI
- SG_ Actual_Throttle : 7|8@0- (1,0) [0|100] "%"  AMS,VCU,HOST
- SG_ Actual_Brake : 15|8@0- (1,0) [0|100] "%"  AMS,VCU,HOST
- SG_ Digital_input_1 : 16|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ Digital_input_2 : 17|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ Digital_input_3 : 18|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ Digital_input_4 : 19|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ Digital_output_1 : 20|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ Digital_output_2 : 21|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ Digital_output_3 : 22|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ Digital_output_4 : 23|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ Drive_enable : 31|8@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ Capacitor_temp_limit : 32|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ DC_current_limit : 33|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ Drive_enable_limit : 34|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ IGBT_accel_limit : 35|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ IGBT_temp_limit : 36|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ Input_voltage_limit : 37|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ Motor_accel_limit : 38|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ Motor_temp_limit : 39|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ RPM_min_limit : 40|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ RPM_max_limit : 41|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ Power_limit : 42|1@0+ (1,0) [0|1] ""  AMS,VCU,HOST
- SG_ CAN_map_version : 63|8@0+ (0.1,0) [0|255] "Version"  AMS,VCU,HOST
-
-BO_ 388 HV500_SetDriveEnable: 2 HOST
- SG_ CMD_DriveEnable : 7|8@0+ (1,0) [0|1] ""  DTI,AMS,VCU,HOST
-
-BO_ 36 HV500_SetAcCurrent: 8 HOST
- SG_ CMD_TargetAcCurrent : 7|16@0- (0.1,0) [-850|850] "A"  DTI,AMS,VCU,HOST
-
-BO_ 68 HV500_SetBrakeCurrent: 8 HOST
- SG_ CMD_TargetBrakeCurrent : 7|16@0- (0.1,0) [0|850] "A"  DTI,AMS,VCU,HOST
-
-BO_ 100 HV500_SetERPM: 4 HOST
- SG_ CMD_TargetSpeed : 7|32@0- (1,0) [-100000|100000] "ERPM"  DTI,AMS,VCU,HOST
-
-BO_ 132 HV500_SetPosition: 2 HOST
- SG_ CMD_TargetPosition : 7|16@0- (0.1,0) [0|359] "degree"  DTI,AMS,VCU,HOST
-
-BO_ 164 HV500_SetRelCurrent: 2 HOST
- SG_ CMD_TargetRelativeCurrent : 7|16@0- (0.1,0) [-100|100] "%"  DTI,AMS,VCU,HOST
-
-BO_ 196 HV500_SetRelBrakeCurrent: 2 HOST
- SG_ CMD_TargeRelativeBrakeCurrent : 7|16@0- (0.1,0) [0|100] "%"  DTI,AMS,VCU,HOST
-
-BO_ 260 HV500_SetMaxAcCurrent: 2 HOST
- SG_ CMD_MaxAcCurrent : 7|16@0- (0.1,0) [0|850] "A"  DTI,AMS,VCU,HOST
-
-BO_ 292 HV500_SetMaxAcBrakeCurrent: 2 HOST
- SG_ CMD_MaxAcBrakeCurrent : 7|16@0- (0.1,0) [-850|0] "A"  DTI,AMS,VCU,HOST
-
-BO_ 324 HV500_SetMaxDcCurrent: 2 HOST
- SG_ CMD_MaxDcCurrent : 7|16@0- (0.1,0) [0|850] "A"  DTI,AMS,VCU,HOST
-
-BO_ 356 HV500_SetMaxDcBrakeCurrent: 2 HOST
- SG_ CMD_MaxDcBrakeCurrent : 7|16@0- (0.1,0) [-850|0] "A"  DTI,AMS,VCU,HOST
-
-BO_ 228 HV500_SetDigOutput: 8 HOST
- SG_ CMD_SetDigOutput1 : 0|1@0+ (1,0) [0|1] "#"  AMS,VCU,HOST
- SG_ CMD_SetDigOutput2 : 1|1@0+ (1,0) [0|1] "#"  AMS,VCU,HOST
- SG_ CMD_SetDigOutput3 : 2|1@0+ (1,0) [0|1] "#"  AMS,VCU,HOST
- SG_ CMD_SetDigOutput4 : 3|1@0+ (1,0) [0|1] "#"  AMS,VCU,HOST
-
-BO_ 996 HV500_TargetIq: 8 DTI
- SG_ ControlMode : 7|8@0+ (1,0) [0|7] "#"  AMS,VCU,HOST
- SG_ TargetIq : 15|16@0- (0.1,0) [-850|850] "Apk"  AMS,VCU,HOST
- SG_ MotorPosition : 31|16@0+ (0.1,0) [0|359] "degree"  AMS,VCU,HOST
- SG_ isMotorStill : 47|8@0+ (1,0) [0|1] "#"  AMS,VCU,HOST
-
-BO_ 1188 HV500_MinMaxAcCurrent: 8 DTI
- SG_ MaxAcCurrent : 7|16@0- (0.1,0) [0|850] "Apk"  AMS,VCU,HOST
- SG_ AvailableMaxAcCurrent : 23|16@0- (0.1,0) [0|850] "Apk"  AMS,VCU,HOST
- SG_ MinAcCurrent : 39|16@0- (0.1,0) [-850|0] "Apk"  AMS,VCU,HOST
- SG_ AvailableMinAcCurrent : 55|16@0- (0.1,0) [-850|0] "Apk"  AMS,VCU,HOST
-
-BO_ 1220 HV500_MinMaxDcCurrent: 8 DTI
- SG_ MaxDcCurrent : 7|16@0- (0.1,0) [0|850] "Adc"  AMS,VCU,HOST
- SG_ AvailableMaxDcCurrent : 23|16@0- (0.1,0) [0|850] "Adc"  AMS,VCU,HOST
- SG_ MinDcCurrent : 39|16@0- (0.1,0) [-850|0] "Adc"  AMS,VCU,HOST
- SG_ AvailableMinDcCurrent : 55|16@0- (0.1,0) [-850|0] "Adc"  AMS,VCU,HOST
-
 BO_ 1795 Master_MSC_ID_2: 8 AMS
  SG_ master_runtime : 0|16@1+ (1,0) [0|0] "s" Vector__XXX
  SG_ fault1_code : 16|8@1+ (1,0) [0|0] "" Vector__XXX
@@ -1015,6 +973,212 @@ BO_ 129 Start_Charging: 1 HOST
 BO_ 1872 VCU_states: 8 VCU
  SG_ vcu_state : 7|8@0+ (1,0) [0|0] "" Vector__XXX
 
+BO_ 1028 INV1_ERPM_DUTY_VOLTAGE: 8 DTI_INV1
+ SG_ INV1_Actual_ERPM : 7|32@0- (1,0) [-120000|120000] "ERPM"  DTI_commands
+ SG_ INV1_Actual_Duty : 39|16@0- (0.1,0) [-100|100] "%"  DTI_commands
+ SG_ INV1_Actual_InputVoltage : 55|16@0- (1,0) [0|1000] "V"  DTI_commands
+
+BO_ 1060 INV1_AC_DC_current: 8 DTI_INV1
+ SG_ INV1_Actual_ACCurrent : 7|16@0- (0.1,0) [-850|850] "Apk"  DTI_commands
+ SG_ INV1_Actual_DCCurrent : 23|16@0- (0.1,0) [-850|850] "A"  DTI_commands
+
+BO_ 1092 INV1_Temperatures: 8 DTI_INV1
+ SG_ INV1_Actual_TempController : 7|16@0- (0.1,0) [-55|200] "C"  DTI_commands
+ SG_ INV1_Actual_TempMotor : 23|16@0- (0.1,0) [-55|200] "C"  DTI_commands
+ SG_ INV1_Actual_FaultCode : 39|8@0+ (1,0) [0|255] ""  DTI_commands
+
+BO_ 1124 INV1_FOC: 8 DTI_INV1
+ SG_ INV1_Actual_FOC_id : 7|32@0- (0.01,0) [-850|850] "Apk"  DTI_commands
+ SG_ INV1_Actual_FOC_iq : 39|32@0- (0.01,0) [-850|850] "Apk"  DTI_commands
+
+BO_ 1156 INV1_MISC: 8 DTI_INV1
+ SG_ INV1_Actual_Throttle : 7|8@0- (1,0) [0|100] "%"  DTI_commands
+ SG_ INV1_Actual_Brake : 15|8@0- (1,0) [0|100] "%"  DTI_commands
+ SG_ INV1_Digital_input_1 : 16|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_Digital_input_2 : 17|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_Digital_input_3 : 18|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_Digital_input_4 : 19|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_Digital_output_1 : 20|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_Digital_output_2 : 21|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_Digital_output_3 : 22|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_Digital_output_4 : 23|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_Drive_enable : 31|8@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_Capacitor_temp_limit : 32|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_DC_current_limit : 33|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_Drive_enable_limit : 34|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_IGBT_accel_limit : 35|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_IGBT_temp_limit : 36|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_Input_voltage_limit : 37|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_Motor_accel_limit : 38|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_Motor_temp_limit : 39|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_RPM_min_limit : 40|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_RPM_max_limit : 41|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_Power_limit : 42|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV1_CAN_map_version : 63|8@0+ (0.1,0) [0|25.5] "Version"  DTI_commands
+
+BO_ 996 INV1_TargetIq: 8 DTI_INV1
+ SG_ INV1_ControlMode : 7|8@0+ (1,0) [0|7] "#"  DTI_commands
+ SG_ INV1_TargetIq : 15|16@0- (0.1,0) [-850|850] "Apk"  DTI_commands
+ SG_ INV1_MotorPosition : 31|16@0+ (0.1,0) [0|359] "degree"  DTI_commands
+ SG_ INV1_isMotorStill : 47|8@0+ (1,0) [0|1] "#"  DTI_commands
+
+BO_ 1188 INV1_MinMaxAcCurrent: 8 DTI_INV1
+ SG_ INV1_MaxAcCurrent : 7|16@0- (0.1,0) [0|850] "Apk"  DTI_commands
+ SG_ INV1_AvailableMaxAcCurrent : 23|16@0- (0.1,0) [0|850] "Apk"  DTI_commands
+ SG_ INV1_MinAcCurrent : 39|16@0- (0.1,0) [-850|0] "Apk"  DTI_commands
+ SG_ INV1_AvailableMinAcCurrent : 55|16@0- (0.1,0) [-850|0] "Apk"  DTI_commands
+
+BO_ 1220 INV1_MinMaxDcCurrent: 8 DTI_INV1
+ SG_ INV1_MaxDcCurrent : 7|16@0- (0.1,0) [0|850] "Adc"  DTI_commands
+ SG_ INV1_AvailableMaxDcCurrent : 23|16@0- (0.1,0) [0|850] "Adc"  DTI_commands
+ SG_ INV1_MinDcCurrent : 39|16@0- (0.1,0) [-850|0] "Adc"  DTI_commands
+ SG_ INV1_AvailableMinDcCurrent : 55|16@0- (0.1,0) [-850|0] "Adc"  DTI_commands
+
+BO_ 388 INV1_SetDriveEnable: 2 DTI_commands
+ SG_ INV1_CMD_DriveEnable : 7|8@0+ (1,0) [0|1] ""  DTI_INV1
+
+BO_ 36 INV1_SetAcCurrent: 8 DTI_commands
+ SG_ INV1_CMD_TargetAcCurrent : 7|16@0- (0.1,0) [-850|850] "A"  DTI_INV1
+
+BO_ 68 INV1_SetBrakeCurrent: 8 DTI_commands
+ SG_ INV1_CMD_TargetBrakeCurrent : 7|16@0- (0.1,0) [0|850] "A"  DTI_INV1
+
+BO_ 100 INV1_SetERPM: 4 DTI_commands
+ SG_ INV1_CMD_TargetSpeed : 7|32@0- (1,0) [-100000|100000] "ERPM"  DTI_INV1
+
+BO_ 132 INV1_SetPosition: 2 DTI_commands
+ SG_ INV1_CMD_TargetPosition : 7|16@0- (0.1,0) [0|359] "degree"  DTI_INV1
+
+BO_ 164 INV1_SetRelCurrent: 2 DTI_commands
+ SG_ INV1_CMD_TargetRelativeCurrent : 7|16@0- (0.1,0) [-100|100] "%"  DTI_INV1
+
+BO_ 196 INV1_SetRelBrakeCurrent: 2 DTI_commands
+ SG_ INV1_CMD_TgtRelBrakeCurrent : 7|16@0- (0.1,0) [0|100] "%"  DTI_INV1
+
+BO_ 228 INV1_SetDigOutput: 8 DTI_commands
+ SG_ INV1_CMD_SetDigOutput1 : 0|1@0+ (1,0) [0|1] "#"  DTI_INV1
+ SG_ INV1_CMD_SetDigOutput2 : 1|1@0+ (1,0) [0|1] "#"  DTI_INV1
+ SG_ INV1_CMD_SetDigOutput3 : 2|1@0+ (1,0) [0|1] "#"  DTI_INV1
+ SG_ INV1_CMD_SetDigOutput4 : 3|1@0+ (1,0) [0|1] "#"  DTI_INV1
+
+BO_ 260 INV1_SetMaxAcCurrent: 2 DTI_commands
+ SG_ INV1_CMD_MaxAcCurrent : 7|16@0- (0.1,0) [0|850] "A"  DTI_INV1
+
+BO_ 292 INV1_SetMaxAcBrakeCurrent: 2 DTI_commands
+ SG_ INV1_CMD_MaxAcBrakeCurrent : 7|16@0- (0.1,0) [-850|0] "A"  DTI_INV1
+
+BO_ 324 INV1_SetMaxDcCurrent: 2 DTI_commands
+ SG_ INV1_CMD_MaxDcCurrent : 7|16@0- (0.1,0) [0|850] "A"  DTI_INV1
+
+BO_ 356 INV1_SetMaxDcBrakeCurrent: 2 DTI_commands
+ SG_ INV1_CMD_MaxDcBrakeCurrent : 7|16@0- (0.1,0) [-850|0] "A"  DTI_INV1
+
+BO_ 1029 INV2_ERPM_DUTY_VOLTAGE: 8 DTI_INV2
+ SG_ INV2_Actual_ERPM : 7|32@0- (1,0) [-120000|120000] "ERPM"  DTI_commands
+ SG_ INV2_Actual_Duty : 39|16@0- (0.1,0) [-100|100] "%"  DTI_commands
+ SG_ INV2_Actual_InputVoltage : 55|16@0- (1,0) [0|1000] "V"  DTI_commands
+
+BO_ 1061 INV2_AC_DC_current: 8 DTI_INV2
+ SG_ INV2_Actual_ACCurrent : 7|16@0- (0.1,0) [-850|850] "Apk"  DTI_commands
+ SG_ INV2_Actual_DCCurrent : 23|16@0- (0.1,0) [-850|850] "A"  DTI_commands
+
+BO_ 1093 INV2_Temperatures: 8 DTI_INV2
+ SG_ INV2_Actual_TempController : 7|16@0- (0.1,0) [-55|200] "C"  DTI_commands
+ SG_ INV2_Actual_TempMotor : 23|16@0- (0.1,0) [-55|200] "C"  DTI_commands
+ SG_ INV2_Actual_FaultCode : 39|8@0+ (1,0) [0|255] ""  DTI_commands
+
+BO_ 1125 INV2_FOC: 8 DTI_INV2
+ SG_ INV2_Actual_FOC_id : 7|32@0- (0.01,0) [-850|850] "Apk"  DTI_commands
+ SG_ INV2_Actual_FOC_iq : 39|32@0- (0.01,0) [-850|850] "Apk"  DTI_commands
+
+BO_ 1157 INV2_MISC: 8 DTI_INV2
+ SG_ INV2_Actual_Throttle : 7|8@0- (1,0) [0|100] "%"  DTI_commands
+ SG_ INV2_Actual_Brake : 15|8@0- (1,0) [0|100] "%"  DTI_commands
+ SG_ INV2_Digital_input_1 : 16|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_Digital_input_2 : 17|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_Digital_input_3 : 18|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_Digital_input_4 : 19|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_Digital_output_1 : 20|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_Digital_output_2 : 21|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_Digital_output_3 : 22|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_Digital_output_4 : 23|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_Drive_enable : 31|8@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_Capacitor_temp_limit : 32|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_DC_current_limit : 33|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_Drive_enable_limit : 34|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_IGBT_accel_limit : 35|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_IGBT_temp_limit : 36|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_Input_voltage_limit : 37|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_Motor_accel_limit : 38|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_Motor_temp_limit : 39|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_RPM_min_limit : 40|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_RPM_max_limit : 41|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_Power_limit : 42|1@0+ (1,0) [0|1] ""  DTI_commands
+ SG_ INV2_CAN_map_version : 63|8@0+ (0.1,0) [0|25.5] "Version"  DTI_commands
+
+BO_ 997 INV2_TargetIq: 8 DTI_INV2
+ SG_ INV2_ControlMode : 7|8@0+ (1,0) [0|7] "#"  DTI_commands
+ SG_ INV2_TargetIq : 15|16@0- (0.1,0) [-850|850] "Apk"  DTI_commands
+ SG_ INV2_MotorPosition : 31|16@0+ (0.1,0) [0|359] "degree"  DTI_commands
+ SG_ INV2_isMotorStill : 47|8@0+ (1,0) [0|1] "#"  DTI_commands
+
+BO_ 1189 INV2_MinMaxAcCurrent: 8 DTI_INV2
+ SG_ INV2_MaxAcCurrent : 7|16@0- (0.1,0) [0|850] "Apk"  DTI_commands
+ SG_ INV2_AvailableMaxAcCurrent : 23|16@0- (0.1,0) [0|850] "Apk"  DTI_commands
+ SG_ INV2_MinAcCurrent : 39|16@0- (0.1,0) [-850|0] "Apk"  DTI_commands
+ SG_ INV2_AvailableMinAcCurrent : 55|16@0- (0.1,0) [-850|0] "Apk"  DTI_commands
+
+BO_ 1221 INV2_MinMaxDcCurrent: 8 DTI_INV2
+ SG_ INV2_MaxDcCurrent : 7|16@0- (0.1,0) [0|850] "Adc"  DTI_commands
+ SG_ INV2_AvailableMaxDcCurrent : 23|16@0- (0.1,0) [0|850] "Adc"  DTI_commands
+ SG_ INV2_MinDcCurrent : 39|16@0- (0.1,0) [-850|0] "Adc"  DTI_commands
+ SG_ INV2_AvailableMinDcCurrent : 55|16@0- (0.1,0) [-850|0] "Adc"  DTI_commands
+
+BO_ 389 INV2_SetDriveEnable: 2 DTI_commands
+ SG_ INV2_CMD_DriveEnable : 7|8@0+ (1,0) [0|1] ""  DTI_INV2
+
+BO_ 37 INV2_SetAcCurrent: 8 DTI_commands
+ SG_ INV2_CMD_TargetAcCurrent : 7|16@0- (0.1,0) [-850|850] "A"  DTI_INV2
+
+BO_ 69 INV2_SetBrakeCurrent: 8 DTI_commands
+ SG_ INV2_CMD_TargetBrakeCurrent : 7|16@0- (0.1,0) [0|850] "A"  DTI_INV2
+
+BO_ 101 INV2_SetERPM: 4 DTI_commands
+ SG_ INV2_CMD_TargetSpeed : 7|32@0- (1,0) [-100000|100000] "ERPM"  DTI_INV2
+
+BO_ 133 INV2_SetPosition: 2 DTI_commands
+ SG_ INV2_CMD_TargetPosition : 7|16@0- (0.1,0) [0|359] "degree"  DTI_INV2
+
+BO_ 165 INV2_SetRelCurrent: 2 DTI_commands
+ SG_ INV2_CMD_TargetRelativeCurrent : 7|16@0- (0.1,0) [-100|100] "%"  DTI_INV2
+
+BO_ 197 INV2_SetRelBrakeCurrent: 2 DTI_commands
+ SG_ INV2_CMD_TgtRelBrakeCurrent : 7|16@0- (0.1,0) [0|100] "%"  DTI_INV2
+
+BO_ 229 INV2_SetDigOutput: 8 DTI_commands
+ SG_ INV2_CMD_SetDigOutput1 : 0|1@0+ (1,0) [0|1] "#"  DTI_INV2
+ SG_ INV2_CMD_SetDigOutput2 : 1|1@0+ (1,0) [0|1] "#"  DTI_INV2
+ SG_ INV2_CMD_SetDigOutput3 : 2|1@0+ (1,0) [0|1] "#"  DTI_INV2
+ SG_ INV2_CMD_SetDigOutput4 : 3|1@0+ (1,0) [0|1] "#"  DTI_INV2
+
+BO_ 261 INV2_SetMaxAcCurrent: 2 DTI_commands
+ SG_ INV2_CMD_MaxAcCurrent : 7|16@0- (0.1,0) [0|850] "A"  DTI_INV2
+
+BO_ 293 INV2_SetMaxAcBrakeCurrent: 2 DTI_commands
+ SG_ INV2_CMD_MaxAcBrakeCurrent : 7|16@0- (0.1,0) [-850|0] "A"  DTI_INV2
+
+BO_ 325 INV2_SetMaxDcCurrent: 2 DTI_commands
+ SG_ INV2_CMD_MaxDcCurrent : 7|16@0- (0.1,0) [0|850] "A"  DTI_INV2
+
+BO_ 357 INV2_SetMaxDcBrakeCurrent: 2 DTI_commands
+ SG_ INV2_CMD_MaxDcBrakeCurrent : 7|16@0- (0.1,0) [-850|0] "A"  DTI_INV2
+
+BO_ 1604 Slave_10_MSC_ID_1: 8 AMS
+ SG_ module_voltage_sum : 0|8@1+ (0.001,0) [0|0] "V" Vector__XXX
+ SG_ module_voltage_avg : 8|8@1+ (0.001,0) [0|0] "V" Vector__XXX
+ SG_ module_voltage_min : 16|8@1+ (0.001,0) [0|0] "V" Vector__XXX
+ SG_ module_voltage_max : 24|8@1+ (0.001,0) [0|0] "V" Vector__XXX
+
 
 
 CM_ BU_ HOST "The commnad sender
@@ -1022,117 +1186,253 @@ CM_ BU_ HOST "The commnad sender
 CM_ BU_ ISABELLE "";
 CM_ BO_ 3221225472 "This is a message for not used signals, created by Vector CANdb++ DBC OLE DB Provider.";
 CM_ SG_ 3221225472 modules_detected "slave counter";
-CM_ BO_ 452 "";
-CM_ SG_ 262 module_open_wire "";
-CM_ SG_ 269 module_open_wire "";
-CM_ SG_ 276 module_open_wire "";
-CM_ SG_ 283 module_open_wire "";
-CM_ SG_ 290 module_open_wire "";
-CM_ SG_ 297 module_open_wire "";
-CM_ SG_ 304 module_open_wire "";
-CM_ SG_ 311 module_open_wire "";
-CM_ SG_ 318 module_open_wire "";
-CM_ SG_ 325 module_open_wire "";
-CM_ SG_ 332 module_open_wire "";
-CM_ SG_ 339 module_open_wire "";
-CM_ SG_ 1793 master_state "Master State Machine
-";
-CM_ SG_ 1793 adbms_pec_error "ADBMS PEC Error  (Error on comms)";
-CM_ SG_ 1793 fault_counter "RT Fault Counter";
-CM_ SG_ 1794 precharge_state "Pecharge State Machine";
-CM_ BO_ 1028 "Node ID: 4 (decimal)";
-CM_ SG_ 1028 Actual_ERPM "Electrical RPM
-Equation: ERPM = Motor RPM * number of the motor pole pairs.";
-CM_ SG_ 1028 Actual_Duty "The controller duty cycle. The sign of this value will represent whether the motor is running(positive) current or regenerating (negative) current.";
-CM_ SG_ 1028 Actual_InputVoltage "Input voltage is the DC voltage.";
-CM_ BO_ 1060 "Node ID: 4 (decimal)";
-CM_ SG_ 1060 Actual_ACCurrent "The motor current. The sign of this value represents whether the motor is running(positive) current or regenerating (negative) current.";
-CM_ SG_ 1060 Actual_DCCurrent "DC Current: Current on DC side. The sign of this value represents whether the motor is running(positive) current or regenerating (negative) current.";
-CM_ BO_ 1092 "Node ID: 4 (decimal)";
-CM_ SG_ 1092 Actual_TempController "Temperature of the inverter semiconductors.";
-CM_ SG_ 1092 Actual_TempMotor "Temperature of the motor measured by the inverter.";
-CM_ SG_ 1092 Actual_FaultCode "Fault codes.";
-CM_ BO_ 1124 "Node ID: 4 (decimal)";
-CM_ SG_ 1124 Actual_FOC_id "FOC algorithm component Id.";
-CM_ SG_ 1124 Actual_FOC_iq "FOC algorithm component Iq";
-CM_ BO_ 1156 "Node ID: 4 (decimal)";
-CM_ SG_ 1156 Actual_Throttle "Throttle signal derived from analog inputs or CAN2.";
-CM_ SG_ 1156 Actual_Brake "Brake signal derived from analog inputs or CAN2.";
-CM_ SG_ 1156 CAN_map_version "Indicates the CAN map version. For ex: 23 -> 2,3 (V2,3)";
-CM_ BO_ 388 "Node ID: 4 (decimal)";
-CM_ BO_ 36 "Node ID: 4 (decimal)";
-CM_ SG_ 36 CMD_TargetAcCurrent "Min/Max AC current depends on configuration!";
-CM_ BO_ 68 "Node ID: 4 (decimal)";
-CM_ SG_ 68 CMD_TargetBrakeCurrent "Max AC brake current depends on configuration!";
-CM_ BO_ 100 "Node ID: 4 (decimal)";
-CM_ BO_ 132 "Node ID: 4 (decimal)";
-CM_ BO_ 164 "Node ID: 4 (decimal)";
-CM_ BO_ 196 "Node ID: 4 (decimal)";
-CM_ BO_ 260 "Node ID: 4 (decimal)
-";
-CM_ BO_ 292 "Node ID: 4 (decimal)";
-CM_ SG_ 292 CMD_MaxAcBrakeCurrent "Minimum AC current value depends on inverter configuration!";
-CM_ BO_ 324 "Node ID: 4 (decimal)";
-CM_ BO_ 356 "Node ID: 4 (decimal)";
-CM_ SG_ 356 CMD_MaxDcBrakeCurrent "Minimum DC current value depends on inverter configuration!";
-CM_ BO_ 228 "Node ID: 4 (decimal)";
-CM_ SG_ 228 CMD_SetDigOutput1 "0: OFF
-1: ON";
-CM_ SG_ 228 CMD_SetDigOutput2 "0: OFF
-1: ON";
-CM_ SG_ 228 CMD_SetDigOutput3 "0: OFF
-1: ON";
-CM_ SG_ 228 CMD_SetDigOutput4 "0: OFF
-1: ON";
-CM_ BO_ 996 "Node ID: 4 (decimal)";
-CM_ SG_ 996 ControlMode "1: CONTROL_MODE_SPEED
+CM_ SG_ 3221225472 CMD_MaxAcBrakeCurrent "Minimum AC current value depends on inverter configuration!";
+CM_ SG_ 3221225472 ControlMode "1: CONTROL_MODE_SPEED
 2: CONTROL_MODE_CURRENT
 3: CONTROL_MODE_CURRENT_BRAKE
 4: CONTROL_MODE_POS
 7: CONTROL_MODE_NONE
 0, 5, 6: NOT USED
 ";
-CM_ SG_ 996 TargetIq "The value represent how much Iq current the inverter is targeted to reach. This value excludes limits. For ex. if the target Iq is 50 A and temperature limit is hit, the values keep 50 A in any case, not including the deration of the temp. limit. This is useful in multi-inverter configuration to let know the secondary inverter the target Iq. ";
-CM_ SG_ 996 MotorPosition "Motor position expressed in degrees.";
-CM_ SG_ 996 isMotorStill "Represents if the motor in still position or not. 1: still, 0: rotating";
-CM_ BO_ 1188 "Node ID: 4 (decimal)";
-CM_ SG_ 1188 MaxAcCurrent "Max AC current configured with the DTI CAN tool.";
-CM_ SG_ 1188 AvailableMaxAcCurrent "Available max AC current. This value affected by the limitation functions (igbt temp, motortemp etc.) Defines how much current available from the configured one.";
-CM_ SG_ 1188 MinAcCurrent "Min AC current configured with the DTI CAN tool.";
-CM_ SG_ 1188 AvailableMinAcCurrent "Available min AC current. This value affected by the limitation functions (igbt temp, motortemp etc.) Defines how much current available from the configured one.";
-CM_ BO_ 1220 "Node ID: 4 (decimal)";
-CM_ SG_ 1220 MaxDcCurrent "Max DC current configured with the DTI CAN tool.";
-CM_ SG_ 1220 AvailableMaxDcCurrent "Available max DC current. This value affected by the limitation functions (igbt temp, motortemp etc.) Defines how much current available from the configured one.";
-CM_ SG_ 1220 MinDcCurrent "Min DC current configured with the DTI CAN tool.";
-CM_ SG_ 1220 AvailableMinDcCurrent "Available min DC current. This value affected by the limitation functions (igbt temp, motortemp etc.) Defines how much current available from the configured one.";
+CM_ SG_ 3221225472 TargetIq "The value represent how much Iq current the inverter is targeted to reach. This value excludes limits. For ex. if the target Iq is 50 A and temperature limit is hit, the values keep 50 A in any case, not including the deration of the temp. limit. This is useful in multi-inverter configuration to let know the secondary inverter the target Iq. ";
+CM_ SG_ 3221225472 MotorPosition "Motor position expressed in degrees.";
+CM_ SG_ 3221225472 isMotorStill "Represents if the motor in still position or not. 1: still, 0: rotating";
+CM_ SG_ 3221225472 CMD_SetDigOutput1 "0: OFF
+1: ON";
+CM_ SG_ 3221225472 CMD_SetDigOutput2 "0: OFF
+1: ON";
+CM_ SG_ 3221225472 CMD_SetDigOutput3 "0: OFF
+1: ON";
+CM_ SG_ 3221225472 CMD_SetDigOutput4 "0: OFF
+1: ON";
+CM_ SG_ 3221225472 CMD_MaxDcBrakeCurrent "Minimum DC current value depends on inverter configuration!";
+CM_ SG_ 3221225472 MaxAcCurrent "Max AC current configured with the DTI CAN tool.";
+CM_ SG_ 3221225472 AvailableMaxAcCurrent "Available max AC current. This value affected by the limitation functions (igbt temp, motortemp etc.) Defines how much current available from the configured one.";
+CM_ SG_ 3221225472 MinAcCurrent "Min AC current configured with the DTI CAN tool.";
+CM_ SG_ 3221225472 AvailableMinAcCurrent "Available min AC current. This value affected by the limitation functions (igbt temp, motortemp etc.) Defines how much current available from the configured one.";
+CM_ SG_ 3221225472 MaxDcCurrent "Max DC current configured with the DTI CAN tool.";
+CM_ SG_ 3221225472 AvailableMaxDcCurrent "Available max DC current. This value affected by the limitation functions (igbt temp, motortemp etc.) Defines how much current available from the configured one.";
+CM_ SG_ 3221225472 MinDcCurrent "Min DC current configured with the DTI CAN tool.";
+CM_ SG_ 3221225472 AvailableMinDcCurrent "Available min DC current. This value affected by the limitation functions (igbt temp, motortemp etc.) Defines how much current available from the configured one.";
+CM_ SG_ 3221225472 CMD_TargetBrakeCurrent "Max AC brake current depends on configuration!";
+CM_ SG_ 3221225472 CMD_TargetAcCurrent "Min/Max AC current depends on configuration!";
+CM_ SG_ 3221225472 Actual_Throttle "Throttle signal derived from analog inputs or CAN2.";
+CM_ SG_ 3221225472 Actual_Brake "Brake signal derived from analog inputs or CAN2.";
+CM_ SG_ 3221225472 CAN_map_version "Indicates the CAN map version. For ex: 23 -> 2,3 (V2,3)";
+CM_ SG_ 3221225472 Actual_FOC_id "FOC algorithm component Id.";
+CM_ SG_ 3221225472 Actual_FOC_iq "FOC algorithm component Iq";
+CM_ SG_ 3221225472 Actual_TempController "Temperature of the inverter semiconductors.";
+CM_ SG_ 3221225472 Actual_TempMotor "Temperature of the motor measured by the inverter.";
+CM_ SG_ 3221225472 Actual_FaultCode "Fault codes.";
+CM_ SG_ 3221225472 Actual_ACCurrent "The motor current. The sign of this value represents whether the motor is running(positive) current or regenerating (negative) current.";
+CM_ SG_ 3221225472 Actual_DCCurrent "DC Current: Current on DC side. The sign of this value represents whether the motor is running(positive) current or regenerating (negative) current.";
+CM_ SG_ 3221225472 Actual_ERPM "Electrical RPM
+Equation: ERPM = Motor RPM * number of the motor pole pairs.";
+CM_ SG_ 3221225472 Actual_Duty "The controller duty cycle. The sign of this value will represent whether the motor is running(positive) current or regenerating (negative) current.";
+CM_ SG_ 3221225472 Actual_InputVoltage "Input voltage is the DC voltage.";
+CM_ BO_ 1540 "";
+CM_ BO_ 1541 "Node ID: 5 — Configure max AC current limit";
+CM_ SG_ 1542 module_open_wire "";
+CM_ SG_ 1549 module_open_wire "";
+CM_ SG_ 1556 module_open_wire "";
+CM_ SG_ 1563 module_open_wire "";
+CM_ SG_ 1570 module_open_wire "";
+CM_ BO_ 1573 "Node ID: 5 — Configure max AC brake current";
+CM_ SG_ 1577 module_open_wire "";
+CM_ SG_ 1584 module_open_wire "";
+CM_ SG_ 1591 module_open_wire "";
+CM_ SG_ 1598 module_open_wire "";
+CM_ BO_ 1605 "Node ID: 5 — Configure max DC current limit";
+CM_ SG_ 1605 module_open_wire "";
+CM_ SG_ 1612 module_open_wire "";
+CM_ SG_ 1619 module_open_wire "";
+CM_ SG_ 1793 master_state "Master State Machine
+";
+CM_ SG_ 1793 adbms_pec_error "ADBMS PEC Error  (Error on comms)";
+CM_ SG_ 1793 fault_counter "RT Fault Counter";
+CM_ SG_ 1794 precharge_state "Pecharge State Machine";
 CM_ SG_ 1795 master_runtime "AMS Master Runtime in seconds";
 CM_ SG_ 1797 SOC_Integer "State of Charge";
 CM_ SG_ 1797 SOC_Float "State of Charge";
 CM_ SG_ 1798 slaves_detected "slaves detected in the daisychain";
+CM_ BO_ 1028 "Node ID: 4 — ERPM, duty cycle, and DC input voltage";
+CM_ SG_ 1028 INV1_Actual_ERPM "Electrical RPM. ERPM = Motor_RPM * pole_pairs";
+CM_ SG_ 1028 INV1_Actual_Duty "Controller duty cycle. Positive=motoring, negative=regen";
+CM_ SG_ 1028 INV1_Actual_InputVoltage "DC bus input voltage";
+CM_ BO_ 1060 "Node ID: 4 — AC and DC current";
+CM_ SG_ 1060 INV1_Actual_ACCurrent "Motor AC current. Positive=motoring, negative=regen";
+CM_ SG_ 1060 INV1_Actual_DCCurrent "DC side current. Positive=motoring, negative=regen";
+CM_ BO_ 1092 "Node ID: 4 — Temperatures and fault code";
+CM_ SG_ 1092 INV1_Actual_TempController "Inverter semiconductor temperature";
+CM_ SG_ 1092 INV1_Actual_TempMotor "Motor temperature measured by inverter";
+CM_ SG_ 1092 INV1_Actual_FaultCode "Fault code. 0=NO_FAULT";
+CM_ BO_ 1124 "Node ID: 4 — FOC algorithm Id/Iq currents";
+CM_ SG_ 1124 INV1_Actual_FOC_id "FOC d-axis current component";
+CM_ SG_ 1124 INV1_Actual_FOC_iq "FOC q-axis current component";
+CM_ BO_ 1156 "Node ID: 4 — Throttle, brake, digital I/O, limits, CAN map version";
+CM_ SG_ 1156 INV1_Actual_Throttle "Throttle from analog inputs or CAN2";
+CM_ SG_ 1156 INV1_Actual_Brake "Brake signal";
+CM_ SG_ 1156 INV1_Digital_input_1 "Digital input 1 state";
+CM_ SG_ 1156 INV1_Digital_input_2 "Digital input 2 state";
+CM_ SG_ 1156 INV1_Digital_input_3 "Digital input 3 state";
+CM_ SG_ 1156 INV1_Digital_input_4 "Digital input 4 state";
+CM_ SG_ 1156 INV1_Digital_output_1 "Digital output 1 state";
+CM_ SG_ 1156 INV1_Digital_output_2 "Digital output 2 state";
+CM_ SG_ 1156 INV1_Digital_output_3 "Digital output 3 state";
+CM_ SG_ 1156 INV1_Digital_output_4 "Digital output 4 state";
+CM_ SG_ 1156 INV1_Drive_enable "Drive enable status";
+CM_ SG_ 1156 INV1_Capacitor_temp_limit "Capacitor temperature limit active";
+CM_ SG_ 1156 INV1_DC_current_limit "DC current limit active";
+CM_ SG_ 1156 INV1_Drive_enable_limit "Drive enable limit active";
+CM_ SG_ 1156 INV1_IGBT_accel_limit "IGBT acceleration temperature limit active";
+CM_ SG_ 1156 INV1_IGBT_temp_limit "IGBT temperature limit active";
+CM_ SG_ 1156 INV1_Input_voltage_limit "Input voltage limit active";
+CM_ SG_ 1156 INV1_Motor_accel_limit "Motor acceleration temperature limit active";
+CM_ SG_ 1156 INV1_Motor_temp_limit "Motor temperature limit active";
+CM_ SG_ 1156 INV1_RPM_min_limit "RPM minimum limit active";
+CM_ SG_ 1156 INV1_RPM_max_limit "RPM maximum limit active";
+CM_ SG_ 1156 INV1_Power_limit "Power limit active";
+CM_ SG_ 1156 INV1_CAN_map_version "CAN map version (e.g. 25 → V2.5)";
+CM_ BO_ 996 "Node ID: 4 — Control mode, target Iq, motor position, still flag";
+CM_ SG_ 996 INV1_ControlMode "Control mode. 1=SPEED 2=CURRENT 3=CURRENT_BRAKE 4=POS 7=NONE";
+CM_ SG_ 996 INV1_TargetIq "Target Iq current commanded (before limits)";
+CM_ SG_ 996 INV1_MotorPosition "Motor rotor position";
+CM_ SG_ 996 INV1_isMotorStill "1=motor still, 0=rotating";
+CM_ BO_ 1188 "Node ID: 4 — Configured and available AC current limits";
+CM_ SG_ 1188 INV1_MaxAcCurrent "Max AC current configured";
+CM_ SG_ 1188 INV1_AvailableMaxAcCurrent "Available max AC current after derating";
+CM_ SG_ 1188 INV1_MinAcCurrent "Min AC current configured";
+CM_ SG_ 1188 INV1_AvailableMinAcCurrent "Available min AC current after derating";
+CM_ BO_ 1220 "Node ID: 4 — Configured and available DC current limits";
+CM_ SG_ 1220 INV1_MaxDcCurrent "Max DC current configured";
+CM_ SG_ 1220 INV1_AvailableMaxDcCurrent "Available max DC current after derating";
+CM_ SG_ 1220 INV1_MinDcCurrent "Min DC current configured";
+CM_ SG_ 1220 INV1_AvailableMinDcCurrent "Available min DC current after derating";
+CM_ BO_ 388 "Node ID: 4 — Enable/disable drive";
+CM_ SG_ 388 INV1_CMD_DriveEnable "1=Drive allowed, 0=Drive not allowed";
+CM_ BO_ 36 "Node ID: 4 — Set target AC current";
+CM_ SG_ 36 INV1_CMD_TargetAcCurrent "Target AC current. Range depends on inverter config";
+CM_ BO_ 68 "Node ID: 4 — Set target brake current";
+CM_ SG_ 68 INV1_CMD_TargetBrakeCurrent "Target brake current. Max depends on inverter config";
+CM_ BO_ 100 "Node ID: 4 — Set target ERPM";
+CM_ SG_ 100 INV1_CMD_TargetSpeed "Target electrical RPM";
+CM_ BO_ 132 "Node ID: 4 — Set target rotor position";
+CM_ SG_ 132 INV1_CMD_TargetPosition "Target motor position in degrees";
+CM_ BO_ 164 "Node ID: 4 — Set relative current percentage";
+CM_ SG_ 164 INV1_CMD_TargetRelativeCurrent "Target current as percentage of configured max";
+CM_ BO_ 196 "Node ID: 4 — Set relative brake current percentage";
+CM_ SG_ 196 INV1_CMD_TgtRelBrakeCurrent "Target brake current as percentage of configured max";
+CM_ BO_ 228 "Node ID: 4 — Set digital outputs";
+CM_ SG_ 228 INV1_CMD_SetDigOutput1 "Digital output 1: 0=OFF, 1=ON";
+CM_ SG_ 228 INV1_CMD_SetDigOutput2 "Digital output 2: 0=OFF, 1=ON";
+CM_ SG_ 228 INV1_CMD_SetDigOutput3 "Digital output 3: 0=OFF, 1=ON";
+CM_ SG_ 228 INV1_CMD_SetDigOutput4 "Digital output 4: 0=OFF, 1=ON";
+CM_ BO_ 260 "Node ID: 4 — Configure max AC current limit";
+CM_ SG_ 260 INV1_CMD_MaxAcCurrent "Max AC current limit";
+CM_ BO_ 292 "Node ID: 4 — Configure max AC brake current";
+CM_ SG_ 292 INV1_CMD_MaxAcBrakeCurrent "Max AC brake current. Min depends on inverter config";
+CM_ BO_ 324 "Node ID: 4 — Configure max DC current limit";
+CM_ SG_ 324 INV1_CMD_MaxDcCurrent "Max DC current limit";
+CM_ BO_ 356 "Node ID: 4 — Configure max DC brake current";
+CM_ SG_ 356 INV1_CMD_MaxDcBrakeCurrent "Max DC brake current. Min depends on inverter config";
+CM_ BO_ 1029 "Node ID: 5 — ERPM, duty cycle, and DC input voltage";
+CM_ SG_ 1029 INV2_Actual_ERPM "Electrical RPM. ERPM = Motor_RPM * pole_pairs";
+CM_ SG_ 1029 INV2_Actual_Duty "Controller duty cycle. Positive=motoring, negative=regen";
+CM_ SG_ 1029 INV2_Actual_InputVoltage "DC bus input voltage";
+CM_ BO_ 1061 "Node ID: 5 — AC and DC current";
+CM_ SG_ 1061 INV2_Actual_ACCurrent "Motor AC current. Positive=motoring, negative=regen";
+CM_ SG_ 1061 INV2_Actual_DCCurrent "DC side current. Positive=motoring, negative=regen";
+CM_ BO_ 1093 "Node ID: 5 — Temperatures and fault code";
+CM_ SG_ 1093 INV2_Actual_TempController "Inverter semiconductor temperature";
+CM_ SG_ 1093 INV2_Actual_TempMotor "Motor temperature measured by inverter";
+CM_ SG_ 1093 INV2_Actual_FaultCode "Fault code. 0=NO_FAULT";
+CM_ BO_ 1125 "Node ID: 5 — FOC algorithm Id/Iq currents";
+CM_ SG_ 1125 INV2_Actual_FOC_id "FOC d-axis current component";
+CM_ SG_ 1125 INV2_Actual_FOC_iq "FOC q-axis current component";
+CM_ BO_ 1157 "Node ID: 5 — Throttle, brake, digital I/O, limits, CAN map version";
+CM_ SG_ 1157 INV2_Actual_Throttle "Throttle from analog inputs or CAN2";
+CM_ SG_ 1157 INV2_Actual_Brake "Brake signal";
+CM_ SG_ 1157 INV2_Digital_input_1 "Digital input 1 state";
+CM_ SG_ 1157 INV2_Digital_input_2 "Digital input 2 state";
+CM_ SG_ 1157 INV2_Digital_input_3 "Digital input 3 state";
+CM_ SG_ 1157 INV2_Digital_input_4 "Digital input 4 state";
+CM_ SG_ 1157 INV2_Digital_output_1 "Digital output 1 state";
+CM_ SG_ 1157 INV2_Digital_output_2 "Digital output 2 state";
+CM_ SG_ 1157 INV2_Digital_output_3 "Digital output 3 state";
+CM_ SG_ 1157 INV2_Digital_output_4 "Digital output 4 state";
+CM_ SG_ 1157 INV2_Drive_enable "Drive enable status";
+CM_ SG_ 1157 INV2_Capacitor_temp_limit "Capacitor temperature limit active";
+CM_ SG_ 1157 INV2_DC_current_limit "DC current limit active";
+CM_ SG_ 1157 INV2_Drive_enable_limit "Drive enable limit active";
+CM_ SG_ 1157 INV2_IGBT_accel_limit "IGBT acceleration temperature limit active";
+CM_ SG_ 1157 INV2_IGBT_temp_limit "IGBT temperature limit active";
+CM_ SG_ 1157 INV2_Input_voltage_limit "Input voltage limit active";
+CM_ SG_ 1157 INV2_Motor_accel_limit "Motor acceleration temperature limit active";
+CM_ SG_ 1157 INV2_Motor_temp_limit "Motor temperature limit active";
+CM_ SG_ 1157 INV2_RPM_min_limit "RPM minimum limit active";
+CM_ SG_ 1157 INV2_RPM_max_limit "RPM maximum limit active";
+CM_ SG_ 1157 INV2_Power_limit "Power limit active";
+CM_ SG_ 1157 INV2_CAN_map_version "CAN map version (e.g. 25 → V2.5)";
+CM_ BO_ 997 "Node ID: 5 — Control mode, target Iq, motor position, still flag";
+CM_ SG_ 997 INV2_ControlMode "Control mode. 1=SPEED 2=CURRENT 3=CURRENT_BRAKE 4=POS 7=NONE";
+CM_ SG_ 997 INV2_TargetIq "Target Iq current commanded (before limits)";
+CM_ SG_ 997 INV2_MotorPosition "Motor rotor position";
+CM_ SG_ 997 INV2_isMotorStill "1=motor still, 0=rotating";
+CM_ BO_ 1189 "Node ID: 5 — Configured and available AC current limits";
+CM_ SG_ 1189 INV2_MaxAcCurrent "Max AC current configured";
+CM_ SG_ 1189 INV2_AvailableMaxAcCurrent "Available max AC current after derating";
+CM_ SG_ 1189 INV2_MinAcCurrent "Min AC current configured";
+CM_ SG_ 1189 INV2_AvailableMinAcCurrent "Available min AC current after derating";
+CM_ BO_ 1221 "Node ID: 5 — Configured and available DC current limits";
+CM_ SG_ 1221 INV2_MaxDcCurrent "Max DC current configured";
+CM_ SG_ 1221 INV2_AvailableMaxDcCurrent "Available max DC current after derating";
+CM_ SG_ 1221 INV2_MinDcCurrent "Min DC current configured";
+CM_ SG_ 1221 INV2_AvailableMinDcCurrent "Available min DC current after derating";
+CM_ BO_ 389 "Node ID: 5 — Enable/disable drive";
+CM_ SG_ 389 INV2_CMD_DriveEnable "1=Drive allowed, 0=Drive not allowed";
+CM_ BO_ 37 "Node ID: 5 — Set target AC current";
+CM_ SG_ 37 INV2_CMD_TargetAcCurrent "Target AC current. Range depends on inverter config";
+CM_ BO_ 69 "Node ID: 5 — Set target brake current";
+CM_ SG_ 69 INV2_CMD_TargetBrakeCurrent "Target brake current. Max depends on inverter config";
+CM_ BO_ 101 "Node ID: 5 — Set target ERPM";
+CM_ SG_ 101 INV2_CMD_TargetSpeed "Target electrical RPM";
+CM_ BO_ 133 "Node ID: 5 — Set target rotor position";
+CM_ SG_ 133 INV2_CMD_TargetPosition "Target motor position in degrees";
+CM_ BO_ 165 "Node ID: 5 — Set relative current percentage";
+CM_ SG_ 165 INV2_CMD_TargetRelativeCurrent "Target current as percentage of configured max";
+CM_ BO_ 197 "Node ID: 5 — Set relative brake current percentage";
+CM_ SG_ 197 INV2_CMD_TgtRelBrakeCurrent "Target brake current as percentage of configured max";
+CM_ BO_ 229 "Node ID: 5 — Set digital outputs";
+CM_ SG_ 229 INV2_CMD_SetDigOutput1 "Digital output 1: 0=OFF, 1=ON";
+CM_ SG_ 229 INV2_CMD_SetDigOutput2 "Digital output 2: 0=OFF, 1=ON";
+CM_ SG_ 229 INV2_CMD_SetDigOutput3 "Digital output 3: 0=OFF, 1=ON";
+CM_ SG_ 229 INV2_CMD_SetDigOutput4 "Digital output 4: 0=OFF, 1=ON";
+CM_ BO_ 357 "Node ID: 5 — Configure max DC brake current";
+CM_ SG_ 357 INV2_CMD_MaxDcBrakeCurrent "Max DC brake current. Min depends on inverter config";
 BA_DEF_  "BusType" STRING ;
 BA_DEF_DEF_  "BusType" "CAN";
 VAL_ 131 Precharge_Request 0 "open/de-energize" 1 "close/energize contactors" ;
-VAL_ 262 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
-VAL_ 262 module_overvoltage 0 "No Fault" 1 "Overvoltage Detected" ;
-VAL_ 262 module_undervoltage 0 "No Fault" 1 "Undervoltage Detected" ;
-VAL_ 262 module_under_over_identifier 0 "No Fault" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "Termistor 1" 14 "Termistor 2" 15 "Termistor 3" 16 "Termistor 4" 17 "Termistor 5" 18 "Termistor 6" ;
-VAL_ 269 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
-VAL_ 269 module_overvoltage 0 "No Fault" 1 "Overvoltage Detected" ;
-VAL_ 269 module_undervoltage 0 "No Fault" 1 "Overvoltage Detected" ;
-VAL_ 269 module_under_over_identifier 0 "No Fault" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "Termistor 1" 14 "Termistor 2" 15 "Termistor 3" 16 "Termistor 4" 17 "Termistor 5" 18 "Termistor 6" ;
-VAL_ 276 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
-VAL_ 283 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
-VAL_ 290 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
-VAL_ 297 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
-VAL_ 304 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
-VAL_ 311 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
-VAL_ 318 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
-VAL_ 325 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
-VAL_ 332 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
-VAL_ 339 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
+VAL_ 1542 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
+VAL_ 1542 module_overvoltage 0 "No Fault" 1 "Overvoltage Detected" ;
+VAL_ 1542 module_undervoltage 0 "No Fault" 1 "Undervoltage Detected" ;
+VAL_ 1542 module_under_over_identifier 0 "No Fault" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "Termistor 1" 14 "Termistor 2" 15 "Termistor 3" 16 "Termistor 4" 17 "Termistor 5" 18 "Termistor 6" ;
+VAL_ 1549 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
+VAL_ 1549 module_overvoltage 0 "No Fault" 1 "Overvoltage Detected" ;
+VAL_ 1549 module_undervoltage 0 "No Fault" 1 "Overvoltage Detected" ;
+VAL_ 1549 module_under_over_identifier 0 "No Fault" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "Termistor 1" 14 "Termistor 2" 15 "Termistor 3" 16 "Termistor 4" 17 "Termistor 5" 18 "Termistor 6" ;
+VAL_ 1556 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
+VAL_ 1563 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
+VAL_ 1570 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
+VAL_ 1577 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
+VAL_ 1584 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
+VAL_ 1591 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
+VAL_ 1598 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
+VAL_ 1605 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
+VAL_ 1612 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
+VAL_ 1619 module_open_wire 0 "No open wire" 1 "Cell 1" 2 "Cell 2" 3 "Cell 3" 4 "Cell 4" 5 "Cell 5" 6 "Cell 6" 7 "Cell 7" 8 "Cell 8" 9 "Cell 9" 10 "Cell 10" 11 "Cell 11" 12 "Cell 12" 13 "GPIO 1" 14 "GPIO 2" 15 "GPIO 3" 16 "GPIO 4" 17 "GPIO 5" 18 "GPIO 6" ;
 VAL_ 1793 master_firmware_version 0 "Unknown Firmware" 1 "alpha" 3 "beta" 5 "alpha-v1" 7 "beta-v1" 9 "alpha-v2" 13 "alpha-v3" 17 "alpha-v3.1" 11 "beta-v2" 15 "beta-v3" ;
 VAL_ 1793 master_state 0 "BALANCING" 1 "CHARGING" 2 "IDLE" 3 "ONMISSION" 4 "STARTUP" 5 "DISCHARGE_TEST" 6 "RESET_ISA" 7 "FAULT" ;
-VAL_ 1794 precharge_state 0 "START" 1 "OPEN_ALL" 2 "SWITCH_HVNEG" 3 "WAIT_FOR_AIR_NEG_TO_CLOSE" 4 "CHECKING_AIR_NEG_IS_CLOSED" 5 "SWITCH_PRECHARGE" 6 "WAIT_FOR_PRECHARGE_TO_CLOSE" 7 "CHECKING_PRECHARGE_IS_CLOSED" 8 "VERIFY_CURRENT" 9 "VERIFY_BUS_VOLT" 10 "SWITCH_HVPOS" 11 "WAIT_FOR_AIR_POS_TO_CLOSE" 12 "CHECKING_AIR_POS_IS_CLOSED" 13 "TURN_OFF_PRECHARGE" 14 "WAIT_FOR_PRECHARGE_TO_OPEN" 15 "CHECKING_PRECHARGE_IS_OPEN" 16 "END" 17 "WRONG" 18 "KILL" 19 "RX_CAN" ;
+VAL_ 1794 precharge_state 0 "START" 1 "OPEN_ALL" 2 "SWITCH_HVNEG" 3 "WAIT_FOR_AIR_NEG_TO_CLOSE" 4 "CHECKING_AIR_NEG_IS_CLOSED" 5 "SWITCH_PRECHARGE" 6 "WAIT_FOR_PRECHARGE_TO_CLOSE" 7 "CHECKING_PRECHARGE_IS_CLOSED" 8 "VERIFY_CURRENT" 9 "VERIFY_BUS_VOLT" 10 "SWITCH_HVPOS" 11 "WAIT_FOR_AIR_POS_TO_CLOSE" 12 "CHECKING_AIR_POS_IS_CLOSED" 13 "TURN_OFF_PRECHARGE" 14 "WAIT_FOR_PRECHARGE_TO_OPEN" 15 "CHECKING_PRECHARGE_IS_OPEN" 16 "HV_ON" 17 "WRONG" 18 "KILL" 19 "RX_CAN" ;
 VAL_ 1795 fault1_code 0 "FAULT_OVERVOLTAGE" 1 "FAULT_UNDERVOLTAGE" 2 "FAULT_OVERTEMPERATURE" 3 "FAULT_UNDERTEMPERATURE" 4 "FAULT_OVERTEMPERATURE_DISCHARGE" 5 "FAULT_UNDERTEMPERATURE_CHARGE" 6 "FAULT_TEMP_SENSOR_OPEN" 7 "FAULT_SLAVE_NOT_DETECTED" 8 "FAULT_PEC_ERROR" 9 "FAULT_OPEN_WIRE" 10 "FAULT_ACQUISITION_TIMEOUT" 11 "FAULT_CAN_SEND_ERROR" 12 "FAULT_CAN_INIT_ERROR" 13 "FAULT_CAN_MAILBOX_FULL" 14 "FAULT_CAN_BUS_OFF" 15 "FAULT_CAN_RECEIVE_ERROR" 16 "FAULT_INVERTER_TIMEOUT" 17 "FAULT_VCU_TIMEOUT" 18 "FAULT_PDM_TIMEOUT" 19 "FAULT_CHARGER_TIMEOUT" 20 "FAULT_ACQUISITION_NODE_TIMEOUT" 21 "FAULT_CONTACTOR_MISMATCH" 22 "FAULT_PRECHARGE_TIMEOUT" 23 "FAULT_PRECHARGE_FAILURE" 24 "FAULT_SDC_TRIGGERED" 25 "FAULT_BALANCING_ERROR" 26 "FAULT_BALANCING_OVERTEMP" 27 "FAULT_ADC_ERROR" 28 "FAULT_CURRENT_SENSOR_ERROR" 29 "FAULT_SOC_CRITICAL_LOW" 30 "FAULT_PACK_VOLTAGE_MISMATCH" 31 "FAULT_EEPROM_READ_ERROR" 32 "FAULT_EEPROM_WRITE_ERROR" 33 "FAULT_EEPROM_VALIDATION_ERROR" 34 "FAULT_STARTUP_FAILURE" 35 "FAULT_WATCHDOG_RESET" 36 "FAULT_STACK_OVERFLOW" 37 "FAULT_UART1_TX" 38 "FAULT_UART1_RX" 39 "FAULT_UART2_TX" 40 "FAULT_UART2_RX" 41 "FAULT_OW_DETECTED_CELL" 42 "FAULT_OW_DETECTED_RTH" 255 "EMPTY" ;
 VAL_ 1795 fault1_index_type 0 "SLAVE" 1 "CELL" 2 "CHANNEL" 3 "CONTACTORS" 4 "SLAVE_AND_CELL" 5 "THERMISTOR" 6 "SLAVE_AND_THERMISTOR" 7 "NONE" ;
 VAL_ 1795 fault2_code 0 "FAULT_OVERVOLTAGE" 1 "FAULT_UNDERVOLTAGE" 2 "FAULT_OVERTEMPERATURE" 3 "FAULT_UNDERTEMPERATURE" 4 "FAULT_OVERTEMPERATURE_DISCHARGE" 5 "FAULT_UNDERTEMPERATURE_CHARGE" 6 "FAULT_TEMP_SENSOR_OPEN" 7 "FAULT_SLAVE_NOT_DETECTED" 8 "FAULT_PEC_ERROR" 9 "FAULT_OPEN_WIRE" 10 "FAULT_ACQUISITION_TIMEOUT" 11 "FAULT_CAN_SEND_ERROR" 12 "FAULT_CAN_INIT_ERROR" 13 "FAULT_CAN_MAILBOX_FULL" 14 "FAULT_CAN_BUS_OFF" 15 "FAULT_CAN_RECEIVE_ERROR" 16 "FAULT_INVERTER_TIMEOUT" 17 "FAULT_VCU_TIMEOUT" 18 "FAULT_PDM_TIMEOUT" 19 "FAULT_CHARGER_TIMEOUT" 20 "FAULT_ACQUISITION_NODE_TIMEOUT" 21 "FAULT_CONTACTOR_MISMATCH" 22 "FAULT_PRECHARGE_TIMEOUT" 23 "FAULT_PRECHARGE_FAILURE" 24 "FAULT_SDC_TRIGGERED" 25 "FAULT_BALANCING_ERROR" 26 "FAULT_BALANCING_OVERTEMP" 27 "FAULT_ADC_ERROR" 28 "FAULT_CURRENT_SENSOR_ERROR" 29 "FAULT_SOC_CRITICAL_LOW" 30 "FAULT_PACK_VOLTAGE_MISMATCH" 31 "FAULT_EEPROM_READ_ERROR" 32 "FAULT_EEPROM_WRITE_ERROR" 33 "FAULT_EEPROM_VALIDATION_ERROR" 34 "FAULT_STARTUP_FAILURE" 35 "FAULT_WATCHDOG_RESET" 36 "FAULT_STACK_OVERFLOW" 37 "FAULT_UART1_TX" 38 "FAULT_UART1_RX" 39 "FAULT_UART2_TX" 40 "FAULT_UART2_RX" 41 "FAULT_OW_DETECTED_CELL" 42 "FAULT_OW_DETECTED_RTH" 255 "EMPTY" ;

@@ -1,5 +1,5 @@
 x-common-environment: &common-environment
-  ROS_DOMAIN_ID: 0
+  ROS_DOMAIN_ID: 42
   ROS_AUTOMATIC_DISCOVERY_RANGE: SUBNET
   PYTHONUNBUFFERED: 1
   DISPLAY: ${DISPLAY}
