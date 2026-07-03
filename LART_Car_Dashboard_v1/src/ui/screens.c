@@ -607,7 +607,7 @@ void tick_screen_driver_view() {
         const char *new_val = evalTextProperty(flowState, 4, 3, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.tempmotor_label);
         char formatted_val[128];
-        snprintf(formatted_val, sizeof(formatted_val), "%s °C", new_val);
+        snprintf(formatted_val, sizeof(formatted_val), "%d °C", (int)strtol(new_val, NULL, 10));
         if (strcmp(formatted_val, cur_val) != 0) {
             tick_value_change_obj = objects.tempmotor_label;
             lv_label_set_text(objects.tempmotor_label, formatted_val);
@@ -636,7 +636,7 @@ void tick_screen_driver_view() {
         const char *new_val = evalTextProperty(flowState, 15, 3, "Failed to evaluate Text in Label widget");
         const char *cur_val = lv_label_get_text(objects.temp_inv_label);
         char formatted_val[128];
-        snprintf(formatted_val, sizeof(formatted_val), "%s °C", new_val);
+        snprintf(formatted_val, sizeof(formatted_val), "%d °C", (int)strtol(new_val, NULL, 10));
         if (strcmp(formatted_val, cur_val) != 0) {
             tick_value_change_obj = objects.temp_inv_label;
             lv_label_set_text(objects.temp_inv_label, formatted_val);
