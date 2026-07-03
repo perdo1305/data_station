@@ -1,3 +1,5 @@
 float32 inv1_actual_faultcode
 float32 inv1_actual_tempcontroller
 float32 inv1_actual_tempmotor
+float32 inv1_tempinverter
+float32 inv1_tempmotor

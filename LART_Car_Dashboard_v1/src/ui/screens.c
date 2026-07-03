@@ -1579,8 +1579,8 @@ void tick_screen_debug_3() {
     lv_table_add_cell_ctrl(table, 5, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
 
     // Row 6
-    float apps1_show = (dbc_api.pedal_box.apps1 > 0.0f) ? dbc_api.pedal_box.apps1 : dbc_api.apps_adc_raw.apps1_raw;
-    float apps2_show = (dbc_api.pedal_box.apps2 > 0.0f) ? dbc_api.pedal_box.apps2 : dbc_api.apps_adc_raw.apps2_raw;
+    float apps1_show = dbc_api.apps_adc_raw.apps1_raw;
+    float apps2_show = dbc_api.apps_adc_raw.apps2_raw;
     set_cell(table, 6, 0, "APPS1:", 0xFFFFFF);
     set_cell_fmt(table, 6, 1, 0xFFFFFF, "%6.1f", apps1_show);
     set_cell(table, 6, 2, "APPS2:", 0xFFFFFF);
@@ -1606,9 +1606,9 @@ void tick_screen_debug_3() {
 
     // Row 10
     set_cell(table, 10, 0, "IGN:", 0xFFFFFF);
-    set_cell(table, 10, 1, (dbc_api.rear_wheel_l.ignition == 1) ? "ON" : "OFF", (dbc_api.rear_wheel_l.ignition == 1) ? 0x00FF00 : 0x808080);
+    set_cell(table, 10, 1, (dbc_api.vcu_ign_r2d.ignition_switch_raw == 1) ? "ON" : "OFF", (dbc_api.vcu_ign_r2d.ignition_switch_raw == 1) ? 0x00FF00 : 0x808080);
     set_cell(table, 10, 2, "R2D:", 0xFFFFFF);
-    set_cell(table, 10, 3, (dbc_api.rear_wheel_l.shutdown_circuit == 1) ? "ON" : "OFF", (dbc_api.rear_wheel_l.shutdown_circuit == 1) ? 0x00FF00 : 0x808080);
+    set_cell(table, 10, 3, (dbc_api.vcu_ign_r2d.shutdown_signal == 1) ? "ON" : "OFF", (dbc_api.vcu_ign_r2d.shutdown_signal == 1) ? 0x00FF00 : 0x808080);
 }
 
 void create_screen_debug_wheels_4() {

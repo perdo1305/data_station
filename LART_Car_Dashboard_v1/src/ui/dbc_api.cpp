@@ -64,15 +64,12 @@ extern "C" void ui_update_telemetry_vars(const void *t_ptr) {
         dbc_api.vcu_hv.brake_pressure_front = t->vcu_brkf;
         dbc_api.vcu_hv.brake_pressure_rear = t->vcu_brkr;
         dbc_api.inv1_misc.inv1_actual_brake = t->inv_brake;
-        dbc_api.pedal_box.apps1 = t->apps1;
-        dbc_api.pedal_box.apps2 = t->apps2;
         dbc_api.inv1_misc.inv1_actual_throttle = t->inv_throttle;
         dbc_api.master_soc_accumulator.soc_float = t->ams_soc;
         dbc_api.ivt_msg_result_u3.ivt_result_u3 = t->ivt_u3;
         dbc_api.master_msc_id_1.mcu_vref = t->ams_mcu_vref;
         dbc_api.vcu_ign_r2d.r2d_manual = t->vcu_r2d_man;
         dbc_api.vcu_ign_r2d.r2d_auto = t->vcu_r2d_auto;
-        dbc_api.rear_wheel_l.shutdown_circuit = t->rear_r2d;
         dbc_api.acu.acu_state = t->acu_state;
         dbc_api.dv_dynamics_1.speed_actual = t->dv_spd_act;
         dbc_api.inv1_temperatures.inv1_actual_tempcontroller = t->inv_temp_ctrl;
@@ -97,8 +94,6 @@ extern "C" void ui_update_telemetry_vars(const void *t_ptr) {
     float apps2_val = ((dbc_api.apps_adc_raw.apps2_raw * 10.0f) / 4095.0f) * 100.0f;
     float max_acc = apps1_val;
     if (apps2_val > max_acc) max_acc = apps2_val;
-    if (dbc_api.pedal_box.apps1 > max_acc) max_acc = dbc_api.pedal_box.apps1;
-    if (dbc_api.pedal_box.apps2 > max_acc) max_acc = dbc_api.pedal_box.apps2;
     if (dbc_api.inv1_misc.inv1_actual_throttle > max_acc) max_acc = dbc_api.inv1_misc.inv1_actual_throttle;
     int acc_val = static_cast<int>(max_acc);
     if (acc_val < 0) acc_val = 0;
@@ -127,7 +122,7 @@ extern "C" void ui_update_telemetry_vars(const void *t_ptr) {
     // 5. READY (String "READY" / "NOT READY")
     bool is_ready = (dbc_api.vcu_ign_r2d.r2d_manual == 1.0f || 
                     dbc_api.vcu_ign_r2d.r2d_auto == 1.0f || 
-                    dbc_api.rear_wheel_l.shutdown_circuit == 1.0f || 
+                    dbc_api.vcu_ign_r2d.shutdown_signal == 1.0f || 
                     dbc_api.acu.acu_state == 4.0f || 
                     dbc_api.acu.acu_state == 5.0f);
     eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_READY, eez::StringValue(is_ready ? "READY" : "NOT READY"));
@@ -180,122 +175,6 @@ extern "C" const char *ui_get_mission_name(int mission_id) {
 extern "C" void check_dbc_errors(void (*on_error)(const char *id, const char *msg_name, const char *sig_name, float value, const char *choice_label)) {
     if (!on_error) return;
 
-    {
-        float val = dbc_api.acu.emergency;
-        int val_int = static_cast<int>(val);
-        const char *label = nullptr;
-        if (val_int == 0) label = "OFF";
-        if (val_int == 1) label = "ON";
-        if (label) {
-            bool is_safe = false;
-            std::string l_lower = label;
-            for (auto &c : l_lower) c = std::tolower(c);
-            if (l_lower == "none" || l_lower == "empty" || l_lower == "no fault" ||
-                l_lower == "ok" || l_lower == "normal" || l_lower == "off" ||
-                l_lower == "deactivated" || l_lower == "no open wire" || l_lower == "false") {
-                is_safe = true;
-            }
-            if (!is_safe) {
-                on_error("acu.emergency", "ACU", "EMERGENCY", val, label);
-            }
-        }
-    }
-    {
-        float val = dbc_api.acu.emergency_cause;
-        int val_int = static_cast<int>(val);
-        const char *label = nullptr;
-        if (val_int == 0) label = "None";
-        if (val_int == 1) label = "SDC_OPEN";
-        if (val_int == 2) label = "RES";
-        if (val_int == 3) label = "Pressure_checks";
-        if (val_int == 4) label = "VCU_timeout";
-        if (val_int == 5) label = "Jetson_timeout";
-        if (val_int == 6) label = "ACU_WDT_TRIGGERED";
-        if (val_int == 7) label = "dir_actuator_timeout";
-        if (val_int == 8) label = "CAN_Dynamics_Pressure_timeout";
-        if (label) {
-            bool is_safe = false;
-            std::string l_lower = label;
-            for (auto &c : l_lower) c = std::tolower(c);
-            if (l_lower == "none" || l_lower == "empty" || l_lower == "no fault" ||
-                l_lower == "ok" || l_lower == "normal" || l_lower == "off" ||
-                l_lower == "deactivated" || l_lower == "no open wire" || l_lower == "false") {
-                is_safe = true;
-            }
-            if (!is_safe) {
-                on_error("acu.emergency_cause", "ACU", "EMERGENCY_cause", val, label);
-            }
-        }
-    }
-    {
-        float val = dbc_api.cubemars_feedback.error_code;
-        int val_int = static_cast<int>(val);
-        const char *label = nullptr;
-        if (val_int == 0) label = "None";
-        if (val_int == 1) label = "OVER-VOLTAGE";
-        if (val_int == 2) label = "UNDER-VOLTAGE";
-        if (val_int == 3) label = "DRIVER-FAULT";
-        if (val_int == 4) label = "OVER-CURRENT";
-        if (val_int == 5) label = "MOSFET-OVER-TEMP";
-        if (val_int == 6) label = "MOTOR-OVER-TEMP";
-        if (val_int == 7) label = "GATE-DRIVE-OVER-VOLTAGE";
-        if (val_int == 8) label = "GATE-DRIVE-UNDER-VOLTAGE";
-        if (val_int == 9) label = "MCU-UNDER-VOLTAGE";
-        if (val_int == 10) label = "REBOOTING-FROM-WATCHDOG";
-        if (val_int == 11) label = "ENCODER-FAULT";
-        if (val_int == 12) label = "MIN-ENCODER-LIMIT-EXCEEDED";
-        if (val_int == 13) label = "MAX-ENCODER-LIMIT-EXCEEDED";
-        if (val_int == 14) label = "FLASH-FAULT";
-        if (val_int == 15) label = "HIGH-OFFSET-CURRENT-SENSOR1";
-        if (val_int == 16) label = "HIGH-OFFSET-CURRENT-SENSOR2";
-        if (label) {
-            bool is_safe = false;
-            std::string l_lower = label;
-            for (auto &c : l_lower) c = std::tolower(c);
-            if (l_lower == "none" || l_lower == "empty" || l_lower == "no fault" ||
-                l_lower == "ok" || l_lower == "normal" || l_lower == "off" ||
-                l_lower == "deactivated" || l_lower == "no open wire" || l_lower == "false") {
-                is_safe = true;
-            }
-            if (!is_safe) {
-                on_error("cubemars_feedback.error_code", "CubeMars_Feedback", "Error_Code", val, label);
-            }
-        }
-    }
-    {
-        float val = dbc_api.aqt4.emergency;
-        if (val > 0.5f) {
-            on_error("aqt4.emergency", "AQT4", "EMERGENCY", val, "ERROR");
-        }
-    }
-    {
-        float val = dbc_api.jetson.emergency_cause;
-        int val_int = static_cast<int>(val);
-        const char *label = nullptr;
-        if (val_int == 0) label = "None";
-        if (val_int == 1) label = "RES";
-        if (val_int == 2) label = "ACU";
-        if (val_int == 3) label = "ZED";
-        if (val_int == 4) label = "Steering_error";
-        if (val_int == 5) label = "Steering_timeout";
-        if (val_int == 6) label = "Planner";
-        if (val_int == 7) label = "SLAM";
-        if (val_int == 8) label = "P-Puma";
-        if (val_int == 9) label = "IMU";
-        if (label) {
-            bool is_safe = false;
-            std::string l_lower = label;
-            for (auto &c : l_lower) c = std::tolower(c);
-            if (l_lower == "none" || l_lower == "empty" || l_lower == "no fault" ||
-                l_lower == "ok" || l_lower == "normal" || l_lower == "off" ||
-                l_lower == "deactivated" || l_lower == "no open wire" || l_lower == "false") {
-                is_safe = true;
-            }
-            if (!is_safe) {
-                on_error("jetson.emergency_cause", "JETSON", "EMERGENCY_CAUSE", val, label);
-            }
-        }
-    }
     {
         float val = dbc_api.master_msc_id_1.adbms_pec_error;
         if (val > 0.5f) {
@@ -692,6 +571,122 @@ extern "C" void check_dbc_errors(void (*on_error)(const char *id, const char *ms
         float val = dbc_api.inv2_temperatures.inv2_actual_faultcode;
         if (val > 0.5f) {
             on_error("inv2_temperatures.inv2_actual_faultcode", "INV2_Temperatures", "INV2_Actual_FaultCode", val, "ERROR");
+        }
+    }
+    {
+        float val = dbc_api.acu.emergency;
+        int val_int = static_cast<int>(val);
+        const char *label = nullptr;
+        if (val_int == 0) label = "OFF";
+        if (val_int == 1) label = "ON";
+        if (label) {
+            bool is_safe = false;
+            std::string l_lower = label;
+            for (auto &c : l_lower) c = std::tolower(c);
+            if (l_lower == "none" || l_lower == "empty" || l_lower == "no fault" ||
+                l_lower == "ok" || l_lower == "normal" || l_lower == "off" ||
+                l_lower == "deactivated" || l_lower == "no open wire" || l_lower == "false") {
+                is_safe = true;
+            }
+            if (!is_safe) {
+                on_error("acu.emergency", "ACU", "EMERGENCY", val, label);
+            }
+        }
+    }
+    {
+        float val = dbc_api.acu.emergency_cause;
+        int val_int = static_cast<int>(val);
+        const char *label = nullptr;
+        if (val_int == 0) label = "None";
+        if (val_int == 1) label = "SDC_OPEN";
+        if (val_int == 2) label = "RES";
+        if (val_int == 3) label = "Pressure_checks";
+        if (val_int == 4) label = "VCU_timeout";
+        if (val_int == 5) label = "Jetson_timeout";
+        if (val_int == 6) label = "ACU_WDT_TRIGGERED";
+        if (val_int == 7) label = "dir_actuator_timeout";
+        if (val_int == 8) label = "CAN_Dynamics_Pressure_timeout";
+        if (label) {
+            bool is_safe = false;
+            std::string l_lower = label;
+            for (auto &c : l_lower) c = std::tolower(c);
+            if (l_lower == "none" || l_lower == "empty" || l_lower == "no fault" ||
+                l_lower == "ok" || l_lower == "normal" || l_lower == "off" ||
+                l_lower == "deactivated" || l_lower == "no open wire" || l_lower == "false") {
+                is_safe = true;
+            }
+            if (!is_safe) {
+                on_error("acu.emergency_cause", "ACU", "EMERGENCY_cause", val, label);
+            }
+        }
+    }
+    {
+        float val = dbc_api.cubemars_feedback.error_code;
+        int val_int = static_cast<int>(val);
+        const char *label = nullptr;
+        if (val_int == 0) label = "None";
+        if (val_int == 1) label = "OVER-VOLTAGE";
+        if (val_int == 2) label = "UNDER-VOLTAGE";
+        if (val_int == 3) label = "DRIVER-FAULT";
+        if (val_int == 4) label = "OVER-CURRENT";
+        if (val_int == 5) label = "MOSFET-OVER-TEMP";
+        if (val_int == 6) label = "MOTOR-OVER-TEMP";
+        if (val_int == 7) label = "GATE-DRIVE-OVER-VOLTAGE";
+        if (val_int == 8) label = "GATE-DRIVE-UNDER-VOLTAGE";
+        if (val_int == 9) label = "MCU-UNDER-VOLTAGE";
+        if (val_int == 10) label = "REBOOTING-FROM-WATCHDOG";
+        if (val_int == 11) label = "ENCODER-FAULT";
+        if (val_int == 12) label = "MIN-ENCODER-LIMIT-EXCEEDED";
+        if (val_int == 13) label = "MAX-ENCODER-LIMIT-EXCEEDED";
+        if (val_int == 14) label = "FLASH-FAULT";
+        if (val_int == 15) label = "HIGH-OFFSET-CURRENT-SENSOR1";
+        if (val_int == 16) label = "HIGH-OFFSET-CURRENT-SENSOR2";
+        if (label) {
+            bool is_safe = false;
+            std::string l_lower = label;
+            for (auto &c : l_lower) c = std::tolower(c);
+            if (l_lower == "none" || l_lower == "empty" || l_lower == "no fault" ||
+                l_lower == "ok" || l_lower == "normal" || l_lower == "off" ||
+                l_lower == "deactivated" || l_lower == "no open wire" || l_lower == "false") {
+                is_safe = true;
+            }
+            if (!is_safe) {
+                on_error("cubemars_feedback.error_code", "CubeMars_Feedback", "Error_Code", val, label);
+            }
+        }
+    }
+    {
+        float val = dbc_api.aqt4.emergency;
+        if (val > 0.5f) {
+            on_error("aqt4.emergency", "AQT4", "EMERGENCY", val, "ERROR");
+        }
+    }
+    {
+        float val = dbc_api.jetson.emergency_cause;
+        int val_int = static_cast<int>(val);
+        const char *label = nullptr;
+        if (val_int == 0) label = "None";
+        if (val_int == 1) label = "RES";
+        if (val_int == 2) label = "ACU";
+        if (val_int == 3) label = "ZED";
+        if (val_int == 4) label = "Steering_error";
+        if (val_int == 5) label = "Steering_timeout";
+        if (val_int == 6) label = "Planner";
+        if (val_int == 7) label = "SLAM";
+        if (val_int == 8) label = "P-Puma";
+        if (val_int == 9) label = "IMU";
+        if (label) {
+            bool is_safe = false;
+            std::string l_lower = label;
+            for (auto &c : l_lower) c = std::tolower(c);
+            if (l_lower == "none" || l_lower == "empty" || l_lower == "no fault" ||
+                l_lower == "ok" || l_lower == "normal" || l_lower == "off" ||
+                l_lower == "deactivated" || l_lower == "no open wire" || l_lower == "false") {
+                is_safe = true;
+            }
+            if (!is_safe) {
+                on_error("jetson.emergency_cause", "JETSON", "EMERGENCY_CAUSE", val, label);
+            }
         }
     }
 }

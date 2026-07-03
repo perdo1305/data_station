@@ -137,9 +137,12 @@ else()
 endif()
 
 if(ament_cmake_FOUND AND lart_msgs_FOUND)
+    file(GLOB CAN_BRIDGE_SUB_SOURCES CONFIGURE_DEPENDS "generated/can_bridge_impl_sub_*.cpp")
+
     add_executable(can_bridge
         can_bridge.cpp
         generated/can_bridge_impl.cpp
+        ${CAN_BRIDGE_SUB_SOURCES}
         generated/data_t26.c
         generated/powertrain_t26.c
         generated/autonomous_t26.c
@@ -168,6 +171,7 @@ if(ament_cmake_FOUND AND lart_msgs_FOUND)
     add_executable(test_can_bridge
         test_can_bridge.cpp
         generated/can_bridge_impl.cpp
+        ${CAN_BRIDGE_SUB_SOURCES}
         generated/data_t26.c
         generated/powertrain_t26.c
         generated/autonomous_t26.c

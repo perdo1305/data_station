@@ -69,11 +69,6 @@ typedef struct {
         float ebs_pressure_tank_rear;
     } asf_signals;
     struct {
-        float brake_disk_temp;
-        float tire_temp;
-        float wheel_speed;
-    } central_rear;
-    struct {
         float current;
         float driver_temp;
         float error_code;
@@ -87,10 +82,6 @@ typedef struct {
         float ignition_switch_raw;
         float r2d_button_raw;
     } dashboard;
-    struct {
-        float suspension_level_left;
-        float suspension_level_right;
-    } data_box;
     struct {
         float brake_hydr_actual;
         float brake_hydr_target;
@@ -116,18 +107,6 @@ typedef struct {
         float lap_counter;
         float steering_state;
     } dv_status;
-    struct {
-        float brake_disc_temp;
-        float tire_temp;
-        float wheel_angle;
-        float wheel_speed;
-    } front_wheel_l;
-    struct {
-        float brake_disc_temp;
-        float tire_temp;
-        float wheel_angle;
-        float wheel_speed;
-    } front_wheel_r;
     struct {
         float inv1_actual_accurrent;
         float inv1_actual_dccurrent;
@@ -227,6 +206,8 @@ typedef struct {
         float inv1_actual_faultcode;
         float inv1_actual_tempcontroller;
         float inv1_actual_tempmotor;
+        float inv1_tempinverter;
+        float inv1_tempmotor;
     } inv1_temperatures;
     struct {
         float inv2_actual_accurrent;
@@ -327,6 +308,8 @@ typedef struct {
         float inv2_actual_faultcode;
         float inv2_actual_tempcontroller;
         float inv2_actual_tempmotor;
+        float inv2_tempinverter;
+        float inv2_tempmotor;
     } inv2_temperatures;
     struct {
         float ivt_id_cmd;
@@ -658,23 +641,12 @@ typedef struct {
         float soc_integer;
     } master_soc_accumulator;
     struct {
-        float apps1;
-        float apps2;
-    } pedal_box;
+        float coolingfan_pwm;
+        float waterpump_pwm;
+    } pdm_cooling;
     struct {
-        float ignition;
-        float mission_select;
-        float shutdown_circuit;
-    } rear_wheel_l;
-    struct {
-        float hydrauli_brake_pressure;
-        float ntc1;
-        float ntc2;
-        float ntc3;
-        float ntc4;
-        float ntc5;
-        float ntc6;
-    } rear_wheel_r;
+        float lv_voltage_mv;
+    } pdm_lv;
     struct {
         float signal;
     } res;

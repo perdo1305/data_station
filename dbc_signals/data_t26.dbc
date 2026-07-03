@@ -33,7 +33,7 @@ NS_ :
 
 BS_:
 
-BU_: Acquisition_Board2 Acquisition_Board3 Acquisition_Board5 Acquisition_Board6 Acquisition_Board7 Acquisition_Board8
+BU_: Acquisition_Board2 Acquisition_Board3 Acquisition_Board5 Acquisition_Board6 Acquisition_Board7 Acquisition_Board8 FSIC_INV1 FSIC_INV2 PDM
 
 
 BO_ 3221225472 VECTOR__INDEPENDENT_SIG_MSG: 0 Vector__XXX
@@ -72,5 +72,26 @@ BO_ 1920 AQT8: 6 Acquisition_Board8
  SG_ NTC2 : 16|16@1+ (0.1,0) [0|0] "�C" Vector__XXX
  SG_ NTC3 : 32|16@1+ (0.1,0) [0|0] "�C" Vector__XXX
 
+BO_ 1092 INV1_Temperatures: 8 FSIC_INV1
+ SG_ INV1_TempInverter : 7|16@0- (0.1,0) [-55|200] "�C" Vector__XXX
+ SG_ INV1_TempMotor : 23|16@0- (0.1,0) [-55|200] "�C" Vector__XXX
+
+BO_ 1093 INV2_Temperatures: 8 FSIC_INV2
+ SG_ INV2_TempInverter : 7|16@0- (0.1,0) [-55|200] "�C" Vector__XXX
+ SG_ INV2_TempMotor : 23|16@0- (0.1,0) [-55|200] "�C" Vector__XXX
+
+BO_ 528 PDM_LV: 2 PDM
+ SG_ LV_Voltage_mV : 0|16@1+ (0.001,0) [0|0] "" Vector__XXX
+
+BO_ 544 PDM_Cooling: 8 PDM
+ SG_ WaterPump_PWM : 0|8@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ CoolingFan_PWM : 8|8@1+ (1,0) [0|0] "" Vector__XXX
 
 
+
+CM_ BO_ 1092 "0x444 - INV1 (left) temperatures from HV500 inverter";
+CM_ SG_ 1092 INV1_TempInverter "Inverter semiconductor temperature";
+CM_ SG_ 1092 INV1_TempMotor "Motor temperature measured by the inverter";
+CM_ BO_ 1093 "0x445 - INV2 (right) temperatures from HV500 inverter";
+CM_ SG_ 1093 INV2_TempInverter "Inverter semiconductor temperature";
+CM_ SG_ 1093 INV2_TempMotor "Motor temperature measured by the inverter";

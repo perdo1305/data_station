@@ -11,6 +11,9 @@ CONTAINER_UI_BUILD_DIR := /tmp/lart-ui-build
 BUILD_PLAT ?= linux/amd64
 BUILD_PLAT_ARM ?= linux/arm64
 BUILD_PLAT_AMD ?= linux/amd64
+# The generated dbc_api_sub_*.cpp translation units are memory-heavy to compile;
+# building them in parallel can OOM-kill cc1plus on memory-constrained hosts (e.g. Raspberry Pi).
+UI_BUILD_JOBS ?= 1
 
 help:
 	@echo "LART Dashboard ROS2 Docker Management"
@@ -141,7 +144,7 @@ display: build network
 		-v $(PROJECT_DIR):/root/lart_ws/LART_Car_Dashboard_v1 \
 		--ipc=host \
 		$(IMAGE_NAME) \
-		bash -c "source /root/.bashrc && cmake -S $(CONTAINER_UI_DIR) -B $(CONTAINER_UI_BUILD_DIR) && cmake --build $(CONTAINER_UI_BUILD_DIR) --parallel $$(nproc) && $(CONTAINER_UI_BUILD_DIR)/ui_runner"
+		bash -c "source /root/.bashrc && cmake -S $(CONTAINER_UI_DIR) -B $(CONTAINER_UI_BUILD_DIR) && cmake --build $(CONTAINER_UI_BUILD_DIR) --parallel $(UI_BUILD_JOBS) && $(CONTAINER_UI_BUILD_DIR)/ui_runner"
 	@echo "✓ Display started: lart-dashboard-display"
 
 listener: build network
@@ -212,8 +215,8 @@ listener-local:
 
 display-local: check-ui-deps
 	@echo "Building and running UI locally (requires SDL2; ROS2 is optional)"
-	@bash -lc 'set -e; source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/../install/setup.bash >/dev/null 2>&1 || true; cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; cmake --build $(PROJECT_DIR)/build/ui-build --parallel $$(nproc); UI_BIN="$(PROJECT_DIR)/build/ui-build/ui_runner"; if [[ ! -x "$$UI_BIN" ]]; then echo "ui_runner was not generated. Install libsdl2-dev and ensure LVGL sources exist at $(PROJECT_DIR)/src/ui/third_party/lvgl/src."; exit 2; fi; exec "$$UI_BIN"'
+	@bash -lc 'set -e; source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/../install/setup.bash >/dev/null 2>&1 || true; cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; cmake --build $(PROJECT_DIR)/build/ui-build --parallel $(UI_BUILD_JOBS); UI_BIN="$(PROJECT_DIR)/build/ui-build/ui_runner"; if [[ ! -x "$$UI_BIN" ]]; then echo "ui_runner was not generated. Install libsdl2-dev and ensure LVGL sources exist at $(PROJECT_DIR)/src/ui/third_party/lvgl/src."; exit 2; fi; exec "$$UI_BIN"'
 
 run-all-local: check-ui-deps
 	@echo "Starting publisher and listener in background; launching display in foreground"
-	@bash -lc 'set -e; source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/../install/setup.bash >/dev/null 2>&1 || true; export PYTHONPATH=$(PROJECT_DIR)/src; ros2 topic pub -r 10 /vehicle/speed_kph std_msgs/msg/Float32 "{data: 40.0}" & PUB_PID=$$!; python3 -m dashboard_ui.speed_listener & LIST_PID=$$!; trap "kill $$PUB_PID $$LIST_PID 2>/dev/null || true" EXIT INT TERM; echo "Started publisher $$PUB_PID and listener $$LIST_PID"; cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; cmake --build $(PROJECT_DIR)/build/ui-build --parallel $$(nproc); UI_BIN="$(PROJECT_DIR)/build/ui-build/ui_runner"; if [[ ! -x "$$UI_BIN" ]]; then echo "ui_runner was not generated. Install libsdl2-dev and ensure LVGL sources exist at $(PROJECT_DIR)/src/ui/third_party/lvgl/src."; exit 2; fi; exec "$$UI_BIN"'
+	@bash -lc 'set -e; source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/../install/setup.bash >/dev/null 2>&1 || true; export PYTHONPATH=$(PROJECT_DIR)/src; ros2 topic pub -r 10 /vehicle/speed_kph std_msgs/msg/Float32 "{data: 40.0}" & PUB_PID=$$!; python3 -m dashboard_ui.speed_listener & LIST_PID=$$!; trap "kill $$PUB_PID $$LIST_PID 2>/dev/null || true" EXIT INT TERM; echo "Started publisher $$PUB_PID and listener $$LIST_PID"; cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; cmake --build $(PROJECT_DIR)/build/ui-build --parallel $(UI_BUILD_JOBS); UI_BIN="$(PROJECT_DIR)/build/ui-build/ui_runner"; if [[ ! -x "$$UI_BIN" ]]; then echo "ui_runner was not generated. Install libsdl2-dev and ensure LVGL sources exist at $(PROJECT_DIR)/src/ui/third_party/lvgl/src."; exit 2; fi; exec "$$UI_BIN"'

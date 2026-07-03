@@ -85,6 +85,8 @@
 #include <lart_msgs/msg/master_msc_id4.hpp>
 #include <lart_msgs/msg/master_precharge_id1.hpp>
 #include <lart_msgs/msg/master_soc_accumulator.hpp>
+#include <lart_msgs/msg/pdm_cooling.hpp>
+#include <lart_msgs/msg/pdm_lv.hpp>
 #include <lart_msgs/msg/res.hpp>
 #include <lart_msgs/msg/slam_stats_can.hpp>
 #include <lart_msgs/msg/slave01_msc_id1.hpp>
@@ -271,6 +273,8 @@ private:
     rclcpp::Publisher<lart_msgs::msg::MasterMscId4>::SharedPtr pub_master_msc_id_4;
     rclcpp::Publisher<lart_msgs::msg::MasterPrechargeId1>::SharedPtr pub_master_precharge_id_1;
     rclcpp::Publisher<lart_msgs::msg::MasterSocAccumulator>::SharedPtr pub_master_soc_accumulator;
+    rclcpp::Publisher<lart_msgs::msg::PdmCooling>::SharedPtr pub_pdm_cooling;
+    rclcpp::Publisher<lart_msgs::msg::PdmLv>::SharedPtr pub_pdm_lv;
     rclcpp::Publisher<lart_msgs::msg::Res>::SharedPtr pub_res;
     rclcpp::Publisher<lart_msgs::msg::SlamStatsCan>::SharedPtr pub_slam_stats_can;
     rclcpp::Publisher<lart_msgs::msg::Slave01MscId1>::SharedPtr pub_slave_01_msc_id_1;
@@ -367,6 +371,19 @@ private:
     rclcpp::Publisher<lart_msgs::msg::VcuRpmTarget>::SharedPtr pub_vcu_rpm_target;
     rclcpp::Publisher<lart_msgs::msg::VcuStates>::SharedPtr pub_vcu_states;
     rclcpp::Publisher<lart_msgs::msg::VcuTorqueTarget>::SharedPtr pub_vcu_torque_target;
+
+    void init_publishers_chunk_0(rclcpp::Node* node);
+    bool handle_frame_chunk_0(uint32_t can_id, const uint8_t* data, size_t dlc);
+    void init_publishers_chunk_1(rclcpp::Node* node);
+    bool handle_frame_chunk_1(uint32_t can_id, const uint8_t* data, size_t dlc);
+    void init_publishers_chunk_2(rclcpp::Node* node);
+    bool handle_frame_chunk_2(uint32_t can_id, const uint8_t* data, size_t dlc);
+    void init_publishers_chunk_3(rclcpp::Node* node);
+    bool handle_frame_chunk_3(uint32_t can_id, const uint8_t* data, size_t dlc);
+    void init_publishers_chunk_4(rclcpp::Node* node);
+    bool handle_frame_chunk_4(uint32_t can_id, const uint8_t* data, size_t dlc);
+    void init_publishers_chunk_5(rclcpp::Node* node);
+    bool handle_frame_chunk_5(uint32_t can_id, const uint8_t* data, size_t dlc);
 
 };
 

@@ -17,16 +17,12 @@ extern std::mutex dbc_api_mutex;
 #include <lart_msgs/msg/aqt7.hpp>
 #include <lart_msgs/msg/aqt8.hpp>
 #include <lart_msgs/msg/asf_signals.hpp>
-#include <lart_msgs/msg/central_rear.hpp>
 #include <lart_msgs/msg/cubemars_feedback.hpp>
 #include <lart_msgs/msg/cubemars_position_loop.hpp>
 #include <lart_msgs/msg/dashboard.hpp>
-#include <lart_msgs/msg/data_box.hpp>
 #include <lart_msgs/msg/dv_dynamics1.hpp>
 #include <lart_msgs/msg/dv_dynamics2.hpp>
 #include <lart_msgs/msg/dv_status.hpp>
-#include <lart_msgs/msg/front_wheel_l.hpp>
-#include <lart_msgs/msg/front_wheel_r.hpp>
 #include <lart_msgs/msg/inv1_ac_dc_current.hpp>
 #include <lart_msgs/msg/inv1_erpm_duty_voltage.hpp>
 #include <lart_msgs/msg/inv1_foc.hpp>
@@ -36,6 +32,10 @@ extern std::mutex dbc_api_mutex;
 #include <lart_msgs/msg/inv1_setaccurrent.hpp>
 #include <lart_msgs/msg/inv1_setbrakecurrent.hpp>
 #include <lart_msgs/msg/inv1_setdigoutput.hpp>
+#include <lart_msgs/msg/inv1_setdriveenable.hpp>
+#include <lart_msgs/msg/inv1_seterpm.hpp>
+#include <lart_msgs/msg/inv1_setmaxacbrakecurrent.hpp>
+#include <lart_msgs/msg/inv1_setmaxaccurrent.hpp>
 
 void init_dbc_api_subscribers_chunk_0(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs) {
     auto sensor_qos = rclcpp::QoS(10).best_effort();
@@ -145,15 +145,6 @@ void init_dbc_api_subscribers_chunk_0(std::shared_ptr<rclcpp::Node> node, std::v
                 dbc_api.asf_signals.ebs_pressure_tank_rear = msg->ebs_pressure_tank_rear;
             }
         }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::CentralRear>(
-        "/can/dbc/central_rear", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::CentralRear> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.central_rear.brake_disk_temp = msg->brake_disk_temp;
-                dbc_api.central_rear.tire_temp = msg->tire_temp;
-                dbc_api.central_rear.wheel_speed = msg->wheel_speed;
-            }
-        }));
     subs.push_back(node->create_subscription<lart_msgs::msg::CubemarsFeedback>(
         "/can/dbc/cubemars_feedback", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::CubemarsFeedback> msg) {
             if (msg) {
@@ -178,14 +169,6 @@ void init_dbc_api_subscribers_chunk_0(std::shared_ptr<rclcpp::Node> node, std::v
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.dashboard.ignition_switch_raw = msg->ignition_switch_raw;
                 dbc_api.dashboard.r2d_button_raw = msg->r2d_button_raw;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::DataBox>(
-        "/can/dbc/data_box", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::DataBox> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.data_box.suspension_level_left = msg->suspension_level_left;
-                dbc_api.data_box.suspension_level_right = msg->suspension_level_right;
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::DvDynamics1>(
@@ -223,26 +206,6 @@ void init_dbc_api_subscribers_chunk_0(std::shared_ptr<rclcpp::Node> node, std::v
                 dbc_api.dv_status.cones_count_all = msg->cones_count_all;
                 dbc_api.dv_status.lap_counter = msg->lap_counter;
                 dbc_api.dv_status.steering_state = msg->steering_state;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::FrontWheelL>(
-        "/can/dbc/front_wheel_l", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::FrontWheelL> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.front_wheel_l.brake_disc_temp = msg->brake_disc_temp;
-                dbc_api.front_wheel_l.tire_temp = msg->tire_temp;
-                dbc_api.front_wheel_l.wheel_angle = msg->wheel_angle;
-                dbc_api.front_wheel_l.wheel_speed = msg->wheel_speed;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::FrontWheelR>(
-        "/can/dbc/front_wheel_r", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::FrontWheelR> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.front_wheel_r.brake_disc_temp = msg->brake_disc_temp;
-                dbc_api.front_wheel_r.tire_temp = msg->tire_temp;
-                dbc_api.front_wheel_r.wheel_angle = msg->wheel_angle;
-                dbc_api.front_wheel_r.wheel_speed = msg->wheel_speed;
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::Inv1AcDcCurrent>(
@@ -341,6 +304,34 @@ void init_dbc_api_subscribers_chunk_0(std::shared_ptr<rclcpp::Node> node, std::v
                 dbc_api.inv1_setdigoutput.inv1_cmd_setdigoutput2 = msg->inv1_cmd_setdigoutput2;
                 dbc_api.inv1_setdigoutput.inv1_cmd_setdigoutput3 = msg->inv1_cmd_setdigoutput3;
                 dbc_api.inv1_setdigoutput.inv1_cmd_setdigoutput4 = msg->inv1_cmd_setdigoutput4;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setdriveenable>(
+        "/can/dbc/inv1_setdriveenable", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setdriveenable> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv1_setdriveenable.inv1_cmd_driveenable = msg->inv1_cmd_driveenable;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Seterpm>(
+        "/can/dbc/inv1_seterpm", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Seterpm> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv1_seterpm.inv1_cmd_targetspeed = msg->inv1_cmd_targetspeed;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setmaxacbrakecurrent>(
+        "/can/dbc/inv1_setmaxacbrakecurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setmaxacbrakecurrent> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv1_setmaxacbrakecurrent.inv1_cmd_maxacbrakecurrent = msg->inv1_cmd_maxacbrakecurrent;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setmaxaccurrent>(
+        "/can/dbc/inv1_setmaxaccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setmaxaccurrent> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv1_setmaxaccurrent.inv1_cmd_maxaccurrent = msg->inv1_cmd_maxaccurrent;
             }
         }));
 }

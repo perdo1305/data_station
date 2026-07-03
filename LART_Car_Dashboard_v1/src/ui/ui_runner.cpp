@@ -395,8 +395,7 @@ int main(int argc, char **argv) {
         // Test 1: Setting dbc_api directly and calling with NULL
         dbc_api.asf_signals.brake_pressure_front = 45.2f;
         dbc_api.asf_signals.brake_pressure_rear = 10.0f;
-        dbc_api.pedal_box.apps1 = 80.0f;
-        dbc_api.pedal_box.apps2 = 78.0f;
+        dbc_api.inv1_misc.inv1_actual_throttle = 80.0f;
         dbc_api.master_soc_accumulator.soc_float = 92.5f;
         dbc_api.ivt_msg_result_u3.ivt_result_u3 = 24300.0f;
         dbc_api.vcu_ign_r2d.r2d_manual = 1.0f;

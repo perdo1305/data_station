@@ -20,8 +20,15 @@ def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     dbc_dir = os.path.abspath(os.path.join(script_dir, "../../../dbc_signals"))
     
+    # Must match the file set loaded by generated/generate_can_bridge.py so the UI only
+    # subscribes to topics that can_bridge actually publishes. aquisition_boards.dbc is the
+    # pre-reorg file superseded by the AQT1-AQT8 messages in data_t26.dbc/autonomous_t26.dbc;
+    # including it here reintroduces legacy topics (front_wheel_l, pedal_box, ...) that clutter
+    # `ros2 topic list`.
+    dbc_filenames = ["data_t26.dbc", "powertrain_t26.dbc", "autonomous_t26.dbc"]
+
     db = cantools.database.Database()
-    dbc_files = sorted(glob.glob(os.path.join(dbc_dir, "*.dbc")))
+    dbc_files = [os.path.join(dbc_dir, fn) for fn in dbc_filenames]
     for df in dbc_files:
         db.add_dbc_file(df)
         
@@ -280,15 +287,12 @@ def main():
         "        dbc_api.vcu_hv.brake_pressure_front = t->vcu_brkf;",
         "        dbc_api.vcu_hv.brake_pressure_rear = t->vcu_brkr;",
         "        dbc_api.inv1_misc.inv1_actual_brake = t->inv_brake;",
-        "        dbc_api.pedal_box.apps1 = t->apps1;",
-        "        dbc_api.pedal_box.apps2 = t->apps2;",
         "        dbc_api.inv1_misc.inv1_actual_throttle = t->inv_throttle;",
         "        dbc_api.master_soc_accumulator.soc_float = t->ams_soc;",
         "        dbc_api.ivt_msg_result_u3.ivt_result_u3 = t->ivt_u3;",
         "        dbc_api.master_msc_id_1.mcu_vref = t->ams_mcu_vref;",
         "        dbc_api.vcu_ign_r2d.r2d_manual = t->vcu_r2d_man;",
         "        dbc_api.vcu_ign_r2d.r2d_auto = t->vcu_r2d_auto;",
-        "        dbc_api.rear_wheel_l.shutdown_circuit = t->rear_r2d;",
         "        dbc_api.acu.acu_state = t->acu_state;",
         "        dbc_api.dv_dynamics_1.speed_actual = t->dv_spd_act;",
         "        dbc_api.inv1_temperatures.inv1_actual_tempcontroller = t->inv_temp_ctrl;",
@@ -313,8 +317,6 @@ def main():
         "    float apps2_val = ((dbc_api.apps_adc_raw.apps2_raw * 10.0f) / 4095.0f) * 100.0f;",
         "    float max_acc = apps1_val;",
         "    if (apps2_val > max_acc) max_acc = apps2_val;",
-        "    if (dbc_api.pedal_box.apps1 > max_acc) max_acc = dbc_api.pedal_box.apps1;",
-        "    if (dbc_api.pedal_box.apps2 > max_acc) max_acc = dbc_api.pedal_box.apps2;",
         "    if (dbc_api.inv1_misc.inv1_actual_throttle > max_acc) max_acc = dbc_api.inv1_misc.inv1_actual_throttle;",
         "    int acc_val = static_cast<int>(max_acc);",
         "    if (acc_val < 0) acc_val = 0;",
@@ -343,7 +345,7 @@ def main():
         "    // 5. READY (String \"READY\" / \"NOT READY\")",
         "    bool is_ready = (dbc_api.vcu_ign_r2d.r2d_manual == 1.0f || ",
         "                    dbc_api.vcu_ign_r2d.r2d_auto == 1.0f || ",
-        "                    dbc_api.rear_wheel_l.shutdown_circuit == 1.0f || ",
+        "                    dbc_api.vcu_ign_r2d.shutdown_signal == 1.0f || ",
         "                    dbc_api.acu.acu_state == 4.0f || ",
         "                    dbc_api.acu.acu_state == 5.0f);",
         "    eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_READY, eez::StringValue(is_ready ? \"READY\" : \"NOT READY\"));",
