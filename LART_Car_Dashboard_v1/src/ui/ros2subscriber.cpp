@@ -61,11 +61,17 @@
 #include <lart_msgs/msg/can_frame.hpp>
 #endif
 
+extern std::mutex dbc_api_mutex;
+
 namespace {
 constexpr const char *DEFAULT_SPEED_TOPIC = "/can/dbc/dv_dynamics_1/speed_actual";
 constexpr const char *DEFAULT_HV_TOPIC = "/can/dbc/vcu_hv/hv";
 constexpr const char *DEFAULT_DASHBOARD_STATE_TOPIC = "/vehicle/dashboard_state";
 constexpr const char *DEFAULT_SET_SCREEN_TOPIC = "/dashboard/set_screen";
+// The ACU still publishes mission_select on its own legacy per-signal topic
+// (not folded into the aggregated "/can/dbc/acu" message), so it's picked
+// up here directly and written into dbc_api.acu.mission_select.
+constexpr const char *DEFAULT_MISSION_SELECT_TOPIC = "/can/dbc/acu/mission_select";
 
 std::atomic<int> g_is_initialized(0);
 std::atomic<int> g_has_speed(0);
@@ -91,6 +97,7 @@ rclcpp::SubscriptionBase::SharedPtr g_sub_screen;
 rclcpp::SubscriptionBase::SharedPtr g_sub_can_frames;
 rclcpp::SubscriptionBase::SharedPtr g_sub_notifications;
 rclcpp::SubscriptionBase::SharedPtr g_sub_notification_ack;
+rclcpp::SubscriptionBase::SharedPtr g_sub_mission_select;
 rclcpp::Publisher<std_msgs::msg::String>::SharedPtr g_pub_notification_ack;
 
 const char *env_or_default(const char *name, const char *fallback) {
@@ -206,6 +213,18 @@ LART_WEAK int ros2subscriber_init(void) {
     // per-signal topics.
     init_dbc_api_subscribers(g_node, g_subs);
 
+    // Mission_select is still published on its own legacy per-signal topic
+    // rather than as part of the aggregated "/can/dbc/acu" message.
+    const char *mission_select_topic = env_or_default("LART_ROS2_MISSION_SELECT_TOPIC", DEFAULT_MISSION_SELECT_TOPIC);
+    auto mission_select_callback = [](const std_msgs::msg::Float32::SharedPtr msg) {
+        if (msg) {
+            std::lock_guard<std::mutex> lock(dbc_api_mutex);
+            dbc_api.acu.mission_select = msg->data;
+        }
+    };
+    g_sub_mission_select = g_node->create_subscription<std_msgs::msg::Float32>(
+        mission_select_topic, sensor_qos, mission_select_callback);
+
     g_is_initialized.store(1);
     g_has_speed.store(0);
     g_has_hv.store(0);
@@ -295,6 +314,7 @@ LART_WEAK void ros2subscriber_fini(void) {
     g_sub_can_frames.reset();
     g_sub_notifications.reset();
     g_sub_notification_ack.reset();
+    g_sub_mission_select.reset();
     g_pub_notification_ack.reset();
     g_subs.clear();
 

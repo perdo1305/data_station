@@ -89,19 +89,14 @@ extern "C" void ui_update_telemetry_vars(const void *t_ptr) {
     if (brake_val > 100) brake_val = 100;
     eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_BRAKE_PEDAL_PRESSURE, eez::IntegerValue(brake_val));
 
-    // 2. ACCELL PEDAL PRESSURE (0 to 100)
-    float apps1_val = ((dbc_api.apps_adc_raw.apps1_raw * 10.0f) / 4095.0f) * 100.0f;
-    float apps2_val = ((dbc_api.apps_adc_raw.apps2_raw * 10.0f) / 4095.0f) * 100.0f;
-    float max_acc = apps1_val;
-    if (apps2_val > max_acc) max_acc = apps2_val;
-    if (dbc_api.inv1_misc.inv1_actual_throttle > max_acc) max_acc = dbc_api.inv1_misc.inv1_actual_throttle;
-    int acc_val = static_cast<int>(max_acc);
+    // 2. ACCELL PEDAL PRESSURE (0 to 100) — driven by INV1 target relative current (%)
+    int acc_val = static_cast<int>(dbc_api.inv1_setrelcurrent.inv1_cmd_targetrelativecurrent);
     if (acc_val < 0) acc_val = 0;
     if (acc_val > 100) acc_val = 100;
     eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_ACCELL_PEDAL_PRESSURE, eez::IntegerValue(acc_val));
 
-    // 3. SOC (State of Charge, 0 to 100)
-    int soc_val = static_cast<int>(dbc_api.master_soc_accumulator.soc_float);
+    // 3. HV bar (0 to 100) — driven by INV1 target relative current (%)
+    int soc_val = static_cast<int>(dbc_api.inv1_setrelcurrent.inv1_cmd_targetrelativecurrent);
     if (soc_val < 0) soc_val = 0;
     if (soc_val > 100) soc_val = 100;
     eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_SOC, eez::IntegerValue(soc_val));

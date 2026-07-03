@@ -508,6 +508,7 @@ int main(int argc, char **argv) {
 
     ui_init();
     ui_set_speed(initial_speed);
+    ros2subscriber_init();
 
     uint32_t last_tick_ms = SDL_GetTicks();
 
@@ -525,6 +526,7 @@ int main(int argc, char **argv) {
         const uint32_t elapsed_ms = now_ms - last_tick_ms;
         last_tick_ms = now_ms;
 
+        ros2subscriber_spin_some();
         lv_tick_inc(elapsed_ms);
         ui_tick();
 
@@ -563,6 +565,7 @@ int main(int argc, char **argv) {
         SDL_Delay(kFrameDelayMs);
     }
 
+    ros2subscriber_fini();
     ui_fini();
     destroy_window();
     SDL_Quit();

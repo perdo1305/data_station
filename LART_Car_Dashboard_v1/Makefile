@@ -13,7 +13,8 @@ BUILD_PLAT_ARM ?= linux/arm64
 BUILD_PLAT_AMD ?= linux/amd64
 # The generated dbc_api_sub_*.cpp translation units are memory-heavy to compile;
 # building them in parallel can OOM-kill cc1plus on memory-constrained hosts (e.g. Raspberry Pi).
-UI_BUILD_JOBS ?= 1
+# 2 is a safer middle ground than nproc on an 8GB Pi; override with UI_BUILD_JOBS=N if needed.
+UI_BUILD_JOBS ?= 2
 
 help:
 	@echo "LART Dashboard ROS2 Docker Management"
