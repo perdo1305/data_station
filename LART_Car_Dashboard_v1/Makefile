@@ -1,5 +1,6 @@
 .PHONY: help build build-arm build-amd up down logs clean shell compose-up compose-down compose-logs \
-		build-image rebuild network publisher display ps stop
+		build-image rebuild network publisher display ps stop \
+		ros-build-fast ros-build-complete run-ui-local display-local display-local-complete
 
 # Docker image and container names
 IMAGE_NAME := lart-dashboard-ros2
@@ -8,6 +9,8 @@ NETWORK_NAME := lart-ros2-network
 PROJECT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 CONTAINER_UI_DIR := /root/lart_ws/LART_Car_Dashboard_v1/src/ui
 CONTAINER_UI_BUILD_DIR := /tmp/lart-ui-build
+# ROS2 workspace root (parent of this dashboard project)
+WS_DIR := $(abspath $(PROJECT_DIR)/..)
 BUILD_PLAT ?= linux/amd64
 BUILD_PLAT_ARM ?= linux/arm64
 BUILD_PLAT_AMD ?= linux/amd64
@@ -39,7 +42,8 @@ help:
 	@echo "Local (no Docker):"
 	@echo "  publish-local  - Run a simple local ROS2 publisher (no docker)"
 	@echo "  listener-local - Run the Python listener locally"
-	@echo "  display-local  - Build and run the UI locally (requires deps)"
+	@echo "  display-local  - Fast: build workspace (skips lart_msgs) + UI, then run"
+	@echo "  display-local-complete - Full: build workspace incl. lart_msgs + UI, then run"
 	@echo "  run-all-local   - Start publisher+listener in background and run UI"
 	@echo "  logs-pub      - Follow publisher container logs"
 	@echo "  ps            - Show running containers"
@@ -214,9 +218,24 @@ listener-local:
 	@echo "Running local listener (dashboard_ui.speed_listener)"
 	@bash -lc 'source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/../install/setup.bash >/dev/null 2>&1 || true; export PYTHONPATH=$(PROJECT_DIR)/src; python3 -m dashboard_ui.speed_listener'
 
-display-local: check-ui-deps
+# Fast workspace build: lart_msgs (181 msgs, rosidl codegen) rarely changes and
+# dominates build time on the Pi, so skip it here. Use ros-build-complete when
+# the DBC files or msg definitions change.
+ros-build-fast:
+	@echo "Building ROS2 workspace (skipping lart_msgs)..."
+	@bash -lc 'set -e; source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; cd $(WS_DIR); colcon build --symlink-install --packages-skip lart_msgs'
+
+ros-build-complete:
+	@echo "Building full ROS2 workspace (including lart_msgs)..."
+	@bash -lc 'set -e; source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; cd $(WS_DIR); colcon build --symlink-install'
+
+run-ui-local:
 	@echo "Building and running UI locally (requires SDL2; ROS2 is optional)"
 	@bash -lc 'set -e; source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/../install/setup.bash >/dev/null 2>&1 || true; cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; cmake --build $(PROJECT_DIR)/build/ui-build --parallel $(UI_BUILD_JOBS); UI_BIN="$(PROJECT_DIR)/build/ui-build/ui_runner"; if [[ ! -x "$$UI_BIN" ]]; then echo "ui_runner was not generated. Install libsdl2-dev and ensure LVGL sources exist at $(PROJECT_DIR)/src/ui/third_party/lvgl/src."; exit 2; fi; exec "$$UI_BIN"'
+
+display-local: check-ui-deps ros-build-fast run-ui-local
+
+display-local-complete: check-ui-deps ros-build-complete run-ui-local
 
 run-all-local: check-ui-deps
 	@echo "Starting publisher and listener in background; launching display in foreground"
