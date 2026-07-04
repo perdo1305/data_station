@@ -244,13 +244,17 @@ static std::map<std::string, bool> g_last_error_state;
 constexpr int kNotifWidth = 650;
 constexpr int kNotifHeight = 80;
 constexpr int kNotifSpacing = 8;
-constexpr int kNotifMaxVisible = 4;
+// Start the stack below the temperature containers (driver view temp row ends at y≈142)
+// so notifications never cover the INV / Max / Motor temp readouts.
+constexpr int kNotifStartY = 145;
+// 3 × (80 + 8) starting at y=145 keeps the whole stack on the 480px screen.
+constexpr int kNotifMaxVisible = 3;
 
 void reposition_notifications() {
     for (size_t i = 0; i < g_lv_notifications.size(); ++i) {
         if (i < kNotifMaxVisible) {
             lv_obj_clear_flag(g_lv_notifications[i].container, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_set_pos(g_lv_notifications[i].container, (kUiWidth - kNotifWidth) / 2, 15 + i * (kNotifHeight + kNotifSpacing));
+            lv_obj_set_pos(g_lv_notifications[i].container, (kUiWidth - kNotifWidth) / 2, kNotifStartY + i * (kNotifHeight + kNotifSpacing));
         } else {
             lv_obj_add_flag(g_lv_notifications[i].container, LV_OBJ_FLAG_HIDDEN);
         }
@@ -395,8 +399,7 @@ int main(int argc, char **argv) {
         // Test 1: Setting dbc_api directly and calling with NULL
         dbc_api.asf_signals.brake_pressure_front = 45.2f;
         dbc_api.asf_signals.brake_pressure_rear = 10.0f;
-        dbc_api.pedal_box.apps1 = 80.0f;
-        dbc_api.pedal_box.apps2 = 78.0f;
+        dbc_api.inv1_misc.inv1_actual_throttle = 80.0f;
         dbc_api.master_soc_accumulator.soc_float = 92.5f;
         dbc_api.ivt_msg_result_u3.ivt_result_u3 = 24300.0f;
         dbc_api.vcu_ign_r2d.r2d_manual = 1.0f;
@@ -509,6 +512,7 @@ int main(int argc, char **argv) {
 
     ui_init();
     ui_set_speed(initial_speed);
+    ros2subscriber_init();
 
     uint32_t last_tick_ms = SDL_GetTicks();
 
@@ -526,6 +530,7 @@ int main(int argc, char **argv) {
         const uint32_t elapsed_ms = now_ms - last_tick_ms;
         last_tick_ms = now_ms;
 
+        ros2subscriber_spin_some();
         lv_tick_inc(elapsed_ms);
         ui_tick();
 
@@ -564,6 +569,7 @@ int main(int argc, char **argv) {
         SDL_Delay(kFrameDelayMs);
     }
 
+    ros2subscriber_fini();
     ui_fini();
     destroy_window();
     SDL_Quit();

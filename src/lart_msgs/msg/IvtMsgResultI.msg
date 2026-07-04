@@ -1,0 +1,7 @@
+float32 ivt_id_result_i
+float32 ivt_msgcount_result_i
+float32 ivt_result_i
+float32 ivt_result_i_channel_error
+float32 ivt_result_i_measurement_error
+float32 ivt_result_i_ocs
+float32 ivt_result_i_system_error

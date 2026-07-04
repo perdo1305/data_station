@@ -1,0 +1,9 @@
+float32 acu_cpu_temp
+float32 acu_state
+float32 as_state
+float32 asms
+float32 assi_state
+float32 emergency
+float32 emergency_cause
+float32 ign
+float32 mission_select

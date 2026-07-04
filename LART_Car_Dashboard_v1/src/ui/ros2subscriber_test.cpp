@@ -1,6 +1,7 @@
 #include "ros2subscriber.h"
 #include <rclcpp/rclcpp.hpp>
 #include <lart_msgs/msg/can_frame.hpp>
+#include <lart_msgs/msg/acu.hpp>
 #include <std_msgs/msg/float32.hpp>
 #include <iostream>
 #include <cassert>
@@ -66,8 +67,8 @@ int main(int argc, char **argv) {
     // This allows us to simulate the incoming CAN stream locally.
     auto pub_node = std::make_shared<rclcpp::Node>("test_publisher");
     auto pub = pub_node->create_publisher<lart_msgs::msg::CanFrame>("/can/frames", rclcpp::QoS(10).best_effort());
-    auto asms_pub = pub_node->create_publisher<std_msgs::msg::Float32>("/can/dbc/acu/asms", rclcpp::QoS(10).best_effort());
-    
+    auto asms_pub = pub_node->create_publisher<lart_msgs::msg::Acu>("/can/dbc/acu", rclcpp::QoS(10).best_effort());
+
     auto msg = std::make_shared<lart_msgs::msg::CanFrame>();
     msg->can_id = 0x123;
     msg->dlc = 4;
@@ -76,8 +77,8 @@ int main(int argc, char **argv) {
     msg->data[2] = 0xBE;
     msg->data[3] = 0xEF;
 
-    auto asms_msg = std::make_shared<std_msgs::msg::Float32>();
-    asms_msg->data = 1.0f;
+    auto asms_msg = std::make_shared<lart_msgs::msg::Acu>();
+    asms_msg->asms = 1.0f;
     
     // We spin and publish multiple times. This is needed because ROS2 discovery
     // of subscription matches can take some time.

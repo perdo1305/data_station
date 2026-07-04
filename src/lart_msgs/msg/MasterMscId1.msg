@@ -1,0 +1,8 @@
+float32 adbms_pec_error
+float32 ams_current_draw
+float32 fault_counter
+float32 master_fan_pwm
+float32 master_firmware_version
+float32 master_state
+float32 mcu_temperature
+float32 mcu_vref

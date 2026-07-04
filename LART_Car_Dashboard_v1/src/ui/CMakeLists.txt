@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 3.8)
 project(speed_subscriber LANGUAGES C CXX)
 
+# Speed up rebuilds on slow/embedded hosts (e.g. Raspberry Pi) by reusing object files
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+endif()
+
 # Compiler flags
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     add_compile_options(-Wall -Wextra -Wpedantic)
@@ -30,9 +37,12 @@ file(GLOB_RECURSE LVGL_SOURCES CONFIGURE_DEPENDS
 # CREATE ROS2 SUBSCRIBER LIBRARY
 # ============================================================================
 
+file(GLOB DBC_API_SUB_SOURCES CONFIGURE_DEPENDS "dbc_api_sub_*.cpp")
+
 add_library(ros2subscriber STATIC
     ros2subscriber.cpp
     dbc_api.cpp
+    ${DBC_API_SUB_SOURCES}
 )
 
 target_compile_features(ros2subscriber PUBLIC cxx_std_17)
@@ -52,7 +62,7 @@ if(ament_cmake_FOUND)
     ament_target_dependencies(ros2subscriber rclcpp std_msgs)
 endif()
 if(lart_msgs_FOUND)
-    target_compile_definitions(ros2subscriber PRIVATE LART_HAVE_DASHBOARD_STATE_MSG=1)
+    target_compile_definitions(ros2subscriber PRIVATE LART_HAVE_DASHBOARD_STATE_MSG=1 LART_HAVE_LART_MSGS=1)
     if(ament_cmake_FOUND)
         ament_target_dependencies(ros2subscriber lart_msgs)
     endif()
@@ -127,9 +137,12 @@ else()
 endif()
 
 if(ament_cmake_FOUND AND lart_msgs_FOUND)
+    file(GLOB CAN_BRIDGE_SUB_SOURCES CONFIGURE_DEPENDS "generated/can_bridge_impl_sub_*.cpp")
+
     add_executable(can_bridge
         can_bridge.cpp
         generated/can_bridge_impl.cpp
+        ${CAN_BRIDGE_SUB_SOURCES}
         generated/data_t26.c
         generated/powertrain_t26.c
         generated/autonomous_t26.c
@@ -158,6 +171,7 @@ if(ament_cmake_FOUND AND lart_msgs_FOUND)
     add_executable(test_can_bridge
         test_can_bridge.cpp
         generated/can_bridge_impl.cpp
+        ${CAN_BRIDGE_SUB_SOURCES}
         generated/data_t26.c
         generated/powertrain_t26.c
         generated/autonomous_t26.c

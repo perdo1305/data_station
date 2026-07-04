@@ -1,0 +1,3 @@
+float32 cones_count_actual
+float32 cones_count_all
+float32 lap_counter

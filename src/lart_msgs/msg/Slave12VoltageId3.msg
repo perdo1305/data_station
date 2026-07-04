@@ -1,0 +1,4 @@
+float32 cell_voltage_10
+float32 cell_voltage_11
+float32 cell_voltage_12
+float32 cell_voltage_9

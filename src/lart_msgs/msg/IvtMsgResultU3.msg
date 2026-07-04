@@ -1,0 +1,7 @@
+float32 ivt_id_result_u3
+float32 ivt_msgcount_result_u3
+float32 ivt_result_u3
+float32 ivt_result_u3_channel_error
+float32 ivt_result_u3_measurement_error
+float32 ivt_result_u3_ocs
+float32 ivt_result_u3_system_error

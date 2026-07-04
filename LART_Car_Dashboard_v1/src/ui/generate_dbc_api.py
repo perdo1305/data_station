@@ -12,12 +12,23 @@ def _ros_name(raw: str) -> str:
         slug = 'val_' + slug
     return slug
 
+def _ros_header_name(class_name: str) -> str:
+    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', class_name)
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+
 def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     dbc_dir = os.path.abspath(os.path.join(script_dir, "../../../dbc_signals"))
     
+    # Must match the file set loaded by generated/generate_can_bridge.py so the UI only
+    # subscribes to topics that can_bridge actually publishes. aquisition_boards.dbc is the
+    # pre-reorg file superseded by the AQT1-AQT8 messages in data_t26.dbc/autonomous_t26.dbc;
+    # including it here reintroduces legacy topics (front_wheel_l, pedal_box, ...) that clutter
+    # `ros2 topic list`.
+    dbc_filenames = ["data_t26.dbc", "powertrain_t26.dbc", "autonomous_t26.dbc"]
+
     db = cantools.database.Database()
-    dbc_files = sorted(glob.glob(os.path.join(dbc_dir, "*.dbc")))
+    dbc_files = [os.path.join(dbc_dir, fn) for fn in dbc_filenames]
     for df in dbc_files:
         db.add_dbc_file(df)
         
@@ -31,6 +42,56 @@ def main():
             message_signals[msg_slug] = set()
         for sig in msg.signals:
             message_signals[msg_slug].add(_ros_name(sig.name))
+            
+    # 1. Generate ROS 2 message files and update lart_msgs/CMakeLists.txt
+    lart_msgs_dir = os.path.abspath(os.path.join(script_dir, "../../../src/lart_msgs"))
+    msg_dir = os.path.join(lart_msgs_dir, "msg")
+    os.makedirs(msg_dir, exist_ok=True)
+    
+    generated_msg_files = []
+    for msg_slug, sig_slugs in message_signals.items():
+        class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
+        msg_filename = f"{class_name}.msg"
+        msg_path = os.path.join(msg_dir, msg_filename)
+        
+        lines = []
+        for sig_slug in sorted(list(sig_slugs)):
+            lines.append(f"float32 {sig_slug}")
+            
+        with open(msg_path, "w") as mf:
+            mf.write("\n".join(lines) + "\n")
+        generated_msg_files.append(msg_filename)
+        
+    cmake_path = os.path.join(lart_msgs_dir, "CMakeLists.txt")
+    standard_msgs = [
+        "msg/ButtonEvent.msg",
+        "msg/EncoderDelta.msg",
+        "msg/CanFrame.msg",
+        "msg/DashboardState.msg"
+    ]
+    all_msgs = standard_msgs + [f"msg/{mf}" for mf in sorted(generated_msg_files)]
+    
+    cmake_lines = [
+        "cmake_minimum_required(VERSION 3.8)",
+        "project(lart_msgs)",
+        "",
+        "find_package(ament_cmake REQUIRED)",
+        "find_package(rosidl_default_generators REQUIRED)",
+        "find_package(builtin_interfaces REQUIRED)",
+        "",
+        "rosidl_generate_interfaces(${PROJECT_NAME}"
+    ]
+    for m in all_msgs:
+        cmake_lines.append(f'  "{m}"')
+    cmake_lines.extend([
+        "  DEPENDENCIES builtin_interfaces",
+        ")",
+        "",
+        "ament_package()"
+    ])
+    with open(cmake_path, "w") as cf:
+        cf.write("\n".join(cmake_lines) + "\n")
+    print(f"Generated {len(generated_msg_files)} .msg files and updated CMakeLists.txt")
             
     # Identify error signals for checking
     error_signals = []
@@ -78,10 +139,12 @@ def main():
         "#ifdef __cplusplus",
         "}",
         "#if defined(LART_UI_HAVE_RCLCPP) && LART_UI_HAVE_RCLCPP",
+        "#if defined(LART_HAVE_LART_MSGS) && LART_HAVE_LART_MSGS",
         "#include <memory>",
         "#include <vector>",
         "#include <rclcpp/rclcpp.hpp>",
         "void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs);",
+        "#endif",
         "#endif",
         "#endif",
         "",
@@ -93,7 +156,70 @@ def main():
         f.write("\n".join(header_lines) + "\n")
     print(f"Generated: {header_path}")
     
-    # Generate Source
+    # Clean up old sub-chunk files
+    for old_file in glob.glob(os.path.join(script_dir, "dbc_api_sub_*.cpp")):
+        try:
+            os.remove(old_file)
+        except Exception:
+            pass
+
+    sorted_slugs = sorted(message_signals.keys())
+    chunk_size = 30
+    chunks = [sorted_slugs[i:i + chunk_size] for i in range(0, len(sorted_slugs), chunk_size)]
+
+    for idx, chunk_slugs in enumerate(chunks):
+        sub_lines = [
+            "// Auto-generated from DBC files by generate_dbc_api.py. Do not edit.",
+            "#include \"dbc_api.h\"",
+            "#if defined(LART_UI_HAVE_RCLCPP) && LART_UI_HAVE_RCLCPP",
+            "#if defined(LART_HAVE_LART_MSGS) && LART_HAVE_LART_MSGS",
+            "#include <rclcpp/rclcpp.hpp>",
+            "#include <mutex>",
+            "#include <vector>",
+            "extern std::mutex dbc_api_mutex;"
+        ]
+        
+        for msg_slug in sorted(chunk_slugs):
+            class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
+            header_name = _ros_header_name(class_name)
+            sub_lines.append(f'#include <lart_msgs/msg/{header_name}.hpp>')
+            
+        sub_lines.extend([
+            "",
+            f"void init_dbc_api_subscribers_chunk_{idx}(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs) {{",
+            "    auto sensor_qos = rclcpp::QoS(10).best_effort();",
+            ""
+        ])
+        
+        for msg_slug in sorted(chunk_slugs):
+            class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
+            msg_class = f"lart_msgs::msg::{class_name}"
+            topic = f"/can/dbc/{msg_slug}"
+            sub_lines.extend([
+                f"    subs.push_back(node->create_subscription<{msg_class}>(",
+                f"        \"{topic}\", sensor_qos, [](const std::shared_ptr<{msg_class}> msg) {{",
+                f"            if (msg) {{",
+                f"                std::lock_guard<std::mutex> lock(dbc_api_mutex);"
+            ])
+            for sig_slug in sorted(message_signals[msg_slug]):
+                sub_lines.append(f"                dbc_api.{msg_slug}.{sig_slug} = msg->{sig_slug};")
+            sub_lines.extend([
+                f"            }}",
+                f"        }}));"
+            ])
+            
+        sub_lines.extend([
+            "}",
+            "#endif",
+            "#endif"
+        ])
+        
+        sub_path = os.path.join(script_dir, f"dbc_api_sub_{idx}.cpp")
+        with open(sub_path, "w") as sf:
+            sf.write("\n".join(sub_lines) + "\n")
+        print(f"Generated: {sub_path}")
+
+    # Generate Source (dbc_api.cpp)
     source_lines = [
         "// Auto-generated from DBC files by generate_dbc_api.py. Do not edit.",
         "#include \"dbc_api.h\"",
@@ -103,33 +229,28 @@ def main():
         "DbcApi dbc_api = {};",
         "",
         "#if defined(LART_UI_HAVE_RCLCPP) && LART_UI_HAVE_RCLCPP",
+        "#if defined(LART_HAVE_LART_MSGS) && LART_HAVE_LART_MSGS",
         "#include <rclcpp/rclcpp.hpp>",
-        "#include <std_msgs/msg/float32.hpp>",
         "#include <mutex>",
         "#include <vector>",
         "",
-        "static std::mutex dbc_api_mutex;",
-        "",
-        "void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs) {",
-        "    auto sensor_qos = rclcpp::QoS(10).best_effort();",
-        ""
+        "std::mutex dbc_api_mutex;"
     ]
     
-    for msg_slug in sorted(message_signals.keys()):
-        for sig_slug in sorted(message_signals[msg_slug]):
-            topic = f"/can/dbc/{msg_slug}/{sig_slug}"
-            source_lines.extend([
-                f"    subs.push_back(node->create_subscription<std_msgs::msg::Float32>(",
-                f"        \"{topic}\", sensor_qos, [](const std_msgs::msg::Float32::SharedPtr msg) {{",
-                f"            if (msg) {{",
-                f"                std::lock_guard<std::mutex> lock(dbc_api_mutex);",
-                f"                dbc_api.{msg_slug}.{sig_slug} = msg->data;",
-                f"            }}",
-                f"        }}));"
-            ])
-            
+    for idx in range(len(chunks)):
+        source_lines.append(f"extern void init_dbc_api_subscribers_chunk_{idx}(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs);")
+        
+    source_lines.extend([
+        "",
+        "void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs) {",
+    ])
+    
+    for idx in range(len(chunks)):
+        source_lines.append(f"    init_dbc_api_subscribers_chunk_{idx}(node, subs);")
+        
     source_lines.extend([
         "}",
+        "#endif",
         "#endif",
         "",
         "// Combined from power_api.cpp and speed_api.cpp",
@@ -138,6 +259,16 @@ def main():
         "#include \"eez-flow.h\"",
         "#include \"ros2subscriber.h\"",
         "#include <cstdint>",
+        "",
+        "// Last LV value shown on the dashboard (Volts) — used by the screen tick",
+        "// code to render the LV label with one decimal.",
+        "static float ui_lv_value = 20.0f;",
+        "",
+        "extern \"C\" const char *ui_get_lv_str() {",
+        "    static char buf[16];",
+        "    snprintf(buf, sizeof(buf), \"%.1f V\", ui_lv_value);",
+        "    return buf;",
+        "}",
         "",
         "extern \"C\" void ui_set_hv(float hv_value) {",
         "    (void)hv_value;",
@@ -166,15 +297,12 @@ def main():
         "        dbc_api.vcu_hv.brake_pressure_front = t->vcu_brkf;",
         "        dbc_api.vcu_hv.brake_pressure_rear = t->vcu_brkr;",
         "        dbc_api.inv1_misc.inv1_actual_brake = t->inv_brake;",
-        "        dbc_api.pedal_box.apps1 = t->apps1;",
-        "        dbc_api.pedal_box.apps2 = t->apps2;",
         "        dbc_api.inv1_misc.inv1_actual_throttle = t->inv_throttle;",
         "        dbc_api.master_soc_accumulator.soc_float = t->ams_soc;",
         "        dbc_api.ivt_msg_result_u3.ivt_result_u3 = t->ivt_u3;",
         "        dbc_api.master_msc_id_1.mcu_vref = t->ams_mcu_vref;",
         "        dbc_api.vcu_ign_r2d.r2d_manual = t->vcu_r2d_man;",
         "        dbc_api.vcu_ign_r2d.r2d_auto = t->vcu_r2d_auto;",
-        "        dbc_api.rear_wheel_l.shutdown_circuit = t->rear_r2d;",
         "        dbc_api.acu.acu_state = t->acu_state;",
         "        dbc_api.dv_dynamics_1.speed_actual = t->dv_spd_act;",
         "        dbc_api.inv1_temperatures.inv1_actual_tempcontroller = t->inv_temp_ctrl;",
@@ -194,27 +322,24 @@ def main():
         "    if (brake_val > 100) brake_val = 100;",
         "    eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_BRAKE_PEDAL_PRESSURE, eez::IntegerValue(brake_val));",
         "",
-        "    // 2. ACCELL PEDAL PRESSURE (0 to 100)",
-        "    float apps1_val = ((dbc_api.apps_adc_raw.apps1_raw * 10.0f) / 4095.0f) * 100.0f;",
-        "    float apps2_val = ((dbc_api.apps_adc_raw.apps2_raw * 10.0f) / 4095.0f) * 100.0f;",
-        "    float max_acc = apps1_val;",
-        "    if (apps2_val > max_acc) max_acc = apps2_val;",
-        "    if (dbc_api.pedal_box.apps1 > max_acc) max_acc = dbc_api.pedal_box.apps1;",
-        "    if (dbc_api.pedal_box.apps2 > max_acc) max_acc = dbc_api.pedal_box.apps2;",
-        "    if (dbc_api.inv1_misc.inv1_actual_throttle > max_acc) max_acc = dbc_api.inv1_misc.inv1_actual_throttle;",
-        "    int acc_val = static_cast<int>(max_acc);",
+        "    // 2. ACCELL PEDAL PRESSURE (0 to 100) — driven by INV1 target relative current (%)",
+        "    int acc_val = static_cast<int>(dbc_api.inv1_setrelcurrent.inv1_cmd_targetrelativecurrent);",
         "    if (acc_val < 0) acc_val = 0;",
         "    if (acc_val > 100) acc_val = 100;",
         "    eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_ACCELL_PEDAL_PRESSURE, eez::IntegerValue(acc_val));",
         "",
-        "    // 3. SOC (State of Charge, 0 to 100)",
+        "    // 3. HV bar (0 to 100) — driven by AMS Master_SOC_Accumulator SOC_Float (%)",
         "    int soc_val = static_cast<int>(dbc_api.master_soc_accumulator.soc_float);",
         "    if (soc_val < 0) soc_val = 0;",
         "    if (soc_val > 100) soc_val = 100;",
         "    eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_SOC, eez::IntegerValue(soc_val));",
         "",
-        "    // 4. LV (Low Voltage, Volts)",
-        "    float lv_val = dbc_api.ivt_msg_result_u3.ivt_result_u3 / 1000.0f;",
+        "    // 4. LV (Low Voltage, Volts) — PDM_LV LV_Voltage_mV (decoded to Volts),",
+        "    // falling back to IVT U3 then AMS MCU_VRef when PDM data is absent.",
+        "    float lv_val = dbc_api.pdm_lv.lv_voltage_mv;",
+        "    if (lv_val < 5.0f || lv_val > 30.0f) {",
+        "        lv_val = dbc_api.ivt_msg_result_u3.ivt_result_u3 / 1000.0f;",
+        "    }",
         "    if (lv_val < 5.0f || lv_val > 30.0f) {",
         "        if (dbc_api.master_msc_id_1.mcu_vref >= 5.0f && dbc_api.master_msc_id_1.mcu_vref <= 30.0f) {",
         "            lv_val = dbc_api.master_msc_id_1.mcu_vref;",
@@ -224,12 +349,13 @@ def main():
         "            lv_val = 20.0f;",
         "        }",
         "    }",
+        "    ui_lv_value = lv_val;",
         "    eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_LV, eez::FloatValue(lv_val));",
         "",
         "    // 5. READY (String \"READY\" / \"NOT READY\")",
         "    bool is_ready = (dbc_api.vcu_ign_r2d.r2d_manual == 1.0f || ",
         "                    dbc_api.vcu_ign_r2d.r2d_auto == 1.0f || ",
-        "                    dbc_api.rear_wheel_l.shutdown_circuit == 1.0f || ",
+        "                    dbc_api.vcu_ign_r2d.shutdown_signal == 1.0f || ",
         "                    dbc_api.acu.acu_state == 4.0f || ",
         "                    dbc_api.acu.acu_state == 5.0f);",
         "    eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_READY, eez::StringValue(is_ready ? \"READY\" : \"NOT READY\"));",

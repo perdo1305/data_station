@@ -12,6 +12,7 @@
 #include <cmath>
 
 #include "generated/can_bridge_impl.hpp"
+#include <lart_msgs/msg/aqt2.hpp>
 
 int main(int argc, char **argv) {
     rclcpp::init(argc, argv);
@@ -25,11 +26,11 @@ int main(int argc, char **argv) {
     bool received = false;
     
     // Subscribe to test target topic
-    auto sub = node->create_subscription<std_msgs::msg::Float32>(
-        "/can/dbc/aqt2/wheel_spd",
+    auto sub = node->create_subscription<lart_msgs::msg::Aqt2>(
+        "/can/dbc/aqt2",
         rclcpp::QoS(10).best_effort(),
-        [&](const std_msgs::msg::Float32::SharedPtr msg) {
-            received_speed = msg->data;
+        [&](const lart_msgs::msg::Aqt2::SharedPtr msg) {
+            received_speed = msg->wheel_spd;
             received = true;
         }
     );

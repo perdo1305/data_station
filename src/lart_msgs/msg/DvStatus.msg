@@ -1,0 +1,8 @@
+float32 ami_state
+float32 as_status
+float32 asb_ebs_state
+float32 asb_redundancy_state
+float32 cones_count_actual
+float32 cones_count_all
+float32 lap_counter
+float32 steering_state
