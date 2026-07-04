@@ -208,6 +208,16 @@ extern "C" void ui_update_telemetry_vars(const void *t_ptr) {
     char state_buf[32];
     snprintf(state_buf, sizeof(state_buf), "%s%s", as_state_str[0] ? ": " : "", as_state_str);
     eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_STATE, eez::StringValue(state_buf));
+
+    // 12. SCREEN_CHANGER_VAR — auto-switch to the Autonomous screen on the
+    // transition into ACU AS_STATE READY (2). Edge-triggered so it does not
+    // re-force the screen every tick and fight the user navigating away.
+    static bool was_as_ready = false;
+    bool is_as_ready = (dbc_api.acu.as_state == 2.0f);
+    if (is_as_ready && !was_as_ready) {
+        eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_SCREEN_CHANGER_VAR, eez::IntegerValue(2));
+    }
+    was_as_ready = is_as_ready;
 }
 
 extern "C" const char *ui_get_as_state_name(int as_state_id) {
