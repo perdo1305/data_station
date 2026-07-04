@@ -40,6 +40,7 @@ typedef struct _objects_t {
     lv_obj_t *debug_autonomous_4;
     lv_obj_t *debug_autonomous_5;
     lv_obj_t *ready_label;
+    lv_obj_t *eth_led;
     lv_obj_t *middle_container;
     lv_obj_t *temp_motor_container;
     lv_obj_t *tempmotor_label;

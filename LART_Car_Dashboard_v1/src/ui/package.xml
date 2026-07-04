@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="3">
-  <name>speed_subscriber</name>
+  <name>lart_dashboard_ui</name>
   <version>0.0.0</version>
   <description>ROS2 subscriber library used by the dashboard UI</description>
   <maintainer email="devnull@example.com">Dev</maintainer>

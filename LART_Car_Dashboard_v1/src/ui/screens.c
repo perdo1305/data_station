@@ -227,6 +227,23 @@ void create_screen_driver_view() {
             lv_label_set_text(obj, "");
         }
         {
+            // ethLedLabel
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            lv_obj_set_pos(obj, 675, 10);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            add_style_text(obj);
+            lv_label_set_text_static(obj, "Jetson");
+        }
+        {
+            // ethLed
+            lv_obj_t *obj = lv_led_create(parent_obj);
+            objects.eth_led = obj;
+            lv_obj_set_pos(obj, 764, 8);
+            lv_obj_set_size(obj, 20, 20);
+            lv_led_set_brightness(obj, LV_LED_BRIGHT_MAX);
+            lv_led_set_color(obj, lv_color_hex(0xff0000));
+        }
+        {
             // middleContainer
             lv_obj_t *obj = lv_obj_create(parent_obj);
             objects.middle_container = obj;
@@ -631,6 +648,11 @@ void create_screen_driver_view() {
 
 void tick_screen_driver_view() {
     ui_update_telemetry_vars(NULL);
+    ui_update_network_status();
+    {
+        bool eth_ok = ui_is_ethernet_connected();
+        lv_led_set_color(objects.eth_led, eth_ok ? lv_color_hex(0x00ff00) : lv_color_hex(0xff0000));
+    }
     void *flowState = getFlowState(0, 0);
     (void)flowState;
     {

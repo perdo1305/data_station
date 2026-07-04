@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.8)
-project(speed_subscriber LANGUAGES C CXX)
+cmake_minimum_required(VERSION 3.10)
+project(lart_dashboard_ui LANGUAGES C CXX)
 
 # Speed up rebuilds on slow/embedded hosts (e.g. Raspberry Pi) by reusing object files
 find_program(CCACHE_PROGRAM ccache)

@@ -3,6 +3,7 @@
 #include <string>
 #include <cctype>
 #include <cstdio>
+#include <cstring>
 
 DbcApi dbc_api = {};
 
@@ -65,6 +66,42 @@ extern "C" void ui_set_speed(float speed_kph) {
         FLOW_GLOBAL_VARIABLE_SPEED,
         eez::FloatValue(speed_kph)
     );
+}
+
+// Ethernet link state for the driver_view corner LED. Polled from sysfs
+// rather than a ROS2 heartbeat, so it reflects the physical cable/link
+// state even if no other node is publishing.
+static bool ui_eth_connected = false;
+
+extern "C" void ui_update_network_status() {
+    static uint32_t last_check_ms = 0;
+    uint32_t now_ms = lv_tick_get();
+    if (last_check_ms != 0 && lv_tick_elaps(last_check_ms) < 500) {
+        return;
+    }
+    last_check_ms = now_ms;
+
+    bool carrier_up = false;
+    if (FILE *f = fopen("/sys/class/net/eth0/carrier", "r")) {
+        int val = 0;
+        carrier_up = (fscanf(f, "%d", &val) == 1 && val == 1);
+        fclose(f);
+    }
+
+    bool operstate_up = false;
+    if (FILE *f = fopen("/sys/class/net/eth0/operstate", "r")) {
+        char state[16] = {0};
+        if (fscanf(f, "%15s", state) == 1) {
+            operstate_up = (strcmp(state, "up") == 0);
+        }
+        fclose(f);
+    }
+
+    ui_eth_connected = carrier_up && operstate_up;
+}
+
+extern "C" bool ui_is_ethernet_connected() {
+    return ui_eth_connected;
 }
 
 extern "C" void ui_update_telemetry_vars(const void *t_ptr) {

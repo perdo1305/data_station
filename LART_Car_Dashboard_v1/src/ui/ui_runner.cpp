@@ -541,6 +541,7 @@ int main(int argc, char **argv) {
         current_errors.clear();
         
         check_dbc_errors([](const char *id, const char *msg_name, const char *sig_name, float value, const char *choice_label) {
+            (void)value;
             std::string id_str = id;
             current_errors[id_str] = true;
             if (!g_last_error_state[id_str]) {
