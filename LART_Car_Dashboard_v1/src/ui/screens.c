@@ -737,7 +737,7 @@ void tick_screen_driver_view() {
         }
     }
     {
-        const char *new_val = evalTextProperty(flowState, 27, 3, "Failed to evaluate Text in Label widget");
+        const char *new_val = ui_get_lv_str();
         const char *cur_val = lv_label_get_text(objects.lv_label);
         if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.lv_label;
@@ -1212,7 +1212,7 @@ void tick_screen_autonomous() {
         }
     }
     {
-        const char *new_val = evalTextProperty(flowState, 6, 3, "Failed to evaluate Text in Label widget");
+        const char *new_val = ui_get_lv_str();
         const char *cur_val = lv_label_get_text(objects.lv_label_1);
         if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.lv_label_1;

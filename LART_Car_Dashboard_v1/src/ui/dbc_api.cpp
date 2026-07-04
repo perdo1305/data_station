@@ -38,6 +38,16 @@ void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rc
 #include "ros2subscriber.h"
 #include <cstdint>
 
+// Last LV value shown on the dashboard (Volts) — used by the screen tick
+// code to render the LV label with one decimal.
+static float ui_lv_value = 20.0f;
+
+extern "C" const char *ui_get_lv_str() {
+    static char buf[16];
+    snprintf(buf, sizeof(buf), "%.1f V", ui_lv_value);
+    return buf;
+}
+
 extern "C" void ui_set_hv(float hv_value) {
     (void)hv_value;
 }
@@ -96,14 +106,18 @@ extern "C" void ui_update_telemetry_vars(const void *t_ptr) {
     if (acc_val > 100) acc_val = 100;
     eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_ACCELL_PEDAL_PRESSURE, eez::IntegerValue(acc_val));
 
-    // 3. HV bar (0 to 100) — driven by INV1 target relative current (%)
-    int soc_val = static_cast<int>(dbc_api.inv1_setrelcurrent.inv1_cmd_targetrelativecurrent);
+    // 3. HV bar (0 to 100) — driven by AMS Master_SOC_Accumulator SOC_Float (%)
+    int soc_val = static_cast<int>(dbc_api.master_soc_accumulator.soc_float);
     if (soc_val < 0) soc_val = 0;
     if (soc_val > 100) soc_val = 100;
     eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_SOC, eez::IntegerValue(soc_val));
 
-    // 4. LV (Low Voltage, Volts)
-    float lv_val = dbc_api.ivt_msg_result_u3.ivt_result_u3 / 1000.0f;
+    // 4. LV (Low Voltage, Volts) — PDM_LV LV_Voltage_mV (decoded to Volts),
+    // falling back to IVT U3 then AMS MCU_VRef when PDM data is absent.
+    float lv_val = dbc_api.pdm_lv.lv_voltage_mv;
+    if (lv_val < 5.0f || lv_val > 30.0f) {
+        lv_val = dbc_api.ivt_msg_result_u3.ivt_result_u3 / 1000.0f;
+    }
     if (lv_val < 5.0f || lv_val > 30.0f) {
         if (dbc_api.master_msc_id_1.mcu_vref >= 5.0f && dbc_api.master_msc_id_1.mcu_vref <= 30.0f) {
             lv_val = dbc_api.master_msc_id_1.mcu_vref;
@@ -113,6 +127,7 @@ extern "C" void ui_update_telemetry_vars(const void *t_ptr) {
             lv_val = 20.0f;
         }
     }
+    ui_lv_value = lv_val;
     eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_LV, eez::FloatValue(lv_val));
 
     // 5. READY (String "READY" / "NOT READY")

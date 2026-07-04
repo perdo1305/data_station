@@ -46,8 +46,8 @@ dashboard_state_bridge:
     kw_inst_topic: ""
     kw_limit_topic: ""
     soc_lv_topic: ""
-    soc_hv_topic: ""        # e.g. /can/dbc/master_soc_accumulator/soc_float
-    lv_voltage_topic: ""
+    soc_hv_topic: /can/dbc/master_soc_accumulator/soc_float
+    lv_voltage_topic: /can/dbc/pdm_lv/lv_voltage_mv
     r2d_ready_topic: ""     # e.g. /can/dbc/dashboard/ready_to_drive
 
 input_handler:
