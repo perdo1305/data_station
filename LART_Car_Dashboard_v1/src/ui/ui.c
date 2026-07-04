@@ -584,10 +584,14 @@ void ui_tick() {
     prev_asms = current_asms;
 
     // Automatically transition to debug autonomous screen when ACU as_state is 4 (EMERGENCY)
+    // and to the autonomous screen when it becomes 2 (READY)
     static float prev_as_state = -1.0f;
     float current_as_state = dbc_api.acu.as_state;
     if (current_as_state == 4.0f && prev_as_state != 4.0f) {
         ui_set_screen(SCREEN_ID_DEBUG_AUTONOMOUS_1 - 1); // SCREEN_ID_DEBUG_AUTONOMOUS_1 is 8 (1-based), so 7 (0-based)
+    }
+    if (current_as_state == 2.0f && prev_as_state != 2.0f) {
+        ui_set_screen(SCREEN_ID_AUTONOMOUS - 1); // SCREEN_ID_AUTONOMOUS is 2 (1-based), so 1 (0-based)
     }
     prev_as_state = current_as_state;
 

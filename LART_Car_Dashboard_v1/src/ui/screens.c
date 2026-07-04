@@ -190,7 +190,9 @@ static const char *object_names[] = {
     "autonomous_debug_text_2",
     "autonomous_debug_text_3",
     "autonomous_debug_text_4",
-    "autonomous_debug_text_5"
+    "autonomous_debug_text_5",
+    "temp_max_container",
+    "temp_max_label"
 };
 
 //
@@ -393,6 +395,43 @@ void create_screen_driver_view() {
                             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
                             add_style_text(obj);
                             lv_label_set_text_static(obj, "Temp INV");
+                        }
+                    }
+                }
+                {
+                    // tempMaxContainer
+                    lv_obj_t *obj = lv_obj_create(parent_obj);
+                    objects.temp_max_container = obj;
+                    lv_obj_set_pos(obj, 239, 0);
+                    lv_obj_set_size(obj, 155, 88);
+                    add_style_info_containers(obj);
+                    lv_obj_set_style_border_color(obj, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_border_width(obj, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_border_opa(obj, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_radius(obj, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_top(obj, 20, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_left(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_right(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_pad_bottom(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    lv_obj_set_style_bg_opa(obj, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+                    {
+                        lv_obj_t *parent_obj = obj;
+                        {
+                            // tempMaxLabel
+                            lv_obj_t *obj = lv_label_create(parent_obj);
+                            objects.temp_max_label = obj;
+                            lv_obj_set_pos(obj, 11, 20);
+                            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+                            add_style_text(obj);
+                            lv_obj_set_style_text_font(obj, &ui_font_orbitron_bold_30, LV_PART_MAIN | LV_STATE_DEFAULT);
+                            lv_label_set_text(obj, "");
+                        }
+                        {
+                            lv_obj_t *obj = lv_label_create(parent_obj);
+                            lv_obj_set_pos(obj, 20, -15);
+                            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+                            add_style_text(obj);
+                            lv_label_set_text_static(obj, "Temp Bat");
                         }
                     }
                 }
@@ -714,6 +753,16 @@ void tick_screen_driver_view() {
         if (strcmp(formatted_val, cur_val) != 0) {
             tick_value_change_obj = objects.obj2;
             lv_label_set_text(objects.obj2, formatted_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        char formatted_val[128];
+        snprintf(formatted_val, sizeof(formatted_val), "%d °C", (int)dbc_api.master_msc_id_3.overall_maximum_temperature);
+        const char *cur_val = lv_label_get_text(objects.temp_max_label);
+        if (strcmp(formatted_val, cur_val) != 0) {
+            tick_value_change_obj = objects.temp_max_label;
+            lv_label_set_text(objects.temp_max_label, formatted_val);
             tick_value_change_obj = NULL;
         }
     }

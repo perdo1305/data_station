@@ -18,6 +18,10 @@ BUILD_PLAT_AMD ?= linux/amd64
 # building them in parallel can OOM-kill cc1plus on memory-constrained hosts (e.g. Raspberry Pi).
 # 2 is a safer middle ground than nproc on an 8GB Pi; override with UI_BUILD_JOBS=N if needed.
 UI_BUILD_JOBS ?= 2
+# The ros2subscriber target (speed_subscriber package) compiles dbc_api_sub_*.cpp, each of
+# which instantiates rclcpp subscriptions for dozens of lart_msgs types; even two of those
+# compiles at once can OOM an 8GB Pi, so keep the colcon builds fully sequential.
+ROS_BUILD_JOBS ?= 1
 
 help:
 	@echo "LART Dashboard ROS2 Docker Management"
@@ -223,11 +227,11 @@ listener-local:
 # the DBC files or msg definitions change.
 ros-build-fast:
 	@echo "Building ROS2 workspace (skipping lart_msgs)..."
-	@bash -lc 'set -e; source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; cd $(WS_DIR); colcon build --symlink-install --packages-skip lart_msgs'
+	@bash -lc 'set -e; source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; cd $(WS_DIR); MAKEFLAGS="-j$(ROS_BUILD_JOBS)" colcon build --symlink-install --parallel-workers 1 --packages-skip lart_msgs'
 
 ros-build-complete:
 	@echo "Building full ROS2 workspace (including lart_msgs)..."
-	@bash -lc 'set -e; source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; cd $(WS_DIR); colcon build --symlink-install'
+	@bash -lc 'set -e; source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; cd $(WS_DIR); MAKEFLAGS="-j$(ROS_BUILD_JOBS)" colcon build --symlink-install --parallel-workers 1'
 
 run-ui-local:
 	@echo "Building and running UI locally (requires SDL2; ROS2 is optional)"

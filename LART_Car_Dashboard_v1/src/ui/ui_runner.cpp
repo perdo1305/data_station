@@ -244,13 +244,17 @@ static std::map<std::string, bool> g_last_error_state;
 constexpr int kNotifWidth = 650;
 constexpr int kNotifHeight = 80;
 constexpr int kNotifSpacing = 8;
-constexpr int kNotifMaxVisible = 4;
+// Start the stack below the temperature containers (driver view temp row ends at y≈142)
+// so notifications never cover the INV / Max / Motor temp readouts.
+constexpr int kNotifStartY = 145;
+// 3 × (80 + 8) starting at y=145 keeps the whole stack on the 480px screen.
+constexpr int kNotifMaxVisible = 3;
 
 void reposition_notifications() {
     for (size_t i = 0; i < g_lv_notifications.size(); ++i) {
         if (i < kNotifMaxVisible) {
             lv_obj_clear_flag(g_lv_notifications[i].container, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_set_pos(g_lv_notifications[i].container, (kUiWidth - kNotifWidth) / 2, 15 + i * (kNotifHeight + kNotifSpacing));
+            lv_obj_set_pos(g_lv_notifications[i].container, (kUiWidth - kNotifWidth) / 2, kNotifStartY + i * (kNotifHeight + kNotifSpacing));
         } else {
             lv_obj_add_flag(g_lv_notifications[i].container, LV_OBJ_FLAG_HIDDEN);
         }

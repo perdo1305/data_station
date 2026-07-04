@@ -18,6 +18,7 @@ void ui_set_screen_var(int screen_id);
 void ui_update_telemetry_vars(const void *t);
 const char *ui_get_mission_str();
 const char *ui_get_mission_name(int mission_id);
+const char *ui_get_as_state_name(int as_state_id);
 
 #ifdef __cplusplus
 }
