@@ -89,3 +89,11 @@ dashboard_ui:
   ros__parameters:
     rpm_shift: 11500
     rpm_max: 12000
+
+bag_recorder:
+  ros__parameters:
+    trigger_topic: /can/dbc/start_precharge
+    record_regex: /can/dbc/.*
+    bag_dir: "~/bags"            # session folders precharge_YYYYMMDD_HHMMSS
+    stop_grace_s: 30.0           # keep recording this long after request=0
+    split_duration_s: 60         # new bag chunk every 60 s
