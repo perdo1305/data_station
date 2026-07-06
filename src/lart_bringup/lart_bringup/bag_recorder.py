@@ -152,6 +152,8 @@ class BagRecorderNode(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = BagRecorderNode()
+    # SIGTERM (systemd/launch escalation) must finalize the bag like SIGINT
+    signal.signal(signal.SIGTERM, signal.default_int_handler)
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
