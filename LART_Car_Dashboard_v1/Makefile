@@ -156,23 +156,23 @@ display: build network
 		bash -c "source /root/.bashrc && cmake -S $(CONTAINER_UI_DIR) -B $(CONTAINER_UI_BUILD_DIR) && cmake --build $(CONTAINER_UI_BUILD_DIR) --parallel $(UI_BUILD_JOBS) && $(CONTAINER_UI_BUILD_DIR)/ui_runner"
 	@echo "✓ Display started: lart-dashboard-display"
 
-listener: build network
-	@echo "Starting listener container..."
-	docker run -d \
-		--name $(CONTAINER_LISTENER) \
-		--network $(NETWORK_NAME) \
-		--hostname listener \
-		-e ROS_DOMAIN_ID=0 \
-		-e ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET \
-		-e PYTHONUNBUFFERED=1 \
-		-e DISPLAY=$$DISPLAY \
-		-e QT_X11_NO_MITSHM=1 \
-		-e XAUTHORITY=/root/.Xauthority \
-		-v /tmp/.X11-unix:/tmp/.X11-unix:rw \
-		-v $$HOME/.Xauthority:/root/.Xauthority:ro \
-		$(IMAGE_NAME) \
-		bash -c "source /root/.bashrc && echo 'Listener running...' && ros2 run dashboard_ui speed_listener_node"
-	@echo "✓ Listener started: $(CONTAINER_LISTENER)"
+# listener: build network
+# 	@echo "Starting listener container..."
+# 	docker run -d \
+# 		--name $(CONTAINER_LISTENER) \
+# 		--network $(NETWORK_NAME) \
+# 		--hostname listener \
+# 		-e ROS_DOMAIN_ID=0 \
+# 		-e ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET \
+# 		-e PYTHONUNBUFFERED=1 \
+# 		-e DISPLAY=$$DISPLAY \
+# 		-e QT_X11_NO_MITSHM=1 \
+# 		-e XAUTHORITY=/root/.Xauthority \
+# 		-v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+# 		-v $$HOME/.Xauthority:/root/.Xauthority:ro \
+# 		$(IMAGE_NAME) \
+# 		bash -c "source /root/.bashrc && echo 'Listener running...' && ros2 run dashboard_ui speed_listener_node"
+# 	@echo "✓ Listener started: $(CONTAINER_LISTENER)"
 
 shell:
 	@echo "Opening shell in publisher container..."
@@ -218,9 +218,9 @@ publish-local:
 	@echo "Running local numeric publisher at 20Hz. Ctrl-C to stop"
 	@bash -lc 'source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/../install/setup.bash >/dev/null 2>&1 || true; while true; do for value in 0 10 20 30 40 50 60 70 80 90 100; do echo "speed_kph=$$value"; ros2 topic pub --once /vehicle/speed_kph std_msgs/msg/Float32 "{data: $$value}" >/dev/null; done; done'
 
-listener-local:
-	@echo "Running local listener (dashboard_ui.speed_listener)"
-	@bash -lc 'source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/../install/setup.bash >/dev/null 2>&1 || true; export PYTHONPATH=$(PROJECT_DIR)/src; python3 -m dashboard_ui.speed_listener'
+# listener-local:
+# 	@echo "Running local listener (dashboard_ui.speed_listener)"
+# 	@bash -lc 'source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/../install/setup.bash >/dev/null 2>&1 || true; export PYTHONPATH=$(PROJECT_DIR)/src; python3 -m dashboard_ui.speed_listener'
 
 # Fast workspace build: lart_msgs (181 msgs, rosidl codegen) rarely changes and
 # dominates build time on the Pi, so skip it here. Use ros-build-complete when
@@ -242,5 +242,5 @@ display-local: check-ui-deps ros-build-fast run-ui-local
 display-local-complete: check-ui-deps ros-build-complete run-ui-local
 
 run-all-local: check-ui-deps
-	@echo "Starting publisher and listener in background; launching display in foreground"
-	@bash -lc 'set -e; source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/../install/setup.bash >/dev/null 2>&1 || true; export PYTHONPATH=$(PROJECT_DIR)/src; ros2 topic pub -r 10 /vehicle/speed_kph std_msgs/msg/Float32 "{data: 40.0}" & PUB_PID=$$!; python3 -m dashboard_ui.speed_listener & LIST_PID=$$!; trap "kill $$PUB_PID $$LIST_PID 2>/dev/null || true" EXIT INT TERM; echo "Started publisher $$PUB_PID and listener $$LIST_PID"; cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; cmake --build $(PROJECT_DIR)/build/ui-build --parallel $(UI_BUILD_JOBS); UI_BIN="$(PROJECT_DIR)/build/ui-build/ui_runner"; if [[ ! -x "$$UI_BIN" ]]; then echo "ui_runner was not generated. Install libsdl2-dev and ensure LVGL sources exist at $(PROJECT_DIR)/src/ui/third_party/lvgl/src."; exit 2; fi; exec "$$UI_BIN"'
+	@echo "Starting publisher in background; launching display in foreground"
+	@bash -lc 'set -e; source /opt/ros/jazzy/setup.bash >/dev/null 2>&1 || true; source $(PROJECT_DIR)/../install/setup.bash >/dev/null 2>&1 || true; ros2 topic pub -r 10 /vehicle/speed_kph std_msgs/msg/Float32 "{data: 40.0}" & PUB_PID=$$!; trap "kill $$PUB_PID 2>/dev/null || true" EXIT INT TERM; echo "Started publisher $$PUB_PID"; cmake -S $(PROJECT_DIR)/src/ui -B $(PROJECT_DIR)/build/ui-build || true; cmake --build $(PROJECT_DIR)/build/ui-build --parallel $(UI_BUILD_JOBS); UI_BIN="$(PROJECT_DIR)/build/ui-build/ui_runner"; if [[ ! -x "$$UI_BIN" ]]; then echo "ui_runner was not generated. Install libsdl2-dev and ensure LVGL sources exist at $(PROJECT_DIR)/src/ui/third_party/lvgl/src."; exit 2; fi; exec "$$UI_BIN"'

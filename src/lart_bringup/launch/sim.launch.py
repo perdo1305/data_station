@@ -55,18 +55,5 @@ def generate_launch_description():
             output='screen',
             emulate_tty=True,
         ),
-        Node(
-            package='dashboard_ui',
-            executable='dashboard_ui',
-            name='dashboard_ui',
-            parameters=[config],
-            additional_env={
-                'PYGAME_HIDE_SUPPORT_PROMPT': '1',
-                'SDL_RENDER_DRIVER': 'software',
-                'LIBGL_ALWAYS_SOFTWARE': '1',
-                'MESA_LOADER_DRIVER_OVERRIDE': 'llvmpipe',
-            },
-            output='screen',
-            emulate_tty=True,
-        ),
+
     ])

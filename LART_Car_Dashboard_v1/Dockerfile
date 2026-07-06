@@ -46,7 +46,6 @@ RUN pip install --break-system-packages \
     gpiod>=2.0 \
     adafruit-circuitpython-neopixel>=6.0 \
     adafruit-blinka>=8.0 \
-    pygame>=2.5 \
     2>&1 || echo "Some packages may not be available on this architecture"
 
 # Build the workspace

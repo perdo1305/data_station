@@ -58,14 +58,7 @@ def generate_launch_description():
             output='screen',
             emulate_tty=True,
         ),
-        Node(
-            package='dashboard_ui',
-            executable='dashboard_ui',
-            name='dashboard_ui',
-            parameters=[config],
-            output='screen',
-            emulate_tty=True,
-        ),
+
         Node(
             package='lart_bringup',
             executable='bag_recorder',
