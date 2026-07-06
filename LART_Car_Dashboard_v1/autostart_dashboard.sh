@@ -38,7 +38,7 @@ export XDG_RUNTIME_DIR=/run/user/$_UID
 BAG_RECORDER_BIN="/home/lart2026/GIT/data_station/install/lart_bringup/lib/lart_bringup/bag_recorder"
 if [ -x "$BAG_RECORDER_BIN" ]; then
     echo "Starting bag_recorder (bags → ~/bags)..."
-    "$BAG_RECORDER_BIN" &
+    "$BAG_RECORDER_BIN" --ros-args --params-file /home/lart2026/GIT/data_station/install/lart_bringup/share/lart_bringup/config/rpi_config.yaml &
     BAG_RECORDER_PID=$!
     echo "bag_recorder PID: $BAG_RECORDER_PID"
 else
