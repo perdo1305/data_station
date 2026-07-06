@@ -24,6 +24,7 @@ setup(
         'console_scripts': [
             'can_bridge = lart_bringup.can_bridge:main',
             'dashboard_state_bridge = lart_bringup.dashboard_state_bridge:main',
+            'bag_recorder = lart_bringup.bag_recorder:main',
         ],
     },
 )
