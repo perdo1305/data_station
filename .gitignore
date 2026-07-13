@@ -26,3 +26,6 @@ install/
 log/
 
 .vscode/
+
+# Superpowers subagent-driven-development scratch (progress ledger, etc.)
+.superpowers/
