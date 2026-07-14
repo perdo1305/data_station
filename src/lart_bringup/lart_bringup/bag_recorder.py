@@ -74,7 +74,7 @@ class BagRecorderNode(Node):
     # ── state machine callbacks ────────────────────────────────────────────
 
     def _start_recording(self) -> bool:
-        stamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        stamp = datetime.now().strftime('%Y-%m-%dT%H-%M-%S')
         out = self._bag_dir / f'precharge_{stamp}'
         n = 1
         while out.exists():
