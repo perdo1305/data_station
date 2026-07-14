@@ -29,19 +29,21 @@ export function applyVoltageMessage(
   cellOffset: number,
   msg: Record<string, unknown>,
 ): PackState {
-  const newVoltages: Record<number, number> = { ...state[module].voltages };
+  const currentModule = state[module];
+  const newVoltages: Record<number, number> = { ...currentModule?.voltages };
   for (let local = 1; local <= 4; local++) {
     const value = msg[`cell_voltage_${local}`];
     if (isNumber(value)) {
       newVoltages[cellOffset + local] = value;
     }
   }
+  const nextModule: ModuleState = {
+    voltages: newVoltages,
+    temperatures: currentModule?.temperatures ?? { sensors: {} },
+  };
   return {
     ...state,
-    [module]: {
-      ...state[module],
-      voltages: newVoltages,
-    },
+    [module]: nextModule,
   };
 }
 
@@ -51,7 +53,8 @@ export function applyTemperatureMessage(
   idIndex: 1 | 2,
   msg: Record<string, unknown>,
 ): PackState {
-  const existing = state[module].temperatures;
+  const currentModule = state[module];
+  const existing = currentModule?.temperatures ?? { sensors: {} };
   const newSensors: Record<number, number> = { ...existing.sensors };
   let maximum = existing.maximum;
   let delta = existing.delta;
@@ -66,19 +69,20 @@ export function applyTemperatureMessage(
   } else {
     const v5 = msg['temperature_value_5'];
     const v6 = msg['temperature_value_6'];
-    if (isNumber(v5)) newSensors[5] = v5;
-    if (isNumber(v6)) newSensors[6] = v6;
+    if (isNumber(v5)) {newSensors[5] = v5;}
+    if (isNumber(v6)) {newSensors[6] = v6;}
     const max = msg['temperature_maximum'];
     const del = msg['temperature_delta'];
-    if (isNumber(max)) maximum = max;
-    if (isNumber(del)) delta = del;
+    if (isNumber(max)) {maximum = max;}
+    if (isNumber(del)) {delta = del;}
   }
 
+  const nextModule: ModuleState = {
+    voltages: currentModule?.voltages ?? {},
+    temperatures: { sensors: newSensors, maximum, delta },
+  };
   return {
     ...state,
-    [module]: {
-      ...state[module],
-      temperatures: { sensors: newSensors, maximum, delta },
-    },
+    [module]: nextModule,
   };
 }

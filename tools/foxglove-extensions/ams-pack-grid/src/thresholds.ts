@@ -6,9 +6,9 @@ export const VOLTAGE_WARN_MIN = 3.2;
 export const VOLTAGE_WARN_MAX = 4.2;
 
 export function classifyVoltage(volts: number | undefined): Severity {
-  if (volts === undefined) return 'nodata';
-  if (volts >= VOLTAGE_OK_MIN && volts <= VOLTAGE_OK_MAX) return 'ok';
-  if (volts >= VOLTAGE_WARN_MIN && volts <= VOLTAGE_WARN_MAX) return 'warning';
+  if (volts == undefined) {return 'nodata';}
+  if (volts >= VOLTAGE_OK_MIN && volts <= VOLTAGE_OK_MAX) {return 'ok';}
+  if (volts >= VOLTAGE_WARN_MIN && volts <= VOLTAGE_WARN_MAX) {return 'warning';}
   return 'critical';
 }
 
@@ -16,9 +16,9 @@ export const TEMP_OK_MAX = 45;
 export const TEMP_WARN_MAX = 60;
 
 export function classifyTemp(celsius: number | undefined): Severity {
-  if (celsius === undefined) return 'nodata';
-  if (celsius < TEMP_OK_MAX) return 'ok';
-  if (celsius <= TEMP_WARN_MAX) return 'warning';
+  if (celsius == undefined) {return 'nodata';}
+  if (celsius < TEMP_OK_MAX) {return 'ok';}
+  if (celsius <= TEMP_WARN_MAX) {return 'warning';}
   return 'critical';
 }
 
