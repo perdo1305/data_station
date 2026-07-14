@@ -26,6 +26,25 @@ import cantools
 import rclpy
 from rclpy.node import Node
 
+# ---------------------------------------------------------------------------
+# Real-world FS-EV magnitudes.
+#
+# Many DBC signals leave physical min/max unset ([0|0], which cantools reads
+# as "not specified"), so without these targets the simulator falls back to
+# the raw bit-width range — e.g. a 16-bit cell voltage (scale 0.001) would
+# swing up to 65V instead of a real Li-ion cell's ~3.0-4.2V.
+# ---------------------------------------------------------------------------
+TOP_SPEED_KPH = 120.0
+MOTOR_RPM_MAX = 12000.0        # mechanical RPM redline (matches dashboard_ui config)
+MOTOR_ERPM_MAX = 20000.0       # electrical RPM (mechanical * pole pairs)
+PEAK_CURRENT_A = 250.0         # realistic peak pack/phase current under hard accel
+PACK_VOLTAGE_MIN = 500.0       # accumulator nominal-to-full range
+PACK_VOLTAGE_MAX = 600.0
+CELL_VOLTAGE_MIN = 3.0         # single Li-ion cell, empty-to-full
+CELL_VOLTAGE_MAX = 4.2
+LV_VOLTAGE_MIN = 12.0          # 12V LV rail
+LV_VOLTAGE_MAX = 14.4
+
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -160,6 +179,16 @@ def _make_signal_value(signal: cantools.db.Signal, t: float) -> float:
         val = 20000.0 + (soc_lv / 100.0) * (28800.0 - 20000.0)
         return _clamp(val, enc_min, enc_max)
 
+    # Trigger/command signals (e.g. precharge_request) are driven by an
+    # external actor (VCU/operator), not the simulated vehicle bus — hold
+    # them at a constant "off" so they don't spuriously fire downstream
+    # consumers like bag_recorder's precharge trigger. Checked before the
+    # discrete-choice branch below since these signals often carry DBC
+    # choice labels (e.g. 0: open/de-energize, 1: close/energize) that
+    # would otherwise cycle them on/off like a real state signal.
+    if 'request' in name_lower:
+        return 0.0
+
     # 1. Discrete Choice / State Signals
     if getattr(signal, 'choices', None) is not None and len(signal.choices) > 0:
         keys = sorted(list(signal.choices.keys()))
@@ -169,7 +198,7 @@ def _make_signal_value(signal: cantools.db.Signal, t: float) -> float:
 
     # 2. Boolean/Discrete Flags
     unit = (signal.unit or "").strip()
-    
+
     boolean_keywords = ['ign', 'r2d', 'button', 'emergency', 'switch', 'bots', 'enable', 'ok', 'fail', 'error', 'active', 'state', 'status']
     is_boolean = signal.length == 1 or any(x in name_lower for x in boolean_keywords) or ('res' in name_lower and 'result' not in name_lower)
     if is_boolean:
@@ -213,26 +242,41 @@ def _make_signal_value(signal: cantools.db.Signal, t: float) -> float:
         steer_factor = max(0.0, 0.5 * (1.0 - exit_time / 8.0))
 
     # Identify the quantity category and scale to its physical bounds
-    
+
     # Category A: Percentage / Pedals / Torque / Duty cycles
-    is_percentage = (unit == '%' or 
+    is_percentage = (unit == '%' or
                      any(x in name_lower for x in ['apps', 'pedal', 'brake_hydr', 'torque', 'moment', 'percent', 'pct', 'duty', 'throttle']))
-    
-    # Category B: Speed / RPM / Velocity
-    is_speed = any(x in name_lower for x in ['speed', 'spd', 'vel', 'kph', 'rpm', 'erpm'])
-    
+
+    # Category B: Speed / RPM / Velocity — split so electrical RPM, mechanical
+    # RPM and road speed (km/h) each get their own realistic magnitude instead
+    # of all sharing whatever the raw bit width happens to allow.
+    is_erpm = 'erpm' in name_lower
+    is_rpm = (not is_erpm) and 'rpm' in name_lower
+    is_kph_speed = (not is_erpm and not is_rpm and
+                    any(x in name_lower for x in ['speed', 'spd', 'vel', 'kph']))
+
     # Category C: Pressure
     is_pressure = any(x in name_lower for x in ['press', 'pressure', 'bar'])
-    
+
     # Category D: Temperature
     is_temp = any(x in name_lower for x in ['temp', 'temperature', 'ntc'])
-    
+
     # Category E: Current
     is_current = any(x in name_lower for x in ['current', 'curr', 'amp'])
-    
-    # Category F: Voltage
-    is_volt = any(x in name_lower for x in ['voltage', 'volt', 'v_'])
-    
+
+    # Category F: Voltage — split cell-level, module-level and LV-rail
+    # readings from the main HV pack/bus, since they differ by two orders
+    # of magnitude and would otherwise all be driven by the same raw range.
+    is_cell_volt = ('cell_voltage' in name_lower or
+                    any(name_lower.endswith(f'module_voltage_{x}') or f'module_voltage_{x}' in name_lower
+                        for x in ('avg', 'min', 'max')) or
+                    'overall_maximum_voltage' in name_lower or 'overall_minimum_voltage' in name_lower)
+    is_module_volt_sum = 'module_voltage_sum' in name_lower
+    is_lv_volt = (not is_cell_volt and not is_module_volt_sum and
+                  'lv' in name_lower and any(x in name_lower for x in ['volt', 'v_']))
+    is_pack_volt = (not is_cell_volt and not is_module_volt_sum and not is_lv_volt and
+                    any(x in name_lower for x in ['voltage', 'volt', 'v_']))
+
     # Category G: Steering angle
     is_steering = any(x in name_lower for x in ['steering', 'steer', 'wheel_angle', 'st_angle'])
 
@@ -243,14 +287,27 @@ def _make_signal_value(signal: cantools.db.Signal, t: float) -> float:
             val = min_val + (max_val - min_val) * (brake_pct / 100.0)
         else:
             val = min_val + (max_val - min_val) * (accel_pct / 100.0)
-            
-    elif is_speed:
+
+    elif is_kph_speed:
         min_val = max(0.0, enc_min)
-        max_val = enc_max
+        max_val = min(TOP_SPEED_KPH, enc_max)
         val = min_val + (max_val - min_val) * speed_factor
-        # Add slight engine speed vibration
         val += random.uniform(-0.01, 0.01) * (max_val - min_val)
-        
+
+    elif is_rpm:
+        min_val = max(0.0, enc_min)
+        max_val = min(MOTOR_RPM_MAX, enc_max)
+        val = min_val + (max_val - min_val) * speed_factor
+        val += random.uniform(-0.01, 0.01) * (max_val - min_val)
+
+    elif is_erpm:
+        # eRPM can be negative during regen — keep it capped to a realistic
+        # magnitude rather than the DBC's full ±100000 configuration ceiling.
+        min_val = max(-MOTOR_ERPM_MAX, enc_min)
+        max_val = min(MOTOR_ERPM_MAX, enc_max)
+        val = min_val + (max_val - min_val) * speed_factor
+        val += random.uniform(-0.01, 0.01) * (max_val - min_val)
+
     elif is_pressure:
         if 'brake' in name_lower or 'brk' in name_lower:
             # Brake pressure correlates with brake pedal
@@ -262,7 +319,7 @@ def _make_signal_value(signal: cantools.db.Signal, t: float) -> float:
             min_val = max(0.0, enc_min)
             max_val = enc_max
             val = max_val - (max_val - min_val) * 0.15 * (0.5 + 0.5 * math.sin(t * 0.05))
-            
+
     elif is_temp:
         # Temperature rises slowly with speed/RPM
         min_val = max(20.0, enc_min)
@@ -270,21 +327,47 @@ def _make_signal_value(signal: cantools.db.Signal, t: float) -> float:
         if max_val <= min_val:
             min_val, max_val = enc_min, enc_max
         val = min_val + (max_val - min_val) * (0.35 + 0.45 * speed_factor + 0.1 * math.sin(t * 0.02))
-        
+
     elif is_current:
         # Current is positive and correlates with accelerator pedal
         min_val = max(0.0, enc_min)
-        max_val = enc_max
+        max_val = min(PEAK_CURRENT_A, enc_max)
         val = min_val + (max_val - min_val) * (accel_pct / 100.0)
         val += random.uniform(-0.02, 0.02) * (max_val - min_val)
-        
-    elif is_volt:
-        # Voltage sags slightly under high acceleration
-        min_val = max(0.0, enc_min)
-        max_val = enc_max
+
+    elif is_cell_volt:
+        # Single Li-ion cell (or per-cell module stat) — small per-cell
+        # spread via a name-hashed phase so the 12+ cells in a module don't
+        # all report the identical value, sagging slightly under load.
+        phase = (hash(signal.name) % 100) / 100.0
+        min_val = max(CELL_VOLTAGE_MIN, enc_min)
+        max_val = min(CELL_VOLTAGE_MAX, enc_max)
+        base = max_val - (max_val - min_val) * (0.05 + 0.1 * (accel_pct / 100.0))
+        val = base - (max_val - min_val) * 0.05 * phase
+        val += random.uniform(-0.01, 0.01) * (max_val - min_val)
+
+    elif is_module_volt_sum:
+        # Sum of a 12s cell module
+        min_val = max(CELL_VOLTAGE_MIN * 12, enc_min)
+        max_val = min(CELL_VOLTAGE_MAX * 12, enc_max)
         val = max_val - (max_val - min_val) * (0.1 + 0.1 * (accel_pct / 100.0))
         val += random.uniform(-0.005, 0.005) * (max_val - min_val)
-        
+
+    elif is_lv_volt:
+        min_val = max(LV_VOLTAGE_MIN, enc_min)
+        max_val = min(LV_VOLTAGE_MAX, enc_max)
+        val = max_val - (max_val - min_val) * (0.1 + 0.1 * (accel_pct / 100.0))
+        val += random.uniform(-0.005, 0.005) * (max_val - min_val)
+
+    elif is_pack_volt:
+        # HV accumulator / DC bus — sags slightly under high acceleration
+        min_val = max(PACK_VOLTAGE_MIN, enc_min)
+        max_val = min(PACK_VOLTAGE_MAX, enc_max)
+        if max_val <= min_val:
+            min_val, max_val = enc_min, enc_max
+        val = max_val - (max_val - min_val) * (0.1 + 0.1 * (accel_pct / 100.0))
+        val += random.uniform(-0.005, 0.005) * (max_val - min_val)
+
     elif is_steering:
         # Steering is centered at 0 or mid-point, and turns positive/negative
         val = enc_min + (enc_max - enc_min) * (0.5 + 0.45 * steer_factor)
@@ -453,10 +536,10 @@ class CanSimulatorNode(Node):
                 timestamp=time.time(),
             )
 
-            # try:
-            #     self._bus.send(frame)
-            # except Exception as exc:
-            #     self.get_logger().warn(f'CAN send error: {exc}')
+            try:
+                self._bus.send(frame)
+            except Exception as exc:
+                self.get_logger().warn(f'CAN send error: {exc}')
 
     # -----------------------------------------------------------------------
 
