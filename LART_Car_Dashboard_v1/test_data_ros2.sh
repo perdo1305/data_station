@@ -4,6 +4,8 @@
 
 set -e
 
+export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-42}"
+
 TOPIC_PREFIX="/vehicle"
 SCREEN_TOPIC="/dashboard/set_screen"
 SPEED_VALUES=(10 20 30 40 50 60 70 80 90 100)
@@ -233,7 +235,7 @@ toggle_bag_record() {
     mkdir -p "$BAG_DIR"
     local stamp
     stamp="$(date '+%Y-%m-%dT%H-%M-%S')"
-    local out="$BAG_DIR/test_$stamp"
+    local out="$BAG_DIR/datastation_$stamp"
     echo "Starting bag record → $out (topics matching: $BAG_RECORD_REGEX)..."
     ros2 bag record -o "$out" --regex "$BAG_RECORD_REGEX" &
     BAG_RECORD_PID=$!
