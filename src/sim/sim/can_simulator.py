@@ -189,25 +189,22 @@ def _make_signal_value(signal: cantools.db.Signal, t: float) -> float:
     if 'request' in name_lower:
         return 0.0
 
-    # 1. Discrete Choice / State Signals
+    # 1. Discrete Choice / State Signals — held constant (first choice) so
+    # downstream screens/state indicators don't flip on their own.
     if getattr(signal, 'choices', None) is not None and len(signal.choices) > 0:
         keys = sorted(list(signal.choices.keys()))
-        # Pick one choice based on time
-        idx = int(t * 0.2) % len(keys)
-        return float(keys[idx])
+        return float(keys[0])
 
-    # 2. Boolean/Discrete Flags
+    # 2. Boolean/Discrete Flags — held constant (no cycling) for the same reason.
     unit = (signal.unit or "").strip()
 
     boolean_keywords = ['ign', 'r2d', 'button', 'emergency', 'switch', 'bots', 'enable', 'ok', 'fail', 'error', 'active', 'state', 'status']
     is_boolean = signal.length == 1 or any(x in name_lower for x in boolean_keywords) or ('res' in name_lower and 'result' not in name_lower)
     if is_boolean:
         if enc_max - enc_min == 1:
-            return 1.0 if (int(t * 0.25) % 2 == 0) else 0.0
+            return 1.0
         elif enc_max - enc_min <= 10:
-            # Cycle through integer states
-            num_states = int(enc_max - enc_min) + 1
-            return float(int(t * 0.5) % num_states + int(enc_min))
+            return float(int(enc_min))
 
     # 3. Synchronized Driving Simulation (Lap Profile)
     # A single lap is simulated as 40 seconds long
