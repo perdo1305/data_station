@@ -144,6 +144,8 @@ show_menu() {
     echo "9) Help"
     echo "a) Start/Stop CAN simulator (dbc_sim.launch.py)"
     echo "b) Start/Stop bag record"
+    echo "c) Set Mission_select (autonomous mission select)"
+    echo "d) Set AS_MISSION (mission fallback signal)"
     echo "0) Exit"
     echo ""
 }
@@ -242,6 +244,38 @@ toggle_bag_record() {
     echo "✓ Bag record started (PID $BAG_RECORD_PID)"
 }
 
+set_mission_select() {
+    read -p "Select Mission_select raw value [0-7]: " mission
+
+    if ! [[ "$mission" =~ ^[0-7]$ ]]; then
+        echo "✗ Invalid value. Please enter a number between 0 and 7."
+        return 1
+    fi
+
+    if ! ros2 param set /can_simulator mission_select_value "$mission.0"; then
+        echo "✗ Failed to set mission_select_value (is the CAN simulator running? option 'a')"
+        return 1
+    fi
+    echo "✓ Mission_select set to $mission"
+}
+
+set_as_mission() {
+    # Dashboard's mission display falls back to AS_MISSION when
+    # Mission_select is 0, so this needs setting too.
+    read -p "Select AS_MISSION raw value [0-7]: " mission
+
+    if ! [[ "$mission" =~ ^[0-7]$ ]]; then
+        echo "✗ Invalid value. Please enter a number between 0 and 7."
+        return 1
+    fi
+
+    if ! ros2 param set /can_simulator as_mission_value "$mission.0"; then
+        echo "✗ Failed to set as_mission_value (is the CAN simulator running? option 'a')"
+        return 1
+    fi
+    echo "✓ AS_MISSION set to $mission"
+}
+
 publish_screen() {
     local screen_id=$1
     echo "Publishing screen change: id=$screen_id to $SCREEN_TOPIC..."
@@ -315,6 +349,11 @@ Test Scenarios:
   7. Custom    - Publish a single custom speed
   8. Screen    - Change dashboard screen via ROS topic
                  0=Driver View, 1=Autonomous, 2-6=Debug 1-5, 7-11=Debug Autonomous 1-5
+  c. Mission_select - Set the CAN simulator's Mission_select value (0-7) via
+                  ros2 param set /can_simulator mission_select_value
+  d. AS_MISSION - Set the CAN simulator's AS_MISSION value (0-7) via
+                  ros2 param set /can_simulator as_mission_value
+                  (dashboard falls back to this when Mission_select is 0)
 
 Prerequisites:
   - ROS 2 Jazzy must be installed and sourced.
@@ -343,7 +382,7 @@ EOF
 while true; do
     echo ""
     show_menu
-    read -p "Select option [0-9/a/b]: " choice
+    read -p "Select option [0-9/a/b/c/d]: " choice
 
     case $choice in
         1) test_idle; echo ""; read -p "Press Enter to continue..." ;;
@@ -357,12 +396,14 @@ while true; do
         9) show_help; echo ""; read -p "Press Enter to continue..." ;;
         a|A) toggle_can_sim; echo ""; read -p "Press Enter to continue..." ;;
         b|B) toggle_bag_record; echo ""; read -p "Press Enter to continue..." ;;
+        c|C) set_mission_select; echo ""; read -p "Press Enter to continue..." ;;
+        d|D) set_as_mission; echo ""; read -p "Press Enter to continue..." ;;
         0)
             echo "Goodbye!"
             exit 0
             ;;
         *)
-            echo "✗ Invalid option. Please select 0-9, a, or b."
+            echo "✗ Invalid option. Please select 0-9, a, b, c, or d."
             echo ""
             read -p "Press Enter to continue..."
             ;;

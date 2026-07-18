@@ -42,8 +42,8 @@ PACK_VOLTAGE_MIN = 500.0       # accumulator nominal-to-full range
 PACK_VOLTAGE_MAX = 600.0
 CELL_VOLTAGE_MIN = 3.0         # single Li-ion cell, empty-to-full
 CELL_VOLTAGE_MAX = 4.2
-LV_VOLTAGE_MIN = 12.0          # 12V LV rail
-LV_VOLTAGE_MAX = 14.4
+LV_VOLTAGE_MIN = 24.0          # 24V LV rail
+LV_VOLTAGE_MAX = 28.0
 
 
 # ---------------------------------------------------------------------------
@@ -164,7 +164,7 @@ def _encodable_range(signal: cantools.db.Signal) -> tuple[float, float]:
     return enc_min, enc_max
 
 
-def _make_signal_value(signal: cantools.db.Signal, t: float) -> float:
+def _make_signal_value(signal: cantools.db.Signal, t: float, mission_override: float | None = None) -> float:
     """Generate a realistic, time-varying value for a DBC signal.
 
     Values are guaranteed to lie within the encodable physical range so that
@@ -172,6 +172,15 @@ def _make_signal_value(signal: cantools.db.Signal, t: float) -> float:
     """
     enc_min, enc_max = _encodable_range(signal)
     name_lower = signal.name.lower()
+
+    if signal.name in ('Mission_select', 'AS_MISSION'):
+        # Held constant (not auto-cycled) — the dashboard's mission display
+        # falls back through Mission_select -> AS_MISSION -> ami_state, so
+        # both must be pinned or the UI keeps showing AS_MISSION's drift.
+        # Set manually via the can_simulator "mission_select_value" /
+        # "as_mission_value" ROS parameters (see test_data_ros2.sh).
+        val = mission_override if mission_override is not None else enc_min
+        return _clamp(val, enc_min, enc_max)
 
     if name_lower == 'ivt_result_u3':
         # Simulate 20V to 28.8V LV battery in mV (20000 to 28800 mV)
@@ -255,8 +264,16 @@ def _make_signal_value(signal: cantools.db.Signal, t: float) -> float:
     # Category C: Pressure
     is_pressure = any(x in name_lower for x in ['press', 'pressure', 'bar'])
 
-    # Category D: Temperature
+    # Category D: Temperature — split by subsystem so battery, inverter and
+    # motor each get their own realistic range instead of sharing one band.
     is_temp = any(x in name_lower for x in ['temp', 'temperature', 'ntc'])
+    is_temp_batt = is_temp and any(x in name_lower for x in ['batt', 'bms', 'acc', 'cell', 'pack'])
+    is_temp_inv = is_temp and (not is_temp_batt) and any(x in name_lower for x in ['inv', 'inverter'])
+    is_temp_motor = is_temp and (not is_temp_batt) and (not is_temp_inv) and any(x in name_lower for x in ['mot', 'motor'])
+    is_temp_other = is_temp and not (is_temp_batt or is_temp_inv or is_temp_motor)
+
+    # Category D2: Lap counter — bounded to a realistic 1-4 lap race distance
+    is_lap = 'lap' in name_lower
 
     # Category E: Current
     is_current = any(x in name_lower for x in ['current', 'curr', 'amp'])
@@ -317,13 +334,31 @@ def _make_signal_value(signal: cantools.db.Signal, t: float) -> float:
             max_val = enc_max
             val = max_val - (max_val - min_val) * 0.15 * (0.5 + 0.5 * math.sin(t * 0.05))
 
-    elif is_temp:
-        # Temperature rises slowly with speed/RPM
-        min_val = max(20.0, enc_min)
-        max_val = min(110.0, enc_max)
+    elif is_temp_batt or is_temp_inv or is_temp_motor or is_temp_other:
+        # Temperature rises slowly with speed/RPM. Battery, inverter and motor
+        # each run at a different realistic band.
+        if is_temp_batt:
+            temp_min, temp_max = 30.0, 45.0
+        elif is_temp_inv:
+            temp_min, temp_max = 35.0, 55.0
+        elif is_temp_motor:
+            temp_min, temp_max = 40.0, 70.0
+        else:
+            temp_min, temp_max = 30.0, 45.0
+        min_val = max(temp_min, enc_min)
+        max_val = min(temp_max, enc_max)
         if max_val <= min_val:
             min_val, max_val = enc_min, enc_max
         val = min_val + (max_val - min_val) * (0.35 + 0.45 * speed_factor + 0.1 * math.sin(t * 0.02))
+
+    elif is_lap:
+        # Lap counter — cycles 1 through 4, incrementing once per lap (40s)
+        lap_min = max(1.0, enc_min)
+        lap_max = min(4.0, enc_max)
+        if lap_max <= lap_min:
+            lap_min, lap_max = enc_min, enc_max
+        num_laps = int(lap_max - lap_min) + 1
+        val = lap_min + (int(t // 40.0) % num_laps)
 
     elif is_current:
         # Current is positive and correlates with accelerator pedal
@@ -392,6 +427,14 @@ class CanSimulatorNode(Node):
         self.declare_parameter('dbc_path', '')
         self.declare_parameter('publish_hz', 10.0)
         self.declare_parameter('message_ids', rclpy.parameter.Parameter.Type.INTEGER_ARRAY)
+        # Manual override for Mission_select (see test_data_ros2.sh) — raw
+        # 3-bit value, 0-7, no DBC-defined labels. Change live with:
+        #   ros2 param set /can_simulator mission_select_value <0-7>
+        self.declare_parameter('mission_select_value', 0.0)
+        # Manual override for AS_MISSION — the dashboard falls back to this
+        # signal when Mission_select is 0. Change live with:
+        #   ros2 param set /can_simulator as_mission_value <0-7>
+        self.declare_parameter('as_mission_value', 0.0)
 
         iface = self.get_parameter('can_interface').value
         dbc_path = self.get_parameter('dbc_path').value
@@ -507,6 +550,12 @@ class CanSimulatorNode(Node):
                     valid_list = mux_valid_ids[sig.name]
                     idx = int(self._t * 0.5) % len(valid_list)
                     signals[sig.name] = float(valid_list[idx])
+                elif sig.name == 'Mission_select':
+                    mission_val = self.get_parameter('mission_select_value').value
+                    signals[sig.name] = _make_signal_value(sig, self._t, mission_override=mission_val)
+                elif sig.name == 'AS_MISSION':
+                    as_mission_val = self.get_parameter('as_mission_value').value
+                    signals[sig.name] = _make_signal_value(sig, self._t, mission_override=as_mission_val)
                 else:
                     signals[sig.name] = _make_signal_value(sig, self._t)
 
