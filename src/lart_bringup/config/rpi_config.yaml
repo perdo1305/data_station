@@ -96,4 +96,4 @@ bag_recorder:
     record_regex: /can/dbc/.*
     bag_dir: "~/bags"            # session folders precharge_YYYYMMDD_HHMMSS
     stop_grace_s: 30.0           # keep recording this long after request=0
-    split_duration_s: 60         # new bag chunk every 60 s
+    split_duration_s: 30         # new bag chunk every 30 s
