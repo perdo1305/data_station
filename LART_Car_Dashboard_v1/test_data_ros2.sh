@@ -4,11 +4,31 @@
 
 set -e
 
+export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-42}"
+
 TOPIC_PREFIX="/vehicle"
 SCREEN_TOPIC="/dashboard/set_screen"
 SPEED_VALUES=(10 20 30 40 50 60 70 80 90 100)
 SEND_DELAY_NORMAL=0
 SEND_DELAY_FAST=0
+
+BAG_DIR="${BAG_DIR:-$HOME/bags}"
+BAG_RECORD_REGEX="${BAG_RECORD_REGEX:-/can/dbc/.*}"
+CAN_SIM_PID=""
+BAG_RECORD_PID=""
+
+# Stop any background CAN simulator / bag record process we started
+cleanup_background() {
+    if [ -n "$CAN_SIM_PID" ] && kill -0 "$CAN_SIM_PID" 2>/dev/null; then
+        echo "Stopping CAN simulator (PID $CAN_SIM_PID)..."
+        kill "$CAN_SIM_PID" 2>/dev/null
+    fi
+    if [ -n "$BAG_RECORD_PID" ] && kill -0 "$BAG_RECORD_PID" 2>/dev/null; then
+        echo "Stopping bag record (PID $BAG_RECORD_PID)..."
+        kill -INT "$BAG_RECORD_PID" 2>/dev/null
+    fi
+}
+trap cleanup_background EXIT
 
 echo "╔════════════════════════════════════════════════════════════╗"
 echo "║  LART Dashboard - ROS 2 Test Data Generator (Local)        ║"
@@ -122,6 +142,10 @@ show_menu() {
     echo "7) Custom speed"
     echo "8) Change screen (ROS topic)"
     echo "9) Help"
+    echo "a) Start/Stop CAN simulator (dbc_sim.launch.py)"
+    echo "b) Start/Stop bag record"
+    echo "c) Set Mission_select (autonomous mission select)"
+    echo "d) Set AS_MISSION (mission fallback signal)"
     echo "0) Exit"
     echo ""
 }
@@ -182,6 +206,74 @@ test_custom() {
     
     publish_test_data "$speed"
     echo "✓ Custom speed published"
+}
+
+toggle_can_sim() {
+    if [ -n "$CAN_SIM_PID" ] && kill -0 "$CAN_SIM_PID" 2>/dev/null; then
+        echo "Stopping CAN simulator (PID $CAN_SIM_PID)..."
+        kill "$CAN_SIM_PID" 2>/dev/null
+        wait "$CAN_SIM_PID" 2>/dev/null
+        CAN_SIM_PID=""
+        echo "✓ CAN simulator stopped"
+        return
+    fi
+
+    echo "Starting CAN simulator (dbc_sim.launch.py)..."
+    ros2 launch lart_bringup dbc_sim.launch.py &
+    CAN_SIM_PID=$!
+    echo "✓ CAN simulator started (PID $CAN_SIM_PID)"
+}
+
+toggle_bag_record() {
+    if [ -n "$BAG_RECORD_PID" ] && kill -0 "$BAG_RECORD_PID" 2>/dev/null; then
+        echo "Stopping bag record (PID $BAG_RECORD_PID)..."
+        kill -INT "$BAG_RECORD_PID" 2>/dev/null
+        wait "$BAG_RECORD_PID" 2>/dev/null
+        BAG_RECORD_PID=""
+        echo "✓ Bag record stopped"
+        return
+    fi
+
+    mkdir -p "$BAG_DIR"
+    local stamp
+    stamp="$(date '+%Y-%m-%dT%H-%M-%S')"
+    local out="$BAG_DIR/datastation_$stamp"
+    echo "Starting bag record → $out (topics matching: $BAG_RECORD_REGEX)..."
+    ros2 bag record -o "$out" --regex "$BAG_RECORD_REGEX" &
+    BAG_RECORD_PID=$!
+    echo "✓ Bag record started (PID $BAG_RECORD_PID)"
+}
+
+set_mission_select() {
+    read -p "Select Mission_select raw value [0-7]: " mission
+
+    if ! [[ "$mission" =~ ^[0-7]$ ]]; then
+        echo "✗ Invalid value. Please enter a number between 0 and 7."
+        return 1
+    fi
+
+    if ! ros2 param set /can_simulator mission_select_value "$mission.0"; then
+        echo "✗ Failed to set mission_select_value (is the CAN simulator running? option 'a')"
+        return 1
+    fi
+    echo "✓ Mission_select set to $mission"
+}
+
+set_as_mission() {
+    # Dashboard's mission display falls back to AS_MISSION when
+    # Mission_select is 0, so this needs setting too.
+    read -p "Select AS_MISSION raw value [0-7]: " mission
+
+    if ! [[ "$mission" =~ ^[0-7]$ ]]; then
+        echo "✗ Invalid value. Please enter a number between 0 and 7."
+        return 1
+    fi
+
+    if ! ros2 param set /can_simulator as_mission_value "$mission.0"; then
+        echo "✗ Failed to set as_mission_value (is the CAN simulator running? option 'a')"
+        return 1
+    fi
+    echo "✓ AS_MISSION set to $mission"
 }
 
 publish_screen() {
@@ -257,6 +349,11 @@ Test Scenarios:
   7. Custom    - Publish a single custom speed
   8. Screen    - Change dashboard screen via ROS topic
                  0=Driver View, 1=Autonomous, 2-6=Debug 1-5, 7-11=Debug Autonomous 1-5
+  c. Mission_select - Set the CAN simulator's Mission_select value (0-7) via
+                  ros2 param set /can_simulator mission_select_value
+  d. AS_MISSION - Set the CAN simulator's AS_MISSION value (0-7) via
+                  ros2 param set /can_simulator as_mission_value
+                  (dashboard falls back to this when Mission_select is 0)
 
 Prerequisites:
   - ROS 2 Jazzy must be installed and sourced.
@@ -285,8 +382,8 @@ EOF
 while true; do
     echo ""
     show_menu
-    read -p "Select option [0-9]: " choice
-    
+    read -p "Select option [0-9/a/b/c/d]: " choice
+
     case $choice in
         1) test_idle; echo ""; read -p "Press Enter to continue..." ;;
         2) test_city; echo ""; read -p "Press Enter to continue..." ;;
@@ -297,12 +394,16 @@ while true; do
         7) test_custom; echo ""; read -p "Press Enter to continue..." ;;
         8) show_screen_menu ;;
         9) show_help; echo ""; read -p "Press Enter to continue..." ;;
-        0) 
+        a|A) toggle_can_sim; echo ""; read -p "Press Enter to continue..." ;;
+        b|B) toggle_bag_record; echo ""; read -p "Press Enter to continue..." ;;
+        c|C) set_mission_select; echo ""; read -p "Press Enter to continue..." ;;
+        d|D) set_as_mission; echo ""; read -p "Press Enter to continue..." ;;
+        0)
             echo "Goodbye!"
             exit 0
             ;;
         *)
-            echo "✗ Invalid option. Please select 0-9."
+            echo "✗ Invalid option. Please select 0-9, a, b, c, or d."
             echo ""
             read -p "Press Enter to continue..."
             ;;

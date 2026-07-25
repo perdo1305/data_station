@@ -211,7 +211,9 @@ LART_WEAK int ros2subscriber_init(void) {
     // Per-signal DBC telemetry now arrives via the aggregated per-message
     // topics (e.g. "/can/dbc/aqt2") set up below, not the old split
     // per-signal topics.
+#if LART_HAVE_LART_MSGS
     init_dbc_api_subscribers(g_node, g_subs);
+#endif
 
     // Mission_select is still published on its own legacy per-signal topic
     // rather than as part of the aggregated "/can/dbc/acu" message.

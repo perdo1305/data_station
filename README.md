@@ -10,15 +10,15 @@ Formula Student dashboard workspace for Raspberry Pi 5 + dual CAN (Waveshare 2-C
 - `lart_msgs`: custom ROS 2 messages (`CanFrame`, `ButtonEvent`, `EncoderDelta`, `DashboardState`).
 - `lart_bringup/can_bridge.py`: real car CAN reader (`can0/can1`) and ROS publisher.
 - `sim/mock_can.py`: simulated vehicle values for home testing.
-- `dashboard_ui`: pygame dashboard (old-style MVP interface).
+- `LART_Car_Dashboard_v1/src/ui`: LVGL C++ dashboard interface (production `ui_runner` application).
 - `input_handler`: GPIO buttons + encoders (`sim_mode` skips hardware).
 - `led_controller`: WS2812 RPM bar (safe no-op on machines without NeoPixel libs).
 
 ## Data flow
 
 - CAN CH1/CH2 -> `can_bridge` (car) or `mock_can` (home).
-- Topics published: `/can/frames`, `/vehicle/rpm`, `/vehicle/dashboard_state`.
-- `dashboard_ui` consumes dashboard state + inputs and renders UI.
+- Topics published: `/can/frames`, `/vehicle/rpm`, `/vehicle/dashboard_state` and dynamic `/can/dbc/*` topics.
+- `ui_runner` (LVGL dashboard) consumes the CAN topics and state topics to render the cockpit UI.
 - `led_controller` consumes RPM and drives LED strip.
 - `input_handler` publishes `/input/buttons` and `/input/encoders`.
 

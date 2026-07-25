@@ -24,5 +24,4 @@ gpiod>=2.0
 adafruit-circuitpython-neopixel>=6.0
 adafruit-blinka>=8.0
 
-# Dashboard display (required on any machine running the UI)
-pygame>=2.5
+

@@ -1546,50 +1546,50 @@ void tick_screen_debug_inverter_2() {
     if (!table) return;
 
     // Header
-    set_cell(table, 0, 0, "INVERTER DTI INV1 (2/5)", 0x00BFFF);
+    set_cell(table, 0, 0, "INVERTER DTI INV2 (2/5)", 0x00BFFF);
     lv_table_add_cell_ctrl(table, 0, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
     lv_table_add_cell_ctrl(table, 0, 1, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
     lv_table_add_cell_ctrl(table, 0, 2, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
 
     // Row 1
     set_cell(table, 1, 0, "ERPM:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%-8.0f", dbc_api.inv1_erpm_duty_voltage.inv1_actual_erpm);
+    set_cell_fmt(table, 1, 1, 0xFFFFFF, "%-8.0f", dbc_api.inv2_erpm_duty_voltage.inv2_actual_erpm);
     set_cell(table, 1, 2, "Duty:", 0xFFFFFF);
-    set_cell_fmt(table, 1, 3, 0xFFFFFF, "%5.1f%%", dbc_api.inv1_erpm_duty_voltage.inv1_actual_duty);
+    set_cell_fmt(table, 1, 3, 0xFFFFFF, "%5.1f%%", dbc_api.inv2_erpm_duty_voltage.inv2_actual_duty);
 
     // Row 2
     set_cell(table, 2, 0, "Vin:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%-6.0f V", dbc_api.inv1_erpm_duty_voltage.inv1_actual_inputvoltage);
+    set_cell_fmt(table, 2, 1, 0xFFFFFF, "%-6.0f V", dbc_api.inv2_erpm_duty_voltage.inv2_actual_inputvoltage);
     set_cell(table, 2, 2, "Fault:", 0xFFFFFF);
-    set_cell_fmt(table, 2, 3, (dbc_api.inv1_temperatures.inv1_actual_faultcode == 0) ? 0x00FF00 : 0xFF0000, "%-3.0f", dbc_api.inv1_temperatures.inv1_actual_faultcode);
+    set_cell_fmt(table, 2, 3, (dbc_api.inv2_temperatures.inv2_actual_faultcode == 0) ? 0x00FF00 : 0xFF0000, "%-3.0f", dbc_api.inv2_temperatures.inv2_actual_faultcode);
 
     // Row 3
     set_cell(table, 3, 0, "AC Curr:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%5.1f Apk", dbc_api.inv1_ac_dc_current.inv1_actual_accurrent);
+    set_cell_fmt(table, 3, 1, 0xFFFFFF, "%5.1f Apk", dbc_api.inv2_ac_dc_current.inv2_actual_accurrent);
     set_cell(table, 3, 2, "DC Curr:", 0xFFFFFF);
-    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%5.1f A", dbc_api.inv1_ac_dc_current.inv1_actual_dccurrent);
+    set_cell_fmt(table, 3, 3, 0xFFFFFF, "%5.1f A", dbc_api.inv2_ac_dc_current.inv2_actual_dccurrent);
 
     // Row 4
     set_cell(table, 4, 0, "Ctrl T:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%5.1f C", dbc_api.inv1_temperatures.inv1_actual_tempcontroller);
+    set_cell_fmt(table, 4, 1, 0xFFFFFF, "%5.1f C", dbc_api.inv2_temperatures.inv2_actual_tempcontroller);
     set_cell(table, 4, 2, "Mot T:", 0xFFFFFF);
-    set_cell_fmt(table, 4, 3, 0xFFFFFF, "%5.1f C", dbc_api.inv1_temperatures.inv1_actual_tempmotor);
+    set_cell_fmt(table, 4, 3, 0xFFFFFF, "%5.1f C", dbc_api.inv2_temperatures.inv2_actual_tempmotor);
 
     // Row 5
     set_cell(table, 5, 0, "Throttle:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%3.0f%%", dbc_api.inv1_misc.inv1_actual_throttle);
+    set_cell_fmt(table, 5, 1, 0xFFFFFF, "%3.0f%%", dbc_api.inv2_misc.inv2_actual_throttle);
     set_cell(table, 5, 2, "Brake:", 0xFFFFFF);
-    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%3.0f%%", dbc_api.inv1_misc.inv1_actual_brake);
+    set_cell_fmt(table, 5, 3, 0xFFFFFF, "%3.0f%%", dbc_api.inv2_misc.inv2_actual_brake);
 
     // Row 6
     set_cell(table, 6, 0, "FOC Id:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 1, 0xFFFFFF, "%5.1f Apk", dbc_api.inv1_foc.inv1_actual_foc_id);
+    set_cell_fmt(table, 6, 1, 0xFFFFFF, "%5.1f Apk", dbc_api.inv2_foc.inv2_actual_foc_id);
     set_cell(table, 6, 2, "FOC Iq:", 0xFFFFFF);
-    set_cell_fmt(table, 6, 3, 0xFFFFFF, "%5.1f Apk", dbc_api.inv1_foc.inv1_actual_foc_iq);
+    set_cell_fmt(table, 6, 3, 0xFFFFFF, "%5.1f Apk", dbc_api.inv2_foc.inv2_actual_foc_iq);
 
     // Row 7
     set_cell(table, 7, 0, "DriveEn:", 0xFFFFFF);
-    set_cell(table, 7, 1, (dbc_api.inv1_misc.inv1_drive_enable == 1) ? "ENABLED" : "DISABLED", (dbc_api.inv1_misc.inv1_drive_enable == 1) ? 0x00FF00 : 0x808080);
+    set_cell(table, 7, 1, (dbc_api.inv2_misc.inv2_drive_enable == 1) ? "ENABLED" : "DISABLED", (dbc_api.inv2_misc.inv2_drive_enable == 1) ? 0x00FF00 : 0x808080);
     set_cell(table, 7, 2, "", 0xFFFFFF);
     set_cell(table, 7, 3, "", 0xFFFFFF);
 }

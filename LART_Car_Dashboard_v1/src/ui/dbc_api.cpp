@@ -8,12 +8,12 @@
 DbcApi dbc_api = {};
 
 #if defined(LART_UI_HAVE_RCLCPP) && LART_UI_HAVE_RCLCPP
+#include <mutex>
+std::mutex dbc_api_mutex;
+
 #if defined(LART_HAVE_LART_MSGS) && LART_HAVE_LART_MSGS
 #include <rclcpp/rclcpp.hpp>
-#include <mutex>
 #include <vector>
-
-std::mutex dbc_api_mutex;
 extern void init_dbc_api_subscribers_chunk_0(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs);
 extern void init_dbc_api_subscribers_chunk_1(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs);
 extern void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs);
@@ -202,33 +202,11 @@ extern "C" void ui_update_telemetry_vars(const void *t_ptr) {
     const char *mission_str = ui_get_mission_name(mission_id);
     eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_MISSION, eez::StringValue(mission_str));
 
-    // 11. STATE (String, from ACU AS_STATE) — the autonomous screen state label
-    // renders the flow expression "State"+state, hence the ": " prefix here.
-    const char *as_state_str = ui_get_as_state_name(static_cast<int>(dbc_api.acu.as_state));
-    char state_buf[32];
-    snprintf(state_buf, sizeof(state_buf), "%s%s", as_state_str[0] ? ": " : "", as_state_str);
+    // 11. STATE (String) — ACU_STATE (autonomous_t26.dbc VAL_ 81 ACU_STATE)
+    int as_state_id = static_cast<int>(dbc_api.acu.acu_state);
+    static char state_buf[32];
+    snprintf(state_buf, sizeof(state_buf), ": %s", ui_get_as_state_name(as_state_id));
     eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_STATE, eez::StringValue(state_buf));
-
-    // 12. SCREEN_CHANGER_VAR — auto-switch to the Autonomous screen on the
-    // transition into ACU AS_STATE READY (2). Edge-triggered so it does not
-    // re-force the screen every tick and fight the user navigating away.
-    static bool was_as_ready = false;
-    bool is_as_ready = (dbc_api.acu.as_state == 2.0f);
-    if (is_as_ready && !was_as_ready) {
-        eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_SCREEN_CHANGER_VAR, eez::IntegerValue(2));
-    }
-    was_as_ready = is_as_ready;
-}
-
-extern "C" const char *ui_get_as_state_name(int as_state_id) {
-    switch (as_state_id) {
-        case 1: return "OFF";
-        case 2: return "READY";
-        case 3: return "DRIVING";
-        case 4: return "EMERGENCY";
-        case 5: return "FINISH";
-        default: return "";
-    }
 }
 
 extern "C" const char *ui_get_mission_str() {
@@ -245,6 +223,22 @@ extern "C" const char *ui_get_mission_name(int mission_id) {
         case 5: return "INSPECTION";
         case 6: return "AUTOCROSS";
         default: return "MANUAL";
+    }
+}
+
+extern "C" const char *ui_get_as_state_name(int as_state_id) {
+    switch (as_state_id) {
+        case 0: return "INIT";
+        case 1: return "MISSION SELECT";
+        case 2: return "JETSON WAITING";
+        case 3: return "INIT SEQUENCE";
+        case 4: return "READY";
+        case 5: return "DRIVING";
+        case 6: return "EBS ERROR";
+        case 7: return "EMERGENCY";
+        case 8: return "FINISHED";
+        case 9: return "MANUAL";
+        default: return "UNKNOWN";
     }
 }
 
