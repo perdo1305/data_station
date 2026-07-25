@@ -7,8 +7,18 @@ Watches the precharge request signal and records all DBC-decoded CAN topics
   precharge_request < 0.5        → keep recording for stop_grace_s, then finalize
   request back to 1 within grace → same session continues
 
-Bags split every split_duration_s (rosbag2 -d). Raw frames (/can/frames) are
-never recorded — the regex only matches /can/dbc/*.
+Each session records into a single continuous mcap file (no splitting)
+unless split_duration_s is set > 0. Splitting is avoided by default: a
+session killed non-gracefully (power loss, hard kill) only loses its last
+few messages, instead of corrupting a whole chunk that metadata.yaml (which
+rosbag2 only writes once, at clean shutdown) then points to — which is what
+breaks timestamp continuity when multiple bags are imported into Foxglove
+together. Raw frames (/can/frames) are never recorded — the regex only
+matches /can/dbc/*.
+
+On startup, any existing session folder under bag_dir that is missing
+metadata.yaml (left behind by an unclean shutdown of a previous run) is
+repaired in place via `ros2 bag reindex` so it stays readable.
 
 Config (rpi_config.yaml → bag_recorder):
   trigger_topic, record_regex, bag_dir, stop_grace_s, split_duration_s
@@ -42,7 +52,7 @@ class BagRecorderNode(Node):
         self.declare_parameter('record_regex', '/can/dbc/.*')
         self.declare_parameter('bag_dir', '~/bags')
         self.declare_parameter('stop_grace_s', 30.0)
-        self.declare_parameter('split_duration_s', 60)
+        self.declare_parameter('split_duration_s', 0)
 
         self._trigger_topic = self.get_parameter('trigger_topic').value
         self._record_regex = self.get_parameter('record_regex').value
@@ -52,6 +62,8 @@ class BagRecorderNode(Node):
 
         self._proc: subprocess.Popen | None = None
         self._grace_timer = None
+
+        self._repair_incomplete_bags()
 
         self._sm = TriggerStateMachine(
             start_recording=self._start_recording,
@@ -65,11 +77,35 @@ class BagRecorderNode(Node):
         )
         self.create_timer(2.0, self._check_recorder_alive)
 
+        split_desc = f'{self._split_s}s' if self._split_s > 0 else 'off (single file)'
         self.get_logger().info(
             f'bag_recorder ready — trigger={self._trigger_topic}, '
             f'regex={self._record_regex}, out={self._bag_dir}, '
-            f'grace={self._stop_grace_s:.0f}s, split={self._split_s}s'
+            f'grace={self._stop_grace_s:.0f}s, split={split_desc}'
         )
+
+    def _repair_incomplete_bags(self) -> None:
+        """Reindex any past session left without metadata.yaml by an unclean shutdown."""
+        if not self._bag_dir.is_dir():
+            return
+        for session in sorted(self._bag_dir.iterdir()):
+            if not session.is_dir() or (session / 'metadata.yaml').exists():
+                continue
+            has_data = any(session.glob('*.mcap')) or any(session.glob('*.db3'))
+            if not has_data:
+                continue
+            self.get_logger().warn(
+                f'{session.name} is missing metadata.yaml (unclean shutdown) — reindexing.'
+            )
+            try:
+                subprocess.run(
+                    ['ros2', 'bag', 'reindex', str(session)],
+                    check=True, capture_output=True, text=True,
+                )
+                self.get_logger().info(f'Repaired {session.name}.')
+            except (subprocess.CalledProcessError, OSError) as exc:
+                detail = exc.stderr if isinstance(exc, subprocess.CalledProcessError) else exc
+                self.get_logger().error(f'Failed to reindex {session.name}: {detail}')
 
     # ── state machine callbacks ────────────────────────────────────────────
 
@@ -83,10 +119,11 @@ class BagRecorderNode(Node):
         cmd = [
             'ros2', 'bag', 'record',
             '-e', self._record_regex,
-            '-d', str(self._split_s),
             '-o', str(out),
             '--disable-keyboard-controls',
         ]
+        if self._split_s > 0:
+            cmd += ['-d', str(self._split_s)]
         try:
             self._bag_dir.mkdir(parents=True, exist_ok=True)
             self._proc = subprocess.Popen(cmd)
