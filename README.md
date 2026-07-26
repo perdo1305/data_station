@@ -24,6 +24,21 @@ Formula Student dashboard workspace for Raspberry Pi 5 + dual CAN (Waveshare 2-C
 
 ## Build
 
+Compiled output (the ROS2 workspace and the `ui_runner` dashboard binary) is
+built by GitHub Actions on every push to `master` and published to the
+`latest-arm64` release — the Pi pulls it instead of compiling locally:
+
+```bash
+cd ~/GIT/lart_dashboard_ws
+git pull
+pip install -r requirements.txt --break-system-packages
+./scripts/pull_arm64_build.sh
+source install/setup.bash
+```
+
+To build locally instead (e.g. while developing on a non-arm64 machine, or if
+CI is unavailable), use the original workflow:
+
 ```bash
 cd ~/GIT/lart_dashboard_ws
 source ~/ros2_jazzy/install/local_setup.bash
