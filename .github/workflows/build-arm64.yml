@@ -53,7 +53,7 @@ jobs:
           source /opt/ros/jazzy/setup.bash
           source install/setup.bash
           cmake -S LART_Car_Dashboard_v1/src/ui -B LART_Car_Dashboard_v1/build/ui-build -DCMAKE_BUILD_TYPE=Release
-          cmake --build LART_Car_Dashboard_v1/build/ui-build --parallel
+          cmake --build LART_Car_Dashboard_v1/build/ui-build --parallel 2
 
       - name: Package artifact
         run: tar czf lart-dashboard-arm64.tar.gz install LART_Car_Dashboard_v1/build/ui-build
