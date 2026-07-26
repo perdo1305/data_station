@@ -28,6 +28,13 @@ Compiled output (the ROS2 workspace and the `ui_runner` dashboard binary) is
 built by GitHub Actions on every push to `master` and published to the
 `latest-arm64` release — the Pi pulls it instead of compiling locally:
 
+**One-time prerequisite** (run once on a fresh/reimaged Pi):
+```bash
+sudo apt install libsdl2-2.0-0
+```
+This installs the SDL2 runtime library needed by the `ui_runner` binary.
+
+Then pull and run the build:
 ```bash
 cd ~/GIT/lart_dashboard_ws
 git pull

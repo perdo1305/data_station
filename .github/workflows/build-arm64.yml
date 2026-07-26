@@ -7,6 +7,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: build-arm64
+  cancel-in-progress: true
+
 jobs:
   build-arm64:
     runs-on: ubuntu-24.04-arm
@@ -48,7 +52,7 @@ jobs:
         run: |
           source /opt/ros/jazzy/setup.bash
           source install/setup.bash
-          cmake -S LART_Car_Dashboard_v1/src/ui -B LART_Car_Dashboard_v1/build/ui-build
+          cmake -S LART_Car_Dashboard_v1/src/ui -B LART_Car_Dashboard_v1/build/ui-build -DCMAKE_BUILD_TYPE=Release
           cmake --build LART_Car_Dashboard_v1/build/ui-build --parallel
 
       - name: Package artifact
