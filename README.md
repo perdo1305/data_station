@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="imgs/LART_LogoBranco.png" alt="LART logo" width="360">
+  <img src="imgs/LART_LogoBranco.png" alt="LART logo" width="600">
 </p>
 
 # LART DataStation w/ ROS2
