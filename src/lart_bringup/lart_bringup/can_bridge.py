@@ -1,10 +1,10 @@
 """CAN-to-ROS 2 bridge — with optional DBC-based dynamic decoding.
 
 Reads from one CAN bus via python-can (SocketCAN) and publishes:
-  /can/frames                        (lart_msgs/CanFrame)  — every raw frame
-  /vehicle/rpm                       (std_msgs/Float32)    — legacy RPM signal
-  /can/dbc/<msg_name>/<signal_name>  (std_msgs/Float32)    — all DBC signals
-                                                             (only when dbc_path is set)
+  /can/frames       (lart_msgs/CanFrame)     — every raw frame
+  /can/dbc/<msg_name>  (per-message custom msg from lart_msgs, one field
+                        per DBC signal) — one publisher per DBC message
+                        (only when dbc_path is set)
 
 Legacy RPM config (rpi_config.yaml → can_bridge):
   rpm_can_id       — arbitration ID of the ECU RPM message (decimal)
