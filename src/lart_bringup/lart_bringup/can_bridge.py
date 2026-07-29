@@ -172,7 +172,8 @@ class CanBridgeNode(Node):
                 'name': msg.name,
                 'class': msg_class,
                 'pub': pub,
-                'signals': {sig.name: _ros_name(sig.name) for sig in msg.signals}
+                'signals': {sig.name: _ros_name(sig.name) for sig in msg.signals},
+                'instance': msg_class(),
             }
             total_signals += len(msg.signals)
 
@@ -226,7 +227,7 @@ class CanBridgeNode(Node):
             return
 
         pub_info = self._dbc_pubs[msg.arbitration_id]
-        out = pub_info['class']()
+        out = pub_info['instance']
         for sig_name, value in decoded.items():
             sig_slug = pub_info['signals'].get(sig_name)
             if sig_slug is not None:
