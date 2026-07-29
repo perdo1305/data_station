@@ -1,10 +1,10 @@
 """CAN-to-ROS 2 bridge — with optional DBC-based dynamic decoding.
 
 Reads from one CAN bus via python-can (SocketCAN) and publishes:
-  /can/frames                        (lart_msgs/CanFrame)  — every raw frame
-  /vehicle/rpm                       (std_msgs/Float32)    — legacy RPM signal
-  /can/dbc/<msg_name>/<signal_name>  (std_msgs/Float32)    — all DBC signals
-                                                             (only when dbc_path is set)
+  /can/frames       (lart_msgs/CanFrame)     — every raw frame
+  /can/dbc/<msg_name>  (per-message custom msg from lart_msgs, one field
+                        per DBC signal) — one publisher per DBC message
+                        (only when dbc_path is set)
 
 Legacy RPM config (rpi_config.yaml → can_bridge):
   rpm_can_id       — arbitration ID of the ECU RPM message (decimal)
@@ -89,6 +89,18 @@ class CanBridgeNode(Node):
             self.get_logger().error(f'Cannot open CAN interface "{iface}": {exc}')
             raise
 
+        # Restrict RX to IDs we actually care about (RPM ID + every DBC message
+        # ID) so the kernel/hardware drops everything else instead of us
+        # decoding-and-discarding it in Python at bus rate.
+        filter_ids = set(self._dbc_pubs.keys())
+        filter_ids.add(self._rpm_id)
+        try:
+            self._bus.set_filters([
+                {'can_id': fid, 'can_mask': 0x7FF, 'extended': False} for fid in filter_ids
+            ])
+        except Exception as exc:
+            self.get_logger().warn(f'Failed to set CAN filters, receiving all IDs: {exc}')
+
         self._notifier = can.Notifier(self._bus, [self._on_message])
         self.get_logger().info(
             f'CAN bridge running on {iface}  '
@@ -143,20 +155,39 @@ class CanBridgeNode(Node):
         for msg in self._db.messages:
             if not msg.signals:
                 continue
+
+            if msg.frame_id in self._dbc_pubs:
+                prior_name = self._dbc_pubs[msg.frame_id]['name']
+                self.get_logger().error(
+                    f'Arbitration ID 0x{msg.frame_id:03X} is used by both '
+                    f'"{prior_name}" and "{msg.name}" in the loaded DBC file(s) — '
+                    f'keeping "{prior_name}", skipping "{msg.name}".'
+                )
+                continue
+
             msg_slug = _ros_name(msg.name)
             msg_class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
             try:
                 msg_class = getattr(msg_module, msg_class_name)
-                topic = f'/can/dbc/{msg_slug}'
-                pub = self.create_publisher(msg_class, topic, _BEST_EFFORT)
-                self._dbc_pubs[msg.frame_id] = {
-                    'class': msg_class,
-                    'pub': pub,
-                    'signals': {sig.name: _ros_name(sig.name) for sig in msg.signals}
-                }
-                total_signals += len(msg.signals)
             except AttributeError:
                 self.get_logger().error(f"Message class {msg_class_name} not found in lart_msgs.msg!")
+                continue
+
+            topic = f'/can/dbc/{msg_slug}'
+            try:
+                pub = self.create_publisher(msg_class, topic, _BEST_EFFORT)
+            except Exception as exc:
+                self.get_logger().error(f'Failed to create publisher for "{msg.name}" on "{topic}": {exc}')
+                continue
+
+            self._dbc_pubs[msg.frame_id] = {
+                'name': msg.name,
+                'class': msg_class,
+                'pub': pub,
+                'signals': {sig.name: _ros_name(sig.name) for sig in msg.signals},
+                'instance': msg_class(),
+            }
+            total_signals += len(msg.signals)
 
         self.get_logger().info(
             f'DBC loaded from: {dbc_path}\n'
@@ -182,7 +213,7 @@ class CanBridgeNode(Node):
         # ── Legacy RPM decode ──────────────────────────────────────────────
         if msg.arbitration_id == self._rpm_id:
             end = self._rpm_start + self._rpm_len
-            if end <= msg.dlc:
+            if end <= len(msg.data):
                 raw = int.from_bytes(
                     msg.data[self._rpm_start:end], byteorder='big', signed=False
                 )
@@ -208,7 +239,7 @@ class CanBridgeNode(Node):
             return
 
         pub_info = self._dbc_pubs[msg.arbitration_id]
-        out = pub_info['class']()
+        out = pub_info['instance']
         for sig_name, value in decoded.items():
             sig_slug = pub_info['signals'].get(sig_name)
             if sig_slug is not None:
@@ -218,20 +249,24 @@ class CanBridgeNode(Node):
     # ──────────────────────────────────────────────────────────────────────
 
     def destroy_node(self):
-        self._notifier.stop()
-        self._bus.shutdown()
+        if hasattr(self, '_notifier'):
+            self._notifier.stop()
+        if hasattr(self, '_bus'):
+            self._bus.shutdown()
         super().destroy_node()
 
 
 def main(args=None):
     rclpy.init(args=args)
-    node = CanBridgeNode()
+    node = None
     try:
+        node = CanBridgeNode()
         rclpy.spin(node)
     except KeyboardInterrupt:
         pass
     finally:
-        node.destroy_node()
+        if node is not None:
+            node.destroy_node()
         rclpy.try_shutdown()
 
 

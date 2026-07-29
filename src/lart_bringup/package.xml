@@ -11,8 +11,10 @@
   <exec_depend>rclpy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>lart_msgs</exec_depend>
+  <exec_depend>python3-can</exec_depend>
 
-  <!-- python3-can installed via pip / apt -->
+  <!-- cantools has no rosdep/apt key on Ubuntu — install manually via pip
+       (see the "pip install cantools" hint logged by can_bridge.py) -->
 
   <export>
     <build_type>ament_python</build_type>

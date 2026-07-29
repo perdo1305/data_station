@@ -11,10 +11,13 @@ can_bridge_can0:
     rpm_length_bytes: 2          # number of bytes (big-endian unsigned)
     rpm_scale: 1.0               # raw_value * scale + offset = RPM
     rpm_offset: 0.0
-    # DBC-based dynamic decoding (optional).
-    # Set to the absolute path of a .dbc file to enable /can/dbc/* topics.
-    # Leave empty for legacy RPM-only mode (no cantools dependency needed).
-    dbc_path: ""    # e.g. /home/user/lart_ws/dbc_signals/autonomous_t26.dbc
+    # DBC-based dynamic decoding.
+    # can0 carries the data bus — load ONLY data_t26.dbc here. Do not point
+    # this at the dbc_signals/ directory: powertrain_t26.dbc shares arbitration
+    # IDs 0x444/0x445/0x750 with different signal layouts, and loading both
+    # DBCs into one bridge silently decodes data-bus frames with the wrong
+    # (powertrain) layout.
+    dbc_path: "/home/lart2026/GIT/data_station/dbc_signals/data_t26.dbc"
 
 can_bridge_can1:
   ros__parameters:
@@ -24,10 +27,10 @@ can_bridge_can1:
     rpm_length_bytes: 2          # number of bytes (big-endian unsigned)
     rpm_scale: 1.0               # raw_value * scale + offset = RPM
     rpm_offset: 0.0
-    # DBC-based dynamic decoding (optional).
-    # Set to the absolute path of a .dbc file to enable /can/dbc/* topics.
-    # Leave empty for legacy RPM-only mode (no cantools dependency needed).
-    dbc_path: ""    # e.g. /home/user/lart_ws/dbc_signals/autonomous_t26.dbc
+    # DBC-based dynamic decoding.
+    # can1 carries the powertrain bus — load ONLY powertrain_t26.dbc here.
+    # See can_bridge_can0 comment: never load both DBCs into the same bridge.
+    dbc_path: "/home/lart2026/GIT/data_station/dbc_signals/powertrain_t26.dbc"
 
 dashboard_state_bridge:
   ros__parameters:
