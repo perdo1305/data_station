@@ -89,6 +89,18 @@ class CanBridgeNode(Node):
             self.get_logger().error(f'Cannot open CAN interface "{iface}": {exc}')
             raise
 
+        # Restrict RX to IDs we actually care about (RPM ID + every DBC message
+        # ID) so the kernel/hardware drops everything else instead of us
+        # decoding-and-discarding it in Python at bus rate.
+        filter_ids = set(self._dbc_pubs.keys())
+        filter_ids.add(self._rpm_id)
+        try:
+            self._bus.set_filters([
+                {'can_id': fid, 'can_mask': 0x7FF, 'extended': False} for fid in filter_ids
+            ])
+        except Exception as exc:
+            self.get_logger().warn(f'Failed to set CAN filters, receiving all IDs: {exc}')
+
         self._notifier = can.Notifier(self._bus, [self._on_message])
         self.get_logger().info(
             f'CAN bridge running on {iface}  '
