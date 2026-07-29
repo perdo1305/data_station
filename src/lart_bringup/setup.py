@@ -13,6 +13,7 @@ setup(
         ('share/' + package_name, ['package.xml']),
         (os.path.join('share', package_name, 'launch'), glob('launch/*.py')),
         (os.path.join('share', package_name, 'config'), glob('config/*.yaml')),
+        (os.path.join('share', package_name, 'dbc_signals'), glob(os.path.join('..', '..', 'dbc_signals', '*.dbc'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
