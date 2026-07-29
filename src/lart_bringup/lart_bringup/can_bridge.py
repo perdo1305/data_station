@@ -249,20 +249,24 @@ class CanBridgeNode(Node):
     # ──────────────────────────────────────────────────────────────────────
 
     def destroy_node(self):
-        self._notifier.stop()
-        self._bus.shutdown()
+        if hasattr(self, '_notifier'):
+            self._notifier.stop()
+        if hasattr(self, '_bus'):
+            self._bus.shutdown()
         super().destroy_node()
 
 
 def main(args=None):
     rclpy.init(args=args)
-    node = CanBridgeNode()
+    node = None
     try:
+        node = CanBridgeNode()
         rclpy.spin(node)
     except KeyboardInterrupt:
         pass
     finally:
-        node.destroy_node()
+        if node is not None:
+            node.destroy_node()
         rclpy.try_shutdown()
 
 
