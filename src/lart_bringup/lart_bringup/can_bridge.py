@@ -143,20 +143,38 @@ class CanBridgeNode(Node):
         for msg in self._db.messages:
             if not msg.signals:
                 continue
+
+            if msg.frame_id in self._dbc_pubs:
+                prior_name = self._dbc_pubs[msg.frame_id]['name']
+                self.get_logger().error(
+                    f'Arbitration ID 0x{msg.frame_id:03X} is used by both '
+                    f'"{prior_name}" and "{msg.name}" in the loaded DBC file(s) — '
+                    f'keeping "{prior_name}", skipping "{msg.name}".'
+                )
+                continue
+
             msg_slug = _ros_name(msg.name)
             msg_class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
             try:
                 msg_class = getattr(msg_module, msg_class_name)
-                topic = f'/can/dbc/{msg_slug}'
-                pub = self.create_publisher(msg_class, topic, _BEST_EFFORT)
-                self._dbc_pubs[msg.frame_id] = {
-                    'class': msg_class,
-                    'pub': pub,
-                    'signals': {sig.name: _ros_name(sig.name) for sig in msg.signals}
-                }
-                total_signals += len(msg.signals)
             except AttributeError:
                 self.get_logger().error(f"Message class {msg_class_name} not found in lart_msgs.msg!")
+                continue
+
+            topic = f'/can/dbc/{msg_slug}'
+            try:
+                pub = self.create_publisher(msg_class, topic, _BEST_EFFORT)
+            except Exception as exc:
+                self.get_logger().error(f'Failed to create publisher for "{msg.name}" on "{topic}": {exc}')
+                continue
+
+            self._dbc_pubs[msg.frame_id] = {
+                'name': msg.name,
+                'class': msg_class,
+                'pub': pub,
+                'signals': {sig.name: _ros_name(sig.name) for sig in msg.signals}
+            }
+            total_signals += len(msg.signals)
 
         self.get_logger().info(
             f'DBC loaded from: {dbc_path}\n'
