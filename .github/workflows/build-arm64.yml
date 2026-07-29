@@ -28,6 +28,12 @@ jobs:
           echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
           sudo apt-get update
 
+      - name: Cache apt archives
+        uses: actions/cache@v4
+        with:
+          path: /var/cache/apt/archives
+          key: apt-arm64-jazzy-${{ hashFiles('.github/workflows/build-arm64.yml') }}
+
       - name: Install ROS2 and build tooling
         run: |
           sudo apt-get install -y \
@@ -43,17 +49,28 @@ jobs:
             pkg-config \
             libsdl2-dev
 
+      - name: Cache colcon build
+        uses: actions/cache@v4
+        with:
+          path: |
+            build
+            install
+            log
+          key: colcon-arm64-${{ hashFiles('src/**/CMakeLists.txt', 'src/**/package.xml', 'src/**/*.cpp', 'src/**/*.hpp', 'src/**/*.h', 'src/**/*.py') }}
+          restore-keys: |
+            colcon-arm64-
+
       - name: Build ROS2 workspace
         run: |
           source /opt/ros/jazzy/setup.bash
-          colcon build
+          colcon build --parallel-workers $(nproc)
 
       - name: Build dashboard UI
         run: |
           source /opt/ros/jazzy/setup.bash
           source install/setup.bash
           cmake -S LART_Car_Dashboard_v1/src/ui -B LART_Car_Dashboard_v1/build/ui-build -DCMAKE_BUILD_TYPE=Release
-          cmake --build LART_Car_Dashboard_v1/build/ui-build --parallel 2
+          cmake --build LART_Car_Dashboard_v1/build/ui-build --parallel $(nproc)
 
       - name: Package artifact
         run: tar czf lart-dashboard-arm64.tar.gz install LART_Car_Dashboard_v1/build/ui-build
