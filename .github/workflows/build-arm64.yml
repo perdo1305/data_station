@@ -48,6 +48,7 @@ jobs:
             cmake \
             pkg-config \
             libsdl2-dev
+          sudo chown -R "$(id -u):$(id -g)" /var/cache/apt/archives
 
       - name: Cache colcon build
         uses: actions/cache@v4
