@@ -200,7 +200,7 @@ class CanBridgeNode(Node):
         # ── Legacy RPM decode ──────────────────────────────────────────────
         if msg.arbitration_id == self._rpm_id:
             end = self._rpm_start + self._rpm_len
-            if end <= msg.dlc:
+            if end <= len(msg.data):
                 raw = int.from_bytes(
                     msg.data[self._rpm_start:end], byteorder='big', signed=False
                 )
