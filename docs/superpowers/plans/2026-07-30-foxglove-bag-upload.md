@@ -505,7 +505,7 @@ def upload_session(client: Client, session_dir: Path) -> bool:
     data = mcap_path.read_bytes()
     try:
         result = client.upload_data(filename=mcap_path.name, data=data, key=session_dir.name)
-    except (requests.exceptions.RequestException, Exception) as exc:  # noqa: BLE001
+    except Exception as exc:  # noqa: BLE001 — one session's upload error must not crash the loop
         print(f"{session_dir.name}: upload error: {exc}", file=sys.stderr)
         return False
 
