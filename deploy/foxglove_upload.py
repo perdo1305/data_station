@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Uploads finalized precharge bag sessions to Foxglove when online.
 
-Run every 5 minutes by foxglove-upload.timer (systemd). Each run:
+Run every 2 minutes by foxglove-upload.timer (systemd). Each run:
   1. Loads FOXGLOVE_API_KEY from deploy/.env (skips if unset).
   2. Checks api.foxglove.dev is reachable (skips if not).
   3. Reads bag_dir from src/lart_bringup/config/rpi_config.yaml — the same
