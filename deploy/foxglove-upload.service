@@ -9,5 +9,7 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
+User=lart2026
+Group=lart2026
 WorkingDirectory=/home/lart2026/GIT/data_station/deploy
 ExecStart=/usr/bin/python3 /home/lart2026/GIT/data_station/deploy/foxglove_upload.py

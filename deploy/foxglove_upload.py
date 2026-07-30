@@ -97,9 +97,9 @@ def upload_session(client: Client, session_dir: Path) -> bool:
         )
         return False
 
-    data = mcap_path.read_bytes()
     try:
-        result = client.upload_data(filename=mcap_path.name, data=data, key=session_dir.name)
+        with mcap_path.open("rb") as f:
+            result = client.upload_data(filename=mcap_path.name, data=f, key=session_dir.name)
     except Exception as exc:  # noqa: BLE001 — one session's upload error must not crash the loop
         print(f"{session_dir.name}: upload error: {exc}", file=sys.stderr)
         return False
@@ -111,7 +111,15 @@ def upload_session(client: Client, session_dir: Path) -> bool:
         )
         return False
 
-    (session_dir / UPLOADED_MARKER).write_text(datetime.now().isoformat() + "\n")
+    try:
+        (session_dir / UPLOADED_MARKER).write_text(datetime.now().isoformat() + "\n")
+    except OSError as exc:
+        print(
+            f"{session_dir.name}: uploaded but failed to write marker: {exc}",
+            file=sys.stderr,
+        )
+        return False
+
     print(f"{session_dir.name}: uploaded.")
     return True
 
@@ -126,7 +134,12 @@ def main() -> int:
         print("Foxglove unreachable — skipping.")
         return 0
 
-    bag_dir = read_bag_dir(RPI_CONFIG_PATH)
+    try:
+        bag_dir = read_bag_dir(RPI_CONFIG_PATH)
+    except (OSError, yaml.YAMLError, KeyError, TypeError) as exc:
+        print(f"Failed to read bag_dir from config: {exc}", file=sys.stderr)
+        return 0
+
     pending = find_pending_sessions(bag_dir)
     if not pending:
         return 0

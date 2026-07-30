@@ -1,5 +1,6 @@
 """Unit tests for deploy/foxglove_upload.py."""
 
+import io
 import socket
 from pathlib import Path
 
@@ -117,7 +118,14 @@ class FakeClient:
         self.calls = []
 
     def upload_data(self, *, filename, data, key):
-        self.calls.append({"filename": filename, "data": data, "key": key})
+        # Read the stream now, like a real HTTP client would while the caller's
+        # `with` block still has the file open, and keep a reusable copy so
+        # assertions made after upload_session's `with` block has closed the
+        # file can still inspect what was sent.
+        content = data.read() if hasattr(data, "read") else data
+        self.calls.append(
+            {"filename": filename, "data": io.BytesIO(content), "key": key}
+        )
         if self._raises:
             raise self._raises
         return self._result
@@ -130,9 +138,11 @@ def test_upload_session_success_writes_marker(tmp_path):
 
     assert fu.upload_session(client, session) is True
     assert (session / fu.UPLOADED_MARKER).exists()
-    assert client.calls == [
-        {"filename": "precharge_1_0.mcap", "data": b"data", "key": "precharge_1"}
-    ]
+    assert len(client.calls) == 1
+    call = client.calls[0]
+    assert call["filename"] == "precharge_1_0.mcap"
+    assert call["key"] == "precharge_1"
+    assert call["data"].read() == b"data"
 
 
 def test_upload_session_http_failure_no_marker(tmp_path):
@@ -150,6 +160,15 @@ def test_upload_session_missing_mcap_no_marker(tmp_path):
 
     assert fu.upload_session(client, session) is False
     assert not client.calls
+    assert not (session / fu.UPLOADED_MARKER).exists()
+
+
+def test_upload_session_raises_no_marker_no_propagation(tmp_path):
+    session = _make_session(tmp_path, "precharge_1")
+    (session / "precharge_1_0.mcap").write_bytes(b"data")
+    client = FakeClient(raises=RuntimeError("boom"))
+
+    assert fu.upload_session(client, session) is False
     assert not (session / fu.UPLOADED_MARKER).exists()
 
 
@@ -189,3 +208,45 @@ def test_main_uploads_pending_sessions(tmp_path, monkeypatch):
     assert fu.main() == 0
     assert (session / fu.UPLOADED_MARKER).exists()
     assert fake_client.calls
+
+
+class SelectiveFailClient(FakeClient):
+    """FakeClient variant that raises only for one specific session key."""
+
+    def __init__(self, fail_key):
+        super().__init__()
+        self._fail_key = fail_key
+
+    def upload_data(self, *, filename, data, key):
+        self.calls.append({"filename": filename, "data": data, "key": key})
+        if key == self._fail_key:
+            raise RuntimeError("boom")
+        return self._result
+
+
+def test_main_continues_after_one_session_upload_raises(tmp_path, monkeypatch):
+    env_path = tmp_path / ".env"
+    env_path.write_text("FOXGLOVE_API_KEY=abc123\n")
+    monkeypatch.setattr(fu, "ENV_PATH", env_path)
+    monkeypatch.setattr(fu, "check_connectivity", lambda: True)
+
+    bag_dir = tmp_path / "bags"
+    bag_dir.mkdir()
+    session1 = _make_session(bag_dir, "precharge_1")
+    (session1 / "precharge_1_0.mcap").write_bytes(b"data")
+    session2 = _make_session(bag_dir, "precharge_2")
+    (session2 / "precharge_2_0.mcap").write_bytes(b"data")
+
+    config_path = tmp_path / "rpi_config.yaml"
+    config_path.write_text(
+        f"bag_recorder:\n  ros__parameters:\n    bag_dir: {bag_dir}\n"
+    )
+    monkeypatch.setattr(fu, "RPI_CONFIG_PATH", config_path)
+
+    fake_client = SelectiveFailClient(fail_key="precharge_1")
+    monkeypatch.setattr(fu, "Client", lambda token: fake_client)
+
+    assert fu.main() == 0
+    assert not (session1 / fu.UPLOADED_MARKER).exists()
+    assert (session2 / fu.UPLOADED_MARKER).exists()
+    assert len(fake_client.calls) == 2
