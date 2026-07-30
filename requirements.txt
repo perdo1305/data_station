@@ -24,4 +24,7 @@ gpiod>=2.0
 adafruit-circuitpython-neopixel>=6.0
 adafruit-blinka>=8.0
 
-
+# Foxglove bag auto-upload (deploy/foxglove_upload.py)
+# Official Foxglove Data Platform client — github.com/foxglove/foxglove-python
+foxglove-client>=0.19.0
+PyYAML>=6.0

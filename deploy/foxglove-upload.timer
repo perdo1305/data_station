@@ -1,0 +1,10 @@
+[Unit]
+Description=Run foxglove-upload.service every 2 minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=2min
+Unit=foxglove-upload.service
+
+[Install]
+WantedBy=timers.target
