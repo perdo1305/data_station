@@ -59,6 +59,35 @@ def check_connectivity(
         return False
 
 
+def read_bag_dir(config_path: Path) -> Path:
+    with config_path.open() as f:
+        config = yaml.safe_load(f)
+    raw = config["bag_recorder"]["ros__parameters"]["bag_dir"]
+    return Path(raw).expanduser()
+
+
+def find_mcap_file(session_dir: Path) -> Optional[Path]:
+    mcaps = sorted(session_dir.glob("*.mcap"))
+    if len(mcaps) != 1:
+        return None
+    return mcaps[0]
+
+
+def find_pending_sessions(bag_dir: Path) -> List[Path]:
+    if not bag_dir.is_dir():
+        return []
+    pending = []
+    for session in sorted(bag_dir.iterdir()):
+        if not session.is_dir():
+            continue
+        if not (session / "metadata.yaml").exists():
+            continue
+        if (session / UPLOADED_MARKER).exists():
+            continue
+        pending.append(session)
+    return pending
+
+
 def main() -> int:
     api_key = load_api_key(ENV_PATH)
     if not api_key:
