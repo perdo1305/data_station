@@ -1,0 +1,13 @@
+# Install on the car (as root):
+#   cp deploy/foxglove-upload.service deploy/foxglove-upload.timer /etc/systemd/system/
+#   systemctl daemon-reload
+#   systemctl enable --now foxglove-upload.timer
+[Unit]
+Description=Upload finalized precharge bags to Foxglove
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/lart2026/GIT/data_station/deploy
+ExecStart=/usr/bin/python3 /home/lart2026/GIT/data_station/deploy/foxglove_upload.py
