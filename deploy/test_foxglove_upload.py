@@ -108,3 +108,84 @@ def test_find_pending_sessions_skips_already_uploaded(tmp_path):
 
 def test_find_pending_sessions_missing_bag_dir(tmp_path):
     assert fu.find_pending_sessions(tmp_path / "does_not_exist") == []
+
+
+class FakeClient:
+    def __init__(self, result=None, raises=None):
+        self._result = result or {"link": "https://x/y", "text": "", "code": 200}
+        self._raises = raises
+        self.calls = []
+
+    def upload_data(self, *, filename, data, key):
+        self.calls.append({"filename": filename, "data": data, "key": key})
+        if self._raises:
+            raise self._raises
+        return self._result
+
+
+def test_upload_session_success_writes_marker(tmp_path):
+    session = _make_session(tmp_path, "precharge_1")
+    (session / "precharge_1_0.mcap").write_bytes(b"data")
+    client = FakeClient(result={"link": "l", "text": "ok", "code": 200})
+
+    assert fu.upload_session(client, session) is True
+    assert (session / fu.UPLOADED_MARKER).exists()
+    assert client.calls == [
+        {"filename": "precharge_1_0.mcap", "data": b"data", "key": "precharge_1"}
+    ]
+
+
+def test_upload_session_http_failure_no_marker(tmp_path):
+    session = _make_session(tmp_path, "precharge_1")
+    (session / "precharge_1_0.mcap").write_bytes(b"data")
+    client = FakeClient(result={"link": "l", "text": "server error", "code": 500})
+
+    assert fu.upload_session(client, session) is False
+    assert not (session / fu.UPLOADED_MARKER).exists()
+
+
+def test_upload_session_missing_mcap_no_marker(tmp_path):
+    session = _make_session(tmp_path, "precharge_1")
+    client = FakeClient()
+
+    assert fu.upload_session(client, session) is False
+    assert not client.calls
+    assert not (session / fu.UPLOADED_MARKER).exists()
+
+
+def test_main_skips_without_api_key(tmp_path, monkeypatch):
+    monkeypatch.setattr(fu, "ENV_PATH", tmp_path / "no.env")
+    assert fu.main() == 0
+
+
+def test_main_skips_when_offline(tmp_path, monkeypatch):
+    env_path = tmp_path / ".env"
+    env_path.write_text("FOXGLOVE_API_KEY=abc123\n")
+    monkeypatch.setattr(fu, "ENV_PATH", env_path)
+    monkeypatch.setattr(fu, "check_connectivity", lambda: False)
+    assert fu.main() == 0
+
+
+def test_main_uploads_pending_sessions(tmp_path, monkeypatch):
+    env_path = tmp_path / ".env"
+    env_path.write_text("FOXGLOVE_API_KEY=abc123\n")
+    monkeypatch.setattr(fu, "ENV_PATH", env_path)
+    monkeypatch.setattr(fu, "check_connectivity", lambda: True)
+
+    bag_dir = tmp_path / "bags"
+    bag_dir.mkdir()
+    session = _make_session(bag_dir, "precharge_1")
+    (session / "precharge_1_0.mcap").write_bytes(b"data")
+
+    config_path = tmp_path / "rpi_config.yaml"
+    config_path.write_text(
+        f"bag_recorder:\n  ros__parameters:\n    bag_dir: {bag_dir}\n"
+    )
+    monkeypatch.setattr(fu, "RPI_CONFIG_PATH", config_path)
+
+    fake_client = FakeClient()
+    monkeypatch.setattr(fu, "Client", lambda token: fake_client)
+
+    assert fu.main() == 0
+    assert (session / fu.UPLOADED_MARKER).exists()
+    assert fake_client.calls

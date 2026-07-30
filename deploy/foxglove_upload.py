@@ -88,6 +88,34 @@ def find_pending_sessions(bag_dir: Path) -> List[Path]:
     return pending
 
 
+def upload_session(client: Client, session_dir: Path) -> bool:
+    mcap_path = find_mcap_file(session_dir)
+    if mcap_path is None:
+        print(
+            f"{session_dir.name}: expected exactly one .mcap file, skipping",
+            file=sys.stderr,
+        )
+        return False
+
+    data = mcap_path.read_bytes()
+    try:
+        result = client.upload_data(filename=mcap_path.name, data=data, key=session_dir.name)
+    except Exception as exc:  # noqa: BLE001 — one session's upload error must not crash the loop
+        print(f"{session_dir.name}: upload error: {exc}", file=sys.stderr)
+        return False
+
+    if not (200 <= result["code"] < 300):
+        print(
+            f"{session_dir.name}: upload failed ({result['code']}): {result['text']}",
+            file=sys.stderr,
+        )
+        return False
+
+    (session_dir / UPLOADED_MARKER).write_text(datetime.now().isoformat() + "\n")
+    print(f"{session_dir.name}: uploaded.")
+    return True
+
+
 def main() -> int:
     api_key = load_api_key(ENV_PATH)
     if not api_key:
@@ -97,6 +125,15 @@ def main() -> int:
     if not check_connectivity():
         print("Foxglove unreachable — skipping.")
         return 0
+
+    bag_dir = read_bag_dir(RPI_CONFIG_PATH)
+    pending = find_pending_sessions(bag_dir)
+    if not pending:
+        return 0
+
+    client = Client(token=api_key)
+    for session in pending:
+        upload_session(client, session)
 
     return 0
 
