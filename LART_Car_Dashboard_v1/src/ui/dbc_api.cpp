@@ -49,6 +49,12 @@ extern "C" const char *ui_get_lv_str() {
     return buf;
 }
 
+extern "C" const char *ui_get_lv_current_str() {
+    static char buf[16];
+    snprintf(buf, sizeof(buf), "%.1f A", dbc_api.icd_result.icd_current);
+    return buf;
+}
+
 extern "C" void ui_set_hv(float hv_value) {
     (void)hv_value;
 }

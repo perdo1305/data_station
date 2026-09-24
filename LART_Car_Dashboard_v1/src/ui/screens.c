@@ -587,7 +587,7 @@ void create_screen_driver_view() {
             // hvBar
             lv_obj_t *obj = lv_bar_create(parent_obj);
             objects.hv_bar = obj;
-            lv_obj_set_pos(obj, 734, 106);
+            lv_obj_set_pos(obj, 734, 80);
             lv_obj_set_size(obj, 53, 314);
             lv_bar_set_range(obj, 0, 100);
             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
@@ -608,7 +608,7 @@ void create_screen_driver_view() {
             // lvBar
             lv_obj_t *obj = lv_bar_create(parent_obj);
             objects.lv_bar = obj;
-            lv_obj_set_pos(obj, 11, 108);
+            lv_obj_set_pos(obj, 11, 80);
             lv_obj_set_size(obj, 53, 314);
             lv_bar_set_range(obj, 20, 28);
             lv_bar_set_mode(obj, LV_BAR_MODE_RANGE);
@@ -629,7 +629,7 @@ void create_screen_driver_view() {
             // hvLabel
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.hv_label = obj;
-            lv_obj_set_pos(obj, 733, 436);
+            lv_obj_set_pos(obj, 733, 405);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             add_style_text(obj);
             lv_label_set_text(obj, "");
@@ -638,21 +638,39 @@ void create_screen_driver_view() {
             // lvLabel
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.lv_label = obj;
-            lv_obj_set_pos(obj, 9, 436);
+            lv_obj_set_pos(obj, 9, 405);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            add_style_text(obj);
+            lv_label_set_text(obj, "");
+        }
+        {
+            // hvCurrentLabel: reserved until the HV current topic is confirmed
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            objects.hv_current_label = obj;
+            lv_obj_set_pos(obj, 733, 433);
+            lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+            add_style_text(obj);
+            lv_label_set_text_static(obj, "--.- A");
+        }
+        {
+            // lvCurrentLabel
+            lv_obj_t *obj = lv_label_create(parent_obj);
+            objects.lv_current_label = obj;
+            lv_obj_set_pos(obj, 9, 433);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             add_style_text(obj);
             lv_label_set_text(obj, "");
         }
         {
             lv_obj_t *obj = lv_label_create(parent_obj);
-            lv_obj_set_pos(obj, 736, 73);
+            lv_obj_set_pos(obj, 736, 52);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             add_style_text(obj);
             lv_label_set_text_static(obj, "SOC");
         }
         {
             lv_obj_t *obj = lv_label_create(parent_obj);
-            lv_obj_set_pos(obj, 22, 75);
+            lv_obj_set_pos(obj, 22, 52);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             add_style_text(obj);
             lv_label_set_text_static(obj, "LV");
@@ -808,6 +826,15 @@ void tick_screen_driver_view() {
         if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.lv_label;
             lv_label_set_text(objects.lv_label, new_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        const char *new_val = ui_get_lv_current_str();
+        const char *cur_val = lv_label_get_text(objects.lv_current_label);
+        if (strcmp(new_val, cur_val) != 0) {
+            tick_value_change_obj = objects.lv_current_label;
+            lv_label_set_text(objects.lv_current_label, new_val);
             tick_value_change_obj = NULL;
         }
     }
