@@ -108,7 +108,7 @@ services:
   # ── CAN Bridge / DBC Simulation stack ──────────────────────────────────────
   # Mounts the data_station workspace (../../data_station relative to this file)
   # and runs can_simulator + can_bridge with autonomous_t26.dbc.
-  # Publishes decoded signals on /can/dbc/<msg>/<signal> topics visible to all
+  # Publishes decoded signals on /can/<msg>/<signal> topics visible to all
   # containers on lart-ros2-network.
   #
   # The data_station path is resolved via ${DATA_STATION_PATH} (default: ../..
@@ -119,9 +119,9 @@ services:
   #   docker compose up can_bridge            # start only the CAN stack
   #   docker compose logs -f can_bridge       # follow logs
   #   docker exec -it lart-can-bridge \
-  #     bash -lc "ros2 topic list | grep /can/dbc"
+  #     bash -lc "ros2 topic list | grep -E '^/(data|pwt|can)/'"
   #   docker exec -it lart-can-bridge \
-  #     bash -lc "ros2 topic echo /can/dbc/acu/ign std_msgs/msg/Float32"
+  #     bash -lc "ros2 topic echo /can/acu/ign std_msgs/msg/Float32"
   can_bridge:
     image: lart-dashboard-ros2
     container_name: lart-can-bridge

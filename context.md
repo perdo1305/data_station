@@ -147,7 +147,7 @@ DBC files are parsed at build time by `generate_dbc_api.py` (uses `cantools`) to
 
 ### Critical Workflow 1: Live CAN → Screen Update
 
-> This is the **real production path** (path A above). `ros2subscriber.cpp` subscribes directly to dozens of individual `/can/dbc/<msg>/<sig>` topics — it does **not** go through `dashboard_state_bridge` or `/vehicle/dashboard_state`; those belong to path B (the separate `lart_bringup` native launch) and aren't started by `autostart_dashboard.sh`. There's a guarded, optional `/vehicle/dashboard_state` subscription in `ros2subscriber.cpp` for interop with path B, but it isn't the primary data source.
+> This is the **real production path** (path A above). `ros2subscriber.cpp` subscribes directly to dozens of individual `/can/<msg>/<sig>` topics — it does **not** go through `dashboard_state_bridge` or `/vehicle/dashboard_state`; those belong to path B (the separate `lart_bringup` native launch) and aren't started by `autostart_dashboard.sh`. There's a guarded, optional `/vehicle/dashboard_state` subscription in `ros2subscriber.cpp` for interop with path B, but it isn't the primary data source.
 
 ```
 CAN HAT (can0/can1)
@@ -158,10 +158,10 @@ can_bridge (C++ ROS 2 node, LART_Car_Dashboard_v1/src/ui/can_bridge.cpp — 2 in
   │  → generated dbc_api.cpp unpacks bytes → publishes on:
   │    /can/frames          (lart_msgs/CanFrame)
   │    /vehicle/rpm         (std_msgs/Float32)
-  │    /can/dbc/<msg>/<sig> (std_msgs/Float32, one topic per signal — dozens of them)
+  │    /can/<msg>/<sig> (std_msgs/Float32, one topic per signal — dozens of them)
   ▼
 ros2subscriber.cpp (C++ ROS 2 subscriber, lives in the ui_runner process)
-  │  Subscribes directly to each /can/dbc/<msg>/<sig> topic (SUB_FLOAT_MAP macro) plus /can/frames
+  │  Subscribes directly to each /can/<msg>/<sig> topic (SUB_FLOAT_MAP macro) plus /can/frames
   │  Runs in a background spin thread
   │  Writes decoded values atomically into g_telemetry (TelemetryData)
   │  and g_latest_speed_kph / g_latest_hv atomic floats
@@ -398,13 +398,13 @@ python3 LART_Car_Dashboard_v1/src/ui/generate_dbc_api.py
 
 ### ROS 2 Topics Reference
 
-> This table covers both paths' topics together. On the **real car (path A)**, `ros2subscriber` (inside `ui_runner`) subscribes directly to `/can/frames` and the individual `/can/dbc/<msg>/<sig>` topics — `dashboard_state_bridge` and `/vehicle/dashboard_state` are **not** part of that flow; they only exist under path B (`lart_bringup` native launch + pygame `dashboard_ui`).
+> This table covers both paths' topics together. On the **real car (path A)**, `ros2subscriber` (inside `ui_runner`) subscribes directly to `/can/frames` and the individual `/can/<msg>/<sig>` topics — `dashboard_state_bridge` and `/vehicle/dashboard_state` are **not** part of that flow; they only exist under path B (`lart_bringup` native launch + pygame `dashboard_ui`).
 
 | Topic | Type | Publisher | Subscriber(s) |
 |-------|------|-----------|---------------|
 | `/can/frames` | `lart_msgs/CanFrame` | `can_bridge` | `ros2subscriber` (path A), debug nodes |
 | `/vehicle/rpm` | `std_msgs/Float32` | `can_bridge` | `dashboard_state_bridge` (path B), `led_controller` |
-| `/can/dbc/<msg>/<sig>` | `std_msgs/Float32` | `can_bridge` | `ros2subscriber` (path A), `dashboard_state_bridge` (path B) |
+| `/can/<msg>/<sig>` | `std_msgs/Float32` | `can_bridge` | `ros2subscriber` (path A), `dashboard_state_bridge` (path B) |
 | `/vehicle/dashboard_state` | `lart_msgs/DashboardState` | `dashboard_state_bridge` (path B only) | `ros2subscriber` (optional interop hook) |
 | `/input/buttons` | `lart_msgs/ButtonEvent` | `input_handler` | UI / future |
 | `/input/encoders` | `lart_msgs/EncoderDelta` | `input_handler` | UI / future |
@@ -414,7 +414,7 @@ python3 LART_Car_Dashboard_v1/src/ui/generate_dbc_api.py
 
 **`src/lart_bringup/config/rpi_config.yaml`** — parameterises the **path B** nodes only (the native `lart_bringup` launch files). The real-car path A processes (`can_bridge`, `ui_runner`) take their config from CLI args in `autostart_dashboard.sh` and defaults baked into `LART_Car_Dashboard_v1/src/ui/`, not this file.
 
-- `can_bridge_can0.*` / `can_bridge_can1.*` — one block per CAN channel; `can_interface` (`can0`/`can1`), `rpm_can_id` (**update to match your ECU's CAN ID**), `dbc_path` (path to a `.dbc` file to enable `/can/dbc/*` topics)
+- `can_bridge_can0.*` / `can_bridge_can1.*` — one block per CAN channel; `can_interface` (`can0`/`can1`), `rpm_can_id` (**update to match your ECU's CAN ID**), `dbc_path` (path to a `.dbc` file to enable `/can/*` topics)
 - `dashboard_state_bridge.*_topic` — map DBC signal topics to dashboard state fields
 - `led_controller.rpm_shift` / `rpm_max` — LED colour threshold RPMs
 - `input_handler.button_a/b`, `encoder_a/b_*` — GPIO pin assignments

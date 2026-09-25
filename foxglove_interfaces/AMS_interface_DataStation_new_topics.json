@@ -1,7 +1,7 @@
 {
   "configById": {
     "bar-display.Bar Display!pltdc9": {
-      "topicField": "/pwt/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -27,7 +27,7 @@
       "foxglovePanelTitle": "AMS Comms"
     },
     "Indicator!3rosf7m": {
-      "path": "/pwt/dbc/master_msc_id_1.adbms_pec_error",
+      "path": "/pwt/master_msc_id_1.adbms_pec_error",
       "style": "background",
       "fontSize": 36,
       "fallbackColor": "#ff0000",
@@ -45,7 +45,7 @@
     "value-display.Value Display!38qu5vn": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_3.overall_maximum_temperature"
+        "topic": "/pwt/master_msc_id_3.overall_maximum_temperature"
       },
       "display": {
         "label": "Display",
@@ -67,7 +67,7 @@
     "value-display.Value Display!w1do3w": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_3.overall_maximum_voltage"
+        "topic": "/pwt/master_msc_id_3.overall_maximum_voltage"
       },
       "display": {
         "label": "Display",
@@ -88,7 +88,7 @@
     },
     "foxglove-ams-gauge-display.ams-gauge-display!1fcv8lj": {
       "title": "",
-      "topic": "/pwt/dbc/master_msc_id_3",
+      "topic": "/pwt/master_msc_id_3",
       "field": "overall_maximum_voltage",
       "unit": "V",
       "multiplier": 0.001,
@@ -107,7 +107,7 @@
       "foxglovePanelTitle": "Pack Voltage"
     },
     "bar-display.Bar Display!39rg0p1": {
-      "topicField": "/pwt/dbc/master_msc_id_1.master_fan_pwm",
+      "topicField": "/pwt/master_msc_id_1.master_fan_pwm",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#0089ff",
@@ -117,7 +117,7 @@
       "foxglovePanelTitle": "FAN"
     },
     "foxglove-ams-gauge-display.ams-gauge-display!1nb1u3w": {
-      "topic": "/pwt/dbc/master_msc_id_1",
+      "topic": "/pwt/master_msc_id_1",
       "field": "ams_current_draw",
       "unit": "A",
       "multiplier": 0.001,
@@ -136,7 +136,7 @@
       "foxglovePanelTitle": "Pack Current"
     },
     "Indicator!2ncq4ad": {
-      "path": "/pwt/dbc/master_msc_id_1.fault_counter",
+      "path": "/pwt/master_msc_id_1.fault_counter",
       "style": "background",
       "fontSize": 24,
       "fallbackColor": "#68e24a",
@@ -154,7 +154,7 @@
     "value-display.Value Display!3qb8kwt": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_4.slaves_detected"
+        "topic": "/pwt/master_msc_id_4.slaves_detected"
       },
       "display": {
         "label": "Display",
@@ -176,7 +176,7 @@
     "value-display.Value Display!2s8roio": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_3.overall_minimum_temperature"
+        "topic": "/pwt/master_msc_id_3.overall_minimum_temperature"
       },
       "display": {
         "label": "Display",
@@ -198,7 +198,7 @@
     "value-display.Value Display!1in6o0g": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_3.overall_minimum_voltage"
+        "topic": "/pwt/master_msc_id_3.overall_minimum_voltage"
       },
       "display": {
         "label": "Display",
@@ -297,7 +297,7 @@
     "value-display.Value Display!3je2yen": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_1.master_state"
+        "topic": "/pwt/master_msc_id_1.master_state"
       },
       "display": {
         "label": "Display",
@@ -319,7 +319,7 @@
     "value-display.Value Display!13jioct": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_precharge_id_1.precharge_state"
+        "topic": "/pwt/master_precharge_id_1.precharge_state"
       },
       "display": {
         "label": "Display",
@@ -341,7 +341,7 @@
     "value-display.Value Display!1ge8762": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_2.master_runtime"
+        "topic": "/pwt/master_msc_id_2.master_runtime"
       },
       "display": {
         "label": "Display",
@@ -383,7 +383,7 @@
       "foxglovePanelTitle": "CAN Bus Load"
     },
     "Indicator!3eus7q": {
-      "path": "/pwt/dbc/master_precharge_id_1",
+      "path": "/pwt/master_precharge_id_1",
       "style": "background",
       "fontSize": 36,
       "fallbackColor": "#ff7b00",
@@ -399,7 +399,7 @@
       "foxglovePanelTitle": "AIR+"
     },
     "Indicator!4anhofh": {
-      "path": "/pwt/dbc/master_precharge_id_1",
+      "path": "/pwt/master_precharge_id_1",
       "style": "background",
       "fontSize": 36,
       "fallbackColor": "#ff7b00",
@@ -415,7 +415,7 @@
       "foxglovePanelTitle": "AIR-"
     },
     "Indicator!gtjpb7": {
-      "path": "/pwt/dbc/master_precharge_id_1",
+      "path": "/pwt/master_precharge_id_1",
       "style": "background",
       "fontSize": 36,
       "fallbackColor": "#ff7b00",
@@ -431,7 +431,7 @@
       "foxglovePanelTitle": "Precharge"
     },
     "Indicator!2yry5zo": {
-      "path": "/pwt/dbc/master_precharge_id_1",
+      "path": "/pwt/master_precharge_id_1",
       "style": "background",
       "fontSize": 36,
       "fallbackColor": "#ff7b00",
@@ -449,7 +449,7 @@
     "value-display.Value Display!ac8d2x": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_1.mcu_temperature"
+        "topic": "/pwt/master_msc_id_1.mcu_temperature"
       },
       "display": {
         "label": "Display",
@@ -471,7 +471,7 @@
     "value-display.Value Display!2sldj9q": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_1.ams_current_draw"
+        "topic": "/pwt/master_msc_id_1.ams_current_draw"
       },
       "display": {
         "label": "Display",
@@ -493,7 +493,7 @@
     "value-display.Value Display!1ocoqtz": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_1.mcu_vref"
+        "topic": "/pwt/master_msc_id_1.mcu_vref"
       },
       "display": {
         "label": "Display",
@@ -515,7 +515,7 @@
     "value-display.Value Display!fofl49": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_1.master_firmware_version"
+        "topic": "/pwt/master_msc_id_1.master_firmware_version"
       },
       "display": {
         "label": "Display",
@@ -535,7 +535,7 @@
       "foxglovePanelTitle": "Firmaware Version"
     },
     "bar-display.Bar Display!9sn6nc": {
-      "topicField": "/pwt/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -550,71 +550,71 @@
       "overvoltage": 4.2,
       "slaves": [
         {
-          "voltageId1Topic": "/pwt/dbc/slave_01_voltage_id_1",
-          "voltageId2Topic": "/pwt/dbc/slave_01_voltage_id_2",
-          "voltageId3Topic": "/pwt/dbc/slave_01_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_01_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_01_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_01_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/pwt/dbc/slave_02_voltage_id_1",
-          "voltageId2Topic": "/pwt/dbc/slave_02_voltage_id_2",
-          "voltageId3Topic": "/pwt/dbc/slave_02_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_02_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_02_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_02_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/pwt/dbc/slave_03_voltage_id_1",
-          "voltageId2Topic": "/pwt/dbc/slave_03_voltage_id_2",
-          "voltageId3Topic": "/pwt/dbc/slave_03_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_03_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_03_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_03_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/pwt/dbc/slave_04_voltage_id_1",
-          "voltageId2Topic": "/pwt/dbc/slave_04_voltage_id_2",
-          "voltageId3Topic": "/pwt/dbc/slave_04_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_04_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_04_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_04_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/pwt/dbc/slave_05_voltage_id_1",
-          "voltageId2Topic": "/pwt/dbc/slave_05_voltage_id_2",
-          "voltageId3Topic": "/pwt/dbc/slave_05_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_05_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_05_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_05_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/pwt/dbc/slave_06_voltage_id_1",
-          "voltageId2Topic": "/pwt/dbc/slave_06_voltage_id_2",
-          "voltageId3Topic": "/pwt/dbc/slave_06_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_06_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_06_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_06_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/pwt/dbc/slave_07_voltage_id_1",
-          "voltageId2Topic": "/pwt/dbc/slave_07_voltage_id_2",
-          "voltageId3Topic": "/pwt/dbc/slave_07_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_07_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_07_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_07_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/pwt/dbc/slave_08_voltage_id_1",
-          "voltageId2Topic": "/pwt/dbc/slave_08_voltage_id_2",
-          "voltageId3Topic": "/pwt/dbc/slave_08_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_08_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_08_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_08_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/pwt/dbc/slave_09_voltage_id_1",
-          "voltageId2Topic": "/pwt/dbc/slave_09_voltage_id_2",
-          "voltageId3Topic": "/pwt/dbc/slave_09_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_09_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_09_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_09_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/pwt/dbc/slave_10_voltage_id_1",
-          "voltageId2Topic": "/pwt/dbc/slave_10_voltage_id_2",
-          "voltageId3Topic": "/pwt/dbc/slave_10_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_10_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_10_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_10_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/pwt/dbc/slave_11_voltage_id_1",
-          "voltageId2Topic": "/pwt/dbc/slave_11_voltage_id_2",
-          "voltageId3Topic": "/pwt/dbc/slave_11_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_11_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_11_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_11_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/pwt/dbc/slave_12_voltage_id_1",
-          "voltageId2Topic": "/pwt/dbc/slave_12_voltage_id_2",
-          "voltageId3Topic": "/pwt/dbc/slave_12_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_12_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_12_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_12_voltage_id_3"
         }
       ],
       "foxglovePanelTitle": "Voltages"
     },
     "lart-temperature-table.AMS Temperature Table (LART)!2ooyxxt": {},
     "bar-display.Bar Display!b3klbk": {
-      "topicField": "/pwt/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -625,7 +625,7 @@
     },
     "lart-temperature-table.AMS Cell Voltage Bar (LART)!2m7lodw": {},
     "bar-display.Bar Display!33ewjyl": {
-      "topicField": "/pwt/dbc/master_msc_id_3.overall_maximum_temperature",
+      "topicField": "/pwt/master_msc_id_3.overall_maximum_temperature",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -636,7 +636,7 @@
     },
     "lart-temperature-table.AMS Cell Temperature Bar (LART)!243cjw7": {},
     "bar-display.Bar Display!2ecmbsq": {
-      "topicField": "/pwt/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -648,14 +648,14 @@
     "Plot!2z7bpdb": {
       "paths": [
         {
-          "value": "/pwt/dbc/master_msc_id_3.overall_maximum_voltage",
+          "value": "/pwt/master_msc_id_3.overall_maximum_voltage",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Overall Maximum Voltage"
         },
         {
-          "value": "/pwt/dbc/master_msc_id_3.overall_minimum_voltage",
+          "value": "/pwt/master_msc_id_3.overall_minimum_voltage",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
@@ -674,14 +674,14 @@
     "Plot!1iyllp": {
       "paths": [
         {
-          "value": "/pwt/dbc/master_msc_id_3.overall_maximum_temperature",
+          "value": "/pwt/master_msc_id_3.overall_maximum_temperature",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Overall Maximum Temperature"
         },
         {
-          "value": "/pwt/dbc/master_msc_id_3.overall_minimum_temperature",
+          "value": "/pwt/master_msc_id_3.overall_minimum_temperature",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
@@ -694,7 +694,7 @@
       "yAxisLabel": "Volts"
     },
     "bar-display.Bar Display!26uqjp1": {
-      "topicField": "/pwt/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -707,83 +707,83 @@
       "paths": [
         {
           "timestampMethod": "receiveTime",
-          "value": "/pwt/dbc/slave_01_voltage_id_1.cell_voltage_1",
+          "value": "/pwt/slave_01_voltage_id_1.cell_voltage_1",
           "enabled": true,
           "color": "#f5774d",
           "label": "Cell 1"
         },
         {
-          "value": "/pwt/dbc/slave_01_voltage_id_1.cell_voltage_2",
+          "value": "/pwt/slave_01_voltage_id_1.cell_voltage_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 2"
         },
         {
-          "value": "/pwt/dbc/slave_01_voltage_id_1.cell_voltage_3",
+          "value": "/pwt/slave_01_voltage_id_1.cell_voltage_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 3"
         },
         {
-          "value": "/pwt/dbc/slave_01_voltage_id_1.cell_voltage_4",
+          "value": "/pwt/slave_01_voltage_id_1.cell_voltage_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 4"
         },
         {
-          "value": "/pwt/dbc/slave_01_voltage_id_2.cell_voltage_5",
+          "value": "/pwt/slave_01_voltage_id_2.cell_voltage_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Cell 5"
         },
         {
-          "value": "/pwt/dbc/slave_01_voltage_id_2.cell_voltage_6",
+          "value": "/pwt/slave_01_voltage_id_2.cell_voltage_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
           "label": "Cell  6"
         },
         {
-          "value": "/pwt/dbc/slave_01_voltage_id_2.cell_voltage_7",
+          "value": "/pwt/slave_01_voltage_id_2.cell_voltage_7",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#cad660",
           "label": "Cell 7"
         },
         {
-          "value": "/pwt/dbc/slave_01_voltage_id_2.cell_voltage_8",
+          "value": "/pwt/slave_01_voltage_id_2.cell_voltage_8",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 8"
         },
         {
-          "value": "/pwt/dbc/slave_01_voltage_id_3.cell_voltage_9",
+          "value": "/pwt/slave_01_voltage_id_3.cell_voltage_9",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 9"
         },
         {
-          "value": "/pwt/dbc/slave_01_voltage_id_3.cell_voltage_10",
+          "value": "/pwt/slave_01_voltage_id_3.cell_voltage_10",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 10"
         },
         {
-          "value": "/pwt/dbc/slave_01_voltage_id_3.cell_voltage_11",
+          "value": "/pwt/slave_01_voltage_id_3.cell_voltage_11",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 11"
         },
         {
-          "value": "/pwt/dbc/slave_01_voltage_id_3.cell_voltage_12",
+          "value": "/pwt/slave_01_voltage_id_3.cell_voltage_12",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
@@ -801,42 +801,42 @@
     "Plot!w8bzhd": {
       "paths": [
         {
-          "value": "/pwt/dbc/slave_01_temperature_id_1.temperature_value_1",
+          "value": "/pwt/slave_01_temperature_id_1.temperature_value_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Termistor 1"
         },
         {
-          "value": "/pwt/dbc/slave_01_temperature_id_1.temperature_value_2",
+          "value": "/pwt/slave_01_temperature_id_1.temperature_value_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Termistor 2"
         },
         {
-          "value": "/pwt/dbc/slave_01_temperature_id_1.temperature_value_3",
+          "value": "/pwt/slave_01_temperature_id_1.temperature_value_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Termistor 3"
         },
         {
-          "value": "/pwt/dbc/slave_01_temperature_id_1.temperature_value_4",
+          "value": "/pwt/slave_01_temperature_id_1.temperature_value_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Termistor 4"
         },
         {
-          "value": "/pwt/dbc/slave_01_temperature_id_2.temperature_value_5",
+          "value": "/pwt/slave_01_temperature_id_2.temperature_value_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Termistor 5"
         },
         {
-          "value": "/pwt/dbc/slave_01_temperature_id_2.temperature_value_6",
+          "value": "/pwt/slave_01_temperature_id_2.temperature_value_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
@@ -852,7 +852,7 @@
     "value-display.Value Display!3gsyoej": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/slave_01_msc_id_1.module_voltage_avg"
+        "topic": "/pwt/slave_01_msc_id_1.module_voltage_avg"
       },
       "display": {
         "label": "Display",
@@ -874,7 +874,7 @@
     "value-display.Value Display!2kc4rer": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/slave_01_msc_id_1.module_voltage_max"
+        "topic": "/pwt/slave_01_msc_id_1.module_voltage_max"
       },
       "display": {
         "label": "Display",
@@ -896,7 +896,7 @@
     "value-display.Value Display!3cqp77b": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/slave_01_msc_id_1.module_voltage_min"
+        "topic": "/pwt/slave_01_msc_id_1.module_voltage_min"
       },
       "display": {
         "label": "Display",
@@ -918,7 +918,7 @@
     "value-display.Value Display!3sgvg9y": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/slave_01_msc_id_2.module_voltage_delta"
+        "topic": "/pwt/slave_01_msc_id_2.module_voltage_delta"
       },
       "display": {
         "label": "Display",
@@ -940,7 +940,7 @@
     "value-display.Value Display!zn81qk": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/slave_01_temperature_id_2.temperature_maximum"
+        "topic": "/pwt/slave_01_temperature_id_2.temperature_maximum"
       },
       "display": {
         "label": "Display",
@@ -962,7 +962,7 @@
     "value-display.Value Display!1ov1ny5": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/slave_01_temperature_id_2.temperature_delta"
+        "topic": "/pwt/slave_01_temperature_id_2.temperature_delta"
       },
       "display": {
         "label": "Display",
@@ -984,7 +984,7 @@
     "value-display.Value Display!41tljd6": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/slave_01_msc_id_2.module_ic_temperature"
+        "topic": "/pwt/slave_01_msc_id_2.module_ic_temperature"
       },
       "display": {
         "label": "Display",
@@ -1006,7 +1006,7 @@
     "value-display.Value Display!39l6yvw": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/slave_01_msc_id_2.module_open_wire"
+        "topic": "/pwt/slave_01_msc_id_2.module_open_wire"
       },
       "display": {
         "label": "Display",
@@ -1026,7 +1026,7 @@
       "foxglovePanelTitle": "OW"
     },
     "bar-display.Bar Display!39muqf": {
-      "topicField": "/pwt/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -1039,83 +1039,83 @@
       "paths": [
         {
           "timestampMethod": "receiveTime",
-          "value": "/pwt/dbc/slave_02_voltage_id_1.cell_voltage_1",
+          "value": "/pwt/slave_02_voltage_id_1.cell_voltage_1",
           "enabled": true,
           "color": "#f5774d",
           "label": "Cell 1"
         },
         {
-          "value": "/pwt/dbc/slave_02_voltage_id_1.cell_voltage_2",
+          "value": "/pwt/slave_02_voltage_id_1.cell_voltage_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 2"
         },
         {
-          "value": "/pwt/dbc/slave_02_voltage_id_1.cell_voltage_3",
+          "value": "/pwt/slave_02_voltage_id_1.cell_voltage_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 3"
         },
         {
-          "value": "/pwt/dbc/slave_02_voltage_id_1.cell_voltage_4",
+          "value": "/pwt/slave_02_voltage_id_1.cell_voltage_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 4"
         },
         {
-          "value": "/pwt/dbc/slave_02_voltage_id_2.cell_voltage_5",
+          "value": "/pwt/slave_02_voltage_id_2.cell_voltage_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Cell 5"
         },
         {
-          "value": "/pwt/dbc/slave_02_voltage_id_2.cell_voltage_6",
+          "value": "/pwt/slave_02_voltage_id_2.cell_voltage_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
           "label": "Cell  6"
         },
         {
-          "value": "/pwt/dbc/slave_02_voltage_id_2.cell_voltage_7",
+          "value": "/pwt/slave_02_voltage_id_2.cell_voltage_7",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#cad660",
           "label": "Cell 7"
         },
         {
-          "value": "/pwt/dbc/slave_02_voltage_id_2.cell_voltage_8",
+          "value": "/pwt/slave_02_voltage_id_2.cell_voltage_8",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 8"
         },
         {
-          "value": "/pwt/dbc/slave_02_voltage_id_3.cell_voltage_9",
+          "value": "/pwt/slave_02_voltage_id_3.cell_voltage_9",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 9"
         },
         {
-          "value": "/pwt/dbc/slave_02_voltage_id_3.cell_voltage_10",
+          "value": "/pwt/slave_02_voltage_id_3.cell_voltage_10",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 10"
         },
         {
-          "value": "/pwt/dbc/slave_02_voltage_id_3.cell_voltage_11",
+          "value": "/pwt/slave_02_voltage_id_3.cell_voltage_11",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 11"
         },
         {
-          "value": "/pwt/dbc/slave_02_voltage_id_3.cell_voltage_12",
+          "value": "/pwt/slave_02_voltage_id_3.cell_voltage_12",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
@@ -1132,42 +1132,42 @@
     "Plot!33hvk2e": {
       "paths": [
         {
-          "value": "/pwt/dbc/slave_02_temperature_id_1.temperature_value_1",
+          "value": "/pwt/slave_02_temperature_id_1.temperature_value_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Termistor 1"
         },
         {
-          "value": "/pwt/dbc/slave_02_temperature_id_1.temperature_value_2",
+          "value": "/pwt/slave_02_temperature_id_1.temperature_value_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Termistor 2"
         },
         {
-          "value": "/pwt/dbc/slave_02_temperature_id_1.temperature_value_3",
+          "value": "/pwt/slave_02_temperature_id_1.temperature_value_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Termistor 3"
         },
         {
-          "value": "/pwt/dbc/slave_02_temperature_id_1.temperature_value_4",
+          "value": "/pwt/slave_02_temperature_id_1.temperature_value_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Termistor 4"
         },
         {
-          "value": "/pwt/dbc/slave_02_temperature_id_2.temperature_value_5",
+          "value": "/pwt/slave_02_temperature_id_2.temperature_value_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Termistor 5"
         },
         {
-          "value": "/pwt/dbc/slave_02_temperature_id_2.temperature_value_6",
+          "value": "/pwt/slave_02_temperature_id_2.temperature_value_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
@@ -1183,7 +1183,7 @@
     "value-display.Value Display!onzsn0": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/slave_02_msc_id_1.module_voltage_avg"
+        "topic": "/pwt/slave_02_msc_id_1.module_voltage_avg"
       },
       "display": {
         "label": "Display",
@@ -1205,7 +1205,7 @@
     "value-display.Value Display!mnlm6w": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/slave_02_msc_id_1.module_voltage_max"
+        "topic": "/pwt/slave_02_msc_id_1.module_voltage_max"
       },
       "display": {
         "label": "Display",
@@ -1227,7 +1227,7 @@
     "value-display.Value Display!2lzhte5": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/slave_02_msc_id_1.module_voltage_min"
+        "topic": "/pwt/slave_02_msc_id_1.module_voltage_min"
       },
       "display": {
         "label": "Display",
@@ -1249,7 +1249,7 @@
     "value-display.Value Display!1nlgdp6": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/slave_02_msc_id_2.module_voltage_delta"
+        "topic": "/pwt/slave_02_msc_id_2.module_voltage_delta"
       },
       "display": {
         "label": "Display",
@@ -1271,7 +1271,7 @@
     "value-display.Value Display!42am6ab": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/slave_02_temperature_id_2.temperature_maximum"
+        "topic": "/pwt/slave_02_temperature_id_2.temperature_maximum"
       },
       "display": {
         "label": "Display",
@@ -1293,7 +1293,7 @@
     "value-display.Value Display!3q2cub": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/slave_02_temperature_id_2.temperature_delta"
+        "topic": "/pwt/slave_02_temperature_id_2.temperature_delta"
       },
       "display": {
         "label": "Display",
@@ -1315,7 +1315,7 @@
     "value-display.Value Display!3319h71": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/slave_02_msc_id_2.module_ic_temperature"
+        "topic": "/pwt/slave_02_msc_id_2.module_ic_temperature"
       },
       "display": {
         "label": "Display",
@@ -1337,7 +1337,7 @@
     "value-display.Value Display!49b6a1z": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/slave_02_msc_id_2.module_open_wire"
+        "topic": "/pwt/slave_02_msc_id_2.module_open_wire"
       },
       "display": {
         "label": "Display",
@@ -1559,7 +1559,7 @@
     "value-display.Value Display!2h9ozw1": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_1.fault_counter"
+        "topic": "/pwt/master_msc_id_1.fault_counter"
       },
       "display": {
         "label": "Display",
@@ -1581,7 +1581,7 @@
     "value-display.Value Display!o8833s": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_2.fault1_code"
+        "topic": "/pwt/master_msc_id_2.fault1_code"
       },
       "display": {
         "label": "Display",
@@ -1603,7 +1603,7 @@
     "value-display.Value Display!38stc89": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_2.fault2_code"
+        "topic": "/pwt/master_msc_id_2.fault2_code"
       },
       "display": {
         "label": "Display",
@@ -1625,7 +1625,7 @@
     "value-display.Value Display!3v5pggl": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_2.fault1_index_value"
+        "topic": "/pwt/master_msc_id_2.fault1_index_value"
       },
       "display": {
         "label": "Display",
@@ -1647,7 +1647,7 @@
     "value-display.Value Display!2rvrmx5": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_2.fault2_index_value"
+        "topic": "/pwt/master_msc_id_2.fault2_index_value"
       },
       "display": {
         "label": "Display",
@@ -1669,7 +1669,7 @@
     "value-display.Value Display!17nsuqe": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_2.fault1_index_type"
+        "topic": "/pwt/master_msc_id_2.fault1_index_type"
       },
       "display": {
         "label": "Display",
@@ -1691,7 +1691,7 @@
     "value-display.Value Display!28w37c4": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_2.fault2_index_type"
+        "topic": "/pwt/master_msc_id_2.fault2_index_type"
       },
       "display": {
         "label": "Display",
@@ -1714,24 +1714,24 @@
       "paths": [
         {
           "timestampMethod": "receiveTime",
-          "value": "/pwt/dbc/ivt_msg_result_i.ivt_result_i",
+          "value": "/pwt/ivt_msg_result_i.ivt_result_i",
           "enabled": false,
           "color": "#f7df71"
         },
         {
           "timestampMethod": "receiveTime",
-          "value": "/pwt/dbc/master_soc_accumulator.soc_float",
+          "value": "/pwt/master_soc_accumulator.soc_float",
           "enabled": true,
           "color": "#f5774d"
         },
         {
           "timestampMethod": "receiveTime",
-          "value": "/pwt/dbc/master_soc_accumulator.soc_integer",
+          "value": "/pwt/master_soc_accumulator.soc_integer",
           "enabled": true,
           "color": "#4e98e2"
         },
         {
-          "value": "/pwt/dbc/master_msc_id_4.slaves_detected",
+          "value": "/pwt/master_msc_id_4.slaves_detected",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9"
@@ -1742,13 +1742,13 @@
     "Plot!1svsg9p": {
       "paths": [
         {
-          "value": "/pwt/dbc/ivt_msg_result_t.ivt_result_t",
+          "value": "/pwt/ivt_msg_result_t.ivt_result_t",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2"
         },
         {
-          "value": "/pwt/dbc/master_msc_id_1.master_fan_pwm",
+          "value": "/pwt/master_msc_id_1.master_fan_pwm",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d"

@@ -13,7 +13,7 @@ SEND_DELAY_NORMAL=0
 SEND_DELAY_FAST=0
 
 BAG_DIR="${BAG_DIR:-$HOME/bags}"
-BAG_RECORD_REGEX="${BAG_RECORD_REGEX:-/data/dbc/.*|/pwt/dbc/.*|/can/dbc/.*}"
+BAG_RECORD_REGEX="${BAG_RECORD_REGEX:-/data/.*|/pwt/.*|/can/(?!frames$).*}"
 CAN_SIM_PID=""
 BAG_RECORD_PID=""
 

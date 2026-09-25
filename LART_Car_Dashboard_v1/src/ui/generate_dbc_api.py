@@ -210,9 +210,9 @@ def main():
         ])
         
         topic_prefixes = {
-            "data_t26": "/data/dbc",
-            "powertrain_t26": "/pwt/dbc",
-            "autonomous_t26": "/can/dbc",
+            "data_t26": "/data",
+            "powertrain_t26": "/pwt",
+            "autonomous_t26": "/can",
         }
         for msg_slug in sorted(chunk_slugs):
             class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)

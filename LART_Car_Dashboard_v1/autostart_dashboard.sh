@@ -33,7 +33,7 @@ export DISPLAY=:0
 _UID=$(id -u)
 export XDG_RUNTIME_DIR=/run/user/$_UID
 
-# 2b. Start the precharge-triggered bag recorder (records /can/dbc/* topics
+# 2b. Start the precharge-triggered bag recorder (records /can/* topics
 # to ~/bags while precharge_request is active; see lart_bringup/bag_recorder.py)
 BAG_RECORDER_BIN="/home/lart2026/GIT/data_station/install/lart_bringup/lib/lart_bringup/bag_recorder"
 if [ -x "$BAG_RECORDER_BIN" ]; then

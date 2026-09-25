@@ -32,13 +32,13 @@
 extern std::mutex dbc_api_mutex;
 
 namespace {
-constexpr const char *DEFAULT_SPEED_TOPIC = "/can/dbc/dv_dynamics_1/speed_actual";
-constexpr const char *DEFAULT_HV_TOPIC = "/can/dbc/vcu_hv/hv";
+constexpr const char *DEFAULT_SPEED_TOPIC = "/can/dv_dynamics_1/speed_actual";
+constexpr const char *DEFAULT_HV_TOPIC = "/can/vcu_hv/hv";
 constexpr const char *DEFAULT_SET_SCREEN_TOPIC = "/dashboard/set_screen";
 // The ACU still publishes mission_select on its own legacy per-signal topic
-// (not folded into the aggregated "/can/dbc/acu" message), so it's picked
+// (not folded into the aggregated "/can/acu" message), so it's picked
 // up here directly and written into dbc_api.acu.mission_select.
-constexpr const char *DEFAULT_MISSION_SELECT_TOPIC = "/can/dbc/acu/mission_select";
+constexpr const char *DEFAULT_MISSION_SELECT_TOPIC = "/can/acu/mission_select";
 
 std::atomic<int> g_is_initialized(0);
 std::atomic<int> g_has_speed(0);
@@ -157,14 +157,14 @@ LART_WEAK int ros2subscriber_init(void) {
         "/vehicle/notification_ack", rclcpp::QoS(10));
 
     // Per-signal DBC telemetry now arrives via the aggregated per-message
-    // topics (e.g. "/can/dbc/aqt2") set up below, not the old split
+    // topics (e.g. "/can/aqt2") set up below, not the old split
     // per-signal topics.
 #if LART_HAVE_LART_MSGS
     init_dbc_api_subscribers(g_node, g_subs);
 #endif
 
     // Mission_select is still published on its own legacy per-signal topic
-    // rather than as part of the aggregated "/can/dbc/acu" message.
+    // rather than as part of the aggregated "/can/acu" message.
     const char *mission_select_topic = env_or_default("LART_ROS2_MISSION_SELECT_TOPIC", DEFAULT_MISSION_SELECT_TOPIC);
     auto mission_select_callback = [](const std_msgs::msg::Float32::SharedPtr msg) {
         if (msg) {

@@ -13,7 +13,7 @@ saved.
 
 ## Trigger Signal
 
-- Topic: `/can/dbc/start_precharge` (`lart_msgs/StartPrecharge`)
+- Topic: `/can/start_precharge` (`lart_msgs/StartPrecharge`)
 - Field: `precharge_request` (float32; DBC signal `Precharge_Request`,
   CAN ID 131 `Start_PreCharge`)
 - Published by `can_bridge` with BEST_EFFORT QoS.
@@ -49,10 +49,10 @@ IDLE ──req=1──▶ RECORDING ──req=0──▶ GRACE(30 s) ──req=1
 Implementation: the node spawns a subprocess
 
 ```
-ros2 bag record --regex '/can/dbc/.*' -d 60 -o <bag_dir>/precharge_YYYYMMDD_HHMMSS
+ros2 bag record --regex '/can/.*' -d 60 -o <bag_dir>/precharge_YYYYMMDD_HHMMSS
 ```
 
-- `--regex '/can/dbc/.*'` records every decoded CAN topic and nothing else;
+- `--regex '/can/.*'` records every decoded CAN topic and nothing else;
   `/can/frames` (raw) and UI/dashboard topics are never matched.
 - `-d 60` uses rosbag2's native splitting: one folder per session with a new
   chunk file every 60 s.
@@ -70,8 +70,8 @@ ros2 bag record --regex '/can/dbc/.*' -d 60 -o <bag_dir>/precharge_YYYYMMDD_HHMM
 
 | Parameter          | Default                    | Meaning                              |
 | ------------------ | -------------------------- | ------------------------------------ |
-| `trigger_topic`    | `/can/dbc/start_precharge` | Topic carrying the precharge request |
-| `record_regex`     | `/can/dbc/.*`              | Topics to record                     |
+| `trigger_topic`    | `/can/start_precharge` | Topic carrying the precharge request |
+| `record_regex`     | `/can/.*`              | Topics to record                     |
 | `bag_dir`          | `~/bags`                   | Root folder for bag sessions         |
 | `stop_grace_s`     | `30.0`                     | Delay after req=0 before finalizing  |
 | `split_duration_s` | `60`                       | Bag split interval                   |
@@ -91,5 +91,5 @@ ros2 bag record --regex '/can/dbc/.*' -d 60 -o <bag_dir>/precharge_YYYYMMDD_HHMM
 - Unit-style test of the state machine with a fake clock/timer (edge cases:
   resume within grace, timer expiry, rapid toggles, subprocess death).
 - Manual/sim validation with `dbc_sim.launch.py` + publishing
-  `/can/dbc/start_precharge` by hand, verifying bag folders, 60 s chunking,
+  `/can/start_precharge` by hand, verifying bag folders, 60 s chunking,
   and clean finalize.

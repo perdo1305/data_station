@@ -202,9 +202,9 @@ def main():
             sub_lines.append(f"    if ({condition}) {{")
             sub_lines.append(
                 f'        pub_{msg_slug} = node->create_publisher<lart_msgs::msg::{class_name}>('
-                f'database_ == "data_t26" ? "/data/dbc/{msg_slug}" : '
-                f'database_ == "powertrain_t26" ? "/pwt/dbc/{msg_slug}" : '
-                f'"/can/dbc/{msg_slug}", sensor_qos);'
+                f'database_ == "data_t26" ? "/data/{msg_slug}" : '
+                f'database_ == "powertrain_t26" ? "/pwt/{msg_slug}" : '
+                f'"/can/{msg_slug}", sensor_qos);'
             )
             sub_lines.append("    }")
         sub_lines.append("}")

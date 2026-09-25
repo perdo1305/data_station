@@ -3,7 +3,7 @@
     "value-display.Value Display!1jc8avg": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/vcu_states.vcu_state"
+        "topic": "/pwt/vcu_states.vcu_state"
       },
       "display": {
         "label": "Display",
@@ -25,7 +25,7 @@
     "value-display.Value Display!3cxip0z": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_msc_id_1.master_fan_pwm"
+        "topic": "/pwt/master_msc_id_1.master_fan_pwm"
       },
       "display": {
         "label": "Display",
@@ -47,7 +47,7 @@
     "value-display.Value Display!qlbg3v": {
       "data": {
         "label": "Data",
-        "topic": "/pwt/dbc/master_precharge_id_1.precharge_state"
+        "topic": "/pwt/master_precharge_id_1.precharge_state"
       },
       "display": {
         "label": "Display",
@@ -84,7 +84,7 @@
     },
     "foxglove-value-display-lart.value-display!3gpkrco": {
       "title": "",
-      "messagePath": "/pwt/dbc/inv1_erpm_duty_voltage.inv1_actual_erpm",
+      "messagePath": "/pwt/inv1_erpm_duty_voltage.inv1_actual_erpm",
       "factor": 0.25,
       "offset": 0,
       "unit": "",
@@ -98,7 +98,7 @@
     "foxglove-value-display-lart.value-display!12fudh0": {
       "foxglovePanelTitle": "RPM Motor Direito",
       "title": "",
-      "messagePath": "/pwt/dbc/inv2_erpm_duty_voltage.inv2_actual_erpm",
+      "messagePath": "/pwt/inv2_erpm_duty_voltage.inv2_actual_erpm",
       "factor": 0.25,
       "offset": 0,
       "unit": "",
@@ -110,7 +110,7 @@
     },
     "foxglove-value-display-lart.value-display!3itk0zq": {
       "title": "",
-      "messagePath": "/pwt/dbc/master_soc_accumulator.soc_float",
+      "messagePath": "/pwt/master_soc_accumulator.soc_float",
       "factor": 1,
       "offset": 0,
       "unit": "%",
@@ -123,7 +123,7 @@
     },
     "foxglove-value-display-lart.value-display!3sqn3lm": {
       "title": "",
-      "messagePath": "/pwt/dbc/ivt_msg_result_u1.ivt_result_u1",
+      "messagePath": "/pwt/ivt_msg_result_u1.ivt_result_u1",
       "factor": 0.001,
       "offset": 0,
       "unit": "V",
@@ -136,7 +136,7 @@
     },
     "foxglove-value-display-lart.value-display!1fo8mad": {
       "title": "",
-      "messagePath": "/pwt/dbc/ivt_msg_result_i.ivt_result_i",
+      "messagePath": "/pwt/ivt_msg_result_i.ivt_result_i",
       "factor": 0.001,
       "offset": 0,
       "unit": "A",
@@ -150,7 +150,7 @@
     "foxglove-value-display-lart.value-display!3z5v6x4": {
       "foxglovePanelTitle": "Accu Temperature",
       "title": "",
-      "messagePath": "/pwt/dbc/master_msc_id_3.overall_maximum_temperature",
+      "messagePath": "/pwt/master_msc_id_3.overall_maximum_temperature",
       "factor": 1,
       "offset": 0,
       "unit": "ºC",
@@ -164,7 +164,7 @@
       "paths": [
         {
           "timestampMethod": "receiveTime",
-          "value": "/pwt/dbc/apps_adc_raw.apps1_raw.@sub(2452).@mul(0.353357)",
+          "value": "/pwt/apps_adc_raw.apps1_raw.@sub(2452).@mul(0.353357)",
           "enabled": true,
           "color": "#4e98e2",
           "id": "c6464e60-dc3e-4b55-a912-da177e05b33a",
@@ -172,7 +172,7 @@
         },
         {
           "timestampMethod": "receiveTime",
-          "value": "/pwt/dbc/inv1_setrelcurrent.inv1_cmd_targetrelativecurrent",
+          "value": "/pwt/inv1_setrelcurrent.inv1_cmd_targetrelativecurrent",
           "enabled": true,
           "color": "#f5774d",
           "id": "5db58ea0-810f-4d9f-9e25-d830fcfcfdde",
@@ -180,7 +180,7 @@
         },
         {
           "timestampMethod": "receiveTime",
-          "value": "/pwt/dbc/inv2_setrelcurrent.inv2_cmd_targetrelativecurrent",
+          "value": "/pwt/inv2_setrelcurrent.inv2_cmd_targetrelativecurrent",
           "enabled": true,
           "color": "#f7df71",
           "id": "bc7e2bff-1d04-453f-b0a3-3d06b4477d88",
@@ -189,7 +189,7 @@
         },
         {
           "timestampMethod": "receiveTime",
-          "value": "/pwt/dbc/inv1_ac_dc_current.inv1_actual_accurrent",
+          "value": "/pwt/inv1_ac_dc_current.inv1_actual_accurrent",
           "enabled": true,
           "color": "#5cd6a9",
           "id": "4e55523e-a129-4781-958f-b6d569f334ea",
@@ -197,7 +197,7 @@
         },
         {
           "timestampMethod": "receiveTime",
-          "value": "/pwt/dbc/inv2_ac_dc_current.inv2_actual_accurrent",
+          "value": "/pwt/inv2_ac_dc_current.inv2_actual_accurrent",
           "enabled": true,
           "color": "#67ffff",
           "id": "f2c24bdb-a376-4d65-9c31-7299077efaa7",
@@ -213,7 +213,7 @@
       "paths": [
         {
           "timestampMethod": "receiveTime",
-          "value": "/pwt/dbc/ivt_msg_result_i.ivt_result_i.@mul(0.001)",
+          "value": "/pwt/ivt_msg_result_i.ivt_result_i.@mul(0.001)",
           "enabled": true,
           "color": "#4e98e2",
           "id": "63eec21d-abb8-4aa9-accb-e06b49f99b16",
@@ -221,7 +221,7 @@
         },
         {
           "timestampMethod": "receiveTime",
-          "value": "/pwt/dbc/inv1_ac_dc_current.inv1_actual_dccurrent",
+          "value": "/pwt/inv1_ac_dc_current.inv1_actual_dccurrent",
           "enabled": true,
           "color": "#f5774d",
           "id": "7df5183e-f5cc-42f8-aa68-5f03907bfde3",
@@ -229,7 +229,7 @@
         },
         {
           "timestampMethod": "receiveTime",
-          "value": "/pwt/dbc/inv2_ac_dc_current.inv2_actual_dccurrent",
+          "value": "/pwt/inv2_ac_dc_current.inv2_actual_dccurrent",
           "enabled": true,
           "color": "#f7df71",
           "id": "99bf58e2-6e25-49a9-a6e6-2534589a92a0",
@@ -243,7 +243,7 @@
     },
     "foxglove-value-display-lart.value-display!wso33w": {
       "title": "",
-      "messagePath": "/pwt/dbc/inv1_temperatures.inv1_actual_tempmotor",
+      "messagePath": "/pwt/inv1_temperatures.inv1_actual_tempmotor",
       "factor": 1,
       "offset": 0,
       "unit": "ºC",
@@ -256,7 +256,7 @@
     },
     "foxglove-value-display-lart.value-display!3y8zpgh": {
       "title": "",
-      "messagePath": "/pwt/dbc/inv2_temperatures.inv2_actual_tempmotor",
+      "messagePath": "/pwt/inv2_temperatures.inv2_actual_tempmotor",
       "factor": 1,
       "offset": 0,
       "unit": "ºC",
@@ -270,7 +270,7 @@
     "foxglove-value-display-lart.value-display!19arx5d": {
       "foxglovePanelTitle": "IGBT Esquerdo Temeprature",
       "title": "",
-      "messagePath": "/pwt/dbc/inv1_temperatures.inv1_actual_tempcontroller",
+      "messagePath": "/pwt/inv1_temperatures.inv1_actual_tempcontroller",
       "factor": 1,
       "offset": 0,
       "unit": "ºC",
@@ -282,7 +282,7 @@
     },
     "foxglove-value-display-lart.value-display!jpf280": {
       "title": "",
-      "messagePath": "/pwt/dbc/inv2_temperatures.inv2_actual_tempcontroller",
+      "messagePath": "/pwt/inv2_temperatures.inv2_actual_tempcontroller",
       "factor": 1,
       "offset": 0,
       "unit": "ºC",
@@ -305,7 +305,7 @@
         },
         {
           "timestampMethod": "receiveTime",
-          "value": "/can/dbc/aqt1.frt_brk_press",
+          "value": "/can/aqt1.frt_brk_press",
           "enabled": true,
           "color": "#f5774d",
           "id": "da94518b-3aed-424d-89e3-86a7157cb11b",
@@ -313,7 +313,7 @@
         },
         {
           "timestampMethod": "receiveTime",
-          "value": "/pwt/dbc/inv1_setrelcurrent.inv1_cmd_targetrelativecurrent",
+          "value": "/pwt/inv1_setrelcurrent.inv1_cmd_targetrelativecurrent",
           "enabled": true,
           "color": "#f7df71",
           "id": "961d7c66-5554-4d1b-8b64-0e01a378c47c",
@@ -326,7 +326,7 @@
       "paths": [
         {
           "timestampMethod": "receiveTime",
-          "value": "/pwt/dbc/apps_adc_raw.apps1_raw",
+          "value": "/pwt/apps_adc_raw.apps1_raw",
           "enabled": true,
           "color": "#4e98e2",
           "id": "5612af45-f375-47b1-ad0b-7e148638f7c0",
@@ -334,7 +334,7 @@
         },
         {
           "timestampMethod": "receiveTime",
-          "value": "/pwt/dbc/apps_adc_raw.apps2_raw",
+          "value": "/pwt/apps_adc_raw.apps2_raw",
           "enabled": true,
           "color": "#f5774d",
           "id": "2d1aac48-d94f-411c-a9df-899d04acca2d",
@@ -342,7 +342,7 @@
         },
         {
           "timestampMethod": "receiveTime",
-          "value": "/pwt/dbc/inv1_setrelcurrent.inv1_cmd_targetrelativecurrent",
+          "value": "/pwt/inv1_setrelcurrent.inv1_cmd_targetrelativecurrent",
           "enabled": true,
           "color": "#f7df71",
           "id": "117cff98-898e-4e70-bd63-ee4a0809bb29"

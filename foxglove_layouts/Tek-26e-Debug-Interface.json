@@ -1,7 +1,7 @@
 {
   "configById": {
     "bar-display.Bar Display!pltdc9": {
-      "topicField": "/can/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -45,7 +45,7 @@
     "value-display.Value Display!38qu5vn": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_msc_id_3.overall_maximum_temperature"
+        "topic": "/pwt/master_msc_id_3.overall_maximum_temperature"
       },
       "display": {
         "label": "Display",
@@ -67,7 +67,7 @@
     "value-display.Value Display!w1do3w": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_msc_id_3.overall_maximum_voltage"
+        "topic": "/pwt/master_msc_id_3.overall_maximum_voltage"
       },
       "display": {
         "label": "Display",
@@ -88,7 +88,7 @@
     },
     "foxglove-ams-gauge-display.ams-gauge-display!1fcv8lj": {
       "title": "",
-      "topic": "/can/dbc/master_msc_id_3",
+      "topic": "/pwt/master_msc_id_3",
       "field": "overall_maximum_voltage",
       "unit": "V",
       "multiplier": 0.001,
@@ -117,7 +117,7 @@
       "foxglovePanelTitle": "FAN"
     },
     "foxglove-ams-gauge-display.ams-gauge-display!1nb1u3w": {
-      "topic": "/can/dbc/master_msc_id_1",
+      "topic": "/pwt/master_msc_id_1",
       "field": "ams_current_draw",
       "unit": "A",
       "multiplier": 0.001,
@@ -136,7 +136,7 @@
       "foxglovePanelTitle": "Pack Current"
     },
     "Indicator!2ncq4ad": {
-      "path": "/can/dbc/master_msc_id_1.fault_counter",
+      "path": "/pwt/master_msc_id_1.fault_counter",
       "style": "background",
       "fontSize": 24,
       "fallbackColor": "#68e24a",
@@ -154,7 +154,7 @@
     "value-display.Value Display!3qb8kwt": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_msc_id_4.slaves_detected"
+        "topic": "/pwt/master_msc_id_4.slaves_detected"
       },
       "display": {
         "label": "Display",
@@ -176,7 +176,7 @@
     "value-display.Value Display!2s8roio": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_msc_id_3.overall_minimum_temperature"
+        "topic": "/pwt/master_msc_id_3.overall_minimum_temperature"
       },
       "display": {
         "label": "Display",
@@ -198,7 +198,7 @@
     "value-display.Value Display!1in6o0g": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_msc_id_3.overall_minimum_voltage"
+        "topic": "/pwt/master_msc_id_3.overall_minimum_voltage"
       },
       "display": {
         "label": "Display",
@@ -297,7 +297,7 @@
     "value-display.Value Display!3je2yen": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_msc_id_1.master_state"
+        "topic": "/pwt/master_msc_id_1.master_state"
       },
       "display": {
         "label": "Display",
@@ -319,7 +319,7 @@
     "value-display.Value Display!13jioct": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_precharge_id_1.precharge_state"
+        "topic": "/pwt/master_precharge_id_1.precharge_state"
       },
       "display": {
         "label": "Display",
@@ -341,7 +341,7 @@
     "value-display.Value Display!1ge8762": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_msc_id_2.master_runtime"
+        "topic": "/pwt/master_msc_id_2.master_runtime"
       },
       "display": {
         "label": "Display",
@@ -383,7 +383,7 @@
       "foxglovePanelTitle": "CAN Bus Load"
     },
     "Indicator!3eus7q": {
-      "path": "/can/dbc/master_precharge_id_1",
+      "path": "/pwt/master_precharge_id_1",
       "style": "background",
       "fontSize": 36,
       "fallbackColor": "#ff7b00",
@@ -399,7 +399,7 @@
       "foxglovePanelTitle": "AIR+"
     },
     "Indicator!4anhofh": {
-      "path": "/can/dbc/master_precharge_id_1",
+      "path": "/pwt/master_precharge_id_1",
       "style": "background",
       "fontSize": 36,
       "fallbackColor": "#ff7b00",
@@ -415,7 +415,7 @@
       "foxglovePanelTitle": "AIR-"
     },
     "Indicator!gtjpb7": {
-      "path": "/can/dbc/master_precharge_id_1",
+      "path": "/pwt/master_precharge_id_1",
       "style": "background",
       "fontSize": 36,
       "fallbackColor": "#ff7b00",
@@ -431,7 +431,7 @@
       "foxglovePanelTitle": "Precharge"
     },
     "Indicator!2yry5zo": {
-      "path": "/can/dbc/master_precharge_id_1",
+      "path": "/pwt/master_precharge_id_1",
       "style": "background",
       "fontSize": 36,
       "fallbackColor": "#ff7b00",
@@ -449,7 +449,7 @@
     "value-display.Value Display!ac8d2x": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_msc_id_1.mcu_temperature"
+        "topic": "/pwt/master_msc_id_1.mcu_temperature"
       },
       "display": {
         "label": "Display",
@@ -471,7 +471,7 @@
     "value-display.Value Display!2sldj9q": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_msc_id_1.ams_current_draw"
+        "topic": "/pwt/master_msc_id_1.ams_current_draw"
       },
       "display": {
         "label": "Display",
@@ -493,7 +493,7 @@
     "value-display.Value Display!1ocoqtz": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_msc_id_1.mcu_vref"
+        "topic": "/pwt/master_msc_id_1.mcu_vref"
       },
       "display": {
         "label": "Display",
@@ -515,7 +515,7 @@
     "value-display.Value Display!fofl49": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_msc_id_1.master_firmware_version"
+        "topic": "/pwt/master_msc_id_1.master_firmware_version"
       },
       "display": {
         "label": "Display",
@@ -535,7 +535,7 @@
       "foxglovePanelTitle": "Firmaware Version"
     },
     "bar-display.Bar Display!9sn6nc": {
-      "topicField": "/can/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -550,71 +550,71 @@
       "overvoltage": 4.2,
       "slaves": [
         {
-          "voltageId1Topic": "/can/dbc/slave_01_voltage_id_1",
-          "voltageId2Topic": "/can/dbc/slave_01_voltage_id_2",
-          "voltageId3Topic": "/can/dbc/slave_01_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_01_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_01_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_01_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/can/dbc/slave_02_voltage_id_1",
-          "voltageId2Topic": "/can/dbc/slave_02_voltage_id_2",
-          "voltageId3Topic": "/can/dbc/slave_02_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_02_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_02_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_02_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/can/dbc/slave_03_voltage_id_1",
-          "voltageId2Topic": "/can/dbc/slave_03_voltage_id_2",
-          "voltageId3Topic": "/can/dbc/slave_03_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_03_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_03_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_03_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/can/dbc/slave_04_voltage_id_1",
-          "voltageId2Topic": "/can/dbc/slave_04_voltage_id_2",
-          "voltageId3Topic": "/can/dbc/slave_04_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_04_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_04_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_04_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/can/dbc/slave_05_voltage_id_1",
-          "voltageId2Topic": "/can/dbc/slave_05_voltage_id_2",
-          "voltageId3Topic": "/can/dbc/slave_05_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_05_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_05_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_05_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/can/dbc/slave_06_voltage_id_1",
-          "voltageId2Topic": "/can/dbc/slave_06_voltage_id_2",
-          "voltageId3Topic": "/can/dbc/slave_06_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_06_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_06_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_06_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/can/dbc/slave_07_voltage_id_1",
-          "voltageId2Topic": "/can/dbc/slave_07_voltage_id_2",
-          "voltageId3Topic": "/can/dbc/slave_07_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_07_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_07_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_07_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/can/dbc/slave_08_voltage_id_1",
-          "voltageId2Topic": "/can/dbc/slave_08_voltage_id_2",
-          "voltageId3Topic": "/can/dbc/slave_08_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_08_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_08_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_08_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/can/dbc/slave_09_voltage_id_1",
-          "voltageId2Topic": "/can/dbc/slave_09_voltage_id_2",
-          "voltageId3Topic": "/can/dbc/slave_09_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_09_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_09_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_09_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/can/dbc/slave_10_voltage_id_1",
-          "voltageId2Topic": "/can/dbc/slave_10_voltage_id_2",
-          "voltageId3Topic": "/can/dbc/slave_10_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_10_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_10_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_10_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/can/dbc/slave_11_voltage_id_1",
-          "voltageId2Topic": "/can/dbc/slave_11_voltage_id_2",
-          "voltageId3Topic": "/can/dbc/slave_11_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_11_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_11_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_11_voltage_id_3"
         },
         {
-          "voltageId1Topic": "/can/dbc/slave_12_voltage_id_1",
-          "voltageId2Topic": "/can/dbc/slave_12_voltage_id_2",
-          "voltageId3Topic": "/can/dbc/slave_12_voltage_id_3"
+          "voltageId1Topic": "/pwt/slave_12_voltage_id_1",
+          "voltageId2Topic": "/pwt/slave_12_voltage_id_2",
+          "voltageId3Topic": "/pwt/slave_12_voltage_id_3"
         }
       ],
       "foxglovePanelTitle": "Voltages"
     },
     "lart-temperature-table.AMS Temperature Table (LART)!1letg2j": {},
     "bar-display.Bar Display!b3klbk": {
-      "topicField": "/can/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -625,7 +625,7 @@
     },
     "lart-temperature-table.AMS Cell Voltage Bar (LART)!4dlwohl": {},
     "bar-display.Bar Display!33ewjyl": {
-      "topicField": "/can/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -636,7 +636,7 @@
     },
     "lart-temperature-table.AMS Cell Temperature Bar (LART)!26pemw7": {},
     "bar-display.Bar Display!2ecmbsq": {
-      "topicField": "/can/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -648,14 +648,14 @@
     "Plot!2z7bpdb": {
       "paths": [
         {
-          "value": "/can/dbc/master_msc_id_3.overall_maximum_voltage",
+          "value": "/pwt/master_msc_id_3.overall_maximum_voltage",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Overall Maximum Voltage"
         },
         {
-          "value": "/can/dbc/master_msc_id_3.overall_minimum_voltage",
+          "value": "/pwt/master_msc_id_3.overall_minimum_voltage",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
@@ -675,14 +675,14 @@
     "Plot!1iyllp": {
       "paths": [
         {
-          "value": "/can/dbc/master_msc_id_3.overall_maximum_temperature",
+          "value": "/pwt/master_msc_id_3.overall_maximum_temperature",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Overall Maximum Temperature"
         },
         {
-          "value": "/can/dbc/master_msc_id_3.overall_minimum_temperature",
+          "value": "/pwt/master_msc_id_3.overall_minimum_temperature",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
@@ -900,7 +900,7 @@
     "value-display.Value Display!2h9ozw1": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_msc_id_1.fault_counter"
+        "topic": "/pwt/master_msc_id_1.fault_counter"
       },
       "display": {
         "label": "Display",
@@ -922,7 +922,7 @@
     "value-display.Value Display!o8833s": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_msc_id_2.fault1_code"
+        "topic": "/pwt/master_msc_id_2.fault1_code"
       },
       "display": {
         "label": "Display",
@@ -944,7 +944,7 @@
     "value-display.Value Display!38stc89": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_msc_id_2.fault2_code"
+        "topic": "/pwt/master_msc_id_2.fault2_code"
       },
       "display": {
         "label": "Display",
@@ -966,7 +966,7 @@
     "value-display.Value Display!3v5pggl": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_msc_id_2.fault1_index_value"
+        "topic": "/pwt/master_msc_id_2.fault1_index_value"
       },
       "display": {
         "label": "Display",
@@ -988,7 +988,7 @@
     "value-display.Value Display!2rvrmx5": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_msc_id_2.fault2_index_value"
+        "topic": "/pwt/master_msc_id_2.fault2_index_value"
       },
       "display": {
         "label": "Display",
@@ -1010,7 +1010,7 @@
     "value-display.Value Display!17nsuqe": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_msc_id_2.fault1_index_type"
+        "topic": "/pwt/master_msc_id_2.fault1_index_type"
       },
       "display": {
         "label": "Display",
@@ -1032,7 +1032,7 @@
     "value-display.Value Display!28w37c4": {
       "data": {
         "label": "Data",
-        "topic": "/can/dbc/master_msc_id_2.fault2_index_type"
+        "topic": "/pwt/master_msc_id_2.fault2_index_type"
       },
       "display": {
         "label": "Display",
@@ -1052,29 +1052,29 @@
       "foxglovePanelTitle": "Fault Index"
     },
     "Table!auto_25": {
-      "topicPath": "/can/dbc/acu",
+      "topicPath": "/can/acu",
       "title": "ACU status"
     },
     "Table!auto_26": {
-      "topicPath": "/can/dbc/jetson",
+      "topicPath": "/can/jetson",
       "title": "Jetson status"
     },
     "Table!auto_27": {
-      "topicPath": "/can/dbc/slam_stats_can",
+      "topicPath": "/can/slam_stats_can",
       "title": "SLAM stats"
     },
     "Table!auto_28": {
-      "topicPath": "/can/dbc/dv_status",
+      "topicPath": "/can/dv_status",
       "title": "DV status (AMI/AS/EBS/steering)"
     },
     "Table!auto_29": {
-      "topicPath": "/can/dbc/res",
+      "topicPath": "/can/res",
       "title": "RES (remote e-stop)"
     },
     "Plot!auto_30": {
       "paths": [
         {
-          "value": "/can/dbc/acu/mission_select.data",
+          "value": "/can/acu/mission_select.data",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
@@ -1091,28 +1091,28 @@
     "Plot!auto_31": {
       "paths": [
         {
-          "value": "/can/dbc/dv_dynamics_1.speed_actual",
+          "value": "/can/dv_dynamics_1.speed_actual",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Speed actual"
         },
         {
-          "value": "/can/dbc/dv_dynamics_1.speed_target",
+          "value": "/can/dv_dynamics_1.speed_target",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Speed target"
         },
         {
-          "value": "/can/dbc/dv_dynamics_1.steering_angle_actual",
+          "value": "/can/dv_dynamics_1.steering_angle_actual",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Steering actual"
         },
         {
-          "value": "/can/dbc/dv_dynamics_1.steering_angle_target",
+          "value": "/can/dv_dynamics_1.steering_angle_target",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
@@ -1129,28 +1129,28 @@
     "Plot!auto_32": {
       "paths": [
         {
-          "value": "/can/dbc/dv_dynamics_1.brake_hydr_actual",
+          "value": "/can/dv_dynamics_1.brake_hydr_actual",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Brake hydr actual"
         },
         {
-          "value": "/can/dbc/dv_dynamics_1.brake_hydr_target",
+          "value": "/can/dv_dynamics_1.brake_hydr_target",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Brake hydr target"
         },
         {
-          "value": "/can/dbc/dv_dynamics_1.motor_moment_actual",
+          "value": "/can/dv_dynamics_1.motor_moment_actual",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Motor moment actual"
         },
         {
-          "value": "/can/dbc/dv_dynamics_1.motor_moment_target",
+          "value": "/can/dv_dynamics_1.motor_moment_target",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
@@ -1167,21 +1167,21 @@
     "Plot!auto_33": {
       "paths": [
         {
-          "value": "/can/dbc/dv_dynamics_2.acceleration_lateral",
+          "value": "/can/dv_dynamics_2.acceleration_lateral",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Accel lateral"
         },
         {
-          "value": "/can/dbc/dv_dynamics_2.acceleration_longitudinal",
+          "value": "/can/dv_dynamics_2.acceleration_longitudinal",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Accel longitudinal"
         },
         {
-          "value": "/can/dbc/dv_dynamics_2.yaw_rate",
+          "value": "/can/dv_dynamics_2.yaw_rate",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
@@ -2246,21 +2246,21 @@
     "Plot!auto_2001": {
       "paths": [
         {
-          "value": "/can/dbc/vcu_hv.brake_pressure_front",
+          "value": "/can/vcu_hv.brake_pressure_front",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Brake pressure front"
         },
         {
-          "value": "/can/dbc/vcu_hv.brake_pressure_rear",
+          "value": "/can/vcu_hv.brake_pressure_rear",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Brake pressure rear"
         },
         {
-          "value": "/can/dbc/vcu_hv.hv",
+          "value": "/can/vcu_hv.hv",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
@@ -2277,28 +2277,28 @@
     "Plot!auto_2002": {
       "paths": [
         {
-          "value": "/can/dbc/asf_signals.brake_pressure_front",
+          "value": "/can/asf_signals.brake_pressure_front",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Brake front"
         },
         {
-          "value": "/can/dbc/asf_signals.brake_pressure_rear",
+          "value": "/can/asf_signals.brake_pressure_rear",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Brake rear"
         },
         {
-          "value": "/can/dbc/asf_signals.ebs_pressure_tank_front",
+          "value": "/can/asf_signals.ebs_pressure_tank_front",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "EBS tank front"
         },
         {
-          "value": "/can/dbc/asf_signals.ebs_pressure_tank_rear",
+          "value": "/can/asf_signals.ebs_pressure_tank_rear",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
@@ -2313,7 +2313,7 @@
       "xAxisVal": "timestamp"
     },
     "bar-display.Bar Display!auto_2004": {
-      "topicField": "/can/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -2325,84 +2325,84 @@
     "Plot!auto_2005": {
       "paths": [
         {
-          "value": "/can/dbc/slave_01_voltage_id_1.cell_voltage_1",
+          "value": "/pwt/slave_01_voltage_id_1.cell_voltage_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 1"
         },
         {
-          "value": "/can/dbc/slave_01_voltage_id_1.cell_voltage_2",
+          "value": "/pwt/slave_01_voltage_id_1.cell_voltage_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 2"
         },
         {
-          "value": "/can/dbc/slave_01_voltage_id_1.cell_voltage_3",
+          "value": "/pwt/slave_01_voltage_id_1.cell_voltage_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 3"
         },
         {
-          "value": "/can/dbc/slave_01_voltage_id_1.cell_voltage_4",
+          "value": "/pwt/slave_01_voltage_id_1.cell_voltage_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 4"
         },
         {
-          "value": "/can/dbc/slave_01_voltage_id_2.cell_voltage_5",
+          "value": "/pwt/slave_01_voltage_id_2.cell_voltage_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Cell 5"
         },
         {
-          "value": "/can/dbc/slave_01_voltage_id_2.cell_voltage_6",
+          "value": "/pwt/slave_01_voltage_id_2.cell_voltage_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
           "label": "Cell 6"
         },
         {
-          "value": "/can/dbc/slave_01_voltage_id_2.cell_voltage_7",
+          "value": "/pwt/slave_01_voltage_id_2.cell_voltage_7",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#cad660",
           "label": "Cell 7"
         },
         {
-          "value": "/can/dbc/slave_01_voltage_id_2.cell_voltage_8",
+          "value": "/pwt/slave_01_voltage_id_2.cell_voltage_8",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 8"
         },
         {
-          "value": "/can/dbc/slave_01_voltage_id_3.cell_voltage_9",
+          "value": "/pwt/slave_01_voltage_id_3.cell_voltage_9",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 9"
         },
         {
-          "value": "/can/dbc/slave_01_voltage_id_3.cell_voltage_10",
+          "value": "/pwt/slave_01_voltage_id_3.cell_voltage_10",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 10"
         },
         {
-          "value": "/can/dbc/slave_01_voltage_id_3.cell_voltage_11",
+          "value": "/pwt/slave_01_voltage_id_3.cell_voltage_11",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 11"
         },
         {
-          "value": "/can/dbc/slave_01_voltage_id_3.cell_voltage_12",
+          "value": "/pwt/slave_01_voltage_id_3.cell_voltage_12",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
@@ -2422,42 +2422,42 @@
     "Plot!auto_2006": {
       "paths": [
         {
-          "value": "/can/dbc/slave_01_temperature_id_1.temperature_value_1",
+          "value": "/pwt/slave_01_temperature_id_1.temperature_value_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Thermistor 1"
         },
         {
-          "value": "/can/dbc/slave_01_temperature_id_1.temperature_value_2",
+          "value": "/pwt/slave_01_temperature_id_1.temperature_value_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Thermistor 2"
         },
         {
-          "value": "/can/dbc/slave_01_temperature_id_1.temperature_value_3",
+          "value": "/pwt/slave_01_temperature_id_1.temperature_value_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Thermistor 3"
         },
         {
-          "value": "/can/dbc/slave_01_temperature_id_1.temperature_value_4",
+          "value": "/pwt/slave_01_temperature_id_1.temperature_value_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Thermistor 4"
         },
         {
-          "value": "/can/dbc/slave_01_temperature_id_2.temperature_value_5",
+          "value": "/pwt/slave_01_temperature_id_2.temperature_value_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Thermistor 5"
         },
         {
-          "value": "/can/dbc/slave_01_temperature_id_2.temperature_value_6",
+          "value": "/pwt/slave_01_temperature_id_2.temperature_value_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
@@ -2475,7 +2475,7 @@
       "maxYValue": 70
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2007": {
-      "topic": "/can/dbc/slave_01_temperature_id_2",
+      "topic": "/pwt/slave_01_temperature_id_2",
       "field": "temperature_maximum",
       "label": "Max Temperature",
       "unit": " \u00baC",
@@ -2487,7 +2487,7 @@
       "foxglovePanelTitle": "Max Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2008": {
-      "topic": "/can/dbc/slave_01_temperature_id_2",
+      "topic": "/pwt/slave_01_temperature_id_2",
       "field": "temperature_delta",
       "label": "Temp Delta",
       "unit": " \u00baC",
@@ -2499,7 +2499,7 @@
       "foxglovePanelTitle": "Temp Delta"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2009": {
-      "topic": "/can/dbc/slave_01_msc_id_2",
+      "topic": "/pwt/slave_01_msc_id_2",
       "field": "module_ic_temperature",
       "label": "IC Temperature",
       "unit": " \u00baC",
@@ -2511,7 +2511,7 @@
       "foxglovePanelTitle": "IC Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2010": {
-      "topic": "/can/dbc/slave_01_msc_id_1",
+      "topic": "/pwt/slave_01_msc_id_1",
       "field": "module_voltage_avg",
       "label": "Avg Voltage",
       "unit": " V",
@@ -2523,7 +2523,7 @@
       "foxglovePanelTitle": "Avg Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2011": {
-      "topic": "/can/dbc/slave_01_msc_id_1",
+      "topic": "/pwt/slave_01_msc_id_1",
       "field": "module_voltage_max",
       "label": "Max Voltage",
       "unit": " V",
@@ -2535,7 +2535,7 @@
       "foxglovePanelTitle": "Max Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2012": {
-      "topic": "/can/dbc/slave_01_msc_id_1",
+      "topic": "/pwt/slave_01_msc_id_1",
       "field": "module_voltage_min",
       "label": "Min Voltage",
       "unit": " V",
@@ -2547,7 +2547,7 @@
       "foxglovePanelTitle": "Min Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2013": {
-      "topic": "/can/dbc/slave_01_msc_id_2",
+      "topic": "/pwt/slave_01_msc_id_2",
       "field": "module_voltage_delta",
       "label": "Voltage Delta",
       "unit": " V",
@@ -2559,7 +2559,7 @@
       "foxglovePanelTitle": "Voltage Delta"
     },
     "Indicator!auto_2014": {
-      "path": "/can/dbc/slave_01_msc_id_2.module_open_wire",
+      "path": "/pwt/slave_01_msc_id_2.module_open_wire",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -2575,7 +2575,7 @@
       "foxglovePanelTitle": "Open Wire"
     },
     "Indicator!auto_2015": {
-      "path": "/can/dbc/slave_01_msc_id_2.module_undervoltage",
+      "path": "/pwt/slave_01_msc_id_2.module_undervoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -2591,7 +2591,7 @@
       "foxglovePanelTitle": "Undervoltage"
     },
     "Indicator!auto_2016": {
-      "path": "/can/dbc/slave_01_msc_id_2.module_overvoltage",
+      "path": "/pwt/slave_01_msc_id_2.module_overvoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -2607,7 +2607,7 @@
       "foxglovePanelTitle": "Overvoltage"
     },
     "bar-display.Bar Display!auto_2017": {
-      "topicField": "/can/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -2619,84 +2619,84 @@
     "Plot!auto_2018": {
       "paths": [
         {
-          "value": "/can/dbc/slave_02_voltage_id_1.cell_voltage_1",
+          "value": "/pwt/slave_02_voltage_id_1.cell_voltage_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 1"
         },
         {
-          "value": "/can/dbc/slave_02_voltage_id_1.cell_voltage_2",
+          "value": "/pwt/slave_02_voltage_id_1.cell_voltage_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 2"
         },
         {
-          "value": "/can/dbc/slave_02_voltage_id_1.cell_voltage_3",
+          "value": "/pwt/slave_02_voltage_id_1.cell_voltage_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 3"
         },
         {
-          "value": "/can/dbc/slave_02_voltage_id_1.cell_voltage_4",
+          "value": "/pwt/slave_02_voltage_id_1.cell_voltage_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 4"
         },
         {
-          "value": "/can/dbc/slave_02_voltage_id_2.cell_voltage_5",
+          "value": "/pwt/slave_02_voltage_id_2.cell_voltage_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Cell 5"
         },
         {
-          "value": "/can/dbc/slave_02_voltage_id_2.cell_voltage_6",
+          "value": "/pwt/slave_02_voltage_id_2.cell_voltage_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
           "label": "Cell 6"
         },
         {
-          "value": "/can/dbc/slave_02_voltage_id_2.cell_voltage_7",
+          "value": "/pwt/slave_02_voltage_id_2.cell_voltage_7",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#cad660",
           "label": "Cell 7"
         },
         {
-          "value": "/can/dbc/slave_02_voltage_id_2.cell_voltage_8",
+          "value": "/pwt/slave_02_voltage_id_2.cell_voltage_8",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 8"
         },
         {
-          "value": "/can/dbc/slave_02_voltage_id_3.cell_voltage_9",
+          "value": "/pwt/slave_02_voltage_id_3.cell_voltage_9",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 9"
         },
         {
-          "value": "/can/dbc/slave_02_voltage_id_3.cell_voltage_10",
+          "value": "/pwt/slave_02_voltage_id_3.cell_voltage_10",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 10"
         },
         {
-          "value": "/can/dbc/slave_02_voltage_id_3.cell_voltage_11",
+          "value": "/pwt/slave_02_voltage_id_3.cell_voltage_11",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 11"
         },
         {
-          "value": "/can/dbc/slave_02_voltage_id_3.cell_voltage_12",
+          "value": "/pwt/slave_02_voltage_id_3.cell_voltage_12",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
@@ -2716,42 +2716,42 @@
     "Plot!auto_2019": {
       "paths": [
         {
-          "value": "/can/dbc/slave_02_temperature_id_1.temperature_value_1",
+          "value": "/pwt/slave_02_temperature_id_1.temperature_value_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Thermistor 1"
         },
         {
-          "value": "/can/dbc/slave_02_temperature_id_1.temperature_value_2",
+          "value": "/pwt/slave_02_temperature_id_1.temperature_value_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Thermistor 2"
         },
         {
-          "value": "/can/dbc/slave_02_temperature_id_1.temperature_value_3",
+          "value": "/pwt/slave_02_temperature_id_1.temperature_value_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Thermistor 3"
         },
         {
-          "value": "/can/dbc/slave_02_temperature_id_1.temperature_value_4",
+          "value": "/pwt/slave_02_temperature_id_1.temperature_value_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Thermistor 4"
         },
         {
-          "value": "/can/dbc/slave_02_temperature_id_2.temperature_value_5",
+          "value": "/pwt/slave_02_temperature_id_2.temperature_value_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Thermistor 5"
         },
         {
-          "value": "/can/dbc/slave_02_temperature_id_2.temperature_value_6",
+          "value": "/pwt/slave_02_temperature_id_2.temperature_value_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
@@ -2769,7 +2769,7 @@
       "maxYValue": 70
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2020": {
-      "topic": "/can/dbc/slave_02_temperature_id_2",
+      "topic": "/pwt/slave_02_temperature_id_2",
       "field": "temperature_maximum",
       "label": "Max Temperature",
       "unit": " \u00baC",
@@ -2781,7 +2781,7 @@
       "foxglovePanelTitle": "Max Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2021": {
-      "topic": "/can/dbc/slave_02_temperature_id_2",
+      "topic": "/pwt/slave_02_temperature_id_2",
       "field": "temperature_delta",
       "label": "Temp Delta",
       "unit": " \u00baC",
@@ -2793,7 +2793,7 @@
       "foxglovePanelTitle": "Temp Delta"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2022": {
-      "topic": "/can/dbc/slave_02_msc_id_2",
+      "topic": "/pwt/slave_02_msc_id_2",
       "field": "module_ic_temperature",
       "label": "IC Temperature",
       "unit": " \u00baC",
@@ -2805,7 +2805,7 @@
       "foxglovePanelTitle": "IC Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2023": {
-      "topic": "/can/dbc/slave_02_msc_id_1",
+      "topic": "/pwt/slave_02_msc_id_1",
       "field": "module_voltage_avg",
       "label": "Avg Voltage",
       "unit": " V",
@@ -2817,7 +2817,7 @@
       "foxglovePanelTitle": "Avg Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2024": {
-      "topic": "/can/dbc/slave_02_msc_id_1",
+      "topic": "/pwt/slave_02_msc_id_1",
       "field": "module_voltage_max",
       "label": "Max Voltage",
       "unit": " V",
@@ -2829,7 +2829,7 @@
       "foxglovePanelTitle": "Max Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2025": {
-      "topic": "/can/dbc/slave_02_msc_id_1",
+      "topic": "/pwt/slave_02_msc_id_1",
       "field": "module_voltage_min",
       "label": "Min Voltage",
       "unit": " V",
@@ -2841,7 +2841,7 @@
       "foxglovePanelTitle": "Min Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2026": {
-      "topic": "/can/dbc/slave_02_msc_id_2",
+      "topic": "/pwt/slave_02_msc_id_2",
       "field": "module_voltage_delta",
       "label": "Voltage Delta",
       "unit": " V",
@@ -2853,7 +2853,7 @@
       "foxglovePanelTitle": "Voltage Delta"
     },
     "Indicator!auto_2027": {
-      "path": "/can/dbc/slave_02_msc_id_2.module_open_wire",
+      "path": "/pwt/slave_02_msc_id_2.module_open_wire",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -2869,7 +2869,7 @@
       "foxglovePanelTitle": "Open Wire"
     },
     "Indicator!auto_2028": {
-      "path": "/can/dbc/slave_02_msc_id_2.module_undervoltage",
+      "path": "/pwt/slave_02_msc_id_2.module_undervoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -2885,7 +2885,7 @@
       "foxglovePanelTitle": "Undervoltage"
     },
     "Indicator!auto_2029": {
-      "path": "/can/dbc/slave_02_msc_id_2.module_overvoltage",
+      "path": "/pwt/slave_02_msc_id_2.module_overvoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -2901,7 +2901,7 @@
       "foxglovePanelTitle": "Overvoltage"
     },
     "bar-display.Bar Display!auto_2030": {
-      "topicField": "/can/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -2913,84 +2913,84 @@
     "Plot!auto_2031": {
       "paths": [
         {
-          "value": "/can/dbc/slave_03_voltage_id_1.cell_voltage_1",
+          "value": "/pwt/slave_03_voltage_id_1.cell_voltage_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 1"
         },
         {
-          "value": "/can/dbc/slave_03_voltage_id_1.cell_voltage_2",
+          "value": "/pwt/slave_03_voltage_id_1.cell_voltage_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 2"
         },
         {
-          "value": "/can/dbc/slave_03_voltage_id_1.cell_voltage_3",
+          "value": "/pwt/slave_03_voltage_id_1.cell_voltage_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 3"
         },
         {
-          "value": "/can/dbc/slave_03_voltage_id_1.cell_voltage_4",
+          "value": "/pwt/slave_03_voltage_id_1.cell_voltage_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 4"
         },
         {
-          "value": "/can/dbc/slave_03_voltage_id_2.cell_voltage_5",
+          "value": "/pwt/slave_03_voltage_id_2.cell_voltage_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Cell 5"
         },
         {
-          "value": "/can/dbc/slave_03_voltage_id_2.cell_voltage_6",
+          "value": "/pwt/slave_03_voltage_id_2.cell_voltage_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
           "label": "Cell 6"
         },
         {
-          "value": "/can/dbc/slave_03_voltage_id_2.cell_voltage_7",
+          "value": "/pwt/slave_03_voltage_id_2.cell_voltage_7",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#cad660",
           "label": "Cell 7"
         },
         {
-          "value": "/can/dbc/slave_03_voltage_id_2.cell_voltage_8",
+          "value": "/pwt/slave_03_voltage_id_2.cell_voltage_8",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 8"
         },
         {
-          "value": "/can/dbc/slave_03_voltage_id_3.cell_voltage_9",
+          "value": "/pwt/slave_03_voltage_id_3.cell_voltage_9",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 9"
         },
         {
-          "value": "/can/dbc/slave_03_voltage_id_3.cell_voltage_10",
+          "value": "/pwt/slave_03_voltage_id_3.cell_voltage_10",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 10"
         },
         {
-          "value": "/can/dbc/slave_03_voltage_id_3.cell_voltage_11",
+          "value": "/pwt/slave_03_voltage_id_3.cell_voltage_11",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 11"
         },
         {
-          "value": "/can/dbc/slave_03_voltage_id_3.cell_voltage_12",
+          "value": "/pwt/slave_03_voltage_id_3.cell_voltage_12",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
@@ -3010,42 +3010,42 @@
     "Plot!auto_2032": {
       "paths": [
         {
-          "value": "/can/dbc/slave_03_temperature_id_1.temperature_value_1",
+          "value": "/pwt/slave_03_temperature_id_1.temperature_value_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Thermistor 1"
         },
         {
-          "value": "/can/dbc/slave_03_temperature_id_1.temperature_value_2",
+          "value": "/pwt/slave_03_temperature_id_1.temperature_value_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Thermistor 2"
         },
         {
-          "value": "/can/dbc/slave_03_temperature_id_1.temperature_value_3",
+          "value": "/pwt/slave_03_temperature_id_1.temperature_value_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Thermistor 3"
         },
         {
-          "value": "/can/dbc/slave_03_temperature_id_1.temperature_value_4",
+          "value": "/pwt/slave_03_temperature_id_1.temperature_value_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Thermistor 4"
         },
         {
-          "value": "/can/dbc/slave_03_temperature_id_2.temperature_value_5",
+          "value": "/pwt/slave_03_temperature_id_2.temperature_value_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Thermistor 5"
         },
         {
-          "value": "/can/dbc/slave_03_temperature_id_2.temperature_value_6",
+          "value": "/pwt/slave_03_temperature_id_2.temperature_value_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
@@ -3063,7 +3063,7 @@
       "maxYValue": 70
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2033": {
-      "topic": "/can/dbc/slave_03_temperature_id_2",
+      "topic": "/pwt/slave_03_temperature_id_2",
       "field": "temperature_maximum",
       "label": "Max Temperature",
       "unit": " \u00baC",
@@ -3075,7 +3075,7 @@
       "foxglovePanelTitle": "Max Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2034": {
-      "topic": "/can/dbc/slave_03_temperature_id_2",
+      "topic": "/pwt/slave_03_temperature_id_2",
       "field": "temperature_delta",
       "label": "Temp Delta",
       "unit": " \u00baC",
@@ -3087,7 +3087,7 @@
       "foxglovePanelTitle": "Temp Delta"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2035": {
-      "topic": "/can/dbc/slave_03_msc_id_2",
+      "topic": "/pwt/slave_03_msc_id_2",
       "field": "module_ic_temperature",
       "label": "IC Temperature",
       "unit": " \u00baC",
@@ -3099,7 +3099,7 @@
       "foxglovePanelTitle": "IC Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2036": {
-      "topic": "/can/dbc/slave_03_msc_id_1",
+      "topic": "/pwt/slave_03_msc_id_1",
       "field": "module_voltage_avg",
       "label": "Avg Voltage",
       "unit": " V",
@@ -3111,7 +3111,7 @@
       "foxglovePanelTitle": "Avg Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2037": {
-      "topic": "/can/dbc/slave_03_msc_id_1",
+      "topic": "/pwt/slave_03_msc_id_1",
       "field": "module_voltage_max",
       "label": "Max Voltage",
       "unit": " V",
@@ -3123,7 +3123,7 @@
       "foxglovePanelTitle": "Max Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2038": {
-      "topic": "/can/dbc/slave_03_msc_id_1",
+      "topic": "/pwt/slave_03_msc_id_1",
       "field": "module_voltage_min",
       "label": "Min Voltage",
       "unit": " V",
@@ -3135,7 +3135,7 @@
       "foxglovePanelTitle": "Min Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2039": {
-      "topic": "/can/dbc/slave_03_msc_id_2",
+      "topic": "/pwt/slave_03_msc_id_2",
       "field": "module_voltage_delta",
       "label": "Voltage Delta",
       "unit": " V",
@@ -3147,7 +3147,7 @@
       "foxglovePanelTitle": "Voltage Delta"
     },
     "Indicator!auto_2040": {
-      "path": "/can/dbc/slave_03_msc_id_2.module_open_wire",
+      "path": "/pwt/slave_03_msc_id_2.module_open_wire",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -3163,7 +3163,7 @@
       "foxglovePanelTitle": "Open Wire"
     },
     "Indicator!auto_2041": {
-      "path": "/can/dbc/slave_03_msc_id_2.module_undervoltage",
+      "path": "/pwt/slave_03_msc_id_2.module_undervoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -3179,7 +3179,7 @@
       "foxglovePanelTitle": "Undervoltage"
     },
     "Indicator!auto_2042": {
-      "path": "/can/dbc/slave_03_msc_id_2.module_overvoltage",
+      "path": "/pwt/slave_03_msc_id_2.module_overvoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -3195,7 +3195,7 @@
       "foxglovePanelTitle": "Overvoltage"
     },
     "bar-display.Bar Display!auto_2043": {
-      "topicField": "/can/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -3207,84 +3207,84 @@
     "Plot!auto_2044": {
       "paths": [
         {
-          "value": "/can/dbc/slave_04_voltage_id_1.cell_voltage_1",
+          "value": "/pwt/slave_04_voltage_id_1.cell_voltage_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 1"
         },
         {
-          "value": "/can/dbc/slave_04_voltage_id_1.cell_voltage_2",
+          "value": "/pwt/slave_04_voltage_id_1.cell_voltage_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 2"
         },
         {
-          "value": "/can/dbc/slave_04_voltage_id_1.cell_voltage_3",
+          "value": "/pwt/slave_04_voltage_id_1.cell_voltage_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 3"
         },
         {
-          "value": "/can/dbc/slave_04_voltage_id_1.cell_voltage_4",
+          "value": "/pwt/slave_04_voltage_id_1.cell_voltage_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 4"
         },
         {
-          "value": "/can/dbc/slave_04_voltage_id_2.cell_voltage_5",
+          "value": "/pwt/slave_04_voltage_id_2.cell_voltage_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Cell 5"
         },
         {
-          "value": "/can/dbc/slave_04_voltage_id_2.cell_voltage_6",
+          "value": "/pwt/slave_04_voltage_id_2.cell_voltage_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
           "label": "Cell 6"
         },
         {
-          "value": "/can/dbc/slave_04_voltage_id_2.cell_voltage_7",
+          "value": "/pwt/slave_04_voltage_id_2.cell_voltage_7",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#cad660",
           "label": "Cell 7"
         },
         {
-          "value": "/can/dbc/slave_04_voltage_id_2.cell_voltage_8",
+          "value": "/pwt/slave_04_voltage_id_2.cell_voltage_8",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 8"
         },
         {
-          "value": "/can/dbc/slave_04_voltage_id_3.cell_voltage_9",
+          "value": "/pwt/slave_04_voltage_id_3.cell_voltage_9",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 9"
         },
         {
-          "value": "/can/dbc/slave_04_voltage_id_3.cell_voltage_10",
+          "value": "/pwt/slave_04_voltage_id_3.cell_voltage_10",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 10"
         },
         {
-          "value": "/can/dbc/slave_04_voltage_id_3.cell_voltage_11",
+          "value": "/pwt/slave_04_voltage_id_3.cell_voltage_11",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 11"
         },
         {
-          "value": "/can/dbc/slave_04_voltage_id_3.cell_voltage_12",
+          "value": "/pwt/slave_04_voltage_id_3.cell_voltage_12",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
@@ -3304,42 +3304,42 @@
     "Plot!auto_2045": {
       "paths": [
         {
-          "value": "/can/dbc/slave_04_temperature_id_1.temperature_value_1",
+          "value": "/pwt/slave_04_temperature_id_1.temperature_value_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Thermistor 1"
         },
         {
-          "value": "/can/dbc/slave_04_temperature_id_1.temperature_value_2",
+          "value": "/pwt/slave_04_temperature_id_1.temperature_value_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Thermistor 2"
         },
         {
-          "value": "/can/dbc/slave_04_temperature_id_1.temperature_value_3",
+          "value": "/pwt/slave_04_temperature_id_1.temperature_value_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Thermistor 3"
         },
         {
-          "value": "/can/dbc/slave_04_temperature_id_1.temperature_value_4",
+          "value": "/pwt/slave_04_temperature_id_1.temperature_value_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Thermistor 4"
         },
         {
-          "value": "/can/dbc/slave_04_temperature_id_2.temperature_value_5",
+          "value": "/pwt/slave_04_temperature_id_2.temperature_value_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Thermistor 5"
         },
         {
-          "value": "/can/dbc/slave_04_temperature_id_2.temperature_value_6",
+          "value": "/pwt/slave_04_temperature_id_2.temperature_value_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
@@ -3357,7 +3357,7 @@
       "maxYValue": 70
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2046": {
-      "topic": "/can/dbc/slave_04_temperature_id_2",
+      "topic": "/pwt/slave_04_temperature_id_2",
       "field": "temperature_maximum",
       "label": "Max Temperature",
       "unit": " \u00baC",
@@ -3369,7 +3369,7 @@
       "foxglovePanelTitle": "Max Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2047": {
-      "topic": "/can/dbc/slave_04_temperature_id_2",
+      "topic": "/pwt/slave_04_temperature_id_2",
       "field": "temperature_delta",
       "label": "Temp Delta",
       "unit": " \u00baC",
@@ -3381,7 +3381,7 @@
       "foxglovePanelTitle": "Temp Delta"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2048": {
-      "topic": "/can/dbc/slave_04_msc_id_2",
+      "topic": "/pwt/slave_04_msc_id_2",
       "field": "module_ic_temperature",
       "label": "IC Temperature",
       "unit": " \u00baC",
@@ -3393,7 +3393,7 @@
       "foxglovePanelTitle": "IC Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2049": {
-      "topic": "/can/dbc/slave_04_msc_id_1",
+      "topic": "/pwt/slave_04_msc_id_1",
       "field": "module_voltage_avg",
       "label": "Avg Voltage",
       "unit": " V",
@@ -3405,7 +3405,7 @@
       "foxglovePanelTitle": "Avg Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2050": {
-      "topic": "/can/dbc/slave_04_msc_id_1",
+      "topic": "/pwt/slave_04_msc_id_1",
       "field": "module_voltage_max",
       "label": "Max Voltage",
       "unit": " V",
@@ -3417,7 +3417,7 @@
       "foxglovePanelTitle": "Max Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2051": {
-      "topic": "/can/dbc/slave_04_msc_id_1",
+      "topic": "/pwt/slave_04_msc_id_1",
       "field": "module_voltage_min",
       "label": "Min Voltage",
       "unit": " V",
@@ -3429,7 +3429,7 @@
       "foxglovePanelTitle": "Min Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2052": {
-      "topic": "/can/dbc/slave_04_msc_id_2",
+      "topic": "/pwt/slave_04_msc_id_2",
       "field": "module_voltage_delta",
       "label": "Voltage Delta",
       "unit": " V",
@@ -3441,7 +3441,7 @@
       "foxglovePanelTitle": "Voltage Delta"
     },
     "Indicator!auto_2053": {
-      "path": "/can/dbc/slave_04_msc_id_2.module_open_wire",
+      "path": "/pwt/slave_04_msc_id_2.module_open_wire",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -3457,7 +3457,7 @@
       "foxglovePanelTitle": "Open Wire"
     },
     "Indicator!auto_2054": {
-      "path": "/can/dbc/slave_04_msc_id_2.module_undervoltage",
+      "path": "/pwt/slave_04_msc_id_2.module_undervoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -3473,7 +3473,7 @@
       "foxglovePanelTitle": "Undervoltage"
     },
     "Indicator!auto_2055": {
-      "path": "/can/dbc/slave_04_msc_id_2.module_overvoltage",
+      "path": "/pwt/slave_04_msc_id_2.module_overvoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -3489,7 +3489,7 @@
       "foxglovePanelTitle": "Overvoltage"
     },
     "bar-display.Bar Display!auto_2056": {
-      "topicField": "/can/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -3501,84 +3501,84 @@
     "Plot!auto_2057": {
       "paths": [
         {
-          "value": "/can/dbc/slave_05_voltage_id_1.cell_voltage_1",
+          "value": "/pwt/slave_05_voltage_id_1.cell_voltage_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 1"
         },
         {
-          "value": "/can/dbc/slave_05_voltage_id_1.cell_voltage_2",
+          "value": "/pwt/slave_05_voltage_id_1.cell_voltage_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 2"
         },
         {
-          "value": "/can/dbc/slave_05_voltage_id_1.cell_voltage_3",
+          "value": "/pwt/slave_05_voltage_id_1.cell_voltage_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 3"
         },
         {
-          "value": "/can/dbc/slave_05_voltage_id_1.cell_voltage_4",
+          "value": "/pwt/slave_05_voltage_id_1.cell_voltage_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 4"
         },
         {
-          "value": "/can/dbc/slave_05_voltage_id_2.cell_voltage_5",
+          "value": "/pwt/slave_05_voltage_id_2.cell_voltage_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Cell 5"
         },
         {
-          "value": "/can/dbc/slave_05_voltage_id_2.cell_voltage_6",
+          "value": "/pwt/slave_05_voltage_id_2.cell_voltage_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
           "label": "Cell 6"
         },
         {
-          "value": "/can/dbc/slave_05_voltage_id_2.cell_voltage_7",
+          "value": "/pwt/slave_05_voltage_id_2.cell_voltage_7",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#cad660",
           "label": "Cell 7"
         },
         {
-          "value": "/can/dbc/slave_05_voltage_id_2.cell_voltage_8",
+          "value": "/pwt/slave_05_voltage_id_2.cell_voltage_8",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 8"
         },
         {
-          "value": "/can/dbc/slave_05_voltage_id_3.cell_voltage_9",
+          "value": "/pwt/slave_05_voltage_id_3.cell_voltage_9",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 9"
         },
         {
-          "value": "/can/dbc/slave_05_voltage_id_3.cell_voltage_10",
+          "value": "/pwt/slave_05_voltage_id_3.cell_voltage_10",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 10"
         },
         {
-          "value": "/can/dbc/slave_05_voltage_id_3.cell_voltage_11",
+          "value": "/pwt/slave_05_voltage_id_3.cell_voltage_11",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 11"
         },
         {
-          "value": "/can/dbc/slave_05_voltage_id_3.cell_voltage_12",
+          "value": "/pwt/slave_05_voltage_id_3.cell_voltage_12",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
@@ -3598,42 +3598,42 @@
     "Plot!auto_2058": {
       "paths": [
         {
-          "value": "/can/dbc/slave_05_temperature_id_1.temperature_value_1",
+          "value": "/pwt/slave_05_temperature_id_1.temperature_value_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Thermistor 1"
         },
         {
-          "value": "/can/dbc/slave_05_temperature_id_1.temperature_value_2",
+          "value": "/pwt/slave_05_temperature_id_1.temperature_value_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Thermistor 2"
         },
         {
-          "value": "/can/dbc/slave_05_temperature_id_1.temperature_value_3",
+          "value": "/pwt/slave_05_temperature_id_1.temperature_value_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Thermistor 3"
         },
         {
-          "value": "/can/dbc/slave_05_temperature_id_1.temperature_value_4",
+          "value": "/pwt/slave_05_temperature_id_1.temperature_value_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Thermistor 4"
         },
         {
-          "value": "/can/dbc/slave_05_temperature_id_2.temperature_value_5",
+          "value": "/pwt/slave_05_temperature_id_2.temperature_value_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Thermistor 5"
         },
         {
-          "value": "/can/dbc/slave_05_temperature_id_2.temperature_value_6",
+          "value": "/pwt/slave_05_temperature_id_2.temperature_value_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
@@ -3651,7 +3651,7 @@
       "maxYValue": 70
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2059": {
-      "topic": "/can/dbc/slave_05_temperature_id_2",
+      "topic": "/pwt/slave_05_temperature_id_2",
       "field": "temperature_maximum",
       "label": "Max Temperature",
       "unit": " \u00baC",
@@ -3663,7 +3663,7 @@
       "foxglovePanelTitle": "Max Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2060": {
-      "topic": "/can/dbc/slave_05_temperature_id_2",
+      "topic": "/pwt/slave_05_temperature_id_2",
       "field": "temperature_delta",
       "label": "Temp Delta",
       "unit": " \u00baC",
@@ -3675,7 +3675,7 @@
       "foxglovePanelTitle": "Temp Delta"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2061": {
-      "topic": "/can/dbc/slave_05_msc_id_2",
+      "topic": "/pwt/slave_05_msc_id_2",
       "field": "module_ic_temperature",
       "label": "IC Temperature",
       "unit": " \u00baC",
@@ -3687,7 +3687,7 @@
       "foxglovePanelTitle": "IC Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2062": {
-      "topic": "/can/dbc/slave_05_msc_id_1",
+      "topic": "/pwt/slave_05_msc_id_1",
       "field": "module_voltage_avg",
       "label": "Avg Voltage",
       "unit": " V",
@@ -3699,7 +3699,7 @@
       "foxglovePanelTitle": "Avg Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2063": {
-      "topic": "/can/dbc/slave_05_msc_id_1",
+      "topic": "/pwt/slave_05_msc_id_1",
       "field": "module_voltage_max",
       "label": "Max Voltage",
       "unit": " V",
@@ -3711,7 +3711,7 @@
       "foxglovePanelTitle": "Max Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2064": {
-      "topic": "/can/dbc/slave_05_msc_id_1",
+      "topic": "/pwt/slave_05_msc_id_1",
       "field": "module_voltage_min",
       "label": "Min Voltage",
       "unit": " V",
@@ -3723,7 +3723,7 @@
       "foxglovePanelTitle": "Min Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2065": {
-      "topic": "/can/dbc/slave_05_msc_id_2",
+      "topic": "/pwt/slave_05_msc_id_2",
       "field": "module_voltage_delta",
       "label": "Voltage Delta",
       "unit": " V",
@@ -3735,7 +3735,7 @@
       "foxglovePanelTitle": "Voltage Delta"
     },
     "Indicator!auto_2066": {
-      "path": "/can/dbc/slave_05_msc_id_2.module_open_wire",
+      "path": "/pwt/slave_05_msc_id_2.module_open_wire",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -3751,7 +3751,7 @@
       "foxglovePanelTitle": "Open Wire"
     },
     "Indicator!auto_2067": {
-      "path": "/can/dbc/slave_05_msc_id_2.module_undervoltage",
+      "path": "/pwt/slave_05_msc_id_2.module_undervoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -3767,7 +3767,7 @@
       "foxglovePanelTitle": "Undervoltage"
     },
     "Indicator!auto_2068": {
-      "path": "/can/dbc/slave_05_msc_id_2.module_overvoltage",
+      "path": "/pwt/slave_05_msc_id_2.module_overvoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -3783,7 +3783,7 @@
       "foxglovePanelTitle": "Overvoltage"
     },
     "bar-display.Bar Display!auto_2069": {
-      "topicField": "/can/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -3795,84 +3795,84 @@
     "Plot!auto_2070": {
       "paths": [
         {
-          "value": "/can/dbc/slave_06_voltage_id_1.cell_voltage_1",
+          "value": "/pwt/slave_06_voltage_id_1.cell_voltage_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 1"
         },
         {
-          "value": "/can/dbc/slave_06_voltage_id_1.cell_voltage_2",
+          "value": "/pwt/slave_06_voltage_id_1.cell_voltage_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 2"
         },
         {
-          "value": "/can/dbc/slave_06_voltage_id_1.cell_voltage_3",
+          "value": "/pwt/slave_06_voltage_id_1.cell_voltage_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 3"
         },
         {
-          "value": "/can/dbc/slave_06_voltage_id_1.cell_voltage_4",
+          "value": "/pwt/slave_06_voltage_id_1.cell_voltage_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 4"
         },
         {
-          "value": "/can/dbc/slave_06_voltage_id_2.cell_voltage_5",
+          "value": "/pwt/slave_06_voltage_id_2.cell_voltage_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Cell 5"
         },
         {
-          "value": "/can/dbc/slave_06_voltage_id_2.cell_voltage_6",
+          "value": "/pwt/slave_06_voltage_id_2.cell_voltage_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
           "label": "Cell 6"
         },
         {
-          "value": "/can/dbc/slave_06_voltage_id_2.cell_voltage_7",
+          "value": "/pwt/slave_06_voltage_id_2.cell_voltage_7",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#cad660",
           "label": "Cell 7"
         },
         {
-          "value": "/can/dbc/slave_06_voltage_id_2.cell_voltage_8",
+          "value": "/pwt/slave_06_voltage_id_2.cell_voltage_8",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 8"
         },
         {
-          "value": "/can/dbc/slave_06_voltage_id_3.cell_voltage_9",
+          "value": "/pwt/slave_06_voltage_id_3.cell_voltage_9",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 9"
         },
         {
-          "value": "/can/dbc/slave_06_voltage_id_3.cell_voltage_10",
+          "value": "/pwt/slave_06_voltage_id_3.cell_voltage_10",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 10"
         },
         {
-          "value": "/can/dbc/slave_06_voltage_id_3.cell_voltage_11",
+          "value": "/pwt/slave_06_voltage_id_3.cell_voltage_11",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 11"
         },
         {
-          "value": "/can/dbc/slave_06_voltage_id_3.cell_voltage_12",
+          "value": "/pwt/slave_06_voltage_id_3.cell_voltage_12",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
@@ -3892,42 +3892,42 @@
     "Plot!auto_2071": {
       "paths": [
         {
-          "value": "/can/dbc/slave_06_temperature_id_1.temperature_value_1",
+          "value": "/pwt/slave_06_temperature_id_1.temperature_value_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Thermistor 1"
         },
         {
-          "value": "/can/dbc/slave_06_temperature_id_1.temperature_value_2",
+          "value": "/pwt/slave_06_temperature_id_1.temperature_value_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Thermistor 2"
         },
         {
-          "value": "/can/dbc/slave_06_temperature_id_1.temperature_value_3",
+          "value": "/pwt/slave_06_temperature_id_1.temperature_value_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Thermistor 3"
         },
         {
-          "value": "/can/dbc/slave_06_temperature_id_1.temperature_value_4",
+          "value": "/pwt/slave_06_temperature_id_1.temperature_value_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Thermistor 4"
         },
         {
-          "value": "/can/dbc/slave_06_temperature_id_2.temperature_value_5",
+          "value": "/pwt/slave_06_temperature_id_2.temperature_value_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Thermistor 5"
         },
         {
-          "value": "/can/dbc/slave_06_temperature_id_2.temperature_value_6",
+          "value": "/pwt/slave_06_temperature_id_2.temperature_value_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
@@ -3945,7 +3945,7 @@
       "maxYValue": 70
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2072": {
-      "topic": "/can/dbc/slave_06_temperature_id_2",
+      "topic": "/pwt/slave_06_temperature_id_2",
       "field": "temperature_maximum",
       "label": "Max Temperature",
       "unit": " \u00baC",
@@ -3957,7 +3957,7 @@
       "foxglovePanelTitle": "Max Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2073": {
-      "topic": "/can/dbc/slave_06_temperature_id_2",
+      "topic": "/pwt/slave_06_temperature_id_2",
       "field": "temperature_delta",
       "label": "Temp Delta",
       "unit": " \u00baC",
@@ -3969,7 +3969,7 @@
       "foxglovePanelTitle": "Temp Delta"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2074": {
-      "topic": "/can/dbc/slave_06_msc_id_2",
+      "topic": "/pwt/slave_06_msc_id_2",
       "field": "module_ic_temperature",
       "label": "IC Temperature",
       "unit": " \u00baC",
@@ -3981,7 +3981,7 @@
       "foxglovePanelTitle": "IC Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2075": {
-      "topic": "/can/dbc/slave_06_msc_id_1",
+      "topic": "/pwt/slave_06_msc_id_1",
       "field": "module_voltage_avg",
       "label": "Avg Voltage",
       "unit": " V",
@@ -3993,7 +3993,7 @@
       "foxglovePanelTitle": "Avg Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2076": {
-      "topic": "/can/dbc/slave_06_msc_id_1",
+      "topic": "/pwt/slave_06_msc_id_1",
       "field": "module_voltage_max",
       "label": "Max Voltage",
       "unit": " V",
@@ -4005,7 +4005,7 @@
       "foxglovePanelTitle": "Max Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2077": {
-      "topic": "/can/dbc/slave_06_msc_id_1",
+      "topic": "/pwt/slave_06_msc_id_1",
       "field": "module_voltage_min",
       "label": "Min Voltage",
       "unit": " V",
@@ -4017,7 +4017,7 @@
       "foxglovePanelTitle": "Min Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2078": {
-      "topic": "/can/dbc/slave_06_msc_id_2",
+      "topic": "/pwt/slave_06_msc_id_2",
       "field": "module_voltage_delta",
       "label": "Voltage Delta",
       "unit": " V",
@@ -4029,7 +4029,7 @@
       "foxglovePanelTitle": "Voltage Delta"
     },
     "Indicator!auto_2079": {
-      "path": "/can/dbc/slave_06_msc_id_2.module_open_wire",
+      "path": "/pwt/slave_06_msc_id_2.module_open_wire",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -4045,7 +4045,7 @@
       "foxglovePanelTitle": "Open Wire"
     },
     "Indicator!auto_2080": {
-      "path": "/can/dbc/slave_06_msc_id_2.module_undervoltage",
+      "path": "/pwt/slave_06_msc_id_2.module_undervoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -4061,7 +4061,7 @@
       "foxglovePanelTitle": "Undervoltage"
     },
     "Indicator!auto_2081": {
-      "path": "/can/dbc/slave_06_msc_id_2.module_overvoltage",
+      "path": "/pwt/slave_06_msc_id_2.module_overvoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -4077,7 +4077,7 @@
       "foxglovePanelTitle": "Overvoltage"
     },
     "bar-display.Bar Display!auto_2082": {
-      "topicField": "/can/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -4089,84 +4089,84 @@
     "Plot!auto_2083": {
       "paths": [
         {
-          "value": "/can/dbc/slave_07_voltage_id_1.cell_voltage_1",
+          "value": "/pwt/slave_07_voltage_id_1.cell_voltage_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 1"
         },
         {
-          "value": "/can/dbc/slave_07_voltage_id_1.cell_voltage_2",
+          "value": "/pwt/slave_07_voltage_id_1.cell_voltage_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 2"
         },
         {
-          "value": "/can/dbc/slave_07_voltage_id_1.cell_voltage_3",
+          "value": "/pwt/slave_07_voltage_id_1.cell_voltage_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 3"
         },
         {
-          "value": "/can/dbc/slave_07_voltage_id_1.cell_voltage_4",
+          "value": "/pwt/slave_07_voltage_id_1.cell_voltage_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 4"
         },
         {
-          "value": "/can/dbc/slave_07_voltage_id_2.cell_voltage_5",
+          "value": "/pwt/slave_07_voltage_id_2.cell_voltage_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Cell 5"
         },
         {
-          "value": "/can/dbc/slave_07_voltage_id_2.cell_voltage_6",
+          "value": "/pwt/slave_07_voltage_id_2.cell_voltage_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
           "label": "Cell 6"
         },
         {
-          "value": "/can/dbc/slave_07_voltage_id_2.cell_voltage_7",
+          "value": "/pwt/slave_07_voltage_id_2.cell_voltage_7",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#cad660",
           "label": "Cell 7"
         },
         {
-          "value": "/can/dbc/slave_07_voltage_id_2.cell_voltage_8",
+          "value": "/pwt/slave_07_voltage_id_2.cell_voltage_8",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 8"
         },
         {
-          "value": "/can/dbc/slave_07_voltage_id_3.cell_voltage_9",
+          "value": "/pwt/slave_07_voltage_id_3.cell_voltage_9",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 9"
         },
         {
-          "value": "/can/dbc/slave_07_voltage_id_3.cell_voltage_10",
+          "value": "/pwt/slave_07_voltage_id_3.cell_voltage_10",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 10"
         },
         {
-          "value": "/can/dbc/slave_07_voltage_id_3.cell_voltage_11",
+          "value": "/pwt/slave_07_voltage_id_3.cell_voltage_11",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 11"
         },
         {
-          "value": "/can/dbc/slave_07_voltage_id_3.cell_voltage_12",
+          "value": "/pwt/slave_07_voltage_id_3.cell_voltage_12",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
@@ -4186,42 +4186,42 @@
     "Plot!auto_2084": {
       "paths": [
         {
-          "value": "/can/dbc/slave_07_temperature_id_1.temperature_value_1",
+          "value": "/pwt/slave_07_temperature_id_1.temperature_value_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Thermistor 1"
         },
         {
-          "value": "/can/dbc/slave_07_temperature_id_1.temperature_value_2",
+          "value": "/pwt/slave_07_temperature_id_1.temperature_value_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Thermistor 2"
         },
         {
-          "value": "/can/dbc/slave_07_temperature_id_1.temperature_value_3",
+          "value": "/pwt/slave_07_temperature_id_1.temperature_value_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Thermistor 3"
         },
         {
-          "value": "/can/dbc/slave_07_temperature_id_1.temperature_value_4",
+          "value": "/pwt/slave_07_temperature_id_1.temperature_value_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Thermistor 4"
         },
         {
-          "value": "/can/dbc/slave_07_temperature_id_2.temperature_value_5",
+          "value": "/pwt/slave_07_temperature_id_2.temperature_value_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Thermistor 5"
         },
         {
-          "value": "/can/dbc/slave_07_temperature_id_2.temperature_value_6",
+          "value": "/pwt/slave_07_temperature_id_2.temperature_value_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
@@ -4239,7 +4239,7 @@
       "maxYValue": 70
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2085": {
-      "topic": "/can/dbc/slave_07_temperature_id_2",
+      "topic": "/pwt/slave_07_temperature_id_2",
       "field": "temperature_maximum",
       "label": "Max Temperature",
       "unit": " \u00baC",
@@ -4251,7 +4251,7 @@
       "foxglovePanelTitle": "Max Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2086": {
-      "topic": "/can/dbc/slave_07_temperature_id_2",
+      "topic": "/pwt/slave_07_temperature_id_2",
       "field": "temperature_delta",
       "label": "Temp Delta",
       "unit": " \u00baC",
@@ -4263,7 +4263,7 @@
       "foxglovePanelTitle": "Temp Delta"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2087": {
-      "topic": "/can/dbc/slave_07_msc_id_2",
+      "topic": "/pwt/slave_07_msc_id_2",
       "field": "module_ic_temperature",
       "label": "IC Temperature",
       "unit": " \u00baC",
@@ -4275,7 +4275,7 @@
       "foxglovePanelTitle": "IC Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2088": {
-      "topic": "/can/dbc/slave_07_msc_id_1",
+      "topic": "/pwt/slave_07_msc_id_1",
       "field": "module_voltage_avg",
       "label": "Avg Voltage",
       "unit": " V",
@@ -4287,7 +4287,7 @@
       "foxglovePanelTitle": "Avg Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2089": {
-      "topic": "/can/dbc/slave_07_msc_id_1",
+      "topic": "/pwt/slave_07_msc_id_1",
       "field": "module_voltage_max",
       "label": "Max Voltage",
       "unit": " V",
@@ -4299,7 +4299,7 @@
       "foxglovePanelTitle": "Max Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2090": {
-      "topic": "/can/dbc/slave_07_msc_id_1",
+      "topic": "/pwt/slave_07_msc_id_1",
       "field": "module_voltage_min",
       "label": "Min Voltage",
       "unit": " V",
@@ -4311,7 +4311,7 @@
       "foxglovePanelTitle": "Min Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2091": {
-      "topic": "/can/dbc/slave_07_msc_id_2",
+      "topic": "/pwt/slave_07_msc_id_2",
       "field": "module_voltage_delta",
       "label": "Voltage Delta",
       "unit": " V",
@@ -4323,7 +4323,7 @@
       "foxglovePanelTitle": "Voltage Delta"
     },
     "Indicator!auto_2092": {
-      "path": "/can/dbc/slave_07_msc_id_2.module_open_wire",
+      "path": "/pwt/slave_07_msc_id_2.module_open_wire",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -4339,7 +4339,7 @@
       "foxglovePanelTitle": "Open Wire"
     },
     "Indicator!auto_2093": {
-      "path": "/can/dbc/slave_07_msc_id_2.module_undervoltage",
+      "path": "/pwt/slave_07_msc_id_2.module_undervoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -4355,7 +4355,7 @@
       "foxglovePanelTitle": "Undervoltage"
     },
     "Indicator!auto_2094": {
-      "path": "/can/dbc/slave_07_msc_id_2.module_overvoltage",
+      "path": "/pwt/slave_07_msc_id_2.module_overvoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -4371,7 +4371,7 @@
       "foxglovePanelTitle": "Overvoltage"
     },
     "bar-display.Bar Display!auto_2095": {
-      "topicField": "/can/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -4383,84 +4383,84 @@
     "Plot!auto_2096": {
       "paths": [
         {
-          "value": "/can/dbc/slave_08_voltage_id_1.cell_voltage_1",
+          "value": "/pwt/slave_08_voltage_id_1.cell_voltage_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 1"
         },
         {
-          "value": "/can/dbc/slave_08_voltage_id_1.cell_voltage_2",
+          "value": "/pwt/slave_08_voltage_id_1.cell_voltage_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 2"
         },
         {
-          "value": "/can/dbc/slave_08_voltage_id_1.cell_voltage_3",
+          "value": "/pwt/slave_08_voltage_id_1.cell_voltage_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 3"
         },
         {
-          "value": "/can/dbc/slave_08_voltage_id_1.cell_voltage_4",
+          "value": "/pwt/slave_08_voltage_id_1.cell_voltage_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 4"
         },
         {
-          "value": "/can/dbc/slave_08_voltage_id_2.cell_voltage_5",
+          "value": "/pwt/slave_08_voltage_id_2.cell_voltage_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Cell 5"
         },
         {
-          "value": "/can/dbc/slave_08_voltage_id_2.cell_voltage_6",
+          "value": "/pwt/slave_08_voltage_id_2.cell_voltage_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
           "label": "Cell 6"
         },
         {
-          "value": "/can/dbc/slave_08_voltage_id_2.cell_voltage_7",
+          "value": "/pwt/slave_08_voltage_id_2.cell_voltage_7",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#cad660",
           "label": "Cell 7"
         },
         {
-          "value": "/can/dbc/slave_08_voltage_id_2.cell_voltage_8",
+          "value": "/pwt/slave_08_voltage_id_2.cell_voltage_8",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 8"
         },
         {
-          "value": "/can/dbc/slave_08_voltage_id_3.cell_voltage_9",
+          "value": "/pwt/slave_08_voltage_id_3.cell_voltage_9",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 9"
         },
         {
-          "value": "/can/dbc/slave_08_voltage_id_3.cell_voltage_10",
+          "value": "/pwt/slave_08_voltage_id_3.cell_voltage_10",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 10"
         },
         {
-          "value": "/can/dbc/slave_08_voltage_id_3.cell_voltage_11",
+          "value": "/pwt/slave_08_voltage_id_3.cell_voltage_11",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 11"
         },
         {
-          "value": "/can/dbc/slave_08_voltage_id_3.cell_voltage_12",
+          "value": "/pwt/slave_08_voltage_id_3.cell_voltage_12",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
@@ -4480,42 +4480,42 @@
     "Plot!auto_2097": {
       "paths": [
         {
-          "value": "/can/dbc/slave_08_temperature_id_1.temperature_value_1",
+          "value": "/pwt/slave_08_temperature_id_1.temperature_value_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Thermistor 1"
         },
         {
-          "value": "/can/dbc/slave_08_temperature_id_1.temperature_value_2",
+          "value": "/pwt/slave_08_temperature_id_1.temperature_value_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Thermistor 2"
         },
         {
-          "value": "/can/dbc/slave_08_temperature_id_1.temperature_value_3",
+          "value": "/pwt/slave_08_temperature_id_1.temperature_value_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Thermistor 3"
         },
         {
-          "value": "/can/dbc/slave_08_temperature_id_1.temperature_value_4",
+          "value": "/pwt/slave_08_temperature_id_1.temperature_value_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Thermistor 4"
         },
         {
-          "value": "/can/dbc/slave_08_temperature_id_2.temperature_value_5",
+          "value": "/pwt/slave_08_temperature_id_2.temperature_value_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Thermistor 5"
         },
         {
-          "value": "/can/dbc/slave_08_temperature_id_2.temperature_value_6",
+          "value": "/pwt/slave_08_temperature_id_2.temperature_value_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
@@ -4533,7 +4533,7 @@
       "maxYValue": 70
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2098": {
-      "topic": "/can/dbc/slave_08_temperature_id_2",
+      "topic": "/pwt/slave_08_temperature_id_2",
       "field": "temperature_maximum",
       "label": "Max Temperature",
       "unit": " \u00baC",
@@ -4545,7 +4545,7 @@
       "foxglovePanelTitle": "Max Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2099": {
-      "topic": "/can/dbc/slave_08_temperature_id_2",
+      "topic": "/pwt/slave_08_temperature_id_2",
       "field": "temperature_delta",
       "label": "Temp Delta",
       "unit": " \u00baC",
@@ -4557,7 +4557,7 @@
       "foxglovePanelTitle": "Temp Delta"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2100": {
-      "topic": "/can/dbc/slave_08_msc_id_2",
+      "topic": "/pwt/slave_08_msc_id_2",
       "field": "module_ic_temperature",
       "label": "IC Temperature",
       "unit": " \u00baC",
@@ -4569,7 +4569,7 @@
       "foxglovePanelTitle": "IC Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2101": {
-      "topic": "/can/dbc/slave_08_msc_id_1",
+      "topic": "/pwt/slave_08_msc_id_1",
       "field": "module_voltage_avg",
       "label": "Avg Voltage",
       "unit": " V",
@@ -4581,7 +4581,7 @@
       "foxglovePanelTitle": "Avg Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2102": {
-      "topic": "/can/dbc/slave_08_msc_id_1",
+      "topic": "/pwt/slave_08_msc_id_1",
       "field": "module_voltage_max",
       "label": "Max Voltage",
       "unit": " V",
@@ -4593,7 +4593,7 @@
       "foxglovePanelTitle": "Max Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2103": {
-      "topic": "/can/dbc/slave_08_msc_id_1",
+      "topic": "/pwt/slave_08_msc_id_1",
       "field": "module_voltage_min",
       "label": "Min Voltage",
       "unit": " V",
@@ -4605,7 +4605,7 @@
       "foxglovePanelTitle": "Min Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2104": {
-      "topic": "/can/dbc/slave_08_msc_id_2",
+      "topic": "/pwt/slave_08_msc_id_2",
       "field": "module_voltage_delta",
       "label": "Voltage Delta",
       "unit": " V",
@@ -4617,7 +4617,7 @@
       "foxglovePanelTitle": "Voltage Delta"
     },
     "Indicator!auto_2105": {
-      "path": "/can/dbc/slave_08_msc_id_2.module_open_wire",
+      "path": "/pwt/slave_08_msc_id_2.module_open_wire",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -4633,7 +4633,7 @@
       "foxglovePanelTitle": "Open Wire"
     },
     "Indicator!auto_2106": {
-      "path": "/can/dbc/slave_08_msc_id_2.module_undervoltage",
+      "path": "/pwt/slave_08_msc_id_2.module_undervoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -4649,7 +4649,7 @@
       "foxglovePanelTitle": "Undervoltage"
     },
     "Indicator!auto_2107": {
-      "path": "/can/dbc/slave_08_msc_id_2.module_overvoltage",
+      "path": "/pwt/slave_08_msc_id_2.module_overvoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -4665,7 +4665,7 @@
       "foxglovePanelTitle": "Overvoltage"
     },
     "bar-display.Bar Display!auto_2108": {
-      "topicField": "/can/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -4677,84 +4677,84 @@
     "Plot!auto_2109": {
       "paths": [
         {
-          "value": "/can/dbc/slave_09_voltage_id_1.cell_voltage_1",
+          "value": "/pwt/slave_09_voltage_id_1.cell_voltage_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 1"
         },
         {
-          "value": "/can/dbc/slave_09_voltage_id_1.cell_voltage_2",
+          "value": "/pwt/slave_09_voltage_id_1.cell_voltage_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 2"
         },
         {
-          "value": "/can/dbc/slave_09_voltage_id_1.cell_voltage_3",
+          "value": "/pwt/slave_09_voltage_id_1.cell_voltage_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 3"
         },
         {
-          "value": "/can/dbc/slave_09_voltage_id_1.cell_voltage_4",
+          "value": "/pwt/slave_09_voltage_id_1.cell_voltage_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 4"
         },
         {
-          "value": "/can/dbc/slave_09_voltage_id_2.cell_voltage_5",
+          "value": "/pwt/slave_09_voltage_id_2.cell_voltage_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Cell 5"
         },
         {
-          "value": "/can/dbc/slave_09_voltage_id_2.cell_voltage_6",
+          "value": "/pwt/slave_09_voltage_id_2.cell_voltage_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
           "label": "Cell 6"
         },
         {
-          "value": "/can/dbc/slave_09_voltage_id_2.cell_voltage_7",
+          "value": "/pwt/slave_09_voltage_id_2.cell_voltage_7",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#cad660",
           "label": "Cell 7"
         },
         {
-          "value": "/can/dbc/slave_09_voltage_id_2.cell_voltage_8",
+          "value": "/pwt/slave_09_voltage_id_2.cell_voltage_8",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 8"
         },
         {
-          "value": "/can/dbc/slave_09_voltage_id_3.cell_voltage_9",
+          "value": "/pwt/slave_09_voltage_id_3.cell_voltage_9",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 9"
         },
         {
-          "value": "/can/dbc/slave_09_voltage_id_3.cell_voltage_10",
+          "value": "/pwt/slave_09_voltage_id_3.cell_voltage_10",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 10"
         },
         {
-          "value": "/can/dbc/slave_09_voltage_id_3.cell_voltage_11",
+          "value": "/pwt/slave_09_voltage_id_3.cell_voltage_11",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 11"
         },
         {
-          "value": "/can/dbc/slave_09_voltage_id_3.cell_voltage_12",
+          "value": "/pwt/slave_09_voltage_id_3.cell_voltage_12",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
@@ -4774,42 +4774,42 @@
     "Plot!auto_2110": {
       "paths": [
         {
-          "value": "/can/dbc/slave_09_temperature_id_1.temperature_value_1",
+          "value": "/pwt/slave_09_temperature_id_1.temperature_value_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Thermistor 1"
         },
         {
-          "value": "/can/dbc/slave_09_temperature_id_1.temperature_value_2",
+          "value": "/pwt/slave_09_temperature_id_1.temperature_value_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Thermistor 2"
         },
         {
-          "value": "/can/dbc/slave_09_temperature_id_1.temperature_value_3",
+          "value": "/pwt/slave_09_temperature_id_1.temperature_value_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Thermistor 3"
         },
         {
-          "value": "/can/dbc/slave_09_temperature_id_1.temperature_value_4",
+          "value": "/pwt/slave_09_temperature_id_1.temperature_value_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Thermistor 4"
         },
         {
-          "value": "/can/dbc/slave_09_temperature_id_2.temperature_value_5",
+          "value": "/pwt/slave_09_temperature_id_2.temperature_value_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Thermistor 5"
         },
         {
-          "value": "/can/dbc/slave_09_temperature_id_2.temperature_value_6",
+          "value": "/pwt/slave_09_temperature_id_2.temperature_value_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
@@ -4827,7 +4827,7 @@
       "maxYValue": 70
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2111": {
-      "topic": "/can/dbc/slave_09_temperature_id_2",
+      "topic": "/pwt/slave_09_temperature_id_2",
       "field": "temperature_maximum",
       "label": "Max Temperature",
       "unit": " \u00baC",
@@ -4839,7 +4839,7 @@
       "foxglovePanelTitle": "Max Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2112": {
-      "topic": "/can/dbc/slave_09_temperature_id_2",
+      "topic": "/pwt/slave_09_temperature_id_2",
       "field": "temperature_delta",
       "label": "Temp Delta",
       "unit": " \u00baC",
@@ -4851,7 +4851,7 @@
       "foxglovePanelTitle": "Temp Delta"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2113": {
-      "topic": "/can/dbc/slave_09_msc_id_2",
+      "topic": "/pwt/slave_09_msc_id_2",
       "field": "module_ic_temperature",
       "label": "IC Temperature",
       "unit": " \u00baC",
@@ -4863,7 +4863,7 @@
       "foxglovePanelTitle": "IC Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2114": {
-      "topic": "/can/dbc/slave_09_msc_id_1",
+      "topic": "/pwt/slave_09_msc_id_1",
       "field": "module_voltage_avg",
       "label": "Avg Voltage",
       "unit": " V",
@@ -4875,7 +4875,7 @@
       "foxglovePanelTitle": "Avg Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2115": {
-      "topic": "/can/dbc/slave_09_msc_id_1",
+      "topic": "/pwt/slave_09_msc_id_1",
       "field": "module_voltage_max",
       "label": "Max Voltage",
       "unit": " V",
@@ -4887,7 +4887,7 @@
       "foxglovePanelTitle": "Max Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2116": {
-      "topic": "/can/dbc/slave_09_msc_id_1",
+      "topic": "/pwt/slave_09_msc_id_1",
       "field": "module_voltage_min",
       "label": "Min Voltage",
       "unit": " V",
@@ -4899,7 +4899,7 @@
       "foxglovePanelTitle": "Min Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2117": {
-      "topic": "/can/dbc/slave_09_msc_id_2",
+      "topic": "/pwt/slave_09_msc_id_2",
       "field": "module_voltage_delta",
       "label": "Voltage Delta",
       "unit": " V",
@@ -4911,7 +4911,7 @@
       "foxglovePanelTitle": "Voltage Delta"
     },
     "Indicator!auto_2118": {
-      "path": "/can/dbc/slave_09_msc_id_2.module_open_wire",
+      "path": "/pwt/slave_09_msc_id_2.module_open_wire",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -4927,7 +4927,7 @@
       "foxglovePanelTitle": "Open Wire"
     },
     "Indicator!auto_2119": {
-      "path": "/can/dbc/slave_09_msc_id_2.module_undervoltage",
+      "path": "/pwt/slave_09_msc_id_2.module_undervoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -4943,7 +4943,7 @@
       "foxglovePanelTitle": "Undervoltage"
     },
     "Indicator!auto_2120": {
-      "path": "/can/dbc/slave_09_msc_id_2.module_overvoltage",
+      "path": "/pwt/slave_09_msc_id_2.module_overvoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -4959,7 +4959,7 @@
       "foxglovePanelTitle": "Overvoltage"
     },
     "bar-display.Bar Display!auto_2121": {
-      "topicField": "/can/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -4971,84 +4971,84 @@
     "Plot!auto_2122": {
       "paths": [
         {
-          "value": "/can/dbc/slave_10_voltage_id_1.cell_voltage_1",
+          "value": "/pwt/slave_10_voltage_id_1.cell_voltage_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 1"
         },
         {
-          "value": "/can/dbc/slave_10_voltage_id_1.cell_voltage_2",
+          "value": "/pwt/slave_10_voltage_id_1.cell_voltage_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 2"
         },
         {
-          "value": "/can/dbc/slave_10_voltage_id_1.cell_voltage_3",
+          "value": "/pwt/slave_10_voltage_id_1.cell_voltage_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 3"
         },
         {
-          "value": "/can/dbc/slave_10_voltage_id_1.cell_voltage_4",
+          "value": "/pwt/slave_10_voltage_id_1.cell_voltage_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 4"
         },
         {
-          "value": "/can/dbc/slave_10_voltage_id_2.cell_voltage_5",
+          "value": "/pwt/slave_10_voltage_id_2.cell_voltage_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Cell 5"
         },
         {
-          "value": "/can/dbc/slave_10_voltage_id_2.cell_voltage_6",
+          "value": "/pwt/slave_10_voltage_id_2.cell_voltage_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
           "label": "Cell 6"
         },
         {
-          "value": "/can/dbc/slave_10_voltage_id_2.cell_voltage_7",
+          "value": "/pwt/slave_10_voltage_id_2.cell_voltage_7",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#cad660",
           "label": "Cell 7"
         },
         {
-          "value": "/can/dbc/slave_10_voltage_id_2.cell_voltage_8",
+          "value": "/pwt/slave_10_voltage_id_2.cell_voltage_8",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 8"
         },
         {
-          "value": "/can/dbc/slave_10_voltage_id_3.cell_voltage_9",
+          "value": "/pwt/slave_10_voltage_id_3.cell_voltage_9",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 9"
         },
         {
-          "value": "/can/dbc/slave_10_voltage_id_3.cell_voltage_10",
+          "value": "/pwt/slave_10_voltage_id_3.cell_voltage_10",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 10"
         },
         {
-          "value": "/can/dbc/slave_10_voltage_id_3.cell_voltage_11",
+          "value": "/pwt/slave_10_voltage_id_3.cell_voltage_11",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 11"
         },
         {
-          "value": "/can/dbc/slave_10_voltage_id_3.cell_voltage_12",
+          "value": "/pwt/slave_10_voltage_id_3.cell_voltage_12",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
@@ -5068,42 +5068,42 @@
     "Plot!auto_2123": {
       "paths": [
         {
-          "value": "/can/dbc/slave_10_temperature_id_1.temperature_value_1",
+          "value": "/pwt/slave_10_temperature_id_1.temperature_value_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Thermistor 1"
         },
         {
-          "value": "/can/dbc/slave_10_temperature_id_1.temperature_value_2",
+          "value": "/pwt/slave_10_temperature_id_1.temperature_value_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Thermistor 2"
         },
         {
-          "value": "/can/dbc/slave_10_temperature_id_1.temperature_value_3",
+          "value": "/pwt/slave_10_temperature_id_1.temperature_value_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Thermistor 3"
         },
         {
-          "value": "/can/dbc/slave_10_temperature_id_1.temperature_value_4",
+          "value": "/pwt/slave_10_temperature_id_1.temperature_value_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Thermistor 4"
         },
         {
-          "value": "/can/dbc/slave_10_temperature_id_2.temperature_value_5",
+          "value": "/pwt/slave_10_temperature_id_2.temperature_value_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Thermistor 5"
         },
         {
-          "value": "/can/dbc/slave_10_temperature_id_2.temperature_value_6",
+          "value": "/pwt/slave_10_temperature_id_2.temperature_value_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
@@ -5121,7 +5121,7 @@
       "maxYValue": 70
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2124": {
-      "topic": "/can/dbc/slave_10_temperature_id_2",
+      "topic": "/pwt/slave_10_temperature_id_2",
       "field": "temperature_maximum",
       "label": "Max Temperature",
       "unit": " \u00baC",
@@ -5133,7 +5133,7 @@
       "foxglovePanelTitle": "Max Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2125": {
-      "topic": "/can/dbc/slave_10_temperature_id_2",
+      "topic": "/pwt/slave_10_temperature_id_2",
       "field": "temperature_delta",
       "label": "Temp Delta",
       "unit": " \u00baC",
@@ -5145,7 +5145,7 @@
       "foxglovePanelTitle": "Temp Delta"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2126": {
-      "topic": "/can/dbc/slave_10_msc_id_2",
+      "topic": "/pwt/slave_10_msc_id_2",
       "field": "module_ic_temperature",
       "label": "IC Temperature",
       "unit": " \u00baC",
@@ -5157,7 +5157,7 @@
       "foxglovePanelTitle": "IC Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2127": {
-      "topic": "/can/dbc/slave_10_msc_id_1",
+      "topic": "/pwt/slave_10_msc_id_1",
       "field": "module_voltage_avg",
       "label": "Avg Voltage",
       "unit": " V",
@@ -5169,7 +5169,7 @@
       "foxglovePanelTitle": "Avg Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2128": {
-      "topic": "/can/dbc/slave_10_msc_id_1",
+      "topic": "/pwt/slave_10_msc_id_1",
       "field": "module_voltage_max",
       "label": "Max Voltage",
       "unit": " V",
@@ -5181,7 +5181,7 @@
       "foxglovePanelTitle": "Max Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2129": {
-      "topic": "/can/dbc/slave_10_msc_id_1",
+      "topic": "/pwt/slave_10_msc_id_1",
       "field": "module_voltage_min",
       "label": "Min Voltage",
       "unit": " V",
@@ -5193,7 +5193,7 @@
       "foxglovePanelTitle": "Min Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2130": {
-      "topic": "/can/dbc/slave_10_msc_id_2",
+      "topic": "/pwt/slave_10_msc_id_2",
       "field": "module_voltage_delta",
       "label": "Voltage Delta",
       "unit": " V",
@@ -5205,7 +5205,7 @@
       "foxglovePanelTitle": "Voltage Delta"
     },
     "Indicator!auto_2131": {
-      "path": "/can/dbc/slave_10_msc_id_2.module_open_wire",
+      "path": "/pwt/slave_10_msc_id_2.module_open_wire",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -5221,7 +5221,7 @@
       "foxglovePanelTitle": "Open Wire"
     },
     "Indicator!auto_2132": {
-      "path": "/can/dbc/slave_10_msc_id_2.module_undervoltage",
+      "path": "/pwt/slave_10_msc_id_2.module_undervoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -5237,7 +5237,7 @@
       "foxglovePanelTitle": "Undervoltage"
     },
     "Indicator!auto_2133": {
-      "path": "/can/dbc/slave_10_msc_id_2.module_overvoltage",
+      "path": "/pwt/slave_10_msc_id_2.module_overvoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -5253,7 +5253,7 @@
       "foxglovePanelTitle": "Overvoltage"
     },
     "bar-display.Bar Display!auto_2134": {
-      "topicField": "/can/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -5265,84 +5265,84 @@
     "Plot!auto_2135": {
       "paths": [
         {
-          "value": "/can/dbc/slave_11_voltage_id_1.cell_voltage_1",
+          "value": "/pwt/slave_11_voltage_id_1.cell_voltage_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 1"
         },
         {
-          "value": "/can/dbc/slave_11_voltage_id_1.cell_voltage_2",
+          "value": "/pwt/slave_11_voltage_id_1.cell_voltage_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 2"
         },
         {
-          "value": "/can/dbc/slave_11_voltage_id_1.cell_voltage_3",
+          "value": "/pwt/slave_11_voltage_id_1.cell_voltage_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 3"
         },
         {
-          "value": "/can/dbc/slave_11_voltage_id_1.cell_voltage_4",
+          "value": "/pwt/slave_11_voltage_id_1.cell_voltage_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 4"
         },
         {
-          "value": "/can/dbc/slave_11_voltage_id_2.cell_voltage_5",
+          "value": "/pwt/slave_11_voltage_id_2.cell_voltage_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Cell 5"
         },
         {
-          "value": "/can/dbc/slave_11_voltage_id_2.cell_voltage_6",
+          "value": "/pwt/slave_11_voltage_id_2.cell_voltage_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
           "label": "Cell 6"
         },
         {
-          "value": "/can/dbc/slave_11_voltage_id_2.cell_voltage_7",
+          "value": "/pwt/slave_11_voltage_id_2.cell_voltage_7",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#cad660",
           "label": "Cell 7"
         },
         {
-          "value": "/can/dbc/slave_11_voltage_id_2.cell_voltage_8",
+          "value": "/pwt/slave_11_voltage_id_2.cell_voltage_8",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 8"
         },
         {
-          "value": "/can/dbc/slave_11_voltage_id_3.cell_voltage_9",
+          "value": "/pwt/slave_11_voltage_id_3.cell_voltage_9",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 9"
         },
         {
-          "value": "/can/dbc/slave_11_voltage_id_3.cell_voltage_10",
+          "value": "/pwt/slave_11_voltage_id_3.cell_voltage_10",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 10"
         },
         {
-          "value": "/can/dbc/slave_11_voltage_id_3.cell_voltage_11",
+          "value": "/pwt/slave_11_voltage_id_3.cell_voltage_11",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 11"
         },
         {
-          "value": "/can/dbc/slave_11_voltage_id_3.cell_voltage_12",
+          "value": "/pwt/slave_11_voltage_id_3.cell_voltage_12",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
@@ -5362,42 +5362,42 @@
     "Plot!auto_2136": {
       "paths": [
         {
-          "value": "/can/dbc/slave_11_temperature_id_1.temperature_value_1",
+          "value": "/pwt/slave_11_temperature_id_1.temperature_value_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Thermistor 1"
         },
         {
-          "value": "/can/dbc/slave_11_temperature_id_1.temperature_value_2",
+          "value": "/pwt/slave_11_temperature_id_1.temperature_value_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Thermistor 2"
         },
         {
-          "value": "/can/dbc/slave_11_temperature_id_1.temperature_value_3",
+          "value": "/pwt/slave_11_temperature_id_1.temperature_value_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Thermistor 3"
         },
         {
-          "value": "/can/dbc/slave_11_temperature_id_1.temperature_value_4",
+          "value": "/pwt/slave_11_temperature_id_1.temperature_value_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Thermistor 4"
         },
         {
-          "value": "/can/dbc/slave_11_temperature_id_2.temperature_value_5",
+          "value": "/pwt/slave_11_temperature_id_2.temperature_value_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Thermistor 5"
         },
         {
-          "value": "/can/dbc/slave_11_temperature_id_2.temperature_value_6",
+          "value": "/pwt/slave_11_temperature_id_2.temperature_value_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
@@ -5415,7 +5415,7 @@
       "maxYValue": 70
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2137": {
-      "topic": "/can/dbc/slave_11_temperature_id_2",
+      "topic": "/pwt/slave_11_temperature_id_2",
       "field": "temperature_maximum",
       "label": "Max Temperature",
       "unit": " \u00baC",
@@ -5427,7 +5427,7 @@
       "foxglovePanelTitle": "Max Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2138": {
-      "topic": "/can/dbc/slave_11_temperature_id_2",
+      "topic": "/pwt/slave_11_temperature_id_2",
       "field": "temperature_delta",
       "label": "Temp Delta",
       "unit": " \u00baC",
@@ -5439,7 +5439,7 @@
       "foxglovePanelTitle": "Temp Delta"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2139": {
-      "topic": "/can/dbc/slave_11_msc_id_2",
+      "topic": "/pwt/slave_11_msc_id_2",
       "field": "module_ic_temperature",
       "label": "IC Temperature",
       "unit": " \u00baC",
@@ -5451,7 +5451,7 @@
       "foxglovePanelTitle": "IC Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2140": {
-      "topic": "/can/dbc/slave_11_msc_id_1",
+      "topic": "/pwt/slave_11_msc_id_1",
       "field": "module_voltage_avg",
       "label": "Avg Voltage",
       "unit": " V",
@@ -5463,7 +5463,7 @@
       "foxglovePanelTitle": "Avg Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2141": {
-      "topic": "/can/dbc/slave_11_msc_id_1",
+      "topic": "/pwt/slave_11_msc_id_1",
       "field": "module_voltage_max",
       "label": "Max Voltage",
       "unit": " V",
@@ -5475,7 +5475,7 @@
       "foxglovePanelTitle": "Max Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2142": {
-      "topic": "/can/dbc/slave_11_msc_id_1",
+      "topic": "/pwt/slave_11_msc_id_1",
       "field": "module_voltage_min",
       "label": "Min Voltage",
       "unit": " V",
@@ -5487,7 +5487,7 @@
       "foxglovePanelTitle": "Min Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2143": {
-      "topic": "/can/dbc/slave_11_msc_id_2",
+      "topic": "/pwt/slave_11_msc_id_2",
       "field": "module_voltage_delta",
       "label": "Voltage Delta",
       "unit": " V",
@@ -5499,7 +5499,7 @@
       "foxglovePanelTitle": "Voltage Delta"
     },
     "Indicator!auto_2144": {
-      "path": "/can/dbc/slave_11_msc_id_2.module_open_wire",
+      "path": "/pwt/slave_11_msc_id_2.module_open_wire",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -5515,7 +5515,7 @@
       "foxglovePanelTitle": "Open Wire"
     },
     "Indicator!auto_2145": {
-      "path": "/can/dbc/slave_11_msc_id_2.module_undervoltage",
+      "path": "/pwt/slave_11_msc_id_2.module_undervoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -5531,7 +5531,7 @@
       "foxglovePanelTitle": "Undervoltage"
     },
     "Indicator!auto_2146": {
-      "path": "/can/dbc/slave_11_msc_id_2.module_overvoltage",
+      "path": "/pwt/slave_11_msc_id_2.module_overvoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -5547,7 +5547,7 @@
       "foxglovePanelTitle": "Overvoltage"
     },
     "bar-display.Bar Display!auto_2147": {
-      "topicField": "/can/dbc/master_soc_accumulator.soc_float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -5559,84 +5559,84 @@
     "Plot!auto_2148": {
       "paths": [
         {
-          "value": "/can/dbc/slave_12_voltage_id_1.cell_voltage_1",
+          "value": "/pwt/slave_12_voltage_id_1.cell_voltage_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 1"
         },
         {
-          "value": "/can/dbc/slave_12_voltage_id_1.cell_voltage_2",
+          "value": "/pwt/slave_12_voltage_id_1.cell_voltage_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 2"
         },
         {
-          "value": "/can/dbc/slave_12_voltage_id_1.cell_voltage_3",
+          "value": "/pwt/slave_12_voltage_id_1.cell_voltage_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 3"
         },
         {
-          "value": "/can/dbc/slave_12_voltage_id_1.cell_voltage_4",
+          "value": "/pwt/slave_12_voltage_id_1.cell_voltage_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 4"
         },
         {
-          "value": "/can/dbc/slave_12_voltage_id_2.cell_voltage_5",
+          "value": "/pwt/slave_12_voltage_id_2.cell_voltage_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Cell 5"
         },
         {
-          "value": "/can/dbc/slave_12_voltage_id_2.cell_voltage_6",
+          "value": "/pwt/slave_12_voltage_id_2.cell_voltage_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
           "label": "Cell 6"
         },
         {
-          "value": "/can/dbc/slave_12_voltage_id_2.cell_voltage_7",
+          "value": "/pwt/slave_12_voltage_id_2.cell_voltage_7",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#cad660",
           "label": "Cell 7"
         },
         {
-          "value": "/can/dbc/slave_12_voltage_id_2.cell_voltage_8",
+          "value": "/pwt/slave_12_voltage_id_2.cell_voltage_8",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Cell 8"
         },
         {
-          "value": "/can/dbc/slave_12_voltage_id_3.cell_voltage_9",
+          "value": "/pwt/slave_12_voltage_id_3.cell_voltage_9",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Cell 9"
         },
         {
-          "value": "/can/dbc/slave_12_voltage_id_3.cell_voltage_10",
+          "value": "/pwt/slave_12_voltage_id_3.cell_voltage_10",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Cell 10"
         },
         {
-          "value": "/can/dbc/slave_12_voltage_id_3.cell_voltage_11",
+          "value": "/pwt/slave_12_voltage_id_3.cell_voltage_11",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Cell 11"
         },
         {
-          "value": "/can/dbc/slave_12_voltage_id_3.cell_voltage_12",
+          "value": "/pwt/slave_12_voltage_id_3.cell_voltage_12",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
@@ -5656,42 +5656,42 @@
     "Plot!auto_2149": {
       "paths": [
         {
-          "value": "/can/dbc/slave_12_temperature_id_1.temperature_value_1",
+          "value": "/pwt/slave_12_temperature_id_1.temperature_value_1",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "Thermistor 1"
         },
         {
-          "value": "/can/dbc/slave_12_temperature_id_1.temperature_value_2",
+          "value": "/pwt/slave_12_temperature_id_1.temperature_value_2",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "Thermistor 2"
         },
         {
-          "value": "/can/dbc/slave_12_temperature_id_1.temperature_value_3",
+          "value": "/pwt/slave_12_temperature_id_1.temperature_value_3",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
           "label": "Thermistor 3"
         },
         {
-          "value": "/can/dbc/slave_12_temperature_id_1.temperature_value_4",
+          "value": "/pwt/slave_12_temperature_id_1.temperature_value_4",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9",
           "label": "Thermistor 4"
         },
         {
-          "value": "/can/dbc/slave_12_temperature_id_2.temperature_value_5",
+          "value": "/pwt/slave_12_temperature_id_2.temperature_value_5",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Thermistor 5"
         },
         {
-          "value": "/can/dbc/slave_12_temperature_id_2.temperature_value_6",
+          "value": "/pwt/slave_12_temperature_id_2.temperature_value_6",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#a395e2",
@@ -5709,7 +5709,7 @@
       "maxYValue": 70
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2150": {
-      "topic": "/can/dbc/slave_12_temperature_id_2",
+      "topic": "/pwt/slave_12_temperature_id_2",
       "field": "temperature_maximum",
       "label": "Max Temperature",
       "unit": " \u00baC",
@@ -5721,7 +5721,7 @@
       "foxglovePanelTitle": "Max Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2151": {
-      "topic": "/can/dbc/slave_12_temperature_id_2",
+      "topic": "/pwt/slave_12_temperature_id_2",
       "field": "temperature_delta",
       "label": "Temp Delta",
       "unit": " \u00baC",
@@ -5733,7 +5733,7 @@
       "foxglovePanelTitle": "Temp Delta"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2152": {
-      "topic": "/can/dbc/slave_12_msc_id_2",
+      "topic": "/pwt/slave_12_msc_id_2",
       "field": "module_ic_temperature",
       "label": "IC Temperature",
       "unit": " \u00baC",
@@ -5745,7 +5745,7 @@
       "foxglovePanelTitle": "IC Temperature"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2153": {
-      "topic": "/can/dbc/slave_12_msc_id_1",
+      "topic": "/pwt/slave_12_msc_id_1",
       "field": "module_voltage_avg",
       "label": "Avg Voltage",
       "unit": " V",
@@ -5757,7 +5757,7 @@
       "foxglovePanelTitle": "Avg Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2154": {
-      "topic": "/can/dbc/slave_12_msc_id_1",
+      "topic": "/pwt/slave_12_msc_id_1",
       "field": "module_voltage_max",
       "label": "Max Voltage",
       "unit": " V",
@@ -5769,7 +5769,7 @@
       "foxglovePanelTitle": "Max Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2155": {
-      "topic": "/can/dbc/slave_12_msc_id_1",
+      "topic": "/pwt/slave_12_msc_id_1",
       "field": "module_voltage_min",
       "label": "Min Voltage",
       "unit": " V",
@@ -5781,7 +5781,7 @@
       "foxglovePanelTitle": "Min Voltage"
     },
     "lart-temperature-table.AMS Value Tile (LART)!auto_2156": {
-      "topic": "/can/dbc/slave_12_msc_id_2",
+      "topic": "/pwt/slave_12_msc_id_2",
       "field": "module_voltage_delta",
       "label": "Voltage Delta",
       "unit": " V",
@@ -5793,7 +5793,7 @@
       "foxglovePanelTitle": "Voltage Delta"
     },
     "Indicator!auto_2157": {
-      "path": "/can/dbc/slave_12_msc_id_2.module_open_wire",
+      "path": "/pwt/slave_12_msc_id_2.module_open_wire",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -5809,7 +5809,7 @@
       "foxglovePanelTitle": "Open Wire"
     },
     "Indicator!auto_2158": {
-      "path": "/can/dbc/slave_12_msc_id_2.module_undervoltage",
+      "path": "/pwt/slave_12_msc_id_2.module_undervoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -5825,7 +5825,7 @@
       "foxglovePanelTitle": "Undervoltage"
     },
     "Indicator!auto_2159": {
-      "path": "/can/dbc/slave_12_msc_id_2.module_overvoltage",
+      "path": "/pwt/slave_12_msc_id_2.module_overvoltage",
       "style": "background",
       "fontSize": 28,
       "fallbackColor": "#c0392b",
@@ -5843,28 +5843,28 @@
     "Plot!auto_2161": {
       "paths": [
         {
-          "value": "/can/dbc/vcu_rpm.motor_rpm_left",
+          "value": "/can/vcu_rpm.motor_rpm_left",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "RPM left"
         },
         {
-          "value": "/can/dbc/vcu_rpm.motor_rpm_right",
+          "value": "/can/vcu_rpm.motor_rpm_right",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",
           "label": "RPM right"
         },
         {
-          "value": "/can/dbc/vcu_rpm.motor_current_left",
+          "value": "/can/vcu_rpm.motor_current_left",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#61cbff",
           "label": "Current left"
         },
         {
-          "value": "/can/dbc/vcu_rpm.motor_current_right",
+          "value": "/can/vcu_rpm.motor_current_right",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f7df71",
@@ -5881,14 +5881,14 @@
     "Plot!auto_2162": {
       "paths": [
         {
-          "value": "/can/dbc/vcu_rpm_target.rpm_target",
+          "value": "/can/vcu_rpm_target.rpm_target",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2",
           "label": "RPM target"
         },
         {
-          "value": "/can/dbc/vcu_torque_target.torque_target",
+          "value": "/can/vcu_torque_target.torque_target",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d",

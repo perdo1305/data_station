@@ -42,16 +42,16 @@ dashboard_state_bridge:
     speed_from_rpm_scale: 0.02454
     # Topic mapping (empty string disables that input)
     rpm_topic: /vehicle/rpm
-    speed_topic: ""         # e.g. /can/dbc/dv_dynamics_1/speed_actual
-    inv_temp_topic: ""      # e.g. /pwt/dbc/inv1_temperatures/inv1_actual_tempcontroller
-    motor_temp_topic: ""    # e.g. /pwt/dbc/inv1_temperatures/inv1_actual_tempmotor
-    bps_topic: ""           # e.g. /can/dbc/dv_dynamics_1/brake_hydr_actual
+    speed_topic: ""         # e.g. /can/dv_dynamics_1/speed_actual
+    inv_temp_topic: ""      # e.g. /pwt/inv1_temperatures/inv1_actual_tempcontroller
+    motor_temp_topic: ""    # e.g. /pwt/inv1_temperatures/inv1_actual_tempmotor
+    bps_topic: ""           # e.g. /can/dv_dynamics_1/brake_hydr_actual
     kw_inst_topic: ""
     kw_limit_topic: ""
     soc_lv_topic: ""
-    soc_hv_topic: /pwt/dbc/master_soc_accumulator/soc_float
-    lv_voltage_topic: /data/dbc/pdm_lv/lv_voltage_mv
-    r2d_ready_topic: ""     # e.g. /can/dbc/dashboard/ready_to_drive
+    soc_hv_topic: /pwt/master_soc_accumulator/soc_float
+    lv_voltage_topic: /data/pdm_lv/lv_voltage_mv
+    r2d_ready_topic: ""     # e.g. /pwt/dashboard/ready_to_drive
 
 input_handler:
   ros__parameters:
@@ -95,8 +95,8 @@ dashboard_ui:
 
 bag_recorder:
   ros__parameters:
-    trigger_topic: /pwt/dbc/start_precharge
-    record_regex: /data/dbc/.*|/pwt/dbc/.*|/can/dbc/.*|/imu/.*
+    trigger_topic: /pwt/start_precharge
+    record_regex: /data/.*|/pwt/.*|/can/(?!frames$).*|/imu/.*
     bag_dir: "~/bags"            # session folders precharge_YYYYMMDD_HHMMSS
     stop_grace_s: 30.0           # keep recording this long after request=0
     split_duration_s: 0          # 0 = single continuous file per session (no splitting)

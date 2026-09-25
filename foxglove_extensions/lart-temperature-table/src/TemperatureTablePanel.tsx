@@ -12,7 +12,7 @@ type Config = {
 };
 
 const DEFAULT_CONFIG: Config = {
-  topicPrefix: "/can/dbc/slave_",
+  topicPrefix: "/pwt/slave_",
   slaveCount: 12,
   minTemp: 10,
   lowWarnTemp: 20,

@@ -1,6 +1,6 @@
 """Bridge decoded CAN signals into scalar UI topics.
 
-Subscribes to configured Float32 topics (typically /can/dbc/* or /vehicle/rpm)
+Subscribes to configured Float32 topics (typically /can/* or /vehicle/rpm)
 and publishes /vehicle/speed_kph for dashboard_ui.
 """
 
@@ -92,12 +92,12 @@ class SpeedBridge(Node):
 
         r2d_topic = self.get_parameter('r2d_ready_topic').value
         if r2d_topic:
-            if any(r2d_topic.startswith(prefix) for prefix in ('/data/dbc/', '/pwt/dbc/', '/can/dbc/')):
+            if any(r2d_topic.startswith(prefix) for prefix in ('/data/', '/pwt/', '/can/')):
                 parts = r2d_topic.strip('/').split('/')
-                if len(parts) >= 4:
-                    msg_slug = parts[2]
-                    sig_slug = parts[3]
-                    aggregate_topic = '/' + '/'.join(parts[:3])
+                if len(parts) >= 3:
+                    msg_slug = parts[1]
+                    sig_slug = parts[2]
+                    aggregate_topic = '/' + '/'.join(parts[:2])
                     msg_class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
                     try:
                         import importlib
@@ -126,12 +126,12 @@ class SpeedBridge(Node):
         if not topic:
             return
 
-        if any(topic.startswith(prefix) for prefix in ('/data/dbc/', '/pwt/dbc/', '/can/dbc/')):
+        if any(topic.startswith(prefix) for prefix in ('/data/', '/pwt/', '/can/')):
             parts = topic.strip('/').split('/')
-            if len(parts) >= 4:
-                msg_slug = parts[2]
-                sig_slug = parts[3]
-                aggregate_topic = '/' + '/'.join(parts[:3])
+            if len(parts) >= 3:
+                msg_slug = parts[1]
+                sig_slug = parts[2]
+                aggregate_topic = '/' + '/'.join(parts[:2])
                 msg_class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
                 try:
                     import importlib

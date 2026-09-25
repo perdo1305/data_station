@@ -14,7 +14,7 @@ exposes everything to the driver through the LVGL dashboard:
 - **CAN in** — `can0`/`can1` carry `data_t26.dbc` and `powertrain_t26.dbc`
   frames (speed, temps, pressures, HV/LV, inverter/motor telemetry). The
   `can_bridge` decodes these directly off the wire and republishes them as
-  ROS 2 topics (`/can/frames`, `/can/dbc/*`).
+  ROS 2 topics (`/can/frames`, `/can/*`).
 - **Autonomous in** — the Jetson/ACU stack does **not** go through the CAN
   bridge. It publishes its own ROS 2 topics over DDS (mission state, ACU
   state, AS state, emergency cause, SLAM/lap info), and the DataStation
@@ -37,7 +37,7 @@ flowchart LR
     CH1 --> Bridge["can_bridge\n(data_t26.dbc, powertrain_t26.dbc)"]
     CH2 --> Bridge
 
-    Bridge -- "/can/frames\n/can/dbc/*" --> DDS(("ROS 2 / DDS"))
+    Bridge -- "/can/frames\n/can/*" --> DDS(("ROS 2 / DDS"))
     ACU -- "ROS 2 topics\n(direct, no CAN)" --> DDS
 
     DDS --> UI["ui_runner\n(LVGL dashboard)"]
@@ -80,7 +80,7 @@ flowchart LR
 ## Data flow
 
 - CAN CH1/CH2 -> `can_bridge` (car) or `mock_can` (home).
-- Topics published: `/can/frames`, `/vehicle/rpm`, `/vehicle/dashboard_state` and dynamic `/can/dbc/*` topics.
+- Topics published: `/can/frames`, `/vehicle/rpm`, `/vehicle/dashboard_state` and dynamic `/can/*` topics.
 - Jetson/ACU autonomous stack publishes its own ROS 2 topics directly (no CAN involved); `ui_runner` subscribes to them.
 - `ui_runner` (LVGL dashboard) consumes the CAN topics, autonomous topics, and state topics to render the cockpit UI.
 - `led_controller` consumes RPM and drives LED strip.

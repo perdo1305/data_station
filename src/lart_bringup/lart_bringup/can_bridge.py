@@ -1,9 +1,9 @@
 """CAN-to-ROS 2 bridge — with optional DBC-based dynamic decoding.
 
 Reads from one CAN bus via python-can (SocketCAN) and publishes:
-  /data/dbc/<msg_name>  for data_t26.dbc
-  /pwt/dbc/<msg_name>   for powertrain_t26.dbc
-  /can/dbc/<msg_name>   for autonomous_t26.dbc and legacy/unknown DBCs
+  /data/<msg_name>  for data_t26.dbc
+  /pwt/<msg_name>   for powertrain_t26.dbc
+  /can/<msg_name>   for autonomous_t26.dbc and legacy/unknown DBCs
 
 Legacy RPM config (rpi_config.yaml → can_bridge):
   rpm_can_id       — arbitration ID of the ECU RPM message (decimal)

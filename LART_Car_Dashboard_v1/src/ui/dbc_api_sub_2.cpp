@@ -41,7 +41,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
     auto sensor_qos = rclcpp::QoS(10).best_effort();
 
     subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Temperatures>(
-        "/pwt/dbc/inv2_temperatures", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Temperatures> msg) {
+        "/pwt/inv2_temperatures", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Temperatures> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.inv2_temperatures.inv2_actual_faultcode = msg->inv2_actual_faultcode;
@@ -50,7 +50,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::IvtMsgCmd>(
-        "/pwt/dbc/ivt_msg_cmd", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgCmd> msg) {
+        "/pwt/ivt_msg_cmd", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgCmd> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.ivt_msg_cmd.ivt_id_cmd = msg->ivt_id_cmd;
@@ -162,7 +162,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::IvtMsgResponse>(
-        "/pwt/dbc/ivt_msg_response", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResponse> msg) {
+        "/pwt/ivt_msg_response", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResponse> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.ivt_msg_response.a0_resp_cycletime_i = msg->a0_resp_cycletime_i;
@@ -268,7 +268,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::IvtMsgResultAs>(
-        "/pwt/dbc/ivt_msg_result_as", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResultAs> msg) {
+        "/pwt/ivt_msg_result_as", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResultAs> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.ivt_msg_result_as.ivt_id_result_as = msg->ivt_id_result_as;
@@ -281,7 +281,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::IvtMsgResultI>(
-        "/pwt/dbc/ivt_msg_result_i", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResultI> msg) {
+        "/pwt/ivt_msg_result_i", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResultI> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.ivt_msg_result_i.ivt_id_result_i = msg->ivt_id_result_i;
@@ -294,7 +294,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::IvtMsgResultT>(
-        "/pwt/dbc/ivt_msg_result_t", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResultT> msg) {
+        "/pwt/ivt_msg_result_t", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResultT> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.ivt_msg_result_t.ivt_id_result_t = msg->ivt_id_result_t;
@@ -307,7 +307,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::IvtMsgResultU1>(
-        "/pwt/dbc/ivt_msg_result_u1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResultU1> msg) {
+        "/pwt/ivt_msg_result_u1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResultU1> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.ivt_msg_result_u1.ivt_id_result_u1 = msg->ivt_id_result_u1;
@@ -320,7 +320,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::IvtMsgResultU2>(
-        "/pwt/dbc/ivt_msg_result_u2", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResultU2> msg) {
+        "/pwt/ivt_msg_result_u2", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResultU2> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.ivt_msg_result_u2.ivt_id_result_u2 = msg->ivt_id_result_u2;
@@ -333,7 +333,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::IvtMsgResultU3>(
-        "/pwt/dbc/ivt_msg_result_u3", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResultU3> msg) {
+        "/pwt/ivt_msg_result_u3", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResultU3> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.ivt_msg_result_u3.ivt_id_result_u3 = msg->ivt_id_result_u3;
@@ -346,7 +346,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::IvtMsgResultW>(
-        "/pwt/dbc/ivt_msg_result_w", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResultW> msg) {
+        "/pwt/ivt_msg_result_w", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResultW> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.ivt_msg_result_w.ivt_id_result_w = msg->ivt_id_result_w;
@@ -359,7 +359,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::IvtMsgResultWh>(
-        "/pwt/dbc/ivt_msg_result_wh", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResultWh> msg) {
+        "/pwt/ivt_msg_result_wh", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResultWh> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.ivt_msg_result_wh.ivt_id_result_wh = msg->ivt_id_result_wh;
@@ -372,7 +372,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::Jetson>(
-        "/can/dbc/jetson", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Jetson> msg) {
+        "/can/jetson", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Jetson> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.jetson.as_mission = msg->as_mission;
@@ -384,7 +384,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::MasterMscId1>(
-        "/pwt/dbc/master_msc_id_1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::MasterMscId1> msg) {
+        "/pwt/master_msc_id_1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::MasterMscId1> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.master_msc_id_1.adbms_pec_error = msg->adbms_pec_error;
@@ -398,7 +398,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::MasterMscId2>(
-        "/pwt/dbc/master_msc_id_2", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::MasterMscId2> msg) {
+        "/pwt/master_msc_id_2", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::MasterMscId2> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.master_msc_id_2.fault1_code = msg->fault1_code;
@@ -411,7 +411,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::MasterMscId3>(
-        "/pwt/dbc/master_msc_id_3", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::MasterMscId3> msg) {
+        "/pwt/master_msc_id_3", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::MasterMscId3> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.master_msc_id_3.overall_maximum_temperature = msg->overall_maximum_temperature;
@@ -421,14 +421,14 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::MasterMscId4>(
-        "/pwt/dbc/master_msc_id_4", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::MasterMscId4> msg) {
+        "/pwt/master_msc_id_4", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::MasterMscId4> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.master_msc_id_4.slaves_detected = msg->slaves_detected;
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::MasterPrechargeId1>(
-        "/pwt/dbc/master_precharge_id_1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::MasterPrechargeId1> msg) {
+        "/pwt/master_precharge_id_1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::MasterPrechargeId1> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.master_precharge_id_1.precharge_ctc_air_min_state = msg->precharge_ctc_air_min_state;
@@ -439,7 +439,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::MasterSocAccumulator>(
-        "/pwt/dbc/master_soc_accumulator", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::MasterSocAccumulator> msg) {
+        "/pwt/master_soc_accumulator", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::MasterSocAccumulator> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.master_soc_accumulator.soc_float = msg->soc_float;
@@ -447,7 +447,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::PdmCooling>(
-        "/data/dbc/pdm_cooling", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::PdmCooling> msg) {
+        "/data/pdm_cooling", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::PdmCooling> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.pdm_cooling.coolingfan_pwm = msg->coolingfan_pwm;
@@ -455,21 +455,21 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::PdmLv>(
-        "/data/dbc/pdm_lv", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::PdmLv> msg) {
+        "/data/pdm_lv", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::PdmLv> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.pdm_lv.lv_voltage_mv = msg->lv_voltage_mv;
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::Res>(
-        "/can/dbc/res", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Res> msg) {
+        "/can/res", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Res> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.res.signal = msg->signal;
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::SlamStatsCan>(
-        "/can/dbc/slam_stats_can", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::SlamStatsCan> msg) {
+        "/can/slam_stats_can", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::SlamStatsCan> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.slam_stats_can.cones_count_actual = msg->cones_count_actual;
@@ -478,7 +478,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::Slave01MscId1>(
-        "/pwt/dbc/slave_01_msc_id_1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave01MscId1> msg) {
+        "/pwt/slave_01_msc_id_1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave01MscId1> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.slave_01_msc_id_1.module_voltage_avg = msg->module_voltage_avg;
@@ -488,7 +488,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::Slave01MscId2>(
-        "/pwt/dbc/slave_01_msc_id_2", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave01MscId2> msg) {
+        "/pwt/slave_01_msc_id_2", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave01MscId2> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.slave_01_msc_id_2.module_ic_temperature = msg->module_ic_temperature;
@@ -501,7 +501,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::Slave01TemperatureId1>(
-        "/pwt/dbc/slave_01_temperature_id_1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave01TemperatureId1> msg) {
+        "/pwt/slave_01_temperature_id_1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave01TemperatureId1> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.slave_01_temperature_id_1.temperature_value_1 = msg->temperature_value_1;
@@ -511,7 +511,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::Slave01TemperatureId2>(
-        "/pwt/dbc/slave_01_temperature_id_2", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave01TemperatureId2> msg) {
+        "/pwt/slave_01_temperature_id_2", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave01TemperatureId2> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.slave_01_temperature_id_2.temperature_delta = msg->temperature_delta;
@@ -521,7 +521,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::Slave01VoltageId1>(
-        "/pwt/dbc/slave_01_voltage_id_1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave01VoltageId1> msg) {
+        "/pwt/slave_01_voltage_id_1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave01VoltageId1> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.slave_01_voltage_id_1.cell_voltage_1 = msg->cell_voltage_1;
@@ -531,7 +531,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::Slave01VoltageId2>(
-        "/pwt/dbc/slave_01_voltage_id_2", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave01VoltageId2> msg) {
+        "/pwt/slave_01_voltage_id_2", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave01VoltageId2> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.slave_01_voltage_id_2.cell_voltage_5 = msg->cell_voltage_5;
@@ -541,7 +541,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::Slave01VoltageId3>(
-        "/pwt/dbc/slave_01_voltage_id_3", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave01VoltageId3> msg) {
+        "/pwt/slave_01_voltage_id_3", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave01VoltageId3> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.slave_01_voltage_id_3.cell_voltage_10 = msg->cell_voltage_10;
@@ -551,7 +551,7 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::Slave02MscId1>(
-        "/pwt/dbc/slave_02_msc_id_1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave02MscId1> msg) {
+        "/pwt/slave_02_msc_id_1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave02MscId1> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.slave_02_msc_id_1.module_voltage_avg = msg->module_voltage_avg;
