@@ -55,6 +55,13 @@ extern "C" const char *ui_get_lv_current_str() {
     return buf;
 }
 
+extern "C" const char *ui_get_hv_current_str() {
+    static char buf[16];
+    const float current_amps = dbc_api.ivt_msg_result_i.ivt_result_i / 1000.0f;
+    snprintf(buf, sizeof(buf), "%.1f A", current_amps);
+    return buf;
+}
+
 extern "C" void ui_set_hv(float hv_value) {
     (void)hv_value;
 }

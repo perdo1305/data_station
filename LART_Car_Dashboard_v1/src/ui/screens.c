@@ -647,13 +647,13 @@ void create_screen_driver_view() {
             lv_label_set_text(obj, "");
         }
         {
-            // hvCurrentLabel: reserved until the HV current topic is confirmed
+            // hvCurrentLabel
             lv_obj_t *obj = lv_label_create(parent_obj);
             objects.hv_current_label = obj;
             lv_obj_set_pos(obj, 733, 433);
             lv_obj_set_size(obj, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
             add_style_text(obj);
-            lv_label_set_text_static(obj, "--.- A");
+            lv_label_set_text(obj, "");
         }
         {
             // lvCurrentLabel
@@ -838,6 +838,15 @@ void tick_screen_driver_view() {
         if (strcmp(new_val, cur_val) != 0) {
             tick_value_change_obj = objects.lv_current_label;
             lv_label_set_text(objects.lv_current_label, new_val);
+            tick_value_change_obj = NULL;
+        }
+    }
+    {
+        const char *new_val = ui_get_hv_current_str();
+        const char *cur_val = lv_label_get_text(objects.hv_current_label);
+        if (strcmp(new_val, cur_val) != 0) {
+            tick_value_change_obj = objects.hv_current_label;
+            lv_label_set_text(objects.hv_current_label, new_val);
             tick_value_change_obj = NULL;
         }
     }

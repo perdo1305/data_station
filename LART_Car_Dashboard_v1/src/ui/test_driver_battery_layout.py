@@ -58,9 +58,15 @@ class DriverBatteryLayoutTest(unittest.TestCase):
         self.assertIn('"%.1f A"', formatter)
         self.assertIn("ui_get_lv_current_str()", self.screens)
 
-    def test_hv_current_is_a_placeholder(self):
-        hv_block = self._driver_view().split("objects.hv_current_label = obj;", 1)[1]
-        self.assertIn('lv_label_set_text_static(obj, "--.- A");', hv_block)
+    def test_hv_current_is_formatted_from_ivt_current(self):
+        self.assertIn("const char *ui_get_hv_current_str();", self.ui_header)
+        formatter = self.dbc_api.split("ui_get_hv_current_str()", 1)[1].split(
+            "extern \"C\"", 1
+        )[0]
+        self.assertIn("dbc_api.ivt_msg_result_i.ivt_result_i", formatter)
+        self.assertIn("/ 1000.0f", formatter)
+        self.assertIn('"%.1f A"', formatter)
+        self.assertIn("ui_get_hv_current_str()", self.screens)
 
 
 if __name__ == "__main__":
