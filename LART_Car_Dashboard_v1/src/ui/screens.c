@@ -109,7 +109,9 @@ objects_t objects;
 
 static const char *screen_names[] = { 
     "Driver View", 
-    "Autonomous", 
+    "Autonomous"
+#if 0 // Debug screens are excluded from production builds.
+    ,
     "Debug 1", 
     "Debug_Inverter 2", 
     "Debug_3", 
@@ -120,6 +122,7 @@ static const char *screen_names[] = {
     "Debug Autonomous 3", 
     "Debug Autonomous 4", 
     "Debug Autonomous 5" 
+#endif
 };
 static const char *object_names[] = {
     "driver_view",
@@ -1393,6 +1396,7 @@ void tick_screen_autonomous() {
     }
 }
 
+#if 0 // Debug screens are excluded from production builds.
 static void table_draw_event_cb(lv_event_t * e) {
     lv_draw_task_t * draw_task = lv_event_get_draw_task(e);
     if (!draw_task) return;
@@ -2253,11 +2257,14 @@ void tick_screen_debug_autonomous_5() {
     set_cell(table, 9, 2, "", 0xFFFFFF);
     set_cell(table, 9, 3, "", 0xFFFFFF);
 }
+#endif
 
 typedef void (*tick_screen_func_t)();
 tick_screen_func_t tick_screen_funcs[] = {
     tick_screen_driver_view,
-    tick_screen_autonomous,
+    tick_screen_autonomous
+#if 0 // Debug screens are excluded from production builds.
+    ,
     tick_screen_debug_1,
     tick_screen_debug_inverter_2,
     tick_screen_debug_3,
@@ -2268,9 +2275,10 @@ tick_screen_func_t tick_screen_funcs[] = {
     tick_screen_debug_autonomous_3,
     tick_screen_debug_autonomous_4,
     tick_screen_debug_autonomous_5,
+#endif
 };
 void tick_screen(int screen_index) {
-    if (screen_index >= 0 && screen_index < 12) {
+    if (screen_index >= 0 && screen_index < (int)(sizeof(tick_screen_funcs) / sizeof(tick_screen_funcs[0]))) {
         tick_screen_funcs[screen_index]();
     }
 }
@@ -2389,6 +2397,7 @@ eez_flow_init_fonts(fonts, sizeof(fonts) / sizeof(ext_font_desc_t));
     // Create screens
     create_screen_driver_view();
     create_screen_autonomous();
+#if 0 // Debug screens are excluded from production builds.
     create_screen_debug_1();
     create_screen_debug_inverter_2();
     create_screen_debug_3();
@@ -2399,4 +2408,5 @@ eez_flow_init_fonts(fonts, sizeof(fonts) / sizeof(ext_font_desc_t));
     create_screen_debug_autonomous_3();
     create_screen_debug_autonomous_4();
     create_screen_debug_autonomous_5();
+#endif
 }
