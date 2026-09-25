@@ -61,6 +61,8 @@ typedef struct _objects_t {
     lv_obj_t *lv_bar;
     lv_obj_t *hv_label;
     lv_obj_t *lv_label;
+    lv_obj_t *hv_current_label;
+    lv_obj_t *lv_current_label;
     lv_obj_t *obj2;
     lv_obj_t *obj3;
     lv_obj_t *hv_bar_1;
