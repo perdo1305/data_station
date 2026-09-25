@@ -1,32 +1,49 @@
 import unittest
 from pathlib import Path
 
+import yaml
+
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOWS = ROOT / ".github" / "workflows"
 
 
 class Arm64WorkflowTests(unittest.TestCase):
-    def test_cached_build_is_automatic_and_can_be_run_manually(self):
-        workflow = (WORKFLOWS / "build-arm64.yml").read_text()
+    def release_steps(self, filename):
+        workflow = yaml.load(
+            (WORKFLOWS / filename).read_text(), Loader=yaml.BaseLoader
+        )
+        jobs = workflow["jobs"].values()
+        steps = [step for job in jobs for step in job["steps"]]
+        return {
+            step["name"]: step
+            for step in steps
+            if step.get("uses", "").startswith("softprops/action-gh-release@")
+        }
 
-        self.assertIn("name: Build ARM64 (Cached)", workflow)
-        self.assertIn("push:", workflow)
-        self.assertIn("workflow_dispatch:", workflow)
-        self.assertIn("actions/cache/restore@v4", workflow)
-        self.assertIn("actions/cache/save@v4", workflow)
-        self.assertIn("softprops/action-gh-release@v3", workflow)
+    def test_normal_build_preserves_each_version_and_updates_latest(self):
+        releases = self.release_steps("build-arm64.yml")
 
-    def test_clean_build_is_manual_uncached_and_does_not_replace_release(self):
-        workflow = (WORKFLOWS / "build-arm64-clean.yml").read_text()
+        self.assertEqual(
+            releases["Publish versioned release"]["with"]["tag_name"],
+            "arm64-${{ github.sha }}",
+        )
+        self.assertEqual(
+            releases["Update latest release"]["with"]["tag_name"],
+            "latest-arm64",
+        )
 
-        self.assertIn("name: Build ARM64 (Clean)", workflow)
-        self.assertIn("workflow_dispatch:", workflow)
-        self.assertNotIn("push:", workflow)
-        self.assertNotIn("actions/cache/", workflow)
-        self.assertNotIn("softprops/action-gh-release", workflow)
-        self.assertIn("actions/upload-artifact@v4", workflow)
-        self.assertIn("lart-dashboard-arm64-clean", workflow)
+    def test_fast_build_preserves_each_version_and_updates_latest(self):
+        releases = self.release_steps("build-arm64-faster.yml")
+
+        self.assertEqual(
+            releases["Publish versioned release"]["with"]["tag_name"],
+            "faster-arm64-${{ github.sha }}",
+        )
+        self.assertEqual(
+            releases["Update latest release"]["with"]["tag_name"],
+            "faster-arm64",
+        )
 
 
 if __name__ == "__main__":

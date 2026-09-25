@@ -116,7 +116,18 @@ jobs:
           find install -type f -name '*.a' -delete
           tar czf fast-lart-dashboard-arm64.tar.gz install
 
-      - name: Publish release
+      - name: Get short commit SHA
+        id: version
+        run: echo "short_sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Publish versioned release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: faster-arm64-${{ github.sha }}
+          name: "Fast ARM64 build ${{ steps.version.outputs.short_sha }}"
+          files: fast-lart-dashboard-arm64.tar.gz
+
+      - name: Update latest release
         uses: softprops/action-gh-release@v3
         with:
           tag_name: faster-arm64

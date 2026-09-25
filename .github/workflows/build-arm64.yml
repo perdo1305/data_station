@@ -76,7 +76,18 @@ jobs:
       - name: Package artifact
         run: tar czf lart-dashboard-arm64.tar.gz install LART_Car_Dashboard_v1/build/ui-build
 
-      - name: Publish release
+      - name: Get short commit SHA
+        id: version
+        run: echo "short_sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Publish versioned release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: arm64-${{ github.sha }}
+          name: "ARM64 build ${{ steps.version.outputs.short_sha }}"
+          files: lart-dashboard-arm64.tar.gz
+
+      - name: Update latest release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest-arm64

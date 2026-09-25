@@ -90,8 +90,9 @@ flowchart LR
 
 Compiled output (the ROS2 workspace and the `ui_runner` dashboard binary) is
 built by GitHub Actions (`.github/workflows/build-arm64.yml`) on every push to
-`master` and published to the `latest-arm64` release — the Pi pulls it
-instead of compiling locally:
+`master`. Every successful build is retained as a GitHub Release tagged
+`arm64-<full-commit-sha>`, while `latest-arm64` continues to point to the most
+recent build. The Pi pulls the latest release instead of compiling locally:
 
 **One-time prerequisite** (run once on a fresh/reimaged Pi):
 ```bash
@@ -107,6 +108,11 @@ pip install -r requirements.txt --break-system-packages
 ./scripts/pull_arm64_build.sh
 source install/setup.bash
 ```
+
+To use an older build, open the repository's GitHub Releases page, select the
+`arm64-<full-commit-sha>` release for the desired commit, and download its
+`lart-dashboard-arm64.tar.gz` asset. Fast builds are retained in the same way
+under `faster-arm64-<full-commit-sha>` tags.
 
 To build locally instead (e.g. while developing on a non-arm64 machine, or if
 CI is unavailable), use the original workflow:
@@ -143,4 +149,3 @@ source ~/ros2_jazzy/install/local_setup.bash
 source ~/GIT/lart_dashboard_ws/install/setup.bash
 ros2 launch lart_bringup car.launch.py
 ```
-
