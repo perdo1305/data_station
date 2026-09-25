@@ -48,8 +48,8 @@ class BagRecorderNode(Node):
     def __init__(self):
         super().__init__('bag_recorder')
 
-        self.declare_parameter('trigger_topic', '/can/dbc/start_precharge')
-        self.declare_parameter('record_regex', '/can/dbc/.*')
+        self.declare_parameter('trigger_topic', '/pwt/dbc/start_precharge')
+        self.declare_parameter('record_regex', '/data/dbc/.*|/pwt/dbc/.*|/can/dbc/.*')
         self.declare_parameter('bag_dir', '~/bags')
         self.declare_parameter('stop_grace_s', 30.0)
         self.declare_parameter('split_duration_s', 0)

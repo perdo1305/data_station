@@ -92,11 +92,12 @@ class SpeedBridge(Node):
 
         r2d_topic = self.get_parameter('r2d_ready_topic').value
         if r2d_topic:
-            if r2d_topic.startswith('/can/dbc/'):
+            if any(r2d_topic.startswith(prefix) for prefix in ('/data/dbc/', '/pwt/dbc/', '/can/dbc/')):
                 parts = r2d_topic.strip('/').split('/')
                 if len(parts) >= 4:
                     msg_slug = parts[2]
                     sig_slug = parts[3]
+                    aggregate_topic = '/' + '/'.join(parts[:3])
                     msg_class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
                     try:
                         import importlib
@@ -107,8 +108,8 @@ class SpeedBridge(Node):
                             self._r2d_ready = bool(getattr(msg, signal_attr) > 0.5)
                             self._last_rx = time.time()
                             
-                        self.create_subscription(msg_class, f'/can/dbc/{msg_slug}', _on_r2d_cb, 10)
-                        self.get_logger().info(f"Subscribed to aggregated topic /can/dbc/{msg_slug} for R2D ({sig_slug})")
+                        self.create_subscription(msg_class, aggregate_topic, _on_r2d_cb, 10)
+                        self.get_logger().info(f"Subscribed to aggregated topic {aggregate_topic} for R2D ({sig_slug})")
                     except Exception as e:
                         self.get_logger().error(f"Failed to subscribe to aggregated r2d topic for {r2d_topic}: {e}")
                 else:
@@ -125,11 +126,12 @@ class SpeedBridge(Node):
         if not topic:
             return
 
-        if topic.startswith('/can/dbc/'):
+        if any(topic.startswith(prefix) for prefix in ('/data/dbc/', '/pwt/dbc/', '/can/dbc/')):
             parts = topic.strip('/').split('/')
             if len(parts) >= 4:
                 msg_slug = parts[2]
                 sig_slug = parts[3]
+                aggregate_topic = '/' + '/'.join(parts[:3])
                 msg_class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
                 try:
                     import importlib
@@ -141,8 +143,8 @@ class SpeedBridge(Node):
                         self._values[field] = value
                         self._last_rx = time.time()
                         
-                    self.create_subscription(msg_class, f'/can/dbc/{msg_slug}', _cb, 10)
-                    self.get_logger().info(f"Subscribed to aggregated topic /can/dbc/{msg_slug} for field {key} ({sig_slug})")
+                    self.create_subscription(msg_class, aggregate_topic, _cb, 10)
+                    self.get_logger().info(f"Subscribed to aggregated topic {aggregate_topic} for field {key} ({sig_slug})")
                     return
                 except Exception as e:
                     self.get_logger().error(f"Failed to subscribe to aggregated topic for {topic}: {e}")

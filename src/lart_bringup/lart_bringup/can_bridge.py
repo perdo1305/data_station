@@ -1,9 +1,9 @@
 """CAN-to-ROS 2 bridge — with optional DBC-based dynamic decoding.
 
 Reads from one CAN bus via python-can (SocketCAN) and publishes:
-  /can/dbc/<msg_name>  (per-message custom msg from lart_msgs, one field
-                        per DBC signal) — one publisher per DBC message
-                        (only when dbc_path is set)
+  /data/dbc/<msg_name>  for data_t26.dbc
+  /pwt/dbc/<msg_name>   for powertrain_t26.dbc
+  /can/dbc/<msg_name>   for autonomous_t26.dbc and legacy/unknown DBCs
 
 Legacy RPM config (rpi_config.yaml → can_bridge):
   rpm_can_id       — arbitration ID of the ECU RPM message (decimal)
@@ -23,6 +23,8 @@ import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy
 from std_msgs.msg import Float32
+
+from .topic_names import dbc_topic_prefix
 
 _BEST_EFFORT = QoSProfile(
     reliability=QoSReliabilityPolicy.BEST_EFFORT,
@@ -149,6 +151,8 @@ class CanBridgeNode(Node):
             self.get_logger().error("lart_msgs not found! CAN bridge will not work.")
             return
 
+        topic_prefix = dbc_topic_prefix(dbc_path)
+
         for msg in self._db.messages:
             if not msg.signals:
                 continue
@@ -170,7 +174,7 @@ class CanBridgeNode(Node):
                 self.get_logger().error(f"Message class {msg_class_name} not found in lart_msgs.msg!")
                 continue
 
-            topic = f'/can/dbc/{msg_slug}'
+            topic = f'{topic_prefix}/{msg_slug}'
             try:
                 pub = self.create_publisher(msg_class, topic, _BEST_EFFORT)
             except Exception as exc:
@@ -189,7 +193,7 @@ class CanBridgeNode(Node):
         self.get_logger().info(
             f'DBC loaded from: {dbc_path}\n'
             f'  → {len(self._dbc_pubs)} messages, {total_signals} signals\n'
-            f'  → Publishing on /can/dbc/<msg>'
+            f'  → Publishing on {topic_prefix}/<msg>'
         )
 
     # ──────────────────────────────────────────────────────────────────────

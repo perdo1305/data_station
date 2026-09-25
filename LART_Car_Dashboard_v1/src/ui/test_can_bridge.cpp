@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
     
     // Subscribe to test target topic
     auto sub = node->create_subscription<lart_msgs::msg::Aqt2>(
-        "/can/dbc/aqt2",
+        "/data/dbc/aqt2",
         rclcpp::QoS(10).best_effort(),
         [&](const lart_msgs::msg::Aqt2::SharedPtr msg) {
             received_temperature = msg->tire_temp;
@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
     CanBridgeImpl data_bridge(node.get(), "data_t26");
     bool got_result = false, got_response = false, got_wrong_bus = false;
     auto result_sub = node->create_subscription<lart_msgs::msg::IcdResult>(
-        "/can/dbc/icd_result", rclcpp::QoS(10).best_effort(),
+        "/data/dbc/icd_result", rclcpp::QoS(10).best_effort(),
         [&](lart_msgs::msg::IcdResult::SharedPtr msg) {
             if (std::abs(msg->icd_current + 123.456f) > 0.001f ||
                 std::abs(msg->icd_ubat - 12.345f) > 0.001f || msg->icd_msgcounter != 10)
@@ -70,14 +70,14 @@ int main(int argc, char **argv) {
         });
     constexpr uint64_t article = UINT64_C(72057594037927935);
     auto response_sub = node->create_subscription<lart_msgs::msg::IcdResponse>(
-        "/can/dbc/icd_response", rclcpp::QoS(10).best_effort(),
+        "/data/dbc/icd_response", rclcpp::QoS(10).best_effort(),
         [&](lart_msgs::msg::IcdResponse::SharedPtr msg) {
             if (static_cast<uint8_t>(msg->resp_muxid) != 228 || msg->resp_articlenumber != article || msg->resp_fwmajor != 0)
                 throw std::runtime_error("ICD precision/multiplexer mismatch");
             got_response = true;
         });
     auto wrong_sub = node->create_subscription<lart_msgs::msg::DvStatus>(
-        "/can/dbc/dv_status", rclcpp::QoS(10).best_effort(),
+        "/data/dbc/dv_status", rclcpp::QoS(10).best_effort(),
         [&](lart_msgs::msg::DvStatus::SharedPtr) { got_wrong_bus = true; });
     // Fixed wire payloads independently exercise big-endian signed decoding.
     const uint8_t result_payload[8] = {0xa0, 0xff, 0xfe, 0x1d, 0xc0, 0x30, 0x39, 0};
