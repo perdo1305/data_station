@@ -32,8 +32,13 @@ def main():
     dbc_filenames = ["data_t26.dbc", "powertrain_t26.dbc", "autonomous_t26.dbc"]
 
     db = cantools.database.Database()
+    message_databases = {}
     dbc_files = [os.path.join(dbc_dir, fn) for fn in dbc_filenames]
     for df in dbc_files:
+        source_db = cantools.database.load_file(df)
+        db_name = os.path.splitext(os.path.basename(df))[0]
+        for msg in source_db.messages:
+            message_databases.setdefault(_ros_name(msg.name), set()).add(db_name)
         db.add_dbc_file(df)
         
     # Group signals by sanitized message name slug to deduplicate messages
@@ -204,22 +209,28 @@ def main():
             ""
         ])
         
+        topic_prefixes = {
+            "data_t26": "/data",
+            "powertrain_t26": "/pwt",
+            "autonomous_t26": "/can",
+        }
         for msg_slug in sorted(chunk_slugs):
             class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
             msg_class = f"lart_msgs::msg::{class_name}"
-            topic = f"/can/dbc/{msg_slug}"
-            sub_lines.extend([
-                f"    subs.push_back(node->create_subscription<{msg_class}>(",
-                f"        \"{topic}\", sensor_qos, [](const std::shared_ptr<{msg_class}> msg) {{",
-                f"            if (msg) {{",
-                f"                std::lock_guard<std::mutex> lock(dbc_api_mutex);"
-            ])
-            for sig_slug in sorted(message_signals[msg_slug]):
-                sub_lines.append(f"                dbc_api.{msg_slug}.{sig_slug} = msg->{sig_slug};")
-            sub_lines.extend([
-                f"            }}",
-                f"        }}));"
-            ])
+            for db_name in sorted(message_databases[msg_slug]):
+                topic = f"{topic_prefixes[db_name]}/{msg_slug}"
+                sub_lines.extend([
+                    f"    subs.push_back(node->create_subscription<{msg_class}>(",
+                    f"        \"{topic}\", sensor_qos, [](const std::shared_ptr<{msg_class}> msg) {{",
+                    f"            if (msg) {{",
+                    f"                std::lock_guard<std::mutex> lock(dbc_api_mutex);"
+                ])
+                for sig_slug in sorted(message_signals[msg_slug]):
+                    sub_lines.append(f"                dbc_api.{msg_slug}.{sig_slug} = msg->{sig_slug};")
+                sub_lines.extend([
+                    f"            }}",
+                    f"        }}));"
+                ])
             
         sub_lines.extend([
             "}",

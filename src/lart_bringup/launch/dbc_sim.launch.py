@@ -3,7 +3,7 @@
 Starts:
   1. can_simulator  (sim)          — creates vcan0 and injects DBC-encoded frames
   2. can_bridge     (lart_bringup) — reads vcan0, decodes with cantools, publishes
-                                     /can/dbc/<msg>/<signal> topics
+                                     DBC-specific /data, /pwt, or /can topics
 
 Optionally override the DBC file:
   ros2 launch lart_bringup dbc_sim.launch.py dbc_file:=powertrain_t26.dbc
@@ -70,7 +70,7 @@ def generate_launch_description():
             emulate_tty=True,
         ),
 
-        # ── Bridge: reads vcan0, decodes DBC, publishes /can/dbc/* topics ───
+        # ── Bridge: reads vcan0, decodes DBC, publishes namespaced topics ───
         Node(
             package='lart_bringup',
             executable='can_bridge',

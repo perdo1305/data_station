@@ -97,6 +97,9 @@ def main():
     
     # Add publisher declarations and message includes
     unique_msg_slugs = sorted(list(set(m_info["msg_slug"] for m_info in messages_to_decode)))
+    slug_databases = {}
+    for m_info in messages_to_decode:
+        slug_databases.setdefault(m_info["msg_slug"], set()).add(m_info["db_name"])
     
     # Generate correct ROS2-style header filenames
     def _ros_header_name(slug: str) -> str:
@@ -194,8 +197,16 @@ def main():
         sub_lines.append("    auto sensor_qos = rclcpp::QoS(10).best_effort();")
         for msg_slug in chunk_slugs:
             class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
-            topic = f"/can/dbc/{msg_slug}"
-            sub_lines.append(f'    pub_{msg_slug} = node->create_publisher<lart_msgs::msg::{class_name}>("{topic}", sensor_qos);')
+            databases = sorted(slug_databases[msg_slug])
+            condition = " || ".join(f'database_ == "{name}"' for name in databases)
+            sub_lines.append(f"    if ({condition}) {{")
+            sub_lines.append(
+                f'        pub_{msg_slug} = node->create_publisher<lart_msgs::msg::{class_name}>('
+                f'database_ == "data_t26" ? "/data/{msg_slug}" : '
+                f'database_ == "powertrain_t26" ? "/pwt/{msg_slug}" : '
+                f'"/can/{msg_slug}", sensor_qos);'
+            )
+            sub_lines.append("    }")
         sub_lines.append("}")
         sub_lines.append("")
 

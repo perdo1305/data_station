@@ -1,7 +1,7 @@
 """Precharge-triggered rosbag2 recorder.
 
 Watches the precharge request signal and records all DBC-decoded CAN topics
-(/can/dbc/*) into timestamped rosbag2 sessions:
+(/can/*) into timestamped rosbag2 sessions:
 
   precharge_request >= 0.5       → start recording (new session folder)
   precharge_request < 0.5        → keep recording for stop_grace_s, then finalize
@@ -14,7 +14,7 @@ few messages, instead of corrupting a whole chunk that metadata.yaml (which
 rosbag2 only writes once, at clean shutdown) then points to — which is what
 breaks timestamp continuity when multiple bags are imported into Foxglove
 together. Raw frames (/can/frames) are never recorded — the regex only
-matches /can/dbc/*.
+matches /can/*.
 
 On startup, any existing session folder under bag_dir that is missing
 metadata.yaml (left behind by an unclean shutdown of a previous run) is
@@ -48,8 +48,10 @@ class BagRecorderNode(Node):
     def __init__(self):
         super().__init__('bag_recorder')
 
-        self.declare_parameter('trigger_topic', '/can/dbc/start_precharge')
-        self.declare_parameter('record_regex', '/can/dbc/.*')
+        self.declare_parameter('trigger_topic', '/pwt/start_precharge')
+        self.declare_parameter(
+            'record_regex', '/data/.*|/pwt/.*|/can/(?!frames$).*'
+        )
         self.declare_parameter('bag_dir', '~/bags')
         self.declare_parameter('stop_grace_s', 30.0)
         self.declare_parameter('split_duration_s', 0)

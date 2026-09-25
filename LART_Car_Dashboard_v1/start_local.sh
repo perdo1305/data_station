@@ -34,13 +34,13 @@ else
 fi
 
 # 4. Start the DBC simulation stack in the background
-#    (can_simulator → vcan0, can_bridge → /can/dbc/*, dashboard_state_bridge)
+#    (can_simulator → vcan0, can_bridge → /can/*, dashboard_state_bridge)
 echo "Starting DBC simulation stack (can_simulator + can_bridge + dashboard_state_bridge)..."
 ros2 launch lart_bringup dbc_sim.launch.py &
 SIM_STACK_PID=$!
 echo "DBC simulation stack PID: $SIM_STACK_PID"
 
-# 5. Start the precharge-triggered bag recorder (records /can/dbc/* topics
+# 5. Start the precharge-triggered bag recorder (records /can/* topics
 # to ~/bags while precharge_request is active; see lart_bringup/bag_recorder.py)
 BAG_RECORDER_BIN="$WS_DIR/install/lart_bringup/lib/lart_bringup/bag_recorder"
 if [ -x "$BAG_RECORDER_BIN" ]; then

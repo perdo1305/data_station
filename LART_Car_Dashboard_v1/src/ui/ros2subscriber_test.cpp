@@ -63,7 +63,7 @@ int main(int argc, char **argv) {
     assert(init_res == 0);
     
     auto pub_node = std::make_shared<rclcpp::Node>("test_publisher");
-    auto asms_pub = pub_node->create_publisher<lart_msgs::msg::Acu>("/can/dbc/acu", rclcpp::QoS(10).best_effort());
+    auto asms_pub = pub_node->create_publisher<lart_msgs::msg::Acu>("/can/acu", rclcpp::QoS(10).best_effort());
 
     auto asms_msg = std::make_shared<lart_msgs::msg::Acu>();
     asms_msg->asms = 1.0f;

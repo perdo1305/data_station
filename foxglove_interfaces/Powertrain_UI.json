@@ -1,0 +1,445 @@
+{
+  "configById": {
+    "value-display.Value Display!1jc8avg": {
+      "data": {
+        "label": "Data",
+        "topic": "/can/dbc/vcu_states.vcu_state"
+      },
+      "display": {
+        "label": "Display",
+        "unit": "",
+        "fontSize": "auto",
+        "align": "center",
+        "bold": true,
+        "italic": false,
+        "fontColor": "#ffffff",
+        "backgroundColor": "#121212"
+      },
+      "numerical": {
+        "label": "Numerical",
+        "precision": 0,
+        "function": "none"
+      },
+      "foxglovePanelTitle": "VCU State"
+    },
+    "value-display.Value Display!3cxip0z": {
+      "data": {
+        "label": "Data",
+        "topic": "/can/dbc/master_msc_id_1.master_fan_pwm"
+      },
+      "display": {
+        "label": "Display",
+        "unit": "",
+        "fontSize": "auto",
+        "align": "center",
+        "bold": true,
+        "italic": false,
+        "fontColor": "#ffffff",
+        "backgroundColor": "#121212"
+      },
+      "numerical": {
+        "label": "Numerical",
+        "precision": 0,
+        "function": "none"
+      },
+      "foxglovePanelTitle": "Accu Fans PWM"
+    },
+    "value-display.Value Display!qlbg3v": {
+      "data": {
+        "label": "Data",
+        "topic": "/can/dbc/master_precharge_id_1.precharge_state"
+      },
+      "display": {
+        "label": "Display",
+        "unit": "",
+        "fontSize": "auto",
+        "align": "center",
+        "bold": true,
+        "italic": false,
+        "fontColor": "#ffffff",
+        "backgroundColor": "#121212"
+      },
+      "numerical": {
+        "label": "Numerical",
+        "precision": 0,
+        "function": "none"
+      },
+      "foxglovePanelTitle": "Precharge State"
+    },
+    "Indicator!j268k7": {
+      "path": "",
+      "style": "background",
+      "fontSize": 36,
+      "fallbackColor": "#27e223",
+      "fallbackLabel": "SDC CLOSED",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "false",
+          "color": "#ec1818",
+          "label": "SDC OPEN"
+        }
+      ],
+      "foxglovePanelTitle": "SDC State"
+    },
+    "foxglove-value-display-lart.value-display!3gpkrco": {
+      "title": "",
+      "messagePath": "/can/dbc/inv1_erpm_duty_voltage.inv1_actual_erpm",
+      "factor": 0.25,
+      "offset": 0,
+      "unit": "",
+      "precision": 0,
+      "matchAgainst": "raw",
+      "showValueSubtext": true,
+      "defaultColor": "#e8e8e8",
+      "rules": [],
+      "foxglovePanelTitle": "RPM Motor Esqerdo"
+    },
+    "foxglove-value-display-lart.value-display!12fudh0": {
+      "foxglovePanelTitle": "RPM Motor Direito",
+      "title": "",
+      "messagePath": "/can/dbc/inv2_erpm_duty_voltage.inv2_actual_erpm",
+      "factor": 0.25,
+      "offset": 0,
+      "unit": "",
+      "precision": 0,
+      "matchAgainst": "raw",
+      "showValueSubtext": true,
+      "defaultColor": "#e8e8e8",
+      "rules": []
+    },
+    "foxglove-value-display-lart.value-display!3itk0zq": {
+      "title": "",
+      "messagePath": "/can/dbc/master_soc_accumulator.soc_float",
+      "factor": 1,
+      "offset": 0,
+      "unit": "%",
+      "precision": 1,
+      "matchAgainst": "raw",
+      "showValueSubtext": true,
+      "defaultColor": "#e8e8e8",
+      "rules": [],
+      "foxglovePanelTitle": "SOC"
+    },
+    "foxglove-value-display-lart.value-display!3sqn3lm": {
+      "title": "",
+      "messagePath": "/can/dbc/ivt_msg_result_u1.ivt_result_u1",
+      "factor": 0.001,
+      "offset": 0,
+      "unit": "V",
+      "precision": 2,
+      "matchAgainst": "raw",
+      "showValueSubtext": true,
+      "defaultColor": "#e8e8e8",
+      "rules": [],
+      "foxglovePanelTitle": "Accu Voltage"
+    },
+    "foxglove-value-display-lart.value-display!1fo8mad": {
+      "title": "",
+      "messagePath": "/can/dbc/ivt_msg_result_i.ivt_result_i",
+      "factor": 0.001,
+      "offset": 0,
+      "unit": "A",
+      "precision": 2,
+      "matchAgainst": "raw",
+      "showValueSubtext": true,
+      "defaultColor": "#e8e8e8",
+      "rules": [],
+      "foxglovePanelTitle": "Accu Current"
+    },
+    "foxglove-value-display-lart.value-display!3z5v6x4": {
+      "foxglovePanelTitle": "Accu Temperature",
+      "title": "",
+      "messagePath": "/can/dbc/master_msc_id_3.overall_maximum_temperature",
+      "factor": 1,
+      "offset": 0,
+      "unit": "ºC",
+      "precision": 1,
+      "matchAgainst": "raw",
+      "showValueSubtext": true,
+      "defaultColor": "#e8e8e8",
+      "rules": []
+    },
+    "Plot!1i0q846": {
+      "paths": [
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/can/dbc/apps_adc_raw.apps1_raw.@sub(2452).@mul(0.353357)",
+          "enabled": true,
+          "color": "#4e98e2",
+          "id": "c6464e60-dc3e-4b55-a912-da177e05b33a",
+          "label": "APPS"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/can/dbc/inv1_setrelcurrent.inv1_cmd_targetrelativecurrent",
+          "enabled": true,
+          "color": "#f5774d",
+          "id": "5db58ea0-810f-4d9f-9e25-d830fcfcfdde",
+          "label": "INV1 request"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/can/dbc/inv2_setrelcurrent.inv2_cmd_targetrelativecurrent",
+          "enabled": true,
+          "color": "#f7df71",
+          "id": "bc7e2bff-1d04-453f-b0a3-3d06b4477d88",
+          "label": "INV2 request",
+          "showLine": true
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/can/dbc/inv1_ac_dc_current.inv1_actual_accurrent",
+          "enabled": true,
+          "color": "#5cd6a9",
+          "id": "4e55523e-a129-4781-958f-b6d569f334ea",
+          "label": "INV1 actual"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/can/dbc/inv2_ac_dc_current.inv2_actual_accurrent",
+          "enabled": true,
+          "color": "#67ffff",
+          "id": "f2c24bdb-a376-4d65-9c31-7299077efaa7",
+          "label": "INV2 actual"
+        }
+      ],
+      "foxglovePanelTitle": "Torque chain: request vs delivered",
+      "timeWindowMode": "automatic",
+      "xAxisLabel": "Tempo",
+      "showPlotValuesInLegend": true
+    },
+    "Plot!3562obf": {
+      "paths": [
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/can/dbc/ivt_msg_result_i.ivt_result_i.@mul(0.001)",
+          "enabled": true,
+          "color": "#4e98e2",
+          "id": "63eec21d-abb8-4aa9-accb-e06b49f99b16",
+          "label": "Accu Current (A)"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/can/dbc/inv1_ac_dc_current.inv1_actual_dccurrent",
+          "enabled": true,
+          "color": "#f5774d",
+          "id": "7df5183e-f5cc-42f8-aa68-5f03907bfde3",
+          "label": "INV1 DC"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/can/dbc/inv2_ac_dc_current.inv2_actual_dccurrent",
+          "enabled": true,
+          "color": "#f7df71",
+          "id": "99bf58e2-6e25-49a9-a6e6-2534589a92a0",
+          "label": "INV2 DC"
+        }
+      ],
+      "foxglovePanelTitle": "Current reconciliation",
+      "timeWindowMode": "automatic",
+      "xAxisLabel": "Tempo",
+      "showPlotValuesInLegend": true
+    },
+    "foxglove-value-display-lart.value-display!wso33w": {
+      "title": "",
+      "messagePath": "/can/dbc/inv1_temperatures.inv1_actual_tempmotor",
+      "factor": 1,
+      "offset": 0,
+      "unit": "ºC",
+      "precision": 1,
+      "matchAgainst": "raw",
+      "showValueSubtext": true,
+      "defaultColor": "#e8e8e8",
+      "rules": [],
+      "foxglovePanelTitle": "INV Esquerdo Motor Temperature"
+    },
+    "foxglove-value-display-lart.value-display!3y8zpgh": {
+      "title": "",
+      "messagePath": "/can/dbc/inv2_temperatures.inv2_actual_tempmotor",
+      "factor": 1,
+      "offset": 0,
+      "unit": "ºC",
+      "precision": 1,
+      "matchAgainst": "raw",
+      "showValueSubtext": true,
+      "defaultColor": "#e8e8e8",
+      "rules": [],
+      "foxglovePanelTitle": "INV Direito Motor Temperature"
+    },
+    "foxglove-value-display-lart.value-display!19arx5d": {
+      "foxglovePanelTitle": "IGBT Esquerdo Temeprature",
+      "title": "",
+      "messagePath": "/can/dbc/inv1_temperatures.inv1_actual_tempcontroller",
+      "factor": 1,
+      "offset": 0,
+      "unit": "ºC",
+      "precision": 1,
+      "matchAgainst": "raw",
+      "showValueSubtext": true,
+      "defaultColor": "#e8e8e8",
+      "rules": []
+    },
+    "foxglove-value-display-lart.value-display!jpf280": {
+      "title": "",
+      "messagePath": "/can/dbc/inv2_temperatures.inv2_actual_tempcontroller",
+      "factor": 1,
+      "offset": 0,
+      "unit": "ºC",
+      "precision": 1,
+      "matchAgainst": "raw",
+      "showValueSubtext": true,
+      "defaultColor": "#e8e8e8",
+      "rules": [],
+      "foxglovePanelTitle": "IGBT Direito Temeprature"
+    },
+    "Plot!1kh13pd": {
+      "paths": [
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/aquisition/aqt1.frt_brk_press",
+          "enabled": true,
+          "color": "#4e98e2",
+          "id": "5f2f8c7d-d00b-4121-923e-15d4fe756657",
+          "label": "brk pressure"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/can/dbc/aqt1.frt_brk_press",
+          "enabled": true,
+          "color": "#f5774d",
+          "id": "da94518b-3aed-424d-89e3-86a7157cb11b",
+          "label": "front  pressure"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/can/dbc/inv1_setrelcurrent.inv1_cmd_targetrelativecurrent",
+          "enabled": true,
+          "color": "#f7df71",
+          "id": "961d7c66-5554-4d1b-8b64-0e01a378c47c",
+          "label": "reuqest current"
+        }
+      ],
+      "showPlotValuesInLegend": true
+    },
+    "Plot!349kzsi": {
+      "paths": [
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/can/dbc/apps_adc_raw.apps1_raw",
+          "enabled": true,
+          "color": "#4e98e2",
+          "id": "5612af45-f375-47b1-ad0b-7e148638f7c0",
+          "label": "apps1"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/can/dbc/apps_adc_raw.apps2_raw",
+          "enabled": true,
+          "color": "#f5774d",
+          "id": "2d1aac48-d94f-411c-a9df-899d04acca2d",
+          "label": "apps2"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/can/dbc/inv1_setrelcurrent.inv1_cmd_targetrelativecurrent",
+          "enabled": true,
+          "color": "#f7df71",
+          "id": "117cff98-898e-4e70-bd63-ee4a0809bb29"
+        }
+      ],
+      "showPlotValuesInLegend": true
+    },
+    "Tab!3ci967e": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "Home",
+          "layout": {
+            "first": {
+              "first": {
+                "first": "value-display.Value Display!1jc8avg",
+                "second": {
+                  "first": "value-display.Value Display!3cxip0z",
+                  "second": "value-display.Value Display!qlbg3v",
+                  "direction": "row"
+                },
+                "direction": "row",
+                "splitPercentage": 32
+              },
+              "second": {
+                "first": {
+                  "first": "Indicator!j268k7",
+                  "second": "foxglove-value-display-lart.value-display!3gpkrco",
+                  "direction": "row"
+                },
+                "second": "foxglove-value-display-lart.value-display!12fudh0",
+                "direction": "row",
+                "splitPercentage": 67.37254901960785
+              },
+              "direction": "row"
+            },
+            "second": {
+              "first": {
+                "first": {
+                  "first": "foxglove-value-display-lart.value-display!3itk0zq",
+                  "second": "foxglove-value-display-lart.value-display!3sqn3lm",
+                  "direction": "column",
+                  "splitPercentage": 46.96132596685083
+                },
+                "second": {
+                  "first": "foxglove-value-display-lart.value-display!1fo8mad",
+                  "second": "foxglove-value-display-lart.value-display!3z5v6x4",
+                  "direction": "column"
+                },
+                "direction": "column"
+              },
+              "second": {
+                "first": {
+                  "first": "Plot!1i0q846",
+                  "second": "Plot!3562obf",
+                  "direction": "column",
+                  "splitPercentage": 53.21310592110401
+                },
+                "second": {
+                  "first": {
+                    "first": "foxglove-value-display-lart.value-display!wso33w",
+                    "second": "foxglove-value-display-lart.value-display!3y8zpgh",
+                    "direction": "column",
+                    "splitPercentage": 48.342541436464096
+                  },
+                  "second": {
+                    "first": "foxglove-value-display-lart.value-display!19arx5d",
+                    "second": "foxglove-value-display-lart.value-display!jpf280",
+                    "direction": "column"
+                  },
+                  "direction": "column"
+                },
+                "direction": "row",
+                "splitPercentage": 81.83520599250936
+              },
+              "direction": "row",
+              "splitPercentage": 16.64932362122789
+            },
+            "direction": "column",
+            "splitPercentage": 12.451614033244006
+          }
+        },
+        {
+          "title": "diagnosis",
+          "layout": "Plot!1kh13pd"
+        },
+        {
+          "title": "apps overview",
+          "layout": "Plot!349kzsi"
+        }
+      ]
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "playbackConfig": {
+    "speed": 1
+  },
+  "layout": "Tab!3ci967e"
+}

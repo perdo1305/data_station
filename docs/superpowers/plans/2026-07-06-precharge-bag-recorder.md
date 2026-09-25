@@ -2,18 +2,18 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** A `bag_recorder` ROS 2 node that records all `/can/dbc/*` decoded topics to rosbag2 (mcap) sessions, gated by the precharge request signal, with a 30 s stop-grace window and 60 s bag splitting.
+**Goal:** A `bag_recorder` ROS 2 node that records all `/can/*` decoded topics to rosbag2 (mcap) sessions, gated by the precharge request signal, with a 30 s stop-grace window and 60 s bag splitting.
 
-**Architecture:** A pure-Python state machine (`trigger_state.py`, no ROS imports, fully unit-tested) drives four injected callbacks. A thin ROS node (`bag_recorder.py`) wires those callbacks to a `ros2 bag record` subprocess, an rclpy one-shot grace timer, and the `/can/dbc/start_precharge` subscription.
+**Architecture:** A pure-Python state machine (`trigger_state.py`, no ROS imports, fully unit-tested) drives four injected callbacks. A thin ROS node (`bag_recorder.py`) wires those callbacks to a `ros2 bag record` subprocess, an rclpy one-shot grace timer, and the `/can/start_precharge` subscription.
 
 **Tech Stack:** ROS 2 Jazzy, rclpy, `ros2 bag record` CLI (rosbag2, mcap default), pytest, ament_python package `lart_bringup`.
 
 ## Global Constraints
 
 - Spec: `docs/superpowers/specs/2026-07-06-precharge-bag-recorder-design.md`
-- Trigger topic: `/can/dbc/start_precharge` (`lart_msgs/StartPrecharge`, field `precharge_request`), BEST_EFFORT QoS.
+- Trigger topic: `/can/start_precharge` (`lart_msgs/StartPrecharge`, field `precharge_request`), BEST_EFFORT QoS.
 - Threshold: `precharge_request >= 0.5` is active.
-- Record regex: `/can/dbc/.*` — raw `/can/frames` must never be recorded.
+- Record regex: `/can/.*` — raw `/can/frames` must never be recorded.
 - Grace: 30.0 s default; split: 60 s default; output root: `~/bags` default. All parameterized.
 - Session folder naming: `precharge_YYYYMMDD_HHMMSS`.
 - Jazzy `ros2 bag record` flags (verified): `-e REGEX`, `-d MAX_BAG_DURATION`, `-o OUT`, `--disable-keyboard-controls`. Storage defaults to mcap.
@@ -312,14 +312,14 @@ Create `src/lart_bringup/lart_bringup/bag_recorder.py`:
 """Precharge-triggered rosbag2 recorder.
 
 Watches the precharge request signal and records all DBC-decoded CAN topics
-(/can/dbc/*) into timestamped rosbag2 sessions:
+(/can/*) into timestamped rosbag2 sessions:
 
   precharge_request >= 0.5       → start recording (new session folder)
   precharge_request < 0.5        → keep recording for stop_grace_s, then finalize
   request back to 1 within grace → same session continues
 
 Bags split every split_duration_s (rosbag2 -d). Raw frames (/can/frames) are
-never recorded — the regex only matches /can/dbc/*.
+never recorded — the regex only matches /can/*.
 
 Config (rpi_config.yaml → bag_recorder):
   trigger_topic, record_regex, bag_dir, stop_grace_s, split_duration_s
@@ -348,8 +348,8 @@ class BagRecorderNode(Node):
     def __init__(self):
         super().__init__('bag_recorder')
 
-        self.declare_parameter('trigger_topic', '/can/dbc/start_precharge')
-        self.declare_parameter('record_regex', '/can/dbc/.*')
+        self.declare_parameter('trigger_topic', '/can/start_precharge')
+        self.declare_parameter('record_regex', '/can/.*')
         self.declare_parameter('bag_dir', '~/bags')
         self.declare_parameter('stop_grace_s', 30.0)
         self.declare_parameter('split_duration_s', 60)
@@ -499,7 +499,7 @@ source install/setup.bash
 timeout 5 ros2 run lart_bringup bag_recorder --ros-args -p bag_dir:=/tmp/test_bags
 ```
 
-Expected log line: `bag_recorder ready — trigger=/can/dbc/start_precharge, regex=/can/dbc/.*, out=/tmp/test_bags, grace=30s, split=60s`, then clean exit on timeout's SIGTERM (exit code 124 or clean shutdown — no traceback).
+Expected log line: `bag_recorder ready — trigger=/can/start_precharge, regex=/can/.*, out=/tmp/test_bags, grace=30s, split=60s`, then clean exit on timeout's SIGTERM (exit code 124 or clean shutdown — no traceback).
 
 - [ ] **Step 4: Re-run unit tests (still green)**
 
@@ -534,8 +534,8 @@ Append to `src/lart_bringup/config/rpi_config.yaml`:
 
 bag_recorder:
   ros__parameters:
-    trigger_topic: /can/dbc/start_precharge
-    record_regex: /can/dbc/.*
+    trigger_topic: /can/start_precharge
+    record_regex: /can/.*
     bag_dir: "~/bags"            # session folders precharge_YYYYMMDD_HHMMSS
     stop_grace_s: 30.0           # keep recording this long after request=0
     split_duration_s: 60         # new bag chunk every 60 s
@@ -566,29 +566,29 @@ rm -rf /tmp/test_bags
 ros2 run lart_bringup bag_recorder --ros-args -p bag_dir:=/tmp/test_bags -p stop_grace_s:=5.0 &
 sleep 3
 # rising edge → recording starts
-ros2 topic pub --once /can/dbc/start_precharge lart_msgs/msg/StartPrecharge "{precharge_request: 1.0}"
+ros2 topic pub --once /can/start_precharge lart_msgs/msg/StartPrecharge "{precharge_request: 1.0}"
 sleep 3
 ls /tmp/test_bags/            # expect: one precharge_* folder
 # falling edge → grace; back to 1 inside grace → same session
-ros2 topic pub --once /can/dbc/start_precharge lart_msgs/msg/StartPrecharge "{precharge_request: 0.0}"
+ros2 topic pub --once /can/start_precharge lart_msgs/msg/StartPrecharge "{precharge_request: 0.0}"
 sleep 2
-ros2 topic pub --once /can/dbc/start_precharge lart_msgs/msg/StartPrecharge "{precharge_request: 1.0}"
+ros2 topic pub --once /can/start_precharge lart_msgs/msg/StartPrecharge "{precharge_request: 1.0}"
 sleep 2
 ls /tmp/test_bags/            # expect: STILL one folder (session resumed)
 # falling edge → grace expires → finalize
-ros2 topic pub --once /can/dbc/start_precharge lart_msgs/msg/StartPrecharge "{precharge_request: 0.0}"
+ros2 topic pub --once /can/start_precharge lart_msgs/msg/StartPrecharge "{precharge_request: 0.0}"
 sleep 8
 cat /tmp/test_bags/precharge_*/metadata.yaml | head -5   # expect: metadata written = finalized
 # new rising edge → NEW session folder
-ros2 topic pub --once /can/dbc/start_precharge lart_msgs/msg/StartPrecharge "{precharge_request: 1.0}"
+ros2 topic pub --once /can/start_precharge lart_msgs/msg/StartPrecharge "{precharge_request: 1.0}"
 sleep 3
 ls /tmp/test_bags/            # expect: two precharge_* folders
-ros2 topic pub --once /can/dbc/start_precharge lart_msgs/msg/StartPrecharge "{precharge_request: 0.0}"
+ros2 topic pub --once /can/start_precharge lart_msgs/msg/StartPrecharge "{precharge_request: 0.0}"
 sleep 8
 kill %1
 ```
 
-Expected: folder count 1 → 1 → 2 as annotated; `metadata.yaml` exists after grace expiry; recorded topic list in metadata includes `/can/dbc/start_precharge`; no `/can/frames` anywhere.
+Expected: folder count 1 → 1 → 2 as annotated; `metadata.yaml` exists after grace expiry; recorded topic list in metadata includes `/can/start_precharge`; no `/can/frames` anywhere.
 
 - [ ] **Step 4: Verify split works (optional, longer)**
 

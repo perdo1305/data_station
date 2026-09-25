@@ -1,7 +1,7 @@
 {
   "configById": {
     "bar-display.Bar Display!pltdc9": {
-      "topicField": "can/Master_SOC_Accumulator.SOC_Float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -11,7 +11,7 @@
       "foxglovePanelTitle": "SOC"
     },
     "Indicator!1gayboy": {
-      "path": "can/is_ams_alive.is_ams_alive",
+      "path": "",
       "style": "background",
       "fontSize": 36,
       "fallbackColor": "#ff0000",
@@ -27,7 +27,7 @@
       "foxglovePanelTitle": "AMS Comms"
     },
     "Indicator!3rosf7m": {
-      "path": "can/Master_MSC_ID_1.adbms_pec_error",
+      "path": "/pwt/master_msc_id_1.adbms_pec_error",
       "style": "background",
       "fontSize": 36,
       "fallbackColor": "#ff0000",
@@ -107,7 +107,7 @@
       "foxglovePanelTitle": "Pack Voltage"
     },
     "bar-display.Bar Display!39rg0p1": {
-      "topicField": "",
+      "topicField": "/pwt/master_msc_id_1.master_fan_pwm",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#0089ff",
@@ -363,7 +363,7 @@
     "value-display.Value Display!2ilbdob": {
       "data": {
         "label": "Data",
-        "topic": "bus load"
+        "topic": ""
       },
       "display": {
         "label": "Display",
@@ -535,7 +535,7 @@
       "foxglovePanelTitle": "Firmaware Version"
     },
     "bar-display.Bar Display!9sn6nc": {
-      "topicField": "can/Master_SOC_Accumulator.SOC_Float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -612,19 +612,9 @@
       ],
       "foxglovePanelTitle": "Voltages"
     },
-    "foxglove-ams-temperature-table.ams-temperature-table-panel!43sadb3": {
-      "foxglovePanelTitle": "Temeperatures",
-      "minTemp": 10,
-      "lowWarnTemp": 20,
-      "highWarnTemp": 50,
-      "maxTemp": 60,
-      "lowColor": "#4682ff",
-      "normalColor": "#3cb45a",
-      "highColor": "#ff7846",
-      "emptyCellColor": "transparent"
-    },
+    "lart-temperature-table.AMS Temperature Table (LART)!2ooyxxt": {},
     "bar-display.Bar Display!b3klbk": {
-      "topicField": "can/Master_SOC_Accumulator.SOC_Float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -633,15 +623,9 @@
       "negateValue": false,
       "foxglovePanelTitle": "SOC"
     },
-    "foxglove-ams-battery-volts-overview.ams-cell-voltage-bar!3p2syms": {
-      "title": "AMS Cell Voltage",
-      "yMin": 3,
-      "yMax": 4.3,
-      "undervoltage": 3,
-      "overvoltage": 4.2
-    },
+    "lart-temperature-table.AMS Cell Voltage Bar (LART)!2m7lodw": {},
     "bar-display.Bar Display!33ewjyl": {
-      "topicField": "/pwt/master_soc_accumulator.temperature",
+      "topicField": "/pwt/master_msc_id_3.overall_maximum_temperature",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -650,14 +634,9 @@
       "negateValue": false,
       "foxglovePanelTitle": "SOC"
     },
-    "foxglove-ams-temperature-overview.ams-temperature-bar!2zwb4k2": {
-      "title": "AMS Cell Temperature",
-      "yMin": 5,
-      "yMax": 70,
-      "overtemperature": 60
-    },
+    "lart-temperature-table.AMS Cell Temperature Bar (LART)!243cjw7": {},
     "bar-display.Bar Display!2ecmbsq": {
-      "topicField": "can/Master_SOC_Accumulator.SOC_Float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -715,7 +694,7 @@
       "yAxisLabel": "Volts"
     },
     "bar-display.Bar Display!26uqjp1": {
-      "topicField": "can/Master_SOC_Accumulator.SOC_Float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -1047,7 +1026,7 @@
       "foxglovePanelTitle": "OW"
     },
     "bar-display.Bar Display!39muqf": {
-      "topicField": "can/Master_SOC_Accumulator.SOC_Float",
+      "topicField": "/pwt/master_soc_accumulator.soc_float",
       "minValue": 0,
       "maxValue": 100,
       "barColor": "#00ff00",
@@ -1735,24 +1714,24 @@
       "paths": [
         {
           "timestampMethod": "receiveTime",
-          "value": "can/IVT_Msg_Result_I.IVT_Result_I",
+          "value": "/pwt/ivt_msg_result_i.ivt_result_i",
           "enabled": false,
           "color": "#f7df71"
         },
         {
           "timestampMethod": "receiveTime",
-          "value": "can/Master_SOC_Accumulator.SOC_Float",
+          "value": "/pwt/master_soc_accumulator.soc_float",
           "enabled": true,
           "color": "#f5774d"
         },
         {
           "timestampMethod": "receiveTime",
-          "value": "can/Master_SOC_Accumulator.SOC_Integer",
+          "value": "/pwt/master_soc_accumulator.soc_integer",
           "enabled": true,
           "color": "#4e98e2"
         },
         {
-          "value": "can/Master_MSC_ID_4.slaves_detected",
+          "value": "/pwt/master_msc_id_4.slaves_detected",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#5cd6a9"
@@ -1763,19 +1742,20 @@
     "Plot!1svsg9p": {
       "paths": [
         {
-          "value": "can/IVT_Msg_Result_T.IVT_Result_T",
+          "value": "/pwt/ivt_msg_result_t.ivt_result_t",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#4e98e2"
         },
         {
-          "value": "can/Master_MSC_ID_1.master_fan_pwm",
+          "value": "/pwt/master_msc_id_1.master_fan_pwm",
           "enabled": true,
           "timestampMethod": "receiveTime",
           "color": "#f5774d"
         }
       ]
     },
+    "foxglove-ams-gauge-display.ams-gauge-display!1suse1q": {},
     "Tab!3738m24": {
       "tabs": [
         {
@@ -1915,7 +1895,7 @@
             "first": "bar-display.Bar Display!9sn6nc",
             "second": {
               "first": "AMS Cell Table.ams-cell-table-panel!8xsr0j",
-              "second": "foxglove-ams-temperature-table.ams-temperature-table-panel!43sadb3",
+              "second": "lart-temperature-table.AMS Temperature Table (LART)!2ooyxxt",
               "direction": "row"
             },
             "direction": "column",
@@ -1926,7 +1906,7 @@
           "title": "Cell Voltages",
           "layout": {
             "first": "bar-display.Bar Display!b3klbk",
-            "second": "foxglove-ams-battery-volts-overview.ams-cell-voltage-bar!3p2syms",
+            "second": "lart-temperature-table.AMS Cell Voltage Bar (LART)!2m7lodw",
             "direction": "column",
             "splitPercentage": 9.366745198829157
           }
@@ -1935,7 +1915,7 @@
           "title": "Cell Temepratures",
           "layout": {
             "first": "bar-display.Bar Display!33ewjyl",
-            "second": "foxglove-ams-temperature-overview.ams-temperature-bar!2zwb4k2",
+            "second": "lart-temperature-table.AMS Cell Temperature Bar (LART)!243cjw7",
             "direction": "column",
             "splitPercentage": 9.480973798814878
           }
@@ -2092,10 +2072,11 @@
           }
         },
         {
-          "title": ""
+          "title": "",
+          "layout": "foxglove-ams-gauge-display.ams-gauge-display!1suse1q"
         }
       ],
-      "activeTabIdx": 5
+      "activeTabIdx": 0
     }
   },
   "globalVariables": {
