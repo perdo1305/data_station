@@ -66,10 +66,8 @@ input_handler:
 
 led_controller:
   ros__parameters:
-    led_count: 30
+    led_count: 8
     led_pin: 18                  # GPIO 18 (PWM0) — required for WS2812B
-    rpm_shift: 11500             # LEDs turn red at/above this RPM
-    rpm_max: 12000               # RPM at which all LEDs are lit
 
 mock_can:
   ros__parameters:
