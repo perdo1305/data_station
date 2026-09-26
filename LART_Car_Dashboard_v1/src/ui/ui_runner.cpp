@@ -383,7 +383,9 @@ void check_expired_notifications() {
 }  // namespace
 
 int main(int argc, char **argv) {
-    if (std::getenv("LART_TEST_MAPPINGS") != nullptr) {
+    const bool test_mappings = std::getenv("LART_TEST_MAPPINGS") != nullptr;
+    const bool test_precharge_overlay = std::getenv("LART_TEST_PRECHARGE_OVERLAY") != nullptr;
+    if (test_mappings || test_precharge_overlay) {
         init_lvgl();
 
         // Override EEZ-Flow hooks to prevent crashing on flow completion/errors,
@@ -399,7 +401,56 @@ int main(int argc, char **argv) {
 
         std::printf("[TEST] Running telemetry mapping unit tests...\n");
 
-        // Test 1: Setting dbc_api directly and calling with NULL
+        // Test 1: Intermediate precharge states use the overlay for 0.5 seconds.
+        assert(lv_obj_has_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN));
+        dbc_api.master_precharge_id_1.precharge_state = 19.0f;
+        ui_tick();
+        assert(!lv_obj_has_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN));
+        assert(std::strcmp(lv_label_get_text(objects.hv_on_label), "RX CAN") == 0);
+
+        lv_tick_inc(499);
+        ui_tick();
+        assert(!lv_obj_has_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN));
+        lv_tick_inc(1);
+        ui_tick();
+        assert(lv_obj_has_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN));
+
+        dbc_api.master_precharge_id_1.precharge_state = 2.0f;
+        ui_tick();
+        assert(!lv_obj_has_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN));
+        assert(std::strcmp(lv_label_get_text(objects.hv_on_label), "SWITCH HV NEG") == 0);
+        lv_tick_inc(500);
+        ui_tick();
+        assert(lv_obj_has_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN));
+
+        // Test 2: HV ON keeps the longer overlay and ends the progress sequence.
+        dbc_api.master_precharge_id_1.precharge_state = 16.0f;
+        ui_tick();
+        assert(!lv_obj_has_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN));
+        assert(std::strcmp(lv_label_get_text(objects.hv_on_label), "HV ON") == 0);
+
+        lv_tick_inc(3999);
+        ui_tick();
+        assert(!lv_obj_has_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN));
+        lv_tick_inc(1);
+        ui_tick();
+        assert(lv_obj_has_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN));
+
+        // Remaining in state 16 must not retrigger the overlay.
+        ui_tick();
+        assert(lv_obj_has_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN));
+
+        // Intermediate states stay quiet after HV ON until RX CAN starts a new sequence.
+        dbc_api.master_precharge_id_1.precharge_state = 3.0f;
+        ui_tick();
+        assert(lv_obj_has_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN));
+
+        if (test_precharge_overlay && !test_mappings) {
+            std::printf("[TEST] ✓ Precharge overlay tests passed successfully!\n");
+            std::_Exit(0);
+        }
+
+        // Test 3: Setting dbc_api directly and calling with NULL
         dbc_api.asf_signals.brake_pressure_front = 45.2f;
         dbc_api.asf_signals.brake_pressure_rear = 10.0f;
         dbc_api.inv1_misc.inv1_actual_throttle = 80.0f;
@@ -446,7 +497,7 @@ int main(int argc, char **argv) {
         auto val_mission = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_MISSION);
         assert(std::strcmp(val_mission.getString(), "BRAKE TEST") == 0);
 
-        // Test 2: Backwards compatibility (passing TelemetryData)
+        // Test 4: Backwards compatibility (passing TelemetryData)
         TelemetryData t = {};
         t.brk_press_f = 20.0f;
         t.apps1 = 50.0f;
@@ -474,25 +525,7 @@ int main(int argc, char **argv) {
         assert(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_LAP_COUNT).getInt() == 5);
         assert(std::strcmp(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_MISSION).getString(), "ACCEL") == 0);
 
-        // Test 3: HV ON overlay triggers on the transition to precharge state 16
-        assert(lv_obj_has_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN));
-        dbc_api.master_precharge_id_1.precharge_state = 16.0f;
-        ui_tick();
-        assert(!lv_obj_has_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN));
-        assert(std::strcmp(lv_label_get_text(objects.hv_on_label), "HV ON") == 0);
-
-        lv_tick_inc(3999);
-        ui_tick();
-        assert(!lv_obj_has_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN));
-        lv_tick_inc(1);
-        ui_tick();
-        assert(lv_obj_has_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN));
-
-        // Remaining in state 16 must not retrigger the overlay.
-        ui_tick();
-        assert(lv_obj_has_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN));
-
-        // Test 4: Test emergency screen transition on as_state = 4
+        // Test 5: Test emergency screen transition on as_state = 4
         // The default screen after ui_init is SCREEN_ID_DRIVER_VIEW (1)
         assert(eez_flow_get_current_screen() == SCREEN_ID_DRIVER_VIEW);
 

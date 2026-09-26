@@ -17,24 +17,11 @@ source "$WS_DIR/install/setup.bash" 2>/dev/null || true
 # 2. Export necessary environment variables
 export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-42}"
 
-# 3. Setup virtual CAN (vcan0) — needs sudo once; idempotent if already up
-IFACE="vcan0"
-if ! ip link show "$IFACE" &> /dev/null; then
-    echo "Virtual CAN interface $IFACE not found. Creating it..."
-    sudo modprobe vcan
-    sudo ip link add "$IFACE" type vcan
-    sudo ip link set "$IFACE" up
-    echo "✓ Interface $IFACE is up."
-elif ! ip link show "$IFACE" | grep -q "UP"; then
-    echo "Virtual CAN interface $IFACE is down. Bringing it up..."
-    sudo ip link set "$IFACE" up
-    echo "✓ Interface $IFACE is up."
-else
-    echo "✓ Virtual CAN interface $IFACE already up."
-fi
+# 3. Setup isolated virtual CAN buses — needs sudo once; idempotent if up
+"$WS_DIR/scripts/setup_vcan_interfaces.sh" vcan_data vcan_pwt vcan_auto
 
 # 4. Start the DBC simulation stack in the background
-#    (can_simulator → vcan0, can_bridge → /can/*, dashboard_state_bridge)
+#    (isolated simulators/bridges → /data/*, /pwt/*, /can/*)
 echo "Starting DBC simulation stack (can_simulator + can_bridge + dashboard_state_bridge)..."
 ros2 launch lart_bringup dbc_sim.launch.py &
 SIM_STACK_PID=$!

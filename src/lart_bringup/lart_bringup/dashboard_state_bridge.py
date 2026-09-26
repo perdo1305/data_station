@@ -11,6 +11,7 @@ import time
 
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import QoSHistoryPolicy, QoSProfile, QoSReliabilityPolicy
 from std_msgs.msg import Float32
 
 
@@ -20,6 +21,15 @@ def _nan() -> float:
 
 def _is_finite(value: float) -> bool:
     return math.isfinite(value)
+
+
+def can_subscription_qos() -> QoSProfile:
+    """Match the CAN bridge's best-effort sensor-data publishers."""
+    return QoSProfile(
+        reliability=QoSReliabilityPolicy.BEST_EFFORT,
+        history=QoSHistoryPolicy.KEEP_LAST,
+        depth=10,
+    )
 
 
 class SpeedBridge(Node):
@@ -66,6 +76,7 @@ class SpeedBridge(Node):
         }
         self._r2d_ready = False
         self._last_rx: float | None = None
+        self._can_qos = can_subscription_qos()
 
         self._speed_pub = self.create_publisher(
             Float32, '/vehicle/speed_kph', 10
@@ -108,14 +119,14 @@ class SpeedBridge(Node):
                             self._r2d_ready = bool(getattr(msg, signal_attr) > 0.5)
                             self._last_rx = time.time()
                             
-                        self.create_subscription(msg_class, aggregate_topic, _on_r2d_cb, 10)
+                        self.create_subscription(msg_class, aggregate_topic, _on_r2d_cb, self._can_qos)
                         self.get_logger().info(f"Subscribed to aggregated topic {aggregate_topic} for R2D ({sig_slug})")
                     except Exception as e:
                         self.get_logger().error(f"Failed to subscribe to aggregated r2d topic for {r2d_topic}: {e}")
                 else:
-                    self.create_subscription(Float32, r2d_topic, self._on_r2d, 10)
+                    self.create_subscription(Float32, r2d_topic, self._on_r2d, self._can_qos)
             else:
-                self.create_subscription(Float32, r2d_topic, self._on_r2d, 10)
+                self.create_subscription(Float32, r2d_topic, self._on_r2d, self._can_qos)
 
         period_s = 1.0 / max(self._publish_hz, 1.0)
         self.create_timer(period_s, self._publish)
@@ -143,7 +154,7 @@ class SpeedBridge(Node):
                         self._values[field] = value
                         self._last_rx = time.time()
                         
-                    self.create_subscription(msg_class, aggregate_topic, _cb, 10)
+                    self.create_subscription(msg_class, aggregate_topic, _cb, self._can_qos)
                     self.get_logger().info(f"Subscribed to aggregated topic {aggregate_topic} for field {key} ({sig_slug})")
                     return
                 except Exception as e:
@@ -154,7 +165,7 @@ class SpeedBridge(Node):
             self._values[field] = value
             self._last_rx = time.time()
 
-        self.create_subscription(Float32, topic, _cb_fallback, 10)
+        self.create_subscription(Float32, topic, _cb_fallback, self._can_qos)
 
     def _on_r2d(self, msg: Float32) -> None:
         self._r2d_ready = bool(msg.data > 0.5)

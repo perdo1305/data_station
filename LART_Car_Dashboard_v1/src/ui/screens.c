@@ -206,19 +206,100 @@ static const char *object_names[] = {
 
 lv_obj_t *tick_value_change_obj;
 
-static uint32_t hv_on_overlay_started_at;
+static uint32_t precharge_overlay_started_at;
+static uint32_t precharge_overlay_duration_ms;
 static float previous_precharge_state = -1.0f;
+static bool precharge_sequence_active;
+
+static const char *get_precharge_state_label(int state) {
+    static const char *const labels[] = {
+        "START",
+        "OPEN ALL",
+        "SWITCH HV NEG",
+        "8 4 AIR NEG 2 CLOSE",
+        "CK AIR NEG IS CLOSED",
+        "SWITCH PRECHARGE",
+        "8 4 PRECHARGE 2 CLOSE",
+        "CK PRECHARGE IS CLOSED",
+        "VERIFY CURRENT",
+        "VERIFY BUS VOLTAGE",
+        "SWITCH HV POS",
+        "8 4 AIR POS 2 CLOSE",
+        "CHECKING AIR POS IS CLOSED",
+        "TURN OFF PRECHARGE",
+        "8 4 PRECHARGE 2 OPEN",
+        "CHECKING PRECHARGE IS OPEN",
+        "HV ON",
+        "WRONG",
+        "KILL",
+        "RX CAN"
+    };
+
+    return state >= 0 && state < (int)(sizeof(labels) / sizeof(labels[0]))
+        ? labels[state]
+        : NULL;
+}
+
+static uint32_t get_precharge_state_color(int state) {
+    static const uint32_t bright_colors[] = {
+        0x00e5ff, // cyan
+        0xfff200, // yellow
+        0x39ff14, // green
+        0xff8c00, // orange
+        0xff4fd8  // magenta
+    };
+
+    return bright_colors[state % (int)(sizeof(bright_colors) / sizeof(bright_colors[0]))];
+}
+
+static void show_precharge_overlay(int state) {
+    const bool is_hv_on = state == 16;
+
+    lv_label_set_text(objects.hv_on_label, get_precharge_state_label(state));
+    lv_obj_set_style_bg_color(
+        objects.hv_on_overlay,
+        lv_color_hex(is_hv_on ? 0xff0000 : get_precharge_state_color(state)),
+        LV_PART_MAIN | LV_STATE_DEFAULT
+    );
+    lv_obj_set_style_text_color(
+        objects.hv_on_label,
+        lv_color_hex(is_hv_on ? 0xffffff : 0x080808),
+        LV_PART_MAIN | LV_STATE_DEFAULT
+    );
+    lv_obj_set_style_text_font(
+        objects.hv_on_label,
+        is_hv_on ? &ui_font_orbiter_bold_100 : &ui_font_orbitron_bold_40,
+        LV_PART_MAIN | LV_STATE_DEFAULT
+    );
+    lv_obj_center(objects.hv_on_label);
+
+    precharge_overlay_started_at = lv_tick_get();
+    precharge_overlay_duration_ms = is_hv_on ? 4000 : 500;
+    lv_obj_clear_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN);
+}
 
 static void update_hv_on_overlay(void) {
     const float precharge_state = dbc_api.master_precharge_id_1.precharge_state;
+    const int state = (int)precharge_state;
+    const bool state_changed = precharge_state != previous_precharge_state;
+    const bool state_is_valid = precharge_state == (float)state && get_precharge_state_label(state) != NULL;
 
-    if (precharge_state == 16.0f && previous_precharge_state != 16.0f) {
-        hv_on_overlay_started_at = lv_tick_get();
-        lv_obj_clear_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN);
+    if (state_changed && state_is_valid) {
+        if (state == 19) {
+            precharge_sequence_active = true;
+        }
+
+        if (precharge_sequence_active || state == 16) {
+            show_precharge_overlay(state);
+        }
+
+        if (state == 16) {
+            precharge_sequence_active = false;
+        }
     }
 
     if (!lv_obj_has_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN) &&
-        lv_tick_elaps(hv_on_overlay_started_at) >= 3000) {
+        lv_tick_elaps(precharge_overlay_started_at) >= precharge_overlay_duration_ms) {
         lv_obj_add_flag(objects.hv_on_overlay, LV_OBJ_FLAG_HIDDEN);
     }
 
@@ -700,6 +781,9 @@ void create_screen_driver_view() {
             lv_obj_t *label = lv_label_create(obj);
             objects.hv_on_label = label;
             lv_label_set_text(label, "HV ON");
+            lv_obj_set_width(label, 760);
+            lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);
+            lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_color(label, lv_color_hex(0xffffff), LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_set_style_text_font(label, &ui_font_orbiter_bold_100 , LV_PART_MAIN | LV_STATE_DEFAULT);
             lv_obj_center(label);

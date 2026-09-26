@@ -44,6 +44,8 @@ CELL_VOLTAGE_MIN = 3.0         # single Li-ion cell, empty-to-full
 CELL_VOLTAGE_MAX = 4.2
 LV_VOLTAGE_MIN = 24.0          # 24V LV rail
 LV_VOLTAGE_MAX = 28.0
+PRECHARGE_SEQUENCE_STEP_SECONDS = 0.5
+PRECHARGE_TEST_SEQUENCE = (19, *range(17))
 
 
 # ---------------------------------------------------------------------------
@@ -117,6 +119,31 @@ def setup_vcan(iface: str, logger=None) -> bool:
 
 def _clamp(value: float, minimum: float, maximum: float) -> float:
     return max(minimum, min(maximum, value))
+
+
+def _precharge_sequence_value(elapsed_seconds: float) -> float:
+    """Return the test precharge state for time elapsed since RX_CAN."""
+    step = int(max(0.0, elapsed_seconds) / PRECHARGE_SEQUENCE_STEP_SECONDS)
+    step = min(step, len(PRECHARGE_TEST_SEQUENCE) - 1)
+    return float(PRECHARGE_TEST_SEQUENCE[step])
+
+
+class _PrechargeSequence:
+    def __init__(self) -> None:
+        self._started_at = None
+        self._trigger_consumed = False
+
+    def value(self, override: float, now: float) -> float:
+        if override != 19.0:
+            self._started_at = None
+            self._trigger_consumed = False
+            return override
+
+        if not self._trigger_consumed:
+            self._started_at = now
+            self._trigger_consumed = True
+
+        return _precharge_sequence_value(now - self._started_at)
 
 
 def _raw_to_physical(raw: float, signal: cantools.db.Signal) -> float:
@@ -436,7 +463,8 @@ class CanSimulatorNode(Node):
         #   ros2 param set /can_simulator as_mission_value <0-7>
         self.declare_parameter('as_mission_value', 0.0)
         # Manual override for Master_PreCharge precharge_state. -1 keeps the
-        # normal generated value; 16 is the HV_ON choice used by dashboard tests.
+        # normal generated value. Setting 19 starts the dashboard test sequence
+        # RX_CAN -> START -> ... -> HV_ON, advancing every 0.5 seconds.
         self.declare_parameter('precharge_state_value', -1.0)
 
         iface = self.get_parameter('can_interface').value
@@ -529,6 +557,7 @@ class CanSimulatorNode(Node):
 
         self._t = 0.0
         self._dt = 1.0 / hz
+        self._precharge_sequence = _PrechargeSequence()
 
         self.create_timer(self._dt, self._tick)
         self.get_logger().info('CAN simulator running — sending frames to ' + iface)
@@ -561,6 +590,8 @@ class CanSimulatorNode(Node):
                     signals[sig.name] = _make_signal_value(sig, self._t, mission_override=as_mission_val)
                 elif sig.name == 'precharge_state':
                     precharge_val = self.get_parameter('precharge_state_value').value
+                    precharge_val = self._precharge_sequence.value(precharge_val, self._t)
+
                     if precharge_val >= 0.0:
                         enc_min, enc_max = _encodable_range(sig)
                         signals[sig.name] = _clamp(precharge_val, enc_min, enc_max)

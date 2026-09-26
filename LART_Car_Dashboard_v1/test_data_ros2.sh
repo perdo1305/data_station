@@ -278,11 +278,16 @@ set_as_mission() {
 }
 
 set_hv_on() {
-    if ! ros2 param set /can_simulator precharge_state_value "16.0"; then
+    # Reset first so selecting this option again retriggers the edge-based sequence.
+    if ! ros2 param set /can_simulator precharge_state_value "-1.0" >/dev/null; then
+        echo "✗ Failed to reset precharge_state_value (is the CAN simulator running? option 'a')"
+        return 1
+    fi
+    if ! ros2 param set /can_simulator precharge_state_value "19.0"; then
         echo "✗ Failed to set precharge_state_value (is the CAN simulator running? option 'a')"
         return 1
     fi
-    echo "✓ Master_PreCharge set to HV ON (state 16)"
+    echo "✓ Master_PreCharge sequence started: RX_CAN (19) -> states 0-16 -> HV_ON"
 }
 
 publish_screen() {
@@ -363,7 +368,8 @@ Test Scenarios:
   d. AS_MISSION - Set the CAN simulator's AS_MISSION value (0-7) via
                   ros2 param set /can_simulator as_mission_value
                   (dashboard falls back to this when Mission_select is 0)
-  e. HV ON - Set the CAN simulator's Master_PreCharge precharge_state to 16
+  e. HV ON - Run the CAN simulator's Master_PreCharge sequence from RX_CAN (19)
+             through states 0-16 at 0.5 seconds per state, ending at HV_ON
              via ros2 param set /can_simulator precharge_state_value
 
 Prerequisites:

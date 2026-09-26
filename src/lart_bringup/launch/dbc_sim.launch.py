@@ -17,6 +17,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
+from lart_bringup.topic_names import dbc_sim_routes
 
 
 def generate_launch_description():
@@ -40,47 +41,47 @@ def generate_launch_description():
     # To use a single file: DBC_FILE=powertrain_t26.dbc ros2 launch ...
     dbc_filename = os.environ.get('DBC_FILE', 'all')
     
-    if dbc_filename.lower() == 'all':
-        resolved_dbc_path = dbc_signals_dir
-    else:
-        resolved_dbc_path = os.path.join(dbc_signals_dir, dbc_filename)
+    routes = dbc_sim_routes(dbc_signals_dir, dbc_filename)
+    actions = []
+    single_route = len(routes) == 1
 
-    if not os.path.exists(resolved_dbc_path):
-        import warnings
-        warnings.warn(
-            f'DBC path not found: {resolved_dbc_path}\n'
-            f'Set DBC_FILE env var or place files in {dbc_signals_dir}',
-            RuntimeWarning,
-        )
+    for label, dbc_path, interface, _topic_prefix in routes:
+        if not os.path.exists(dbc_path):
+            import warnings
+            warnings.warn(
+                f'DBC file not found: {dbc_path}\n'
+                f'Set DBC_FILE or place the file in {dbc_signals_dir}',
+                RuntimeWarning,
+            )
 
-    dbc_params = {
-        'can_interface': 'vcan0',
-        'dbc_path': resolved_dbc_path,
-        'publish_hz': 10.0,
-    }
+        dbc_params = {
+            'can_interface': interface,
+            'dbc_path': dbc_path,
+            'publish_hz': 10.0,
+        }
+        simulator_name = 'can_simulator' if single_route else f'can_simulator_{label}'
+        bridge_name = 'can_bridge' if single_route else f'can_bridge_{label}'
 
-    return LaunchDescription([
-        # ── Simulator: creates vcan0 and pumps CAN frames from the DBC ──────
-        Node(
-            package='sim',
-            executable='can_simulator',
-            name='can_simulator',
-            parameters=[config, dbc_params],
-            output='screen',
-            emulate_tty=True,
-        ),
+        actions.extend([
+            Node(
+                package='sim',
+                executable='can_simulator',
+                name=simulator_name,
+                parameters=[config, dbc_params],
+                output='screen',
+                emulate_tty=True,
+            ),
+            Node(
+                package='lart_bringup',
+                executable='can_bridge',
+                name=bridge_name,
+                parameters=[config, dbc_params],
+                output='screen',
+                emulate_tty=True,
+            ),
+        ])
 
-        # ── Bridge: reads vcan0, decodes DBC, publishes namespaced topics ───
-        Node(
-            package='lart_bringup',
-            executable='can_bridge',
-            name='can_bridge',
-            parameters=[config, dbc_params],
-            output='screen',
-            emulate_tty=True,
-        ),
-
-        # ── Bridge decoded signals into /vehicle/speed_kph ─
+    actions.append(
         Node(
             package='lart_bringup',
             executable='dashboard_state_bridge',
@@ -88,5 +89,6 @@ def generate_launch_description():
             parameters=[config],
             output='screen',
             emulate_tty=True,
-        ),
-    ])
+        )
+    )
+    return LaunchDescription(actions)

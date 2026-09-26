@@ -39,26 +39,7 @@ else
     exit 1
 fi
 
-# 3. Check and Setup Virtual CAN
-INTERFACE="vcan0"
-if ! ip link show "$INTERFACE" &> /dev/null; then
-    echo "⚠ Virtual CAN interface $INTERFACE not found. Creating it..."
-    sudo modprobe vcan
-    sudo ip link add "$INTERFACE" type vcan
-    sudo ip link set "$INTERFACE" up
-    echo "✓ Interface $INTERFACE is now UP."
-else
-    # Check if interface is UP
-    if ! ip link show "$INTERFACE" | grep -q "UP"; then
-        echo "⚠ Virtual CAN interface $INTERFACE is down. Bringing it up..."
-        sudo ip link set "$INTERFACE" up
-        echo "✓ Interface $INTERFACE is now UP."
-    else
-        echo "✓ Virtual CAN interface $INTERFACE is already active and UP."
-    fi
-fi
-
-# 4. DBC File Selection
+# 3. DBC File Selection
 DBC_DIR="$PROJECT_DIR/dbc_signals"
 echo ""
 echo "Select which DBC file to simulate:"
@@ -77,11 +58,18 @@ case "$opt" in
     *) export DBC_FILE="all" ;;
 esac
 
+# 4. Create the isolated virtual buses required by the selected mode.
+if [ "$DBC_FILE" = "all" ]; then
+    "$PROJECT_DIR/scripts/setup_vcan_interfaces.sh" vcan_data vcan_pwt vcan_auto
+else
+    "$PROJECT_DIR/scripts/setup_vcan_interfaces.sh" vcan0
+fi
+
 echo ""
 if [ "$DBC_FILE" = "all" ]; then
-    echo "🚀 Launching simulation stack for ALL DBC files on $INTERFACE..."
+    echo "🚀 Launching simulation stack for ALL DBC files on isolated virtual buses..."
 else
-    echo "🚀 Launching simulation stack for $DBC_FILE on $INTERFACE..."
+    echo "🚀 Launching simulation stack for $DBC_FILE on vcan0..."
 fi
 echo "Press Ctrl+C to stop."
 echo ""
