@@ -33,7 +33,7 @@ NS_ :
 
 BS_:
 
-BU_: Acquisition_Board2 Acquisition_Board3 Acquisition_Board5 Acquisition_Board6 Acquisition_Board7 Acquisition_Board8 VCU PDM BMS ICD Data_Station
+BU_: Acquisition_Board2 Acquisition_Board3 Acquisition_Board5 Acquisition_Board6 Acquisition_Board7 Acquisition_Board8 VCU PDM BMS ICD Data_Station Acquisition_Board1
 
 
 BO_ 3221225472 VECTOR__INDEPENDENT_SIG_MSG: 0 Vector__XXX
@@ -219,6 +219,9 @@ BO_ 1281 ICD_Response: 8 ICD
  SG_ Resp_EvtSysType m235 : 16|8@1+ (1,0) [0|255] ""  Data_Station
  SG_ Resp_EvtMeasCount m235 : 31|16@0+ (1,0) [0|65535] ""  Data_Station
  SG_ Resp_EvtSysCount m235 : 47|16@0+ (1,0) [0|65535] ""  Data_Station
+
+BO_ 1792 AQT1: 8 Acquisition_Board1
+ SG_ Throtle_Percentage : 0|8@1+ (1,0) [0|0] "" Vector__XXX
 
 
 
