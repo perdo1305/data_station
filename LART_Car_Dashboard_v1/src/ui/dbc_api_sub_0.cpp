@@ -77,6 +77,17 @@ void init_dbc_api_subscribers_chunk_0(std::shared_ptr<rclcpp::Node> node, std::v
                 dbc_api.aqt1.bots = msg->bots;
                 dbc_api.aqt1.frt_brk_press = msg->frt_brk_press;
                 dbc_api.aqt1.res = msg->res;
+                dbc_api.aqt1.throtle_percentage = msg->throtle_percentage;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt1>(
+        "/data/aqt1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt1> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt1.bots = msg->bots;
+                dbc_api.aqt1.frt_brk_press = msg->frt_brk_press;
+                dbc_api.aqt1.res = msg->res;
+                dbc_api.aqt1.throtle_percentage = msg->throtle_percentage;
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2>(

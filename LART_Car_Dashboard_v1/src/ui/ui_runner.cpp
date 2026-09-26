@@ -453,7 +453,7 @@ int main(int argc, char **argv) {
         // Test 3: Setting dbc_api directly and calling with NULL
         dbc_api.asf_signals.brake_pressure_front = 45.2f;
         dbc_api.asf_signals.brake_pressure_rear = 10.0f;
-        dbc_api.inv1_misc.inv1_actual_throttle = 80.0f;
+        dbc_api.aqt1.throtle_percentage = 73.0f;
         dbc_api.master_soc_accumulator.soc_float = 92.5f;
         dbc_api.ivt_msg_result_u3.ivt_result_u3 = 24300.0f;
         dbc_api.vcu_ign_r2d.r2d_manual = 1.0f;
@@ -471,7 +471,7 @@ int main(int argc, char **argv) {
         assert(val_brake.getInt() == 45);
 
         auto val_acc = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_ACCELL_PEDAL_PRESSURE);
-        assert(val_acc.getInt() == 80);
+        assert(val_acc.getInt() == 73);
 
         auto val_soc = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_SOC);
         assert(val_soc.getInt() == 92);

@@ -12,7 +12,7 @@ void CanBridgeImpl::init_publishers_chunk_0(rclcpp::Node* node) {
     if (database_ == "powertrain_t26") {
         pub_apps_adc_raw = node->create_publisher<lart_msgs::msg::AppsAdcRaw>(database_ == "data_t26" ? "/data/apps_adc_raw" : database_ == "powertrain_t26" ? "/pwt/apps_adc_raw" : "/can/apps_adc_raw", sensor_qos);
     }
-    if (database_ == "autonomous_t26") {
+    if (database_ == "autonomous_t26" || database_ == "data_t26") {
         pub_aqt1 = node->create_publisher<lart_msgs::msg::Aqt1>(database_ == "data_t26" ? "/data/aqt1" : database_ == "powertrain_t26" ? "/pwt/aqt1" : "/can/aqt1", sensor_qos);
     }
     if (database_ == "data_t26") {

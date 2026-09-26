@@ -30,6 +30,7 @@ typedef struct {
         float bots;
         float frt_brk_press;
         float res;
+        float throtle_percentage;
     } aqt1;
     struct {
         float brake_temp;

@@ -12,6 +12,7 @@
 #include <cmath>
 
 #include "generated/can_bridge_impl.hpp"
+#include <lart_msgs/msg/aqt1.hpp>
 #include <lart_msgs/msg/aqt2.hpp>
 
 int main(int argc, char **argv) {
@@ -56,6 +57,26 @@ int main(int argc, char **argv) {
     std::cout << "Received temperature: " << received_temperature << " (Expected: ~42.5)" << std::endl;
     assert(received);
     assert(std::abs(received_temperature - 42.5f) < 0.1f);
+
+    float received_throttle = -1.0f;
+    bool received_aqt1 = false;
+    auto aqt1_sub = node->create_subscription<lart_msgs::msg::Aqt1>(
+        "/data/aqt1",
+        rclcpp::QoS(10).best_effort(),
+        [&](const lart_msgs::msg::Aqt1::SharedPtr msg) {
+            received_throttle = msg->throtle_percentage;
+            received_aqt1 = true;
+        }
+    );
+
+    const uint8_t aqt1_payload[8] = {73, 0, 0, 0, 0, 0, 0, 0};
+    assert(bridge.handle_frame(0x700, aqt1_payload, sizeof(aqt1_payload)));
+    for (int i = 0; i < 15; ++i) {
+        rclcpp::spin_some(node);
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+    assert(received_aqt1);
+    assert(std::abs(received_throttle - 73.0f) < 0.1f);
     
     // ICD shares 0x500-0x502 with autonomous frames on a different bus.
     CanBridgeImpl data_bridge(node.get(), "data_t26");

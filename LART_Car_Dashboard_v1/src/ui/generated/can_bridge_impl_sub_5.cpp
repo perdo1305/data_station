@@ -153,6 +153,23 @@ bool CanBridgeImpl::handle_frame_chunk_5(uint32_t can_id, const uint8_t* data, s
             }
             return true;
         }
+        case 1792u: {
+            {
+                lart_msgs::msg::Aqt1 out;
+                bool decoded_any = false;
+                if (database_ == "data_t26") {
+                    struct data_t26_aqt1_t decoded = {};
+                    if (data_t26_aqt1_unpack(&decoded, data, dlc) == 0) {
+                        out.throtle_percentage = data_t26_aqt1_throtle_percentage_decode(decoded.throtle_percentage);
+                        decoded_any = true;
+                    }
+                }
+                if (decoded_any) {
+                    pub_aqt1->publish(out);
+                }
+            }
+            return true;
+        }
         case 1793u: {
             {
                 lart_msgs::msg::MasterMscId1 out;
