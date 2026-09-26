@@ -35,14 +35,26 @@ export XDG_RUNTIME_DIR=/run/user/$_UID
 
 # 2b. Start the precharge-triggered bag recorder (records /can/* topics
 # to ~/bags while precharge_request is active; see lart_bringup/bag_recorder.py)
+RPI_CONFIG="/home/lart2026/GIT/data_station/install/lart_bringup/share/lart_bringup/config/rpi_config.yaml"
 BAG_RECORDER_BIN="/home/lart2026/GIT/data_station/install/lart_bringup/lib/lart_bringup/bag_recorder"
 if [ -x "$BAG_RECORDER_BIN" ]; then
     echo "Starting bag_recorder (bags → ~/bags)..."
-    "$BAG_RECORDER_BIN" --ros-args --params-file /home/lart2026/GIT/data_station/install/lart_bringup/share/lart_bringup/config/rpi_config.yaml &
+    "$BAG_RECORDER_BIN" --ros-args --params-file "$RPI_CONFIG" &
     BAG_RECORDER_PID=$!
     echo "bag_recorder PID: $BAG_RECORDER_PID"
 else
     echo "WARNING: bag_recorder not found at $BAG_RECORDER_BIN – CAN data will not be recorded."
+fi
+
+# 2c. Start the RPM LED bar controller (GPIO and thresholds come from rpi_config.yaml)
+LED_CONTROLLER_BIN="/home/lart2026/GIT/data_station/install/led_controller/lib/led_controller/led_controller"
+if [ -x "$LED_CONTROLLER_BIN" ]; then
+    echo "Starting led_controller..."
+    "$LED_CONTROLLER_BIN" --ros-args --params-file "$RPI_CONFIG" &
+    LED_CONTROLLER_PID=$!
+    echo "led_controller PID: $LED_CONTROLLER_PID"
+else
+    echo "WARNING: led_controller not found at $LED_CONTROLLER_BIN – LED bar will be disabled."
 fi
 
 # 3. Navigate to Project
