@@ -1,95 +1,216 @@
 name: Build ARM64
-
-on:
+'on':
   push:
-    branches: [master]
-
+    branches:
+    - master
 permissions:
   contents: write
-
 concurrency:
   group: build-arm64-normal
   cancel-in-progress: true
-
 jobs:
-  build-arm64:
+  messages:
+    runs-on: ubuntu-24.04-arm
+    outputs:
+      messages: ${{ steps.version.outputs.messages }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Set up ARM64 toolchain
+      id: setup
+      uses: ./.github/actions/setup-arm64
+    - name: Get message commit
+      id: version
+      run: |
+        echo "messages=$(git -C src/lart_msgs rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+    - name: Restore lart_msgs cache
+      id: messages-cache
+      uses: actions/cache/restore@v4
+      with:
+        path: |
+          build/lart_msgs
+          install/lart_msgs
+        key: msgs-${{ steps.setup.outputs.cache-prefix }}-${{ steps.version.outputs.messages }}
+    - name: Build or validate lart_msgs
+      env:
+        CACHE_HIT: ${{ steps.messages-cache.outputs.cache-hit }}
+      run: |
+        source /opt/ros/jazzy/setup.bash
+        if [[ "$CACHE_HIT" == true && -f install/lart_msgs/share/lart_msgs/package.bash ]]; then
+          echo 'Reusing cached lart_msgs for this message commit and toolchain.'
+        else
+          echo 'Message cache missing or incomplete; building lart_msgs from scratch.'
+          rm -rf build/lart_msgs install/lart_msgs
+          colcon build --base-paths src --packages-select lart_msgs --parallel-workers "$(nproc)"
+        fi
+        test -f install/lart_msgs/share/lart_msgs/package.bash
+        source install/lart_msgs/share/lart_msgs/package.bash
+    - name: Save lart_msgs cache
+      if: steps.messages-cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: |
+          build/lart_msgs
+          install/lart_msgs
+        key: ${{ steps.messages-cache.outputs.cache-primary-key }}
+    - name: Archive message install
+      run: |
+        tar czf lart-msgs-install.tar.gz install/lart_msgs
+    - name: Upload lart-msgs-install
+      uses: actions/upload-artifact@v4
+      with:
+        name: lart-msgs-install
+        path: lart-msgs-install.tar.gz
+        if-no-files-found: error
+        retention-days: 1
+        compression-level: 0
+  ros-packages:
+    needs: messages
     runs-on: ubuntu-24.04-arm
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Add ROS2 apt repository
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y curl gnupg lsb-release
-          sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-          sudo apt-get update
-
-      - name: Cache apt archives
-        uses: actions/cache@v4
-        with:
-          path: /var/cache/apt/archives
-          key: apt-arm64-jazzy-${{ hashFiles('.github/workflows/build-arm64.yml') }}
-
-      - name: Install ROS2 and build tooling
-        run: |
-          sudo apt-get install -y \
-            ros-jazzy-ros-base \
-            ros-jazzy-rclcpp \
-            ros-jazzy-rclpy \
-            ros-jazzy-std-msgs \
-            ros-jazzy-rosidl-default-generators \
-            ros-jazzy-rosidl-default-runtime \
-            python3-colcon-common-extensions \
-            build-essential \
-            cmake \
-            pkg-config \
-            libsdl2-dev
-          sudo chown -R "$(id -u):$(id -g)" /var/cache/apt/archives
-
-      - name: Cache colcon build
-        uses: actions/cache@v4
-        with:
-          path: |
-            build
-            install
-            log
-          key: colcon-arm64-${{ hashFiles('src/**/CMakeLists.txt', 'src/**/package.xml', 'src/**/*.cpp', 'src/**/*.hpp', 'src/**/*.h', 'src/**/*.py') }}
-          restore-keys: |
-            colcon-arm64-
-
-      - name: Build ROS2 workspace
-        run: |
-          source /opt/ros/jazzy/setup.bash
-          colcon build --parallel-workers $(nproc)
-
-      - name: Build dashboard UI
-        run: |
-          source /opt/ros/jazzy/setup.bash
-          source install/setup.bash
-          cmake -S LART_Car_Dashboard_v1/src/ui -B LART_Car_Dashboard_v1/build/ui-build -DCMAKE_BUILD_TYPE=Release
-          cmake --build LART_Car_Dashboard_v1/build/ui-build --parallel $(nproc)
-
-      - name: Package artifact
-        run: tar czf lart-dashboard-arm64.tar.gz install LART_Car_Dashboard_v1/build/ui-build
-
-      - name: Get short commit SHA
-        id: version
-        run: echo "short_sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
-
-      - name: Publish versioned release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: arm64-${{ github.sha }}
-          name: "ARM64 build ${{ steps.version.outputs.short_sha }}"
-          files: lart-dashboard-arm64.tar.gz
-
-      - name: Update latest release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: latest-arm64
-          name: "Latest ARM64 build"
-          files: lart-dashboard-arm64.tar.gz
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Set up ARM64 toolchain
+      id: setup
+      uses: ./.github/actions/setup-arm64
+    - name: Cache ROS2 packages
+      uses: actions/cache@v4
+      with:
+        path: |
+          build/*
+          !build/lart_msgs/**
+          install/*
+          !install/lart_msgs/**
+        key: colcon-${{ steps.setup.outputs.cache-prefix }}-${{ needs.messages.outputs.messages }}-${{ hashFiles('src/**', '!src/lart_msgs/**') }}
+        restore-keys: |
+          colcon-${{ steps.setup.outputs.cache-prefix }}-${{ needs.messages.outputs.messages }}-
+    - name: Download lart-msgs-install
+      uses: actions/download-artifact@v4
+      with:
+        name: lart-msgs-install
+        path: .ci-artifacts
+    - name: Extract lart-msgs-install
+      run: |
+        tar xzf .ci-artifacts/lart-msgs-install.tar.gz
+    - name: Build ROS2 workspace
+      run: |
+        source /opt/ros/jazzy/setup.bash
+        source install/lart_msgs/share/lart_msgs/package.bash
+        colcon build --base-paths src --packages-skip lart_msgs --parallel-workers "$(nproc)"
+        tar czf ros-install.tar.gz install
+    - name: Upload ros-install
+      uses: actions/upload-artifact@v4
+      with:
+        name: ros-install
+        path: ros-install.tar.gz
+        if-no-files-found: error
+        retention-days: 1
+        compression-level: 0
+  dashboard:
+    needs: messages
+    runs-on: ubuntu-24.04-arm
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Set up ARM64 toolchain
+      id: setup
+      uses: ./.github/actions/setup-arm64
+    - name: Cache dashboard compiler output
+      uses: actions/cache@v4
+      with:
+        path: .ccache
+        key: ccache-${{ steps.setup.outputs.cache-prefix }}-${{ github.sha }}
+        restore-keys: |
+          ccache-${{ steps.setup.outputs.cache-prefix }}-
+    - name: Cache dashboard build
+      uses: actions/cache@v4
+      with:
+        path: |
+          LART_Car_Dashboard_v1/build/lart_dashboard_ui
+          install/lart_dashboard_ui
+        key: ui-${{ steps.setup.outputs.cache-prefix }}-${{ needs.messages.outputs.messages }}-${{ hashFiles('LART_Car_Dashboard_v1/src/ui/**') }}
+        restore-keys: |
+          ui-${{ steps.setup.outputs.cache-prefix }}-${{ needs.messages.outputs.messages }}-
+    - name: Download lart-msgs-install
+      uses: actions/download-artifact@v4
+      with:
+        name: lart-msgs-install
+        path: .ci-artifacts
+    - name: Extract lart-msgs-install
+      run: |
+        tar xzf .ci-artifacts/lart-msgs-install.tar.gz
+    - name: Build dashboard UI
+      run: |
+        source /opt/ros/jazzy/setup.bash
+        source install/lart_msgs/share/lart_msgs/package.bash
+        ccache --max-size=500M
+        ccache --zero-stats
+        colcon build --base-paths LART_Car_Dashboard_v1/src/ui \
+          --packages-select lart_dashboard_ui \
+          --build-base LART_Car_Dashboard_v1/build --parallel-workers "$(nproc)" \
+          --cmake-args -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+        ccache --show-stats
+        # Preserve the existing ui-build/ui_runner entry point without a second build.
+        ln -sfn lart_dashboard_ui LART_Car_Dashboard_v1/build/ui-build
+        test -x LART_Car_Dashboard_v1/build/ui-build/ui_runner
+        tar czf dashboard-build.tar.gz install/lart_dashboard_ui \
+          LART_Car_Dashboard_v1/build/lart_dashboard_ui LART_Car_Dashboard_v1/build/ui-build
+    - name: Upload dashboard-build
+      uses: actions/upload-artifact@v4
+      with:
+        name: dashboard-build
+        path: dashboard-build.tar.gz
+        if-no-files-found: error
+        retention-days: 1
+        compression-level: 0
+  publish:
+    needs:
+    - ros-packages
+    - dashboard
+    runs-on: ubuntu-24.04-arm
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Download ros-install
+      uses: actions/download-artifact@v4
+      with:
+        name: ros-install
+        path: .ci-artifacts
+    - name: Download dashboard-build
+      uses: actions/download-artifact@v4
+      with:
+        name: dashboard-build
+        path: .ci-artifacts
+    - name: Package artifact
+      run: |
+        tar xzf .ci-artifacts/ros-install.tar.gz
+        tar xzf .ci-artifacts/dashboard-build.tar.gz
+        test -f install/lart_msgs/share/lart_msgs/package.bash
+        test -f install/lart_dashboard_ui/share/lart_dashboard_ui/package.bash
+        test -x LART_Car_Dashboard_v1/build/ui-build/ui_runner
+        tar czf lart-dashboard-arm64.tar.gz install \
+          LART_Car_Dashboard_v1/build/lart_dashboard_ui LART_Car_Dashboard_v1/build/ui-build
+    - name: Get short commit SHA
+      id: version
+      run: echo "short_sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+    - name: Publish versioned release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: arm64-${{ github.sha }}
+        name: ARM64 build ${{ steps.version.outputs.short_sha }}
+        files: lart-dashboard-arm64.tar.gz
+    - name: Update latest release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: latest-arm64
+        name: Latest ARM64 build
+        files: lart-dashboard-arm64.tar.gz

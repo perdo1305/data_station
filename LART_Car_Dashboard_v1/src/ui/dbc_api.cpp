@@ -20,6 +20,7 @@ extern void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node,
 extern void init_dbc_api_subscribers_chunk_3(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs);
 extern void init_dbc_api_subscribers_chunk_4(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs);
 extern void init_dbc_api_subscribers_chunk_5(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs);
+extern void init_dbc_api_subscribers_chunk_6(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs);
 
 void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs) {
     init_dbc_api_subscribers_chunk_0(node, subs);
@@ -28,6 +29,7 @@ void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rc
     init_dbc_api_subscribers_chunk_3(node, subs);
     init_dbc_api_subscribers_chunk_4(node, subs);
     init_dbc_api_subscribers_chunk_5(node, subs);
+    init_dbc_api_subscribers_chunk_6(node, subs);
 }
 #endif
 #endif

@@ -238,6 +238,5502 @@ bool data_t26_aqt2_front_right_wheel_rpm_is_in_phys_range(double value)
     return (true);
 }
 
+int data_t26_aqt2_temperatures_1_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_1_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_001, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_002, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_003, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_004, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_005, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_006, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_007, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_008, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_1_unpack(
+    struct data_t26_aqt2_temperatures_1_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_001 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_002 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_003 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_004 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_005 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_006 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_007 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_008 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_1_init(struct data_t26_aqt2_temperatures_1_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_1_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_1_temperature_001_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_1_temperature_001_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_1_temperature_001_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_1_temperature_001_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_1_temperature_002_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_1_temperature_002_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_1_temperature_002_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_1_temperature_002_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_1_temperature_003_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_1_temperature_003_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_1_temperature_003_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_1_temperature_003_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_1_temperature_004_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_1_temperature_004_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_1_temperature_004_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_1_temperature_004_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_1_temperature_005_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_1_temperature_005_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_1_temperature_005_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_1_temperature_005_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_1_temperature_006_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_1_temperature_006_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_1_temperature_006_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_1_temperature_006_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_1_temperature_007_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_1_temperature_007_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_1_temperature_007_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_1_temperature_007_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_1_temperature_008_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_1_temperature_008_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_1_temperature_008_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_1_temperature_008_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_2_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_2_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_009, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_010, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_011, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_012, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_013, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_014, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_015, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_016, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_2_unpack(
+    struct data_t26_aqt2_temperatures_2_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_009 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_010 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_011 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_012 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_013 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_014 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_015 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_016 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_2_init(struct data_t26_aqt2_temperatures_2_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_2_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_2_temperature_009_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_2_temperature_009_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_2_temperature_009_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_2_temperature_009_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_2_temperature_010_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_2_temperature_010_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_2_temperature_010_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_2_temperature_010_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_2_temperature_011_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_2_temperature_011_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_2_temperature_011_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_2_temperature_011_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_2_temperature_012_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_2_temperature_012_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_2_temperature_012_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_2_temperature_012_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_2_temperature_013_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_2_temperature_013_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_2_temperature_013_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_2_temperature_013_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_2_temperature_014_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_2_temperature_014_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_2_temperature_014_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_2_temperature_014_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_2_temperature_015_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_2_temperature_015_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_2_temperature_015_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_2_temperature_015_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_2_temperature_016_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_2_temperature_016_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_2_temperature_016_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_2_temperature_016_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_3_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_3_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_017, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_018, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_019, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_020, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_021, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_022, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_023, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_024, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_3_unpack(
+    struct data_t26_aqt2_temperatures_3_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_017 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_018 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_019 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_020 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_021 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_022 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_023 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_024 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_3_init(struct data_t26_aqt2_temperatures_3_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_3_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_3_temperature_017_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_3_temperature_017_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_3_temperature_017_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_3_temperature_017_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_3_temperature_018_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_3_temperature_018_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_3_temperature_018_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_3_temperature_018_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_3_temperature_019_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_3_temperature_019_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_3_temperature_019_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_3_temperature_019_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_3_temperature_020_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_3_temperature_020_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_3_temperature_020_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_3_temperature_020_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_3_temperature_021_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_3_temperature_021_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_3_temperature_021_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_3_temperature_021_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_3_temperature_022_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_3_temperature_022_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_3_temperature_022_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_3_temperature_022_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_3_temperature_023_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_3_temperature_023_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_3_temperature_023_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_3_temperature_023_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_3_temperature_024_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_3_temperature_024_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_3_temperature_024_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_3_temperature_024_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_4_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_4_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_025, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_026, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_027, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_028, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_029, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_030, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_031, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_032, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_4_unpack(
+    struct data_t26_aqt2_temperatures_4_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_025 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_026 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_027 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_028 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_029 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_030 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_031 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_032 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_4_init(struct data_t26_aqt2_temperatures_4_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_4_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_4_temperature_025_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_4_temperature_025_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_4_temperature_025_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_4_temperature_025_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_4_temperature_026_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_4_temperature_026_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_4_temperature_026_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_4_temperature_026_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_4_temperature_027_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_4_temperature_027_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_4_temperature_027_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_4_temperature_027_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_4_temperature_028_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_4_temperature_028_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_4_temperature_028_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_4_temperature_028_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_4_temperature_029_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_4_temperature_029_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_4_temperature_029_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_4_temperature_029_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_4_temperature_030_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_4_temperature_030_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_4_temperature_030_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_4_temperature_030_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_4_temperature_031_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_4_temperature_031_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_4_temperature_031_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_4_temperature_031_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_4_temperature_032_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_4_temperature_032_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_4_temperature_032_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_4_temperature_032_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_5_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_5_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_033, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_034, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_035, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_036, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_037, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_038, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_039, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_040, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_5_unpack(
+    struct data_t26_aqt2_temperatures_5_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_033 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_034 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_035 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_036 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_037 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_038 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_039 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_040 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_5_init(struct data_t26_aqt2_temperatures_5_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_5_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_5_temperature_033_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_5_temperature_033_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_5_temperature_033_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_5_temperature_033_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_5_temperature_034_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_5_temperature_034_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_5_temperature_034_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_5_temperature_034_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_5_temperature_035_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_5_temperature_035_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_5_temperature_035_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_5_temperature_035_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_5_temperature_036_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_5_temperature_036_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_5_temperature_036_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_5_temperature_036_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_5_temperature_037_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_5_temperature_037_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_5_temperature_037_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_5_temperature_037_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_5_temperature_038_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_5_temperature_038_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_5_temperature_038_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_5_temperature_038_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_5_temperature_039_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_5_temperature_039_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_5_temperature_039_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_5_temperature_039_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_5_temperature_040_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_5_temperature_040_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_5_temperature_040_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_5_temperature_040_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_6_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_6_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_041, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_042, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_043, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_044, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_045, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_046, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_047, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_048, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_6_unpack(
+    struct data_t26_aqt2_temperatures_6_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_041 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_042 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_043 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_044 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_045 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_046 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_047 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_048 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_6_init(struct data_t26_aqt2_temperatures_6_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_6_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_6_temperature_041_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_6_temperature_041_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_6_temperature_041_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_6_temperature_041_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_6_temperature_042_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_6_temperature_042_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_6_temperature_042_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_6_temperature_042_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_6_temperature_043_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_6_temperature_043_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_6_temperature_043_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_6_temperature_043_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_6_temperature_044_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_6_temperature_044_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_6_temperature_044_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_6_temperature_044_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_6_temperature_045_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_6_temperature_045_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_6_temperature_045_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_6_temperature_045_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_6_temperature_046_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_6_temperature_046_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_6_temperature_046_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_6_temperature_046_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_6_temperature_047_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_6_temperature_047_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_6_temperature_047_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_6_temperature_047_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_6_temperature_048_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_6_temperature_048_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_6_temperature_048_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_6_temperature_048_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_7_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_7_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_049, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_050, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_051, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_052, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_053, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_054, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_055, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_056, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_7_unpack(
+    struct data_t26_aqt2_temperatures_7_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_049 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_050 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_051 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_052 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_053 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_054 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_055 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_056 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_7_init(struct data_t26_aqt2_temperatures_7_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_7_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_7_temperature_049_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_7_temperature_049_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_7_temperature_049_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_7_temperature_049_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_7_temperature_050_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_7_temperature_050_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_7_temperature_050_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_7_temperature_050_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_7_temperature_051_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_7_temperature_051_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_7_temperature_051_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_7_temperature_051_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_7_temperature_052_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_7_temperature_052_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_7_temperature_052_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_7_temperature_052_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_7_temperature_053_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_7_temperature_053_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_7_temperature_053_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_7_temperature_053_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_7_temperature_054_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_7_temperature_054_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_7_temperature_054_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_7_temperature_054_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_7_temperature_055_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_7_temperature_055_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_7_temperature_055_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_7_temperature_055_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_7_temperature_056_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_7_temperature_056_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_7_temperature_056_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_7_temperature_056_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_8_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_057, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_058, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_059, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_060, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_061, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_062, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_063, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_064, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_8_unpack(
+    struct data_t26_aqt2_temperatures_8_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_057 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_058 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_059 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_060 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_061 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_062 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_063 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_064 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_8_init(struct data_t26_aqt2_temperatures_8_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_8_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_8_temperature_057_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_8_temperature_057_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_8_temperature_057_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_8_temperature_057_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_8_temperature_058_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_8_temperature_058_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_8_temperature_058_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_8_temperature_058_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_8_temperature_059_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_8_temperature_059_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_8_temperature_059_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_8_temperature_059_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_8_temperature_060_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_8_temperature_060_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_8_temperature_060_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_8_temperature_060_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_8_temperature_061_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_8_temperature_061_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_8_temperature_061_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_8_temperature_061_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_8_temperature_062_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_8_temperature_062_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_8_temperature_062_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_8_temperature_062_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_8_temperature_063_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_8_temperature_063_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_8_temperature_063_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_8_temperature_063_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_8_temperature_064_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_8_temperature_064_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_8_temperature_064_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_8_temperature_064_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_9_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_9_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_065, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_066, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_067, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_068, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_069, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_070, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_071, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_072, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_9_unpack(
+    struct data_t26_aqt2_temperatures_9_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_065 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_066 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_067 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_068 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_069 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_070 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_071 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_072 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_9_init(struct data_t26_aqt2_temperatures_9_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_9_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_9_temperature_065_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_9_temperature_065_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_9_temperature_065_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_9_temperature_065_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_9_temperature_066_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_9_temperature_066_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_9_temperature_066_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_9_temperature_066_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_9_temperature_067_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_9_temperature_067_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_9_temperature_067_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_9_temperature_067_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_9_temperature_068_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_9_temperature_068_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_9_temperature_068_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_9_temperature_068_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_9_temperature_069_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_9_temperature_069_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_9_temperature_069_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_9_temperature_069_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_9_temperature_070_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_9_temperature_070_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_9_temperature_070_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_9_temperature_070_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_9_temperature_071_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_9_temperature_071_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_9_temperature_071_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_9_temperature_071_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_9_temperature_072_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_9_temperature_072_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_9_temperature_072_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_9_temperature_072_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_10_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_10_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_073, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_074, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_075, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_076, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_077, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_078, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_079, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_080, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_10_unpack(
+    struct data_t26_aqt2_temperatures_10_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_073 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_074 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_075 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_076 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_077 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_078 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_079 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_080 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_10_init(struct data_t26_aqt2_temperatures_10_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_10_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_10_temperature_073_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_10_temperature_073_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_10_temperature_073_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_10_temperature_073_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_10_temperature_074_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_10_temperature_074_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_10_temperature_074_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_10_temperature_074_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_10_temperature_075_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_10_temperature_075_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_10_temperature_075_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_10_temperature_075_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_10_temperature_076_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_10_temperature_076_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_10_temperature_076_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_10_temperature_076_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_10_temperature_077_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_10_temperature_077_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_10_temperature_077_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_10_temperature_077_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_10_temperature_078_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_10_temperature_078_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_10_temperature_078_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_10_temperature_078_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_10_temperature_079_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_10_temperature_079_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_10_temperature_079_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_10_temperature_079_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_10_temperature_080_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_10_temperature_080_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_10_temperature_080_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_10_temperature_080_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_11_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_11_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_081, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_082, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_083, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_084, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_085, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_086, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_087, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_088, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_11_unpack(
+    struct data_t26_aqt2_temperatures_11_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_081 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_082 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_083 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_084 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_085 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_086 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_087 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_088 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_11_init(struct data_t26_aqt2_temperatures_11_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_11_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_11_temperature_081_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_11_temperature_081_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_11_temperature_081_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_11_temperature_081_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_11_temperature_082_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_11_temperature_082_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_11_temperature_082_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_11_temperature_082_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_11_temperature_083_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_11_temperature_083_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_11_temperature_083_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_11_temperature_083_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_11_temperature_084_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_11_temperature_084_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_11_temperature_084_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_11_temperature_084_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_11_temperature_085_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_11_temperature_085_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_11_temperature_085_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_11_temperature_085_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_11_temperature_086_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_11_temperature_086_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_11_temperature_086_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_11_temperature_086_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_11_temperature_087_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_11_temperature_087_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_11_temperature_087_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_11_temperature_087_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_11_temperature_088_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_11_temperature_088_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_11_temperature_088_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_11_temperature_088_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_12_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_12_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_089, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_090, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_091, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_092, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_093, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_094, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_095, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_096, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_12_unpack(
+    struct data_t26_aqt2_temperatures_12_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_089 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_090 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_091 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_092 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_093 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_094 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_095 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_096 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_12_init(struct data_t26_aqt2_temperatures_12_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_12_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_12_temperature_089_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_12_temperature_089_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_12_temperature_089_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_12_temperature_089_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_12_temperature_090_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_12_temperature_090_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_12_temperature_090_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_12_temperature_090_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_12_temperature_091_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_12_temperature_091_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_12_temperature_091_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_12_temperature_091_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_12_temperature_092_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_12_temperature_092_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_12_temperature_092_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_12_temperature_092_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_12_temperature_093_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_12_temperature_093_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_12_temperature_093_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_12_temperature_093_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_12_temperature_094_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_12_temperature_094_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_12_temperature_094_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_12_temperature_094_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_12_temperature_095_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_12_temperature_095_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_12_temperature_095_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_12_temperature_095_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_12_temperature_096_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_12_temperature_096_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_12_temperature_096_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_12_temperature_096_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_13_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_13_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_097, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_098, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_099, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_100, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_101, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_102, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_103, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_104, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_13_unpack(
+    struct data_t26_aqt2_temperatures_13_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_097 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_098 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_099 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_100 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_101 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_102 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_103 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_104 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_13_init(struct data_t26_aqt2_temperatures_13_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_13_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_13_temperature_097_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_13_temperature_097_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_13_temperature_097_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_13_temperature_097_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_13_temperature_098_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_13_temperature_098_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_13_temperature_098_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_13_temperature_098_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_13_temperature_099_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_13_temperature_099_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_13_temperature_099_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_13_temperature_099_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_13_temperature_100_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_13_temperature_100_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_13_temperature_100_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_13_temperature_100_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_13_temperature_101_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_13_temperature_101_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_13_temperature_101_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_13_temperature_101_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_13_temperature_102_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_13_temperature_102_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_13_temperature_102_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_13_temperature_102_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_13_temperature_103_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_13_temperature_103_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_13_temperature_103_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_13_temperature_103_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_13_temperature_104_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_13_temperature_104_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_13_temperature_104_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_13_temperature_104_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_14_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_14_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_105, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_106, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_107, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_108, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_109, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_110, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_111, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_112, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_14_unpack(
+    struct data_t26_aqt2_temperatures_14_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_105 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_106 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_107 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_108 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_109 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_110 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_111 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_112 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_14_init(struct data_t26_aqt2_temperatures_14_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_14_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_14_temperature_105_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_14_temperature_105_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_14_temperature_105_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_14_temperature_105_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_14_temperature_106_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_14_temperature_106_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_14_temperature_106_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_14_temperature_106_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_14_temperature_107_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_14_temperature_107_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_14_temperature_107_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_14_temperature_107_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_14_temperature_108_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_14_temperature_108_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_14_temperature_108_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_14_temperature_108_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_14_temperature_109_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_14_temperature_109_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_14_temperature_109_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_14_temperature_109_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_14_temperature_110_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_14_temperature_110_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_14_temperature_110_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_14_temperature_110_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_14_temperature_111_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_14_temperature_111_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_14_temperature_111_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_14_temperature_111_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_14_temperature_112_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_14_temperature_112_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_14_temperature_112_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_14_temperature_112_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_15_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_15_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_113, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_114, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_115, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_116, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_117, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_118, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_119, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_120, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_15_unpack(
+    struct data_t26_aqt2_temperatures_15_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_113 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_114 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_115 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_116 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_117 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_118 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_119 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_120 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_15_init(struct data_t26_aqt2_temperatures_15_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_15_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_15_temperature_113_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_15_temperature_113_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_15_temperature_113_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_15_temperature_113_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_15_temperature_114_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_15_temperature_114_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_15_temperature_114_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_15_temperature_114_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_15_temperature_115_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_15_temperature_115_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_15_temperature_115_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_15_temperature_115_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_15_temperature_116_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_15_temperature_116_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_15_temperature_116_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_15_temperature_116_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_15_temperature_117_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_15_temperature_117_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_15_temperature_117_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_15_temperature_117_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_15_temperature_118_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_15_temperature_118_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_15_temperature_118_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_15_temperature_118_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_15_temperature_119_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_15_temperature_119_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_15_temperature_119_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_15_temperature_119_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_15_temperature_120_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_15_temperature_120_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_15_temperature_120_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_15_temperature_120_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_16_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_16_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_121, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_122, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_123, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_124, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_125, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_126, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_127, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_128, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_16_unpack(
+    struct data_t26_aqt2_temperatures_16_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_121 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_122 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_123 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_124 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_125 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_126 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_127 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_128 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_16_init(struct data_t26_aqt2_temperatures_16_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_16_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_16_temperature_121_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_16_temperature_121_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_16_temperature_121_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_16_temperature_121_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_16_temperature_122_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_16_temperature_122_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_16_temperature_122_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_16_temperature_122_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_16_temperature_123_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_16_temperature_123_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_16_temperature_123_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_16_temperature_123_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_16_temperature_124_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_16_temperature_124_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_16_temperature_124_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_16_temperature_124_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_16_temperature_125_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_16_temperature_125_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_16_temperature_125_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_16_temperature_125_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_16_temperature_126_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_16_temperature_126_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_16_temperature_126_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_16_temperature_126_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_16_temperature_127_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_16_temperature_127_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_16_temperature_127_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_16_temperature_127_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_16_temperature_128_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_16_temperature_128_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_16_temperature_128_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_16_temperature_128_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_17_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_17_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_129, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_130, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_131, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_132, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_133, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_134, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_135, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_136, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_17_unpack(
+    struct data_t26_aqt2_temperatures_17_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_129 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_130 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_131 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_132 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_133 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_134 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_135 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_136 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_17_init(struct data_t26_aqt2_temperatures_17_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_17_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_17_temperature_129_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_17_temperature_129_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_17_temperature_129_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_17_temperature_129_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_17_temperature_130_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_17_temperature_130_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_17_temperature_130_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_17_temperature_130_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_17_temperature_131_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_17_temperature_131_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_17_temperature_131_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_17_temperature_131_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_17_temperature_132_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_17_temperature_132_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_17_temperature_132_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_17_temperature_132_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_17_temperature_133_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_17_temperature_133_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_17_temperature_133_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_17_temperature_133_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_17_temperature_134_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_17_temperature_134_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_17_temperature_134_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_17_temperature_134_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_17_temperature_135_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_17_temperature_135_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_17_temperature_135_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_17_temperature_135_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_17_temperature_136_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_17_temperature_136_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_17_temperature_136_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_17_temperature_136_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_18_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_18_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_137, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_138, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_139, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_140, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_141, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_142, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_143, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_144, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_18_unpack(
+    struct data_t26_aqt2_temperatures_18_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_137 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_138 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_139 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_140 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_141 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_142 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_143 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_144 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_18_init(struct data_t26_aqt2_temperatures_18_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_18_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_18_temperature_137_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_18_temperature_137_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_18_temperature_137_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_18_temperature_137_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_18_temperature_138_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_18_temperature_138_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_18_temperature_138_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_18_temperature_138_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_18_temperature_139_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_18_temperature_139_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_18_temperature_139_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_18_temperature_139_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_18_temperature_140_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_18_temperature_140_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_18_temperature_140_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_18_temperature_140_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_18_temperature_141_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_18_temperature_141_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_18_temperature_141_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_18_temperature_141_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_18_temperature_142_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_18_temperature_142_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_18_temperature_142_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_18_temperature_142_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_18_temperature_143_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_18_temperature_143_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_18_temperature_143_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_18_temperature_143_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_18_temperature_144_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_18_temperature_144_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_18_temperature_144_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_18_temperature_144_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_19_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_19_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_145, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_146, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_147, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_148, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_149, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_150, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_151, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_152, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_19_unpack(
+    struct data_t26_aqt2_temperatures_19_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_145 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_146 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_147 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_148 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_149 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_150 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_151 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_152 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_19_init(struct data_t26_aqt2_temperatures_19_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_19_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_19_temperature_145_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_19_temperature_145_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_19_temperature_145_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_19_temperature_145_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_19_temperature_146_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_19_temperature_146_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_19_temperature_146_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_19_temperature_146_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_19_temperature_147_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_19_temperature_147_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_19_temperature_147_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_19_temperature_147_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_19_temperature_148_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_19_temperature_148_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_19_temperature_148_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_19_temperature_148_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_19_temperature_149_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_19_temperature_149_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_19_temperature_149_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_19_temperature_149_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_19_temperature_150_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_19_temperature_150_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_19_temperature_150_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_19_temperature_150_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_19_temperature_151_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_19_temperature_151_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_19_temperature_151_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_19_temperature_151_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_19_temperature_152_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_19_temperature_152_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_19_temperature_152_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_19_temperature_152_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_20_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_20_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_153, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_154, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_155, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_156, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_157, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_158, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_159, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_160, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_20_unpack(
+    struct data_t26_aqt2_temperatures_20_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_153 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_154 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_155 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_156 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_157 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_158 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_159 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_160 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_20_init(struct data_t26_aqt2_temperatures_20_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_20_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_20_temperature_153_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_20_temperature_153_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_20_temperature_153_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_20_temperature_153_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_20_temperature_154_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_20_temperature_154_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_20_temperature_154_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_20_temperature_154_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_20_temperature_155_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_20_temperature_155_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_20_temperature_155_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_20_temperature_155_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_20_temperature_156_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_20_temperature_156_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_20_temperature_156_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_20_temperature_156_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_20_temperature_157_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_20_temperature_157_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_20_temperature_157_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_20_temperature_157_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_20_temperature_158_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_20_temperature_158_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_20_temperature_158_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_20_temperature_158_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_20_temperature_159_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_20_temperature_159_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_20_temperature_159_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_20_temperature_159_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_20_temperature_160_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_20_temperature_160_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_20_temperature_160_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_20_temperature_160_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_21_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_21_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_161, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_162, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_163, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_164, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_165, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_166, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_167, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_168, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_21_unpack(
+    struct data_t26_aqt2_temperatures_21_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_161 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_162 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_163 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_164 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_165 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_166 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_167 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_168 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_21_init(struct data_t26_aqt2_temperatures_21_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_21_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_21_temperature_161_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_21_temperature_161_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_21_temperature_161_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_21_temperature_161_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_21_temperature_162_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_21_temperature_162_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_21_temperature_162_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_21_temperature_162_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_21_temperature_163_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_21_temperature_163_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_21_temperature_163_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_21_temperature_163_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_21_temperature_164_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_21_temperature_164_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_21_temperature_164_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_21_temperature_164_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_21_temperature_165_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_21_temperature_165_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_21_temperature_165_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_21_temperature_165_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_21_temperature_166_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_21_temperature_166_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_21_temperature_166_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_21_temperature_166_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_21_temperature_167_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_21_temperature_167_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_21_temperature_167_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_21_temperature_167_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_21_temperature_168_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_21_temperature_168_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_21_temperature_168_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_21_temperature_168_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_22_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_22_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_169, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_170, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_171, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_172, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_173, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_174, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_175, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_176, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_22_unpack(
+    struct data_t26_aqt2_temperatures_22_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_169 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_170 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_171 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_172 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_173 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_174 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_175 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_176 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_22_init(struct data_t26_aqt2_temperatures_22_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_22_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_22_temperature_169_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_22_temperature_169_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_22_temperature_169_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_22_temperature_169_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_22_temperature_170_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_22_temperature_170_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_22_temperature_170_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_22_temperature_170_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_22_temperature_171_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_22_temperature_171_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_22_temperature_171_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_22_temperature_171_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_22_temperature_172_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_22_temperature_172_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_22_temperature_172_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_22_temperature_172_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_22_temperature_173_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_22_temperature_173_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_22_temperature_173_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_22_temperature_173_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_22_temperature_174_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_22_temperature_174_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_22_temperature_174_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_22_temperature_174_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_22_temperature_175_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_22_temperature_175_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_22_temperature_175_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_22_temperature_175_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_22_temperature_176_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_22_temperature_176_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_22_temperature_176_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_22_temperature_176_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_23_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_23_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_177, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_178, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_179, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_180, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_181, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_182, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_183, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_184, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_23_unpack(
+    struct data_t26_aqt2_temperatures_23_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_177 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_178 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_179 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_180 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_181 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_182 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_183 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_184 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_23_init(struct data_t26_aqt2_temperatures_23_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_23_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_23_temperature_177_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_23_temperature_177_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_23_temperature_177_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_23_temperature_177_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_23_temperature_178_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_23_temperature_178_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_23_temperature_178_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_23_temperature_178_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_23_temperature_179_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_23_temperature_179_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_23_temperature_179_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_23_temperature_179_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_23_temperature_180_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_23_temperature_180_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_23_temperature_180_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_23_temperature_180_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_23_temperature_181_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_23_temperature_181_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_23_temperature_181_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_23_temperature_181_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_23_temperature_182_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_23_temperature_182_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_23_temperature_182_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_23_temperature_182_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_23_temperature_183_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_23_temperature_183_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_23_temperature_183_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_23_temperature_183_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_23_temperature_184_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_23_temperature_184_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_23_temperature_184_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_23_temperature_184_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+int data_t26_aqt2_temperatures_24_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_24_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 8);
+
+    dst_p[0] |= pack_left_shift_u8(src_p->temperature_185, 0u, 0xffu);
+    dst_p[1] |= pack_left_shift_u8(src_p->temperature_186, 0u, 0xffu);
+    dst_p[2] |= pack_left_shift_u8(src_p->temperature_187, 0u, 0xffu);
+    dst_p[3] |= pack_left_shift_u8(src_p->temperature_188, 0u, 0xffu);
+    dst_p[4] |= pack_left_shift_u8(src_p->temperature_189, 0u, 0xffu);
+    dst_p[5] |= pack_left_shift_u8(src_p->temperature_190, 0u, 0xffu);
+    dst_p[6] |= pack_left_shift_u8(src_p->temperature_191, 0u, 0xffu);
+    dst_p[7] |= pack_left_shift_u8(src_p->temperature_192, 0u, 0xffu);
+
+    return (8);
+}
+
+int data_t26_aqt2_temperatures_24_unpack(
+    struct data_t26_aqt2_temperatures_24_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    if (size < 8u) {
+        return (-EINVAL);
+    }
+
+    dst_p->temperature_185 = unpack_right_shift_u8(src_p[0], 0u, 0xffu);
+    dst_p->temperature_186 = unpack_right_shift_u8(src_p[1], 0u, 0xffu);
+    dst_p->temperature_187 = unpack_right_shift_u8(src_p[2], 0u, 0xffu);
+    dst_p->temperature_188 = unpack_right_shift_u8(src_p[3], 0u, 0xffu);
+    dst_p->temperature_189 = unpack_right_shift_u8(src_p[4], 0u, 0xffu);
+    dst_p->temperature_190 = unpack_right_shift_u8(src_p[5], 0u, 0xffu);
+    dst_p->temperature_191 = unpack_right_shift_u8(src_p[6], 0u, 0xffu);
+    dst_p->temperature_192 = unpack_right_shift_u8(src_p[7], 0u, 0xffu);
+
+    return (0);
+}
+
+int data_t26_aqt2_temperatures_24_init(struct data_t26_aqt2_temperatures_24_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct data_t26_aqt2_temperatures_24_t));
+
+    return 0;
+}
+
+uint8_t data_t26_aqt2_temperatures_24_temperature_185_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_24_temperature_185_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_24_temperature_185_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_24_temperature_185_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_24_temperature_186_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_24_temperature_186_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_24_temperature_186_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_24_temperature_186_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_24_temperature_187_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_24_temperature_187_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_24_temperature_187_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_24_temperature_187_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_24_temperature_188_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_24_temperature_188_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_24_temperature_188_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_24_temperature_188_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_24_temperature_189_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_24_temperature_189_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_24_temperature_189_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_24_temperature_189_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_24_temperature_190_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_24_temperature_190_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_24_temperature_190_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_24_temperature_190_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_24_temperature_191_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_24_temperature_191_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_24_temperature_191_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_24_temperature_191_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
+uint8_t data_t26_aqt2_temperatures_24_temperature_192_encode(double value)
+{
+    return (uint8_t)(value - 30.0);
+}
+
+double data_t26_aqt2_temperatures_24_temperature_192_decode(uint8_t value)
+{
+    return ((double)value + 30.0);
+}
+
+bool data_t26_aqt2_temperatures_24_temperature_192_is_in_range(uint8_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool data_t26_aqt2_temperatures_24_temperature_192_is_in_phys_range(double value)
+{
+    return ((value >= 30.0) && (value <= 285.0));
+}
+
 int data_t26_aqt7_pack(
     uint8_t *dst_p,
     const struct data_t26_aqt7_t *src_p,

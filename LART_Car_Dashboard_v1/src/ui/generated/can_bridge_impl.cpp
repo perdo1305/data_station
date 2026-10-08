@@ -9,6 +9,7 @@ CanBridgeImpl::CanBridgeImpl(rclcpp::Node* node, const std::string& database) : 
     init_publishers_chunk_3(node);
     init_publishers_chunk_4(node);
     init_publishers_chunk_5(node);
+    init_publishers_chunk_6(node);
 }
 
 bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dlc) {
@@ -18,5 +19,6 @@ bool CanBridgeImpl::handle_frame(uint32_t can_id, const uint8_t* data, size_t dl
     if (handle_frame_chunk_3(can_id, data, dlc)) return true;
     if (handle_frame_chunk_4(can_id, data, dlc)) return true;
     if (handle_frame_chunk_5(can_id, data, dlc)) return true;
+    if (handle_frame_chunk_6(can_id, data, dlc)) return true;
     return false;
 }

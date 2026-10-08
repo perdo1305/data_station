@@ -16,6 +16,30 @@
 #include <lart_msgs/msg/apps_adc_raw.hpp>
 #include <lart_msgs/msg/aqt1.hpp>
 #include <lart_msgs/msg/aqt2.hpp>
+#include <lart_msgs/msg/aqt2_temperatures1.hpp>
+#include <lart_msgs/msg/aqt2_temperatures10.hpp>
+#include <lart_msgs/msg/aqt2_temperatures11.hpp>
+#include <lart_msgs/msg/aqt2_temperatures12.hpp>
+#include <lart_msgs/msg/aqt2_temperatures13.hpp>
+#include <lart_msgs/msg/aqt2_temperatures14.hpp>
+#include <lart_msgs/msg/aqt2_temperatures15.hpp>
+#include <lart_msgs/msg/aqt2_temperatures16.hpp>
+#include <lart_msgs/msg/aqt2_temperatures17.hpp>
+#include <lart_msgs/msg/aqt2_temperatures18.hpp>
+#include <lart_msgs/msg/aqt2_temperatures19.hpp>
+#include <lart_msgs/msg/aqt2_temperatures2.hpp>
+#include <lart_msgs/msg/aqt2_temperatures20.hpp>
+#include <lart_msgs/msg/aqt2_temperatures21.hpp>
+#include <lart_msgs/msg/aqt2_temperatures22.hpp>
+#include <lart_msgs/msg/aqt2_temperatures23.hpp>
+#include <lart_msgs/msg/aqt2_temperatures24.hpp>
+#include <lart_msgs/msg/aqt2_temperatures3.hpp>
+#include <lart_msgs/msg/aqt2_temperatures4.hpp>
+#include <lart_msgs/msg/aqt2_temperatures5.hpp>
+#include <lart_msgs/msg/aqt2_temperatures6.hpp>
+#include <lart_msgs/msg/aqt2_temperatures7.hpp>
+#include <lart_msgs/msg/aqt2_temperatures8.hpp>
+#include <lart_msgs/msg/aqt2_temperatures9.hpp>
 #include <lart_msgs/msg/aqt4.hpp>
 #include <lart_msgs/msg/aqt7.hpp>
 #include <lart_msgs/msg/aqt8.hpp>
@@ -210,6 +234,30 @@ private:
     rclcpp::Publisher<lart_msgs::msg::AppsAdcRaw>::SharedPtr pub_apps_adc_raw;
     rclcpp::Publisher<lart_msgs::msg::Aqt1>::SharedPtr pub_aqt1;
     rclcpp::Publisher<lart_msgs::msg::Aqt2>::SharedPtr pub_aqt2;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures1>::SharedPtr pub_aqt2_temperatures_1;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures10>::SharedPtr pub_aqt2_temperatures_10;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures11>::SharedPtr pub_aqt2_temperatures_11;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures12>::SharedPtr pub_aqt2_temperatures_12;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures13>::SharedPtr pub_aqt2_temperatures_13;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures14>::SharedPtr pub_aqt2_temperatures_14;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures15>::SharedPtr pub_aqt2_temperatures_15;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures16>::SharedPtr pub_aqt2_temperatures_16;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures17>::SharedPtr pub_aqt2_temperatures_17;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures18>::SharedPtr pub_aqt2_temperatures_18;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures19>::SharedPtr pub_aqt2_temperatures_19;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures2>::SharedPtr pub_aqt2_temperatures_2;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures20>::SharedPtr pub_aqt2_temperatures_20;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures21>::SharedPtr pub_aqt2_temperatures_21;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures22>::SharedPtr pub_aqt2_temperatures_22;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures23>::SharedPtr pub_aqt2_temperatures_23;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures24>::SharedPtr pub_aqt2_temperatures_24;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures3>::SharedPtr pub_aqt2_temperatures_3;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures4>::SharedPtr pub_aqt2_temperatures_4;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures5>::SharedPtr pub_aqt2_temperatures_5;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures6>::SharedPtr pub_aqt2_temperatures_6;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures7>::SharedPtr pub_aqt2_temperatures_7;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures8>::SharedPtr pub_aqt2_temperatures_8;
+    rclcpp::Publisher<lart_msgs::msg::Aqt2Temperatures9>::SharedPtr pub_aqt2_temperatures_9;
     rclcpp::Publisher<lart_msgs::msg::Aqt4>::SharedPtr pub_aqt4;
     rclcpp::Publisher<lart_msgs::msg::Aqt7>::SharedPtr pub_aqt7;
     rclcpp::Publisher<lart_msgs::msg::Aqt8>::SharedPtr pub_aqt8;
@@ -393,6 +441,8 @@ private:
     bool handle_frame_chunk_4(uint32_t can_id, const uint8_t* data, size_t dlc);
     void init_publishers_chunk_5(rclcpp::Node* node);
     bool handle_frame_chunk_5(uint32_t can_id, const uint8_t* data, size_t dlc);
+    void init_publishers_chunk_6(rclcpp::Node* node);
+    bool handle_frame_chunk_6(uint32_t can_id, const uint8_t* data, size_t dlc);
 
 };
 

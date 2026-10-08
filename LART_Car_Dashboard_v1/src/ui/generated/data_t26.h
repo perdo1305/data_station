@@ -46,6 +46,30 @@ extern "C" {
 
 /* Frame ids. */
 #define DATA_T26_AQT2_FRAME_ID (0x720u)
+#define DATA_T26_AQT2_TEMPERATURES_1_FRAME_ID (0x781u)
+#define DATA_T26_AQT2_TEMPERATURES_2_FRAME_ID (0x782u)
+#define DATA_T26_AQT2_TEMPERATURES_3_FRAME_ID (0x783u)
+#define DATA_T26_AQT2_TEMPERATURES_4_FRAME_ID (0x784u)
+#define DATA_T26_AQT2_TEMPERATURES_5_FRAME_ID (0x785u)
+#define DATA_T26_AQT2_TEMPERATURES_6_FRAME_ID (0x786u)
+#define DATA_T26_AQT2_TEMPERATURES_7_FRAME_ID (0x787u)
+#define DATA_T26_AQT2_TEMPERATURES_8_FRAME_ID (0x788u)
+#define DATA_T26_AQT2_TEMPERATURES_9_FRAME_ID (0x789u)
+#define DATA_T26_AQT2_TEMPERATURES_10_FRAME_ID (0x78au)
+#define DATA_T26_AQT2_TEMPERATURES_11_FRAME_ID (0x78bu)
+#define DATA_T26_AQT2_TEMPERATURES_12_FRAME_ID (0x78cu)
+#define DATA_T26_AQT2_TEMPERATURES_13_FRAME_ID (0x78du)
+#define DATA_T26_AQT2_TEMPERATURES_14_FRAME_ID (0x78eu)
+#define DATA_T26_AQT2_TEMPERATURES_15_FRAME_ID (0x78fu)
+#define DATA_T26_AQT2_TEMPERATURES_16_FRAME_ID (0x790u)
+#define DATA_T26_AQT2_TEMPERATURES_17_FRAME_ID (0x791u)
+#define DATA_T26_AQT2_TEMPERATURES_18_FRAME_ID (0x792u)
+#define DATA_T26_AQT2_TEMPERATURES_19_FRAME_ID (0x793u)
+#define DATA_T26_AQT2_TEMPERATURES_20_FRAME_ID (0x794u)
+#define DATA_T26_AQT2_TEMPERATURES_21_FRAME_ID (0x795u)
+#define DATA_T26_AQT2_TEMPERATURES_22_FRAME_ID (0x796u)
+#define DATA_T26_AQT2_TEMPERATURES_23_FRAME_ID (0x797u)
+#define DATA_T26_AQT2_TEMPERATURES_24_FRAME_ID (0x798u)
 #define DATA_T26_AQT7_FRAME_ID (0x770u)
 #define DATA_T26_AQT8_FRAME_ID (0x780u)
 #define DATA_T26_VCU_INV1_TEMPERATURES_FRAME_ID (0x444u)
@@ -60,6 +84,30 @@ extern "C" {
 
 /* Frame lengths in bytes. */
 #define DATA_T26_AQT2_LENGTH (4u)
+#define DATA_T26_AQT2_TEMPERATURES_1_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_2_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_3_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_4_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_5_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_6_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_7_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_8_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_9_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_10_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_11_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_12_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_13_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_14_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_15_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_16_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_17_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_18_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_19_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_20_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_21_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_22_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_23_LENGTH (8u)
+#define DATA_T26_AQT2_TEMPERATURES_24_LENGTH (8u)
 #define DATA_T26_AQT7_LENGTH (8u)
 #define DATA_T26_AQT8_LENGTH (6u)
 #define DATA_T26_VCU_INV1_TEMPERATURES_LENGTH (8u)
@@ -74,6 +122,30 @@ extern "C" {
 
 /* Extended or standard frame types. */
 #define DATA_T26_AQT2_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_1_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_2_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_3_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_4_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_5_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_6_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_7_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_8_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_9_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_10_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_11_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_12_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_13_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_14_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_15_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_16_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_17_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_18_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_19_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_20_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_21_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_22_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_23_IS_EXTENDED (0)
+#define DATA_T26_AQT2_TEMPERATURES_24_IS_EXTENDED (0)
 #define DATA_T26_AQT7_IS_EXTENDED (0)
 #define DATA_T26_AQT8_IS_EXTENDED (0)
 #define DATA_T26_VCU_INV1_TEMPERATURES_IS_EXTENDED (0)
@@ -94,6 +166,30 @@ extern "C" {
 
 /* Frame Names. */
 #define DATA_T26_AQT2_NAME "AQT2"
+#define DATA_T26_AQT2_TEMPERATURES_1_NAME "AQT2_Temperatures_1"
+#define DATA_T26_AQT2_TEMPERATURES_2_NAME "AQT2_Temperatures_2"
+#define DATA_T26_AQT2_TEMPERATURES_3_NAME "AQT2_Temperatures_3"
+#define DATA_T26_AQT2_TEMPERATURES_4_NAME "AQT2_Temperatures_4"
+#define DATA_T26_AQT2_TEMPERATURES_5_NAME "AQT2_Temperatures_5"
+#define DATA_T26_AQT2_TEMPERATURES_6_NAME "AQT2_Temperatures_6"
+#define DATA_T26_AQT2_TEMPERATURES_7_NAME "AQT2_Temperatures_7"
+#define DATA_T26_AQT2_TEMPERATURES_8_NAME "AQT2_Temperatures_8"
+#define DATA_T26_AQT2_TEMPERATURES_9_NAME "AQT2_Temperatures_9"
+#define DATA_T26_AQT2_TEMPERATURES_10_NAME "AQT2_Temperatures_10"
+#define DATA_T26_AQT2_TEMPERATURES_11_NAME "AQT2_Temperatures_11"
+#define DATA_T26_AQT2_TEMPERATURES_12_NAME "AQT2_Temperatures_12"
+#define DATA_T26_AQT2_TEMPERATURES_13_NAME "AQT2_Temperatures_13"
+#define DATA_T26_AQT2_TEMPERATURES_14_NAME "AQT2_Temperatures_14"
+#define DATA_T26_AQT2_TEMPERATURES_15_NAME "AQT2_Temperatures_15"
+#define DATA_T26_AQT2_TEMPERATURES_16_NAME "AQT2_Temperatures_16"
+#define DATA_T26_AQT2_TEMPERATURES_17_NAME "AQT2_Temperatures_17"
+#define DATA_T26_AQT2_TEMPERATURES_18_NAME "AQT2_Temperatures_18"
+#define DATA_T26_AQT2_TEMPERATURES_19_NAME "AQT2_Temperatures_19"
+#define DATA_T26_AQT2_TEMPERATURES_20_NAME "AQT2_Temperatures_20"
+#define DATA_T26_AQT2_TEMPERATURES_21_NAME "AQT2_Temperatures_21"
+#define DATA_T26_AQT2_TEMPERATURES_22_NAME "AQT2_Temperatures_22"
+#define DATA_T26_AQT2_TEMPERATURES_23_NAME "AQT2_Temperatures_23"
+#define DATA_T26_AQT2_TEMPERATURES_24_NAME "AQT2_Temperatures_24"
 #define DATA_T26_AQT7_NAME "AQT7"
 #define DATA_T26_AQT8_NAME "AQT8"
 #define DATA_T26_VCU_INV1_TEMPERATURES_NAME "VCU_INV1_Temperatures"
@@ -109,6 +205,198 @@ extern "C" {
 /* Signal Names. */
 #define DATA_T26_AQT2_FRONT_LEFT_WHEEL_RPM_NAME "FRONT_LEFT_WHEEL_RPM"
 #define DATA_T26_AQT2_FRONT_RIGHT_WHEEL_RPM_NAME "FRONT_RIGHT_WHEEL_RPM"
+#define DATA_T26_AQT2_TEMPERATURES_1_TEMPERATURE_001_NAME "Temperature_001"
+#define DATA_T26_AQT2_TEMPERATURES_1_TEMPERATURE_002_NAME "Temperature_002"
+#define DATA_T26_AQT2_TEMPERATURES_1_TEMPERATURE_003_NAME "Temperature_003"
+#define DATA_T26_AQT2_TEMPERATURES_1_TEMPERATURE_004_NAME "Temperature_004"
+#define DATA_T26_AQT2_TEMPERATURES_1_TEMPERATURE_005_NAME "Temperature_005"
+#define DATA_T26_AQT2_TEMPERATURES_1_TEMPERATURE_006_NAME "Temperature_006"
+#define DATA_T26_AQT2_TEMPERATURES_1_TEMPERATURE_007_NAME "Temperature_007"
+#define DATA_T26_AQT2_TEMPERATURES_1_TEMPERATURE_008_NAME "Temperature_008"
+#define DATA_T26_AQT2_TEMPERATURES_2_TEMPERATURE_009_NAME "Temperature_009"
+#define DATA_T26_AQT2_TEMPERATURES_2_TEMPERATURE_010_NAME "Temperature_010"
+#define DATA_T26_AQT2_TEMPERATURES_2_TEMPERATURE_011_NAME "Temperature_011"
+#define DATA_T26_AQT2_TEMPERATURES_2_TEMPERATURE_012_NAME "Temperature_012"
+#define DATA_T26_AQT2_TEMPERATURES_2_TEMPERATURE_013_NAME "Temperature_013"
+#define DATA_T26_AQT2_TEMPERATURES_2_TEMPERATURE_014_NAME "Temperature_014"
+#define DATA_T26_AQT2_TEMPERATURES_2_TEMPERATURE_015_NAME "Temperature_015"
+#define DATA_T26_AQT2_TEMPERATURES_2_TEMPERATURE_016_NAME "Temperature_016"
+#define DATA_T26_AQT2_TEMPERATURES_3_TEMPERATURE_017_NAME "Temperature_017"
+#define DATA_T26_AQT2_TEMPERATURES_3_TEMPERATURE_018_NAME "Temperature_018"
+#define DATA_T26_AQT2_TEMPERATURES_3_TEMPERATURE_019_NAME "Temperature_019"
+#define DATA_T26_AQT2_TEMPERATURES_3_TEMPERATURE_020_NAME "Temperature_020"
+#define DATA_T26_AQT2_TEMPERATURES_3_TEMPERATURE_021_NAME "Temperature_021"
+#define DATA_T26_AQT2_TEMPERATURES_3_TEMPERATURE_022_NAME "Temperature_022"
+#define DATA_T26_AQT2_TEMPERATURES_3_TEMPERATURE_023_NAME "Temperature_023"
+#define DATA_T26_AQT2_TEMPERATURES_3_TEMPERATURE_024_NAME "Temperature_024"
+#define DATA_T26_AQT2_TEMPERATURES_4_TEMPERATURE_025_NAME "Temperature_025"
+#define DATA_T26_AQT2_TEMPERATURES_4_TEMPERATURE_026_NAME "Temperature_026"
+#define DATA_T26_AQT2_TEMPERATURES_4_TEMPERATURE_027_NAME "Temperature_027"
+#define DATA_T26_AQT2_TEMPERATURES_4_TEMPERATURE_028_NAME "Temperature_028"
+#define DATA_T26_AQT2_TEMPERATURES_4_TEMPERATURE_029_NAME "Temperature_029"
+#define DATA_T26_AQT2_TEMPERATURES_4_TEMPERATURE_030_NAME "Temperature_030"
+#define DATA_T26_AQT2_TEMPERATURES_4_TEMPERATURE_031_NAME "Temperature_031"
+#define DATA_T26_AQT2_TEMPERATURES_4_TEMPERATURE_032_NAME "Temperature_032"
+#define DATA_T26_AQT2_TEMPERATURES_5_TEMPERATURE_033_NAME "Temperature_033"
+#define DATA_T26_AQT2_TEMPERATURES_5_TEMPERATURE_034_NAME "Temperature_034"
+#define DATA_T26_AQT2_TEMPERATURES_5_TEMPERATURE_035_NAME "Temperature_035"
+#define DATA_T26_AQT2_TEMPERATURES_5_TEMPERATURE_036_NAME "Temperature_036"
+#define DATA_T26_AQT2_TEMPERATURES_5_TEMPERATURE_037_NAME "Temperature_037"
+#define DATA_T26_AQT2_TEMPERATURES_5_TEMPERATURE_038_NAME "Temperature_038"
+#define DATA_T26_AQT2_TEMPERATURES_5_TEMPERATURE_039_NAME "Temperature_039"
+#define DATA_T26_AQT2_TEMPERATURES_5_TEMPERATURE_040_NAME "Temperature_040"
+#define DATA_T26_AQT2_TEMPERATURES_6_TEMPERATURE_041_NAME "Temperature_041"
+#define DATA_T26_AQT2_TEMPERATURES_6_TEMPERATURE_042_NAME "Temperature_042"
+#define DATA_T26_AQT2_TEMPERATURES_6_TEMPERATURE_043_NAME "Temperature_043"
+#define DATA_T26_AQT2_TEMPERATURES_6_TEMPERATURE_044_NAME "Temperature_044"
+#define DATA_T26_AQT2_TEMPERATURES_6_TEMPERATURE_045_NAME "Temperature_045"
+#define DATA_T26_AQT2_TEMPERATURES_6_TEMPERATURE_046_NAME "Temperature_046"
+#define DATA_T26_AQT2_TEMPERATURES_6_TEMPERATURE_047_NAME "Temperature_047"
+#define DATA_T26_AQT2_TEMPERATURES_6_TEMPERATURE_048_NAME "Temperature_048"
+#define DATA_T26_AQT2_TEMPERATURES_7_TEMPERATURE_049_NAME "Temperature_049"
+#define DATA_T26_AQT2_TEMPERATURES_7_TEMPERATURE_050_NAME "Temperature_050"
+#define DATA_T26_AQT2_TEMPERATURES_7_TEMPERATURE_051_NAME "Temperature_051"
+#define DATA_T26_AQT2_TEMPERATURES_7_TEMPERATURE_052_NAME "Temperature_052"
+#define DATA_T26_AQT2_TEMPERATURES_7_TEMPERATURE_053_NAME "Temperature_053"
+#define DATA_T26_AQT2_TEMPERATURES_7_TEMPERATURE_054_NAME "Temperature_054"
+#define DATA_T26_AQT2_TEMPERATURES_7_TEMPERATURE_055_NAME "Temperature_055"
+#define DATA_T26_AQT2_TEMPERATURES_7_TEMPERATURE_056_NAME "Temperature_056"
+#define DATA_T26_AQT2_TEMPERATURES_8_TEMPERATURE_057_NAME "Temperature_057"
+#define DATA_T26_AQT2_TEMPERATURES_8_TEMPERATURE_058_NAME "Temperature_058"
+#define DATA_T26_AQT2_TEMPERATURES_8_TEMPERATURE_059_NAME "Temperature_059"
+#define DATA_T26_AQT2_TEMPERATURES_8_TEMPERATURE_060_NAME "Temperature_060"
+#define DATA_T26_AQT2_TEMPERATURES_8_TEMPERATURE_061_NAME "Temperature_061"
+#define DATA_T26_AQT2_TEMPERATURES_8_TEMPERATURE_062_NAME "Temperature_062"
+#define DATA_T26_AQT2_TEMPERATURES_8_TEMPERATURE_063_NAME "Temperature_063"
+#define DATA_T26_AQT2_TEMPERATURES_8_TEMPERATURE_064_NAME "Temperature_064"
+#define DATA_T26_AQT2_TEMPERATURES_9_TEMPERATURE_065_NAME "Temperature_065"
+#define DATA_T26_AQT2_TEMPERATURES_9_TEMPERATURE_066_NAME "Temperature_066"
+#define DATA_T26_AQT2_TEMPERATURES_9_TEMPERATURE_067_NAME "Temperature_067"
+#define DATA_T26_AQT2_TEMPERATURES_9_TEMPERATURE_068_NAME "Temperature_068"
+#define DATA_T26_AQT2_TEMPERATURES_9_TEMPERATURE_069_NAME "Temperature_069"
+#define DATA_T26_AQT2_TEMPERATURES_9_TEMPERATURE_070_NAME "Temperature_070"
+#define DATA_T26_AQT2_TEMPERATURES_9_TEMPERATURE_071_NAME "Temperature_071"
+#define DATA_T26_AQT2_TEMPERATURES_9_TEMPERATURE_072_NAME "Temperature_072"
+#define DATA_T26_AQT2_TEMPERATURES_10_TEMPERATURE_073_NAME "Temperature_073"
+#define DATA_T26_AQT2_TEMPERATURES_10_TEMPERATURE_074_NAME "Temperature_074"
+#define DATA_T26_AQT2_TEMPERATURES_10_TEMPERATURE_075_NAME "Temperature_075"
+#define DATA_T26_AQT2_TEMPERATURES_10_TEMPERATURE_076_NAME "Temperature_076"
+#define DATA_T26_AQT2_TEMPERATURES_10_TEMPERATURE_077_NAME "Temperature_077"
+#define DATA_T26_AQT2_TEMPERATURES_10_TEMPERATURE_078_NAME "Temperature_078"
+#define DATA_T26_AQT2_TEMPERATURES_10_TEMPERATURE_079_NAME "Temperature_079"
+#define DATA_T26_AQT2_TEMPERATURES_10_TEMPERATURE_080_NAME "Temperature_080"
+#define DATA_T26_AQT2_TEMPERATURES_11_TEMPERATURE_081_NAME "Temperature_081"
+#define DATA_T26_AQT2_TEMPERATURES_11_TEMPERATURE_082_NAME "Temperature_082"
+#define DATA_T26_AQT2_TEMPERATURES_11_TEMPERATURE_083_NAME "Temperature_083"
+#define DATA_T26_AQT2_TEMPERATURES_11_TEMPERATURE_084_NAME "Temperature_084"
+#define DATA_T26_AQT2_TEMPERATURES_11_TEMPERATURE_085_NAME "Temperature_085"
+#define DATA_T26_AQT2_TEMPERATURES_11_TEMPERATURE_086_NAME "Temperature_086"
+#define DATA_T26_AQT2_TEMPERATURES_11_TEMPERATURE_087_NAME "Temperature_087"
+#define DATA_T26_AQT2_TEMPERATURES_11_TEMPERATURE_088_NAME "Temperature_088"
+#define DATA_T26_AQT2_TEMPERATURES_12_TEMPERATURE_089_NAME "Temperature_089"
+#define DATA_T26_AQT2_TEMPERATURES_12_TEMPERATURE_090_NAME "Temperature_090"
+#define DATA_T26_AQT2_TEMPERATURES_12_TEMPERATURE_091_NAME "Temperature_091"
+#define DATA_T26_AQT2_TEMPERATURES_12_TEMPERATURE_092_NAME "Temperature_092"
+#define DATA_T26_AQT2_TEMPERATURES_12_TEMPERATURE_093_NAME "Temperature_093"
+#define DATA_T26_AQT2_TEMPERATURES_12_TEMPERATURE_094_NAME "Temperature_094"
+#define DATA_T26_AQT2_TEMPERATURES_12_TEMPERATURE_095_NAME "Temperature_095"
+#define DATA_T26_AQT2_TEMPERATURES_12_TEMPERATURE_096_NAME "Temperature_096"
+#define DATA_T26_AQT2_TEMPERATURES_13_TEMPERATURE_097_NAME "Temperature_097"
+#define DATA_T26_AQT2_TEMPERATURES_13_TEMPERATURE_098_NAME "Temperature_098"
+#define DATA_T26_AQT2_TEMPERATURES_13_TEMPERATURE_099_NAME "Temperature_099"
+#define DATA_T26_AQT2_TEMPERATURES_13_TEMPERATURE_100_NAME "Temperature_100"
+#define DATA_T26_AQT2_TEMPERATURES_13_TEMPERATURE_101_NAME "Temperature_101"
+#define DATA_T26_AQT2_TEMPERATURES_13_TEMPERATURE_102_NAME "Temperature_102"
+#define DATA_T26_AQT2_TEMPERATURES_13_TEMPERATURE_103_NAME "Temperature_103"
+#define DATA_T26_AQT2_TEMPERATURES_13_TEMPERATURE_104_NAME "Temperature_104"
+#define DATA_T26_AQT2_TEMPERATURES_14_TEMPERATURE_105_NAME "Temperature_105"
+#define DATA_T26_AQT2_TEMPERATURES_14_TEMPERATURE_106_NAME "Temperature_106"
+#define DATA_T26_AQT2_TEMPERATURES_14_TEMPERATURE_107_NAME "Temperature_107"
+#define DATA_T26_AQT2_TEMPERATURES_14_TEMPERATURE_108_NAME "Temperature_108"
+#define DATA_T26_AQT2_TEMPERATURES_14_TEMPERATURE_109_NAME "Temperature_109"
+#define DATA_T26_AQT2_TEMPERATURES_14_TEMPERATURE_110_NAME "Temperature_110"
+#define DATA_T26_AQT2_TEMPERATURES_14_TEMPERATURE_111_NAME "Temperature_111"
+#define DATA_T26_AQT2_TEMPERATURES_14_TEMPERATURE_112_NAME "Temperature_112"
+#define DATA_T26_AQT2_TEMPERATURES_15_TEMPERATURE_113_NAME "Temperature_113"
+#define DATA_T26_AQT2_TEMPERATURES_15_TEMPERATURE_114_NAME "Temperature_114"
+#define DATA_T26_AQT2_TEMPERATURES_15_TEMPERATURE_115_NAME "Temperature_115"
+#define DATA_T26_AQT2_TEMPERATURES_15_TEMPERATURE_116_NAME "Temperature_116"
+#define DATA_T26_AQT2_TEMPERATURES_15_TEMPERATURE_117_NAME "Temperature_117"
+#define DATA_T26_AQT2_TEMPERATURES_15_TEMPERATURE_118_NAME "Temperature_118"
+#define DATA_T26_AQT2_TEMPERATURES_15_TEMPERATURE_119_NAME "Temperature_119"
+#define DATA_T26_AQT2_TEMPERATURES_15_TEMPERATURE_120_NAME "Temperature_120"
+#define DATA_T26_AQT2_TEMPERATURES_16_TEMPERATURE_121_NAME "Temperature_121"
+#define DATA_T26_AQT2_TEMPERATURES_16_TEMPERATURE_122_NAME "Temperature_122"
+#define DATA_T26_AQT2_TEMPERATURES_16_TEMPERATURE_123_NAME "Temperature_123"
+#define DATA_T26_AQT2_TEMPERATURES_16_TEMPERATURE_124_NAME "Temperature_124"
+#define DATA_T26_AQT2_TEMPERATURES_16_TEMPERATURE_125_NAME "Temperature_125"
+#define DATA_T26_AQT2_TEMPERATURES_16_TEMPERATURE_126_NAME "Temperature_126"
+#define DATA_T26_AQT2_TEMPERATURES_16_TEMPERATURE_127_NAME "Temperature_127"
+#define DATA_T26_AQT2_TEMPERATURES_16_TEMPERATURE_128_NAME "Temperature_128"
+#define DATA_T26_AQT2_TEMPERATURES_17_TEMPERATURE_129_NAME "Temperature_129"
+#define DATA_T26_AQT2_TEMPERATURES_17_TEMPERATURE_130_NAME "Temperature_130"
+#define DATA_T26_AQT2_TEMPERATURES_17_TEMPERATURE_131_NAME "Temperature_131"
+#define DATA_T26_AQT2_TEMPERATURES_17_TEMPERATURE_132_NAME "Temperature_132"
+#define DATA_T26_AQT2_TEMPERATURES_17_TEMPERATURE_133_NAME "Temperature_133"
+#define DATA_T26_AQT2_TEMPERATURES_17_TEMPERATURE_134_NAME "Temperature_134"
+#define DATA_T26_AQT2_TEMPERATURES_17_TEMPERATURE_135_NAME "Temperature_135"
+#define DATA_T26_AQT2_TEMPERATURES_17_TEMPERATURE_136_NAME "Temperature_136"
+#define DATA_T26_AQT2_TEMPERATURES_18_TEMPERATURE_137_NAME "Temperature_137"
+#define DATA_T26_AQT2_TEMPERATURES_18_TEMPERATURE_138_NAME "Temperature_138"
+#define DATA_T26_AQT2_TEMPERATURES_18_TEMPERATURE_139_NAME "Temperature_139"
+#define DATA_T26_AQT2_TEMPERATURES_18_TEMPERATURE_140_NAME "Temperature_140"
+#define DATA_T26_AQT2_TEMPERATURES_18_TEMPERATURE_141_NAME "Temperature_141"
+#define DATA_T26_AQT2_TEMPERATURES_18_TEMPERATURE_142_NAME "Temperature_142"
+#define DATA_T26_AQT2_TEMPERATURES_18_TEMPERATURE_143_NAME "Temperature_143"
+#define DATA_T26_AQT2_TEMPERATURES_18_TEMPERATURE_144_NAME "Temperature_144"
+#define DATA_T26_AQT2_TEMPERATURES_19_TEMPERATURE_145_NAME "Temperature_145"
+#define DATA_T26_AQT2_TEMPERATURES_19_TEMPERATURE_146_NAME "Temperature_146"
+#define DATA_T26_AQT2_TEMPERATURES_19_TEMPERATURE_147_NAME "Temperature_147"
+#define DATA_T26_AQT2_TEMPERATURES_19_TEMPERATURE_148_NAME "Temperature_148"
+#define DATA_T26_AQT2_TEMPERATURES_19_TEMPERATURE_149_NAME "Temperature_149"
+#define DATA_T26_AQT2_TEMPERATURES_19_TEMPERATURE_150_NAME "Temperature_150"
+#define DATA_T26_AQT2_TEMPERATURES_19_TEMPERATURE_151_NAME "Temperature_151"
+#define DATA_T26_AQT2_TEMPERATURES_19_TEMPERATURE_152_NAME "Temperature_152"
+#define DATA_T26_AQT2_TEMPERATURES_20_TEMPERATURE_153_NAME "Temperature_153"
+#define DATA_T26_AQT2_TEMPERATURES_20_TEMPERATURE_154_NAME "Temperature_154"
+#define DATA_T26_AQT2_TEMPERATURES_20_TEMPERATURE_155_NAME "Temperature_155"
+#define DATA_T26_AQT2_TEMPERATURES_20_TEMPERATURE_156_NAME "Temperature_156"
+#define DATA_T26_AQT2_TEMPERATURES_20_TEMPERATURE_157_NAME "Temperature_157"
+#define DATA_T26_AQT2_TEMPERATURES_20_TEMPERATURE_158_NAME "Temperature_158"
+#define DATA_T26_AQT2_TEMPERATURES_20_TEMPERATURE_159_NAME "Temperature_159"
+#define DATA_T26_AQT2_TEMPERATURES_20_TEMPERATURE_160_NAME "Temperature_160"
+#define DATA_T26_AQT2_TEMPERATURES_21_TEMPERATURE_161_NAME "Temperature_161"
+#define DATA_T26_AQT2_TEMPERATURES_21_TEMPERATURE_162_NAME "Temperature_162"
+#define DATA_T26_AQT2_TEMPERATURES_21_TEMPERATURE_163_NAME "Temperature_163"
+#define DATA_T26_AQT2_TEMPERATURES_21_TEMPERATURE_164_NAME "Temperature_164"
+#define DATA_T26_AQT2_TEMPERATURES_21_TEMPERATURE_165_NAME "Temperature_165"
+#define DATA_T26_AQT2_TEMPERATURES_21_TEMPERATURE_166_NAME "Temperature_166"
+#define DATA_T26_AQT2_TEMPERATURES_21_TEMPERATURE_167_NAME "Temperature_167"
+#define DATA_T26_AQT2_TEMPERATURES_21_TEMPERATURE_168_NAME "Temperature_168"
+#define DATA_T26_AQT2_TEMPERATURES_22_TEMPERATURE_169_NAME "Temperature_169"
+#define DATA_T26_AQT2_TEMPERATURES_22_TEMPERATURE_170_NAME "Temperature_170"
+#define DATA_T26_AQT2_TEMPERATURES_22_TEMPERATURE_171_NAME "Temperature_171"
+#define DATA_T26_AQT2_TEMPERATURES_22_TEMPERATURE_172_NAME "Temperature_172"
+#define DATA_T26_AQT2_TEMPERATURES_22_TEMPERATURE_173_NAME "Temperature_173"
+#define DATA_T26_AQT2_TEMPERATURES_22_TEMPERATURE_174_NAME "Temperature_174"
+#define DATA_T26_AQT2_TEMPERATURES_22_TEMPERATURE_175_NAME "Temperature_175"
+#define DATA_T26_AQT2_TEMPERATURES_22_TEMPERATURE_176_NAME "Temperature_176"
+#define DATA_T26_AQT2_TEMPERATURES_23_TEMPERATURE_177_NAME "Temperature_177"
+#define DATA_T26_AQT2_TEMPERATURES_23_TEMPERATURE_178_NAME "Temperature_178"
+#define DATA_T26_AQT2_TEMPERATURES_23_TEMPERATURE_179_NAME "Temperature_179"
+#define DATA_T26_AQT2_TEMPERATURES_23_TEMPERATURE_180_NAME "Temperature_180"
+#define DATA_T26_AQT2_TEMPERATURES_23_TEMPERATURE_181_NAME "Temperature_181"
+#define DATA_T26_AQT2_TEMPERATURES_23_TEMPERATURE_182_NAME "Temperature_182"
+#define DATA_T26_AQT2_TEMPERATURES_23_TEMPERATURE_183_NAME "Temperature_183"
+#define DATA_T26_AQT2_TEMPERATURES_23_TEMPERATURE_184_NAME "Temperature_184"
+#define DATA_T26_AQT2_TEMPERATURES_24_TEMPERATURE_185_NAME "Temperature_185"
+#define DATA_T26_AQT2_TEMPERATURES_24_TEMPERATURE_186_NAME "Temperature_186"
+#define DATA_T26_AQT2_TEMPERATURES_24_TEMPERATURE_187_NAME "Temperature_187"
+#define DATA_T26_AQT2_TEMPERATURES_24_TEMPERATURE_188_NAME "Temperature_188"
+#define DATA_T26_AQT2_TEMPERATURES_24_TEMPERATURE_189_NAME "Temperature_189"
+#define DATA_T26_AQT2_TEMPERATURES_24_TEMPERATURE_190_NAME "Temperature_190"
+#define DATA_T26_AQT2_TEMPERATURES_24_TEMPERATURE_191_NAME "Temperature_191"
+#define DATA_T26_AQT2_TEMPERATURES_24_TEMPERATURE_192_NAME "Temperature_192"
 #define DATA_T26_AQT7_SUSP_L_NAME "SUSP_L"
 #define DATA_T26_AQT7_SUSP_R_NAME "SUSP_R"
 #define DATA_T26_AQT7_NTC_1_NAME "NTC_1"
@@ -274,6 +562,1566 @@ struct data_t26_aqt2_t {
      * Offset: 0
      */
     uint16_t front_right_wheel_rpm;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_1.
+ *
+ * 16x12 thermal matrix, block 1/24. Row-major: 16 columns x 12 rows, zero-based row 0, columns 0..7. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_1_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_001;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_002;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_003;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_004;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_005;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_006;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_007;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_008;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_2.
+ *
+ * 16x12 thermal matrix, block 2/24. Row-major: 16 columns x 12 rows, zero-based row 0, columns 8..15. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_2_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_009;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_010;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_011;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_012;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_013;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_014;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_015;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_016;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_3.
+ *
+ * 16x12 thermal matrix, block 3/24. Row-major: 16 columns x 12 rows, zero-based row 1, columns 0..7. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_3_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_017;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_018;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_019;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_020;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_021;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_022;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_023;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_024;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_4.
+ *
+ * 16x12 thermal matrix, block 4/24. Row-major: 16 columns x 12 rows, zero-based row 1, columns 8..15. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_4_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_025;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_026;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_027;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_028;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_029;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_030;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_031;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_032;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_5.
+ *
+ * 16x12 thermal matrix, block 5/24. Row-major: 16 columns x 12 rows, zero-based row 2, columns 0..7. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_5_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_033;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_034;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_035;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_036;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_037;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_038;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_039;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_040;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_6.
+ *
+ * 16x12 thermal matrix, block 6/24. Row-major: 16 columns x 12 rows, zero-based row 2, columns 8..15. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_6_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_041;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_042;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_043;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_044;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_045;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_046;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_047;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_048;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_7.
+ *
+ * 16x12 thermal matrix, block 7/24. Row-major: 16 columns x 12 rows, zero-based row 3, columns 0..7. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_7_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_049;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_050;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_051;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_052;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_053;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_054;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_055;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_056;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_8.
+ *
+ * 16x12 thermal matrix, block 8/24. Row-major: 16 columns x 12 rows, zero-based row 3, columns 8..15. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_8_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_057;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_058;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_059;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_060;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_061;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_062;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_063;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_064;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_9.
+ *
+ * 16x12 thermal matrix, block 9/24. Row-major: 16 columns x 12 rows, zero-based row 4, columns 0..7. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_9_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_065;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_066;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_067;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_068;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_069;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_070;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_071;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_072;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_10.
+ *
+ * 16x12 thermal matrix, block 10/24. Row-major: 16 columns x 12 rows, zero-based row 4, columns 8..15. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_10_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_073;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_074;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_075;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_076;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_077;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_078;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_079;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_080;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_11.
+ *
+ * 16x12 thermal matrix, block 11/24. Row-major: 16 columns x 12 rows, zero-based row 5, columns 0..7. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_11_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_081;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_082;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_083;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_084;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_085;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_086;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_087;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_088;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_12.
+ *
+ * 16x12 thermal matrix, block 12/24. Row-major: 16 columns x 12 rows, zero-based row 5, columns 8..15. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_12_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_089;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_090;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_091;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_092;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_093;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_094;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_095;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_096;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_13.
+ *
+ * 16x12 thermal matrix, block 13/24. Row-major: 16 columns x 12 rows, zero-based row 6, columns 0..7. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_13_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_097;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_098;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_099;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_100;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_101;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_102;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_103;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_104;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_14.
+ *
+ * 16x12 thermal matrix, block 14/24. Row-major: 16 columns x 12 rows, zero-based row 6, columns 8..15. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_14_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_105;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_106;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_107;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_108;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_109;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_110;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_111;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_112;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_15.
+ *
+ * 16x12 thermal matrix, block 15/24. Row-major: 16 columns x 12 rows, zero-based row 7, columns 0..7. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_15_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_113;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_114;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_115;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_116;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_117;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_118;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_119;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_120;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_16.
+ *
+ * 16x12 thermal matrix, block 16/24. Row-major: 16 columns x 12 rows, zero-based row 7, columns 8..15. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_16_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_121;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_122;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_123;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_124;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_125;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_126;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_127;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_128;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_17.
+ *
+ * 16x12 thermal matrix, block 17/24. Row-major: 16 columns x 12 rows, zero-based row 8, columns 0..7. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_17_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_129;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_130;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_131;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_132;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_133;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_134;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_135;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_136;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_18.
+ *
+ * 16x12 thermal matrix, block 18/24. Row-major: 16 columns x 12 rows, zero-based row 8, columns 8..15. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_18_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_137;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_138;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_139;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_140;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_141;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_142;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_143;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_144;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_19.
+ *
+ * 16x12 thermal matrix, block 19/24. Row-major: 16 columns x 12 rows, zero-based row 9, columns 0..7. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_19_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_145;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_146;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_147;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_148;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_149;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_150;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_151;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_152;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_20.
+ *
+ * 16x12 thermal matrix, block 20/24. Row-major: 16 columns x 12 rows, zero-based row 9, columns 8..15. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_20_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_153;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_154;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_155;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_156;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_157;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_158;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_159;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_160;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_21.
+ *
+ * 16x12 thermal matrix, block 21/24. Row-major: 16 columns x 12 rows, zero-based row 10, columns 0..7. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_21_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_161;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_162;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_163;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_164;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_165;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_166;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_167;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_168;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_22.
+ *
+ * 16x12 thermal matrix, block 22/24. Row-major: 16 columns x 12 rows, zero-based row 10, columns 8..15. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_22_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_169;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_170;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_171;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_172;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_173;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_174;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_175;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_176;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_23.
+ *
+ * 16x12 thermal matrix, block 23/24. Row-major: 16 columns x 12 rows, zero-based row 11, columns 0..7. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_23_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_177;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_178;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_179;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_180;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_181;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_182;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_183;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_184;
+};
+
+/**
+ * Signals in message AQT2_Temperatures_24.
+ *
+ * 16x12 thermal matrix, block 24/24. Row-major: 16 columns x 12 rows, zero-based row 11, columns 8..15. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct data_t26_aqt2_temperatures_24_t {
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_185;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_186;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_187;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_188;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_189;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_190;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_191;
+
+    /**
+     * Range: 0..255 (30..285 degC)
+     * Scale: 1
+     * Offset: 30
+     */
+    uint8_t temperature_192;
 };
 
 /**
@@ -1516,6 +3364,8574 @@ bool data_t26_aqt2_front_right_wheel_rpm_is_in_range(uint16_t value);
  * @return true if in range, false otherwise.
  */
 bool data_t26_aqt2_front_right_wheel_rpm_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_1.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_1_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_1_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_1.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_1_unpack(
+    struct data_t26_aqt2_temperatures_1_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_1.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_1_init(struct data_t26_aqt2_temperatures_1_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_1_temperature_001_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_1_temperature_001_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_1_temperature_001_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_1_temperature_001_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_1_temperature_002_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_1_temperature_002_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_1_temperature_002_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_1_temperature_002_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_1_temperature_003_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_1_temperature_003_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_1_temperature_003_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_1_temperature_003_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_1_temperature_004_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_1_temperature_004_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_1_temperature_004_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_1_temperature_004_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_1_temperature_005_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_1_temperature_005_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_1_temperature_005_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_1_temperature_005_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_1_temperature_006_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_1_temperature_006_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_1_temperature_006_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_1_temperature_006_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_1_temperature_007_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_1_temperature_007_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_1_temperature_007_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_1_temperature_007_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_1_temperature_008_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_1_temperature_008_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_1_temperature_008_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_1_temperature_008_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_2.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_2_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_2_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_2.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_2_unpack(
+    struct data_t26_aqt2_temperatures_2_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_2.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_2_init(struct data_t26_aqt2_temperatures_2_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_2_temperature_009_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_2_temperature_009_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_2_temperature_009_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_2_temperature_009_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_2_temperature_010_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_2_temperature_010_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_2_temperature_010_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_2_temperature_010_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_2_temperature_011_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_2_temperature_011_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_2_temperature_011_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_2_temperature_011_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_2_temperature_012_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_2_temperature_012_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_2_temperature_012_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_2_temperature_012_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_2_temperature_013_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_2_temperature_013_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_2_temperature_013_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_2_temperature_013_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_2_temperature_014_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_2_temperature_014_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_2_temperature_014_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_2_temperature_014_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_2_temperature_015_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_2_temperature_015_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_2_temperature_015_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_2_temperature_015_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_2_temperature_016_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_2_temperature_016_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_2_temperature_016_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_2_temperature_016_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_3.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_3_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_3_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_3.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_3_unpack(
+    struct data_t26_aqt2_temperatures_3_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_3.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_3_init(struct data_t26_aqt2_temperatures_3_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_3_temperature_017_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_3_temperature_017_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_3_temperature_017_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_3_temperature_017_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_3_temperature_018_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_3_temperature_018_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_3_temperature_018_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_3_temperature_018_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_3_temperature_019_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_3_temperature_019_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_3_temperature_019_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_3_temperature_019_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_3_temperature_020_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_3_temperature_020_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_3_temperature_020_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_3_temperature_020_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_3_temperature_021_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_3_temperature_021_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_3_temperature_021_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_3_temperature_021_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_3_temperature_022_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_3_temperature_022_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_3_temperature_022_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_3_temperature_022_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_3_temperature_023_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_3_temperature_023_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_3_temperature_023_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_3_temperature_023_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_3_temperature_024_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_3_temperature_024_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_3_temperature_024_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_3_temperature_024_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_4.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_4_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_4_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_4.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_4_unpack(
+    struct data_t26_aqt2_temperatures_4_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_4.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_4_init(struct data_t26_aqt2_temperatures_4_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_4_temperature_025_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_4_temperature_025_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_4_temperature_025_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_4_temperature_025_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_4_temperature_026_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_4_temperature_026_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_4_temperature_026_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_4_temperature_026_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_4_temperature_027_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_4_temperature_027_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_4_temperature_027_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_4_temperature_027_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_4_temperature_028_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_4_temperature_028_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_4_temperature_028_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_4_temperature_028_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_4_temperature_029_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_4_temperature_029_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_4_temperature_029_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_4_temperature_029_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_4_temperature_030_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_4_temperature_030_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_4_temperature_030_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_4_temperature_030_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_4_temperature_031_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_4_temperature_031_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_4_temperature_031_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_4_temperature_031_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_4_temperature_032_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_4_temperature_032_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_4_temperature_032_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_4_temperature_032_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_5.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_5_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_5_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_5.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_5_unpack(
+    struct data_t26_aqt2_temperatures_5_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_5.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_5_init(struct data_t26_aqt2_temperatures_5_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_5_temperature_033_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_5_temperature_033_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_5_temperature_033_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_5_temperature_033_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_5_temperature_034_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_5_temperature_034_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_5_temperature_034_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_5_temperature_034_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_5_temperature_035_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_5_temperature_035_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_5_temperature_035_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_5_temperature_035_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_5_temperature_036_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_5_temperature_036_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_5_temperature_036_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_5_temperature_036_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_5_temperature_037_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_5_temperature_037_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_5_temperature_037_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_5_temperature_037_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_5_temperature_038_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_5_temperature_038_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_5_temperature_038_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_5_temperature_038_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_5_temperature_039_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_5_temperature_039_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_5_temperature_039_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_5_temperature_039_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_5_temperature_040_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_5_temperature_040_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_5_temperature_040_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_5_temperature_040_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_6.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_6_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_6_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_6.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_6_unpack(
+    struct data_t26_aqt2_temperatures_6_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_6.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_6_init(struct data_t26_aqt2_temperatures_6_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_6_temperature_041_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_6_temperature_041_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_6_temperature_041_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_6_temperature_041_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_6_temperature_042_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_6_temperature_042_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_6_temperature_042_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_6_temperature_042_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_6_temperature_043_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_6_temperature_043_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_6_temperature_043_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_6_temperature_043_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_6_temperature_044_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_6_temperature_044_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_6_temperature_044_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_6_temperature_044_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_6_temperature_045_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_6_temperature_045_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_6_temperature_045_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_6_temperature_045_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_6_temperature_046_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_6_temperature_046_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_6_temperature_046_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_6_temperature_046_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_6_temperature_047_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_6_temperature_047_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_6_temperature_047_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_6_temperature_047_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_6_temperature_048_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_6_temperature_048_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_6_temperature_048_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_6_temperature_048_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_7.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_7_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_7_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_7.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_7_unpack(
+    struct data_t26_aqt2_temperatures_7_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_7.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_7_init(struct data_t26_aqt2_temperatures_7_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_7_temperature_049_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_7_temperature_049_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_7_temperature_049_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_7_temperature_049_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_7_temperature_050_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_7_temperature_050_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_7_temperature_050_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_7_temperature_050_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_7_temperature_051_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_7_temperature_051_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_7_temperature_051_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_7_temperature_051_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_7_temperature_052_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_7_temperature_052_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_7_temperature_052_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_7_temperature_052_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_7_temperature_053_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_7_temperature_053_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_7_temperature_053_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_7_temperature_053_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_7_temperature_054_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_7_temperature_054_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_7_temperature_054_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_7_temperature_054_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_7_temperature_055_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_7_temperature_055_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_7_temperature_055_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_7_temperature_055_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_7_temperature_056_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_7_temperature_056_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_7_temperature_056_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_7_temperature_056_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_8.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_8_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_8_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_8.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_8_unpack(
+    struct data_t26_aqt2_temperatures_8_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_8.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_8_init(struct data_t26_aqt2_temperatures_8_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_8_temperature_057_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_8_temperature_057_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_8_temperature_057_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_8_temperature_057_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_8_temperature_058_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_8_temperature_058_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_8_temperature_058_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_8_temperature_058_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_8_temperature_059_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_8_temperature_059_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_8_temperature_059_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_8_temperature_059_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_8_temperature_060_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_8_temperature_060_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_8_temperature_060_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_8_temperature_060_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_8_temperature_061_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_8_temperature_061_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_8_temperature_061_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_8_temperature_061_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_8_temperature_062_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_8_temperature_062_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_8_temperature_062_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_8_temperature_062_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_8_temperature_063_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_8_temperature_063_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_8_temperature_063_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_8_temperature_063_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_8_temperature_064_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_8_temperature_064_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_8_temperature_064_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_8_temperature_064_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_9.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_9_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_9_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_9.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_9_unpack(
+    struct data_t26_aqt2_temperatures_9_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_9.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_9_init(struct data_t26_aqt2_temperatures_9_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_9_temperature_065_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_9_temperature_065_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_9_temperature_065_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_9_temperature_065_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_9_temperature_066_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_9_temperature_066_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_9_temperature_066_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_9_temperature_066_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_9_temperature_067_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_9_temperature_067_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_9_temperature_067_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_9_temperature_067_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_9_temperature_068_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_9_temperature_068_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_9_temperature_068_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_9_temperature_068_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_9_temperature_069_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_9_temperature_069_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_9_temperature_069_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_9_temperature_069_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_9_temperature_070_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_9_temperature_070_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_9_temperature_070_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_9_temperature_070_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_9_temperature_071_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_9_temperature_071_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_9_temperature_071_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_9_temperature_071_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_9_temperature_072_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_9_temperature_072_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_9_temperature_072_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_9_temperature_072_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_10.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_10_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_10_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_10.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_10_unpack(
+    struct data_t26_aqt2_temperatures_10_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_10.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_10_init(struct data_t26_aqt2_temperatures_10_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_10_temperature_073_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_10_temperature_073_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_10_temperature_073_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_10_temperature_073_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_10_temperature_074_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_10_temperature_074_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_10_temperature_074_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_10_temperature_074_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_10_temperature_075_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_10_temperature_075_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_10_temperature_075_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_10_temperature_075_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_10_temperature_076_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_10_temperature_076_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_10_temperature_076_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_10_temperature_076_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_10_temperature_077_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_10_temperature_077_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_10_temperature_077_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_10_temperature_077_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_10_temperature_078_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_10_temperature_078_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_10_temperature_078_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_10_temperature_078_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_10_temperature_079_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_10_temperature_079_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_10_temperature_079_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_10_temperature_079_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_10_temperature_080_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_10_temperature_080_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_10_temperature_080_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_10_temperature_080_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_11.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_11_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_11_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_11.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_11_unpack(
+    struct data_t26_aqt2_temperatures_11_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_11.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_11_init(struct data_t26_aqt2_temperatures_11_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_11_temperature_081_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_11_temperature_081_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_11_temperature_081_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_11_temperature_081_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_11_temperature_082_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_11_temperature_082_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_11_temperature_082_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_11_temperature_082_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_11_temperature_083_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_11_temperature_083_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_11_temperature_083_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_11_temperature_083_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_11_temperature_084_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_11_temperature_084_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_11_temperature_084_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_11_temperature_084_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_11_temperature_085_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_11_temperature_085_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_11_temperature_085_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_11_temperature_085_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_11_temperature_086_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_11_temperature_086_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_11_temperature_086_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_11_temperature_086_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_11_temperature_087_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_11_temperature_087_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_11_temperature_087_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_11_temperature_087_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_11_temperature_088_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_11_temperature_088_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_11_temperature_088_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_11_temperature_088_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_12.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_12_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_12_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_12.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_12_unpack(
+    struct data_t26_aqt2_temperatures_12_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_12.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_12_init(struct data_t26_aqt2_temperatures_12_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_12_temperature_089_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_12_temperature_089_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_12_temperature_089_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_12_temperature_089_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_12_temperature_090_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_12_temperature_090_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_12_temperature_090_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_12_temperature_090_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_12_temperature_091_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_12_temperature_091_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_12_temperature_091_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_12_temperature_091_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_12_temperature_092_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_12_temperature_092_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_12_temperature_092_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_12_temperature_092_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_12_temperature_093_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_12_temperature_093_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_12_temperature_093_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_12_temperature_093_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_12_temperature_094_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_12_temperature_094_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_12_temperature_094_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_12_temperature_094_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_12_temperature_095_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_12_temperature_095_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_12_temperature_095_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_12_temperature_095_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_12_temperature_096_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_12_temperature_096_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_12_temperature_096_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_12_temperature_096_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_13.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_13_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_13_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_13.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_13_unpack(
+    struct data_t26_aqt2_temperatures_13_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_13.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_13_init(struct data_t26_aqt2_temperatures_13_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_13_temperature_097_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_13_temperature_097_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_13_temperature_097_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_13_temperature_097_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_13_temperature_098_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_13_temperature_098_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_13_temperature_098_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_13_temperature_098_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_13_temperature_099_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_13_temperature_099_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_13_temperature_099_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_13_temperature_099_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_13_temperature_100_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_13_temperature_100_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_13_temperature_100_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_13_temperature_100_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_13_temperature_101_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_13_temperature_101_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_13_temperature_101_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_13_temperature_101_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_13_temperature_102_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_13_temperature_102_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_13_temperature_102_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_13_temperature_102_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_13_temperature_103_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_13_temperature_103_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_13_temperature_103_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_13_temperature_103_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_13_temperature_104_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_13_temperature_104_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_13_temperature_104_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_13_temperature_104_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_14.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_14_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_14_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_14.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_14_unpack(
+    struct data_t26_aqt2_temperatures_14_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_14.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_14_init(struct data_t26_aqt2_temperatures_14_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_14_temperature_105_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_14_temperature_105_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_14_temperature_105_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_14_temperature_105_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_14_temperature_106_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_14_temperature_106_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_14_temperature_106_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_14_temperature_106_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_14_temperature_107_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_14_temperature_107_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_14_temperature_107_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_14_temperature_107_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_14_temperature_108_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_14_temperature_108_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_14_temperature_108_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_14_temperature_108_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_14_temperature_109_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_14_temperature_109_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_14_temperature_109_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_14_temperature_109_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_14_temperature_110_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_14_temperature_110_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_14_temperature_110_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_14_temperature_110_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_14_temperature_111_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_14_temperature_111_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_14_temperature_111_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_14_temperature_111_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_14_temperature_112_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_14_temperature_112_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_14_temperature_112_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_14_temperature_112_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_15.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_15_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_15_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_15.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_15_unpack(
+    struct data_t26_aqt2_temperatures_15_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_15.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_15_init(struct data_t26_aqt2_temperatures_15_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_15_temperature_113_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_15_temperature_113_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_15_temperature_113_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_15_temperature_113_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_15_temperature_114_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_15_temperature_114_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_15_temperature_114_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_15_temperature_114_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_15_temperature_115_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_15_temperature_115_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_15_temperature_115_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_15_temperature_115_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_15_temperature_116_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_15_temperature_116_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_15_temperature_116_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_15_temperature_116_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_15_temperature_117_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_15_temperature_117_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_15_temperature_117_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_15_temperature_117_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_15_temperature_118_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_15_temperature_118_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_15_temperature_118_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_15_temperature_118_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_15_temperature_119_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_15_temperature_119_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_15_temperature_119_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_15_temperature_119_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_15_temperature_120_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_15_temperature_120_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_15_temperature_120_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_15_temperature_120_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_16.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_16_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_16_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_16.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_16_unpack(
+    struct data_t26_aqt2_temperatures_16_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_16.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_16_init(struct data_t26_aqt2_temperatures_16_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_16_temperature_121_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_16_temperature_121_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_16_temperature_121_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_16_temperature_121_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_16_temperature_122_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_16_temperature_122_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_16_temperature_122_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_16_temperature_122_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_16_temperature_123_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_16_temperature_123_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_16_temperature_123_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_16_temperature_123_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_16_temperature_124_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_16_temperature_124_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_16_temperature_124_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_16_temperature_124_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_16_temperature_125_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_16_temperature_125_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_16_temperature_125_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_16_temperature_125_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_16_temperature_126_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_16_temperature_126_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_16_temperature_126_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_16_temperature_126_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_16_temperature_127_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_16_temperature_127_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_16_temperature_127_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_16_temperature_127_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_16_temperature_128_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_16_temperature_128_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_16_temperature_128_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_16_temperature_128_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_17.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_17_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_17_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_17.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_17_unpack(
+    struct data_t26_aqt2_temperatures_17_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_17.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_17_init(struct data_t26_aqt2_temperatures_17_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_17_temperature_129_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_17_temperature_129_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_17_temperature_129_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_17_temperature_129_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_17_temperature_130_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_17_temperature_130_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_17_temperature_130_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_17_temperature_130_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_17_temperature_131_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_17_temperature_131_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_17_temperature_131_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_17_temperature_131_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_17_temperature_132_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_17_temperature_132_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_17_temperature_132_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_17_temperature_132_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_17_temperature_133_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_17_temperature_133_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_17_temperature_133_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_17_temperature_133_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_17_temperature_134_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_17_temperature_134_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_17_temperature_134_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_17_temperature_134_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_17_temperature_135_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_17_temperature_135_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_17_temperature_135_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_17_temperature_135_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_17_temperature_136_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_17_temperature_136_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_17_temperature_136_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_17_temperature_136_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_18.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_18_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_18_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_18.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_18_unpack(
+    struct data_t26_aqt2_temperatures_18_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_18.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_18_init(struct data_t26_aqt2_temperatures_18_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_18_temperature_137_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_18_temperature_137_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_18_temperature_137_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_18_temperature_137_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_18_temperature_138_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_18_temperature_138_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_18_temperature_138_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_18_temperature_138_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_18_temperature_139_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_18_temperature_139_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_18_temperature_139_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_18_temperature_139_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_18_temperature_140_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_18_temperature_140_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_18_temperature_140_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_18_temperature_140_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_18_temperature_141_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_18_temperature_141_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_18_temperature_141_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_18_temperature_141_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_18_temperature_142_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_18_temperature_142_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_18_temperature_142_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_18_temperature_142_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_18_temperature_143_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_18_temperature_143_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_18_temperature_143_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_18_temperature_143_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_18_temperature_144_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_18_temperature_144_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_18_temperature_144_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_18_temperature_144_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_19.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_19_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_19_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_19.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_19_unpack(
+    struct data_t26_aqt2_temperatures_19_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_19.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_19_init(struct data_t26_aqt2_temperatures_19_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_19_temperature_145_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_19_temperature_145_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_19_temperature_145_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_19_temperature_145_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_19_temperature_146_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_19_temperature_146_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_19_temperature_146_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_19_temperature_146_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_19_temperature_147_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_19_temperature_147_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_19_temperature_147_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_19_temperature_147_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_19_temperature_148_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_19_temperature_148_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_19_temperature_148_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_19_temperature_148_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_19_temperature_149_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_19_temperature_149_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_19_temperature_149_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_19_temperature_149_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_19_temperature_150_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_19_temperature_150_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_19_temperature_150_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_19_temperature_150_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_19_temperature_151_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_19_temperature_151_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_19_temperature_151_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_19_temperature_151_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_19_temperature_152_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_19_temperature_152_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_19_temperature_152_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_19_temperature_152_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_20.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_20_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_20_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_20.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_20_unpack(
+    struct data_t26_aqt2_temperatures_20_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_20.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_20_init(struct data_t26_aqt2_temperatures_20_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_20_temperature_153_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_20_temperature_153_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_20_temperature_153_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_20_temperature_153_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_20_temperature_154_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_20_temperature_154_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_20_temperature_154_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_20_temperature_154_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_20_temperature_155_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_20_temperature_155_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_20_temperature_155_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_20_temperature_155_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_20_temperature_156_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_20_temperature_156_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_20_temperature_156_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_20_temperature_156_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_20_temperature_157_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_20_temperature_157_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_20_temperature_157_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_20_temperature_157_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_20_temperature_158_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_20_temperature_158_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_20_temperature_158_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_20_temperature_158_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_20_temperature_159_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_20_temperature_159_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_20_temperature_159_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_20_temperature_159_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_20_temperature_160_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_20_temperature_160_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_20_temperature_160_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_20_temperature_160_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_21.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_21_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_21_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_21.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_21_unpack(
+    struct data_t26_aqt2_temperatures_21_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_21.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_21_init(struct data_t26_aqt2_temperatures_21_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_21_temperature_161_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_21_temperature_161_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_21_temperature_161_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_21_temperature_161_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_21_temperature_162_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_21_temperature_162_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_21_temperature_162_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_21_temperature_162_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_21_temperature_163_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_21_temperature_163_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_21_temperature_163_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_21_temperature_163_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_21_temperature_164_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_21_temperature_164_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_21_temperature_164_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_21_temperature_164_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_21_temperature_165_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_21_temperature_165_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_21_temperature_165_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_21_temperature_165_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_21_temperature_166_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_21_temperature_166_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_21_temperature_166_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_21_temperature_166_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_21_temperature_167_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_21_temperature_167_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_21_temperature_167_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_21_temperature_167_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_21_temperature_168_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_21_temperature_168_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_21_temperature_168_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_21_temperature_168_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_22.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_22_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_22_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_22.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_22_unpack(
+    struct data_t26_aqt2_temperatures_22_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_22.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_22_init(struct data_t26_aqt2_temperatures_22_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_22_temperature_169_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_22_temperature_169_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_22_temperature_169_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_22_temperature_169_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_22_temperature_170_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_22_temperature_170_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_22_temperature_170_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_22_temperature_170_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_22_temperature_171_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_22_temperature_171_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_22_temperature_171_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_22_temperature_171_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_22_temperature_172_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_22_temperature_172_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_22_temperature_172_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_22_temperature_172_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_22_temperature_173_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_22_temperature_173_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_22_temperature_173_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_22_temperature_173_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_22_temperature_174_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_22_temperature_174_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_22_temperature_174_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_22_temperature_174_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_22_temperature_175_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_22_temperature_175_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_22_temperature_175_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_22_temperature_175_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_22_temperature_176_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_22_temperature_176_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_22_temperature_176_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_22_temperature_176_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_23.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_23_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_23_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_23.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_23_unpack(
+    struct data_t26_aqt2_temperatures_23_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_23.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_23_init(struct data_t26_aqt2_temperatures_23_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_23_temperature_177_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_23_temperature_177_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_23_temperature_177_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_23_temperature_177_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_23_temperature_178_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_23_temperature_178_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_23_temperature_178_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_23_temperature_178_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_23_temperature_179_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_23_temperature_179_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_23_temperature_179_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_23_temperature_179_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_23_temperature_180_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_23_temperature_180_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_23_temperature_180_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_23_temperature_180_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_23_temperature_181_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_23_temperature_181_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_23_temperature_181_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_23_temperature_181_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_23_temperature_182_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_23_temperature_182_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_23_temperature_182_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_23_temperature_182_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_23_temperature_183_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_23_temperature_183_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_23_temperature_183_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_23_temperature_183_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_23_temperature_184_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_23_temperature_184_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_23_temperature_184_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_23_temperature_184_is_in_phys_range(double value);
+
+/**
+ * Pack message AQT2_Temperatures_24.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int data_t26_aqt2_temperatures_24_pack(
+    uint8_t *dst_p,
+    const struct data_t26_aqt2_temperatures_24_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message AQT2_Temperatures_24.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int data_t26_aqt2_temperatures_24_unpack(
+    struct data_t26_aqt2_temperatures_24_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from AQT2_Temperatures_24.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int data_t26_aqt2_temperatures_24_init(struct data_t26_aqt2_temperatures_24_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_24_temperature_185_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_24_temperature_185_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_24_temperature_185_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_24_temperature_185_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_24_temperature_186_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_24_temperature_186_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_24_temperature_186_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_24_temperature_186_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_24_temperature_187_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_24_temperature_187_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_24_temperature_187_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_24_temperature_187_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_24_temperature_188_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_24_temperature_188_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_24_temperature_188_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_24_temperature_188_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_24_temperature_189_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_24_temperature_189_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_24_temperature_189_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_24_temperature_189_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_24_temperature_190_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_24_temperature_190_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_24_temperature_190_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_24_temperature_190_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_24_temperature_191_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_24_temperature_191_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_24_temperature_191_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_24_temperature_191_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+uint8_t data_t26_aqt2_temperatures_24_temperature_192_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double data_t26_aqt2_temperatures_24_temperature_192_decode(uint8_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_24_temperature_192_is_in_range(uint8_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool data_t26_aqt2_temperatures_24_temperature_192_is_in_phys_range(double value);
 
 /**
  * Pack message AQT7.

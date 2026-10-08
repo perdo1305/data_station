@@ -7,6 +7,16 @@ import sys
 import cantools
 
 
+def test_committed_aqt7_interface_matches_data_dbc():
+    root = Path(__file__).resolve().parents[1]
+    message = cantools.database.load_file(root / "dbc_signals/data_t26.dbc").get_message_by_name("AQT7")
+    interface = root / "src/lart_msgs/dbc_msgs/Aqt7.msg"
+    fields = {parts[1] for line in interface.read_text().splitlines()
+              if len(parts := line.split()) >= 2}
+    missing = {signal.name.lower() for signal in message.signals} - fields
+    assert not missing, f"Aqt7.msg is missing DBC fields: {sorted(missing)}"
+
+
 def test_api_generation_preserves_ros_package(tmp_path):
     root = Path(__file__).resolve().parents[1]
     ui = tmp_path / "LART_Car_Dashboard_v1/src/ui"

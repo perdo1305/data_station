@@ -6,40 +6,404 @@
 #include <mutex>
 #include <vector>
 extern std::mutex dbc_api_mutex;
+#include <lart_msgs/msg/aqt7.hpp>
+#include <lart_msgs/msg/aqt8.hpp>
+#include <lart_msgs/msg/asf_signals.hpp>
+#include <lart_msgs/msg/cubemars_feedback.hpp>
+#include <lart_msgs/msg/cubemars_position_loop.hpp>
+#include <lart_msgs/msg/dashboard.hpp>
+#include <lart_msgs/msg/dv_dynamics1.hpp>
+#include <lart_msgs/msg/dv_dynamics2.hpp>
+#include <lart_msgs/msg/dv_status.hpp>
+#include <lart_msgs/msg/icd_request.hpp>
+#include <lart_msgs/msg/icd_response.hpp>
+#include <lart_msgs/msg/icd_result.hpp>
+#include <lart_msgs/msg/inv1_ac_dc_current.hpp>
+#include <lart_msgs/msg/inv1_erpm_duty_voltage.hpp>
+#include <lart_msgs/msg/inv1_foc.hpp>
+#include <lart_msgs/msg/inv1_minmaxaccurrent.hpp>
+#include <lart_msgs/msg/inv1_minmaxdccurrent.hpp>
+#include <lart_msgs/msg/inv1_misc.hpp>
+#include <lart_msgs/msg/inv1_setaccurrent.hpp>
+#include <lart_msgs/msg/inv1_setbrakecurrent.hpp>
+#include <lart_msgs/msg/inv1_setdigoutput.hpp>
+#include <lart_msgs/msg/inv1_setdriveenable.hpp>
+#include <lart_msgs/msg/inv1_seterpm.hpp>
+#include <lart_msgs/msg/inv1_setmaxacbrakecurrent.hpp>
 #include <lart_msgs/msg/inv1_setmaxaccurrent.hpp>
 #include <lart_msgs/msg/inv1_setmaxdcbrakecurrent.hpp>
 #include <lart_msgs/msg/inv1_setmaxdccurrent.hpp>
 #include <lart_msgs/msg/inv1_setposition.hpp>
 #include <lart_msgs/msg/inv1_setrelbrakecurrent.hpp>
 #include <lart_msgs/msg/inv1_setrelcurrent.hpp>
-#include <lart_msgs/msg/inv1_targetiq.hpp>
-#include <lart_msgs/msg/inv1_temperatures.hpp>
-#include <lart_msgs/msg/inv2_ac_dc_current.hpp>
-#include <lart_msgs/msg/inv2_erpm_duty_voltage.hpp>
-#include <lart_msgs/msg/inv2_foc.hpp>
-#include <lart_msgs/msg/inv2_minmaxaccurrent.hpp>
-#include <lart_msgs/msg/inv2_minmaxdccurrent.hpp>
-#include <lart_msgs/msg/inv2_misc.hpp>
-#include <lart_msgs/msg/inv2_setaccurrent.hpp>
-#include <lart_msgs/msg/inv2_setbrakecurrent.hpp>
-#include <lart_msgs/msg/inv2_setdigoutput.hpp>
-#include <lart_msgs/msg/inv2_setdriveenable.hpp>
-#include <lart_msgs/msg/inv2_seterpm.hpp>
-#include <lart_msgs/msg/inv2_setmaxacbrakecurrent.hpp>
-#include <lart_msgs/msg/inv2_setmaxaccurrent.hpp>
-#include <lart_msgs/msg/inv2_setmaxdcbrakecurrent.hpp>
-#include <lart_msgs/msg/inv2_setmaxdccurrent.hpp>
-#include <lart_msgs/msg/inv2_setposition.hpp>
-#include <lart_msgs/msg/inv2_setrelbrakecurrent.hpp>
-#include <lart_msgs/msg/inv2_setrelcurrent.hpp>
-#include <lart_msgs/msg/inv2_targetiq.hpp>
-#include <lart_msgs/msg/inv2_temperatures.hpp>
-#include <lart_msgs/msg/ivt_msg_cmd.hpp>
-#include <lart_msgs/msg/ivt_msg_response.hpp>
 
 void init_dbc_api_subscribers_chunk_1(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs) {
     auto sensor_qos = rclcpp::QoS(10).best_effort();
 
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt7>(
+        "/can/aqt7", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt7> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt7.ntc_1 = msg->ntc_1;
+                dbc_api.aqt7.susp_l = msg->susp_l;
+                dbc_api.aqt7.susp_r = msg->susp_r;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt7>(
+        "/data/aqt7", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt7> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt7.ntc_1 = msg->ntc_1;
+                dbc_api.aqt7.susp_l = msg->susp_l;
+                dbc_api.aqt7.susp_r = msg->susp_r;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt8>(
+        "/data/aqt8", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt8> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt8.ntc1 = msg->ntc1;
+                dbc_api.aqt8.ntc2 = msg->ntc2;
+                dbc_api.aqt8.ntc3 = msg->ntc3;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::AsfSignals>(
+        "/can/asf_signals", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::AsfSignals> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.asf_signals.brake_pressure_front = msg->brake_pressure_front;
+                dbc_api.asf_signals.brake_pressure_rear = msg->brake_pressure_rear;
+                dbc_api.asf_signals.ebs_pressure_tank_front = msg->ebs_pressure_tank_front;
+                dbc_api.asf_signals.ebs_pressure_tank_rear = msg->ebs_pressure_tank_rear;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::CubemarsFeedback>(
+        "/can/cubemars_feedback", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::CubemarsFeedback> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.cubemars_feedback.current = msg->current;
+                dbc_api.cubemars_feedback.driver_temp = msg->driver_temp;
+                dbc_api.cubemars_feedback.error_code = msg->error_code;
+                dbc_api.cubemars_feedback.position = msg->position;
+                dbc_api.cubemars_feedback.speed_rpm = msg->speed_rpm;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::CubemarsPositionLoop>(
+        "/can/cubemars_position_loop", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::CubemarsPositionLoop> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.cubemars_position_loop.position = msg->position;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Dashboard>(
+        "/pwt/dashboard", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Dashboard> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.dashboard.ignition_switch_raw = msg->ignition_switch_raw;
+                dbc_api.dashboard.r2d_button_raw = msg->r2d_button_raw;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::DvDynamics1>(
+        "/can/dv_dynamics_1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::DvDynamics1> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.dv_dynamics_1.brake_hydr_actual = msg->brake_hydr_actual;
+                dbc_api.dv_dynamics_1.brake_hydr_target = msg->brake_hydr_target;
+                dbc_api.dv_dynamics_1.motor_moment_actual = msg->motor_moment_actual;
+                dbc_api.dv_dynamics_1.motor_moment_target = msg->motor_moment_target;
+                dbc_api.dv_dynamics_1.speed_actual = msg->speed_actual;
+                dbc_api.dv_dynamics_1.speed_target = msg->speed_target;
+                dbc_api.dv_dynamics_1.steering_angle_actual = msg->steering_angle_actual;
+                dbc_api.dv_dynamics_1.steering_angle_target = msg->steering_angle_target;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::DvDynamics2>(
+        "/can/dv_dynamics_2", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::DvDynamics2> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.dv_dynamics_2.acceleration_lateral = msg->acceleration_lateral;
+                dbc_api.dv_dynamics_2.acceleration_longitudinal = msg->acceleration_longitudinal;
+                dbc_api.dv_dynamics_2.yaw_rate = msg->yaw_rate;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::DvStatus>(
+        "/can/dv_status", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::DvStatus> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.dv_status.ami_state = msg->ami_state;
+                dbc_api.dv_status.as_status = msg->as_status;
+                dbc_api.dv_status.asb_ebs_state = msg->asb_ebs_state;
+                dbc_api.dv_status.asb_redundancy_state = msg->asb_redundancy_state;
+                dbc_api.dv_status.cones_count_actual = msg->cones_count_actual;
+                dbc_api.dv_status.cones_count_all = msg->cones_count_all;
+                dbc_api.dv_status.lap_counter = msg->lap_counter;
+                dbc_api.dv_status.steering_state = msg->steering_state;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::IcdRequest>(
+        "/data/icd_request", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IcdRequest> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.icd_request.req_accessmode = msg->req_accessmode;
+                dbc_api.icd_request.req_accesspw1 = msg->req_accesspw1;
+                dbc_api.icd_request.req_accesspw2 = msg->req_accesspw2;
+                dbc_api.icd_request.req_accesspw3 = msg->req_accesspw3;
+                dbc_api.icd_request.req_accesspw4 = msg->req_accesspw4;
+                dbc_api.icd_request.req_accesspw5 = msg->req_accesspw5;
+                dbc_api.icd_request.req_accesspw6 = msg->req_accesspw6;
+                dbc_api.icd_request.req_averaging = msg->req_averaging;
+                dbc_api.icd_request.req_canbaudrate = msg->req_canbaudrate;
+                dbc_api.icd_request.req_canidreq_id = msg->req_canidreq_id;
+                dbc_api.icd_request.req_canidreq_sn = msg->req_canidreq_sn;
+                dbc_api.icd_request.req_canidres_id = msg->req_canidres_id;
+                dbc_api.icd_request.req_canidres_sn = msg->req_canidres_sn;
+                dbc_api.icd_request.req_canidresp_id = msg->req_canidresp_id;
+                dbc_api.icd_request.req_canidresp_sn = msg->req_canidresp_sn;
+                dbc_api.icd_request.req_canmode = msg->req_canmode;
+                dbc_api.icd_request.req_muxid = msg->req_muxid;
+                dbc_api.icd_request.req_newpw1 = msg->req_newpw1;
+                dbc_api.icd_request.req_newpw2 = msg->req_newpw2;
+                dbc_api.icd_request.req_newpw3 = msg->req_newpw3;
+                dbc_api.icd_request.req_newpw4 = msg->req_newpw4;
+                dbc_api.icd_request.req_newpw5 = msg->req_newpw5;
+                dbc_api.icd_request.req_newpw6 = msg->req_newpw6;
+                dbc_api.icd_request.req_oclimitneg = msg->req_oclimitneg;
+                dbc_api.icd_request.req_oclimitpos = msg->req_oclimitpos;
+                dbc_api.icd_request.req_opinvertcurrent = msg->req_opinvertcurrent;
+                dbc_api.icd_request.req_opmode = msg->req_opmode;
+                dbc_api.icd_request.req_opoutputrate = msg->req_opoutputrate;
+                dbc_api.icd_request.req_resetoption = msg->req_resetoption;
+                dbc_api.icd_request.req_sleepahthreshold = msg->req_sleepahthreshold;
+                dbc_api.icd_request.req_sleepithreshold = msg->req_sleepithreshold;
+                dbc_api.icd_request.req_sleeptimer = msg->req_sleeptimer;
+                dbc_api.icd_request.req_wakeahthreshold = msg->req_wakeahthreshold;
+                dbc_api.icd_request.req_wakeithreshold = msg->req_wakeithreshold;
+                dbc_api.icd_request.req_waketimer = msg->req_waketimer;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::IcdResponse>(
+        "/data/icd_response", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IcdResponse> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.icd_response.resp_accessmode = msg->resp_accessmode;
+                dbc_api.icd_response.resp_ahcounter = msg->resp_ahcounter;
+                dbc_api.icd_response.resp_articlenumber = msg->resp_articlenumber;
+                dbc_api.icd_response.resp_averaging = msg->resp_averaging;
+                dbc_api.icd_response.resp_canbaudrate = msg->resp_canbaudrate;
+                dbc_api.icd_response.resp_canidreq_id = msg->resp_canidreq_id;
+                dbc_api.icd_response.resp_canidreq_sn = msg->resp_canidreq_sn;
+                dbc_api.icd_response.resp_canidres_id = msg->resp_canidres_id;
+                dbc_api.icd_response.resp_canidres_sn = msg->resp_canidres_sn;
+                dbc_api.icd_response.resp_canidresp_id = msg->resp_canidresp_id;
+                dbc_api.icd_response.resp_canidresp_sn = msg->resp_canidresp_sn;
+                dbc_api.icd_response.resp_canmode = msg->resp_canmode;
+                dbc_api.icd_response.resp_devid_char1 = msg->resp_devid_char1;
+                dbc_api.icd_response.resp_devid_char2 = msg->resp_devid_char2;
+                dbc_api.icd_response.resp_devid_char3 = msg->resp_devid_char3;
+                dbc_api.icd_response.resp_devid_char4 = msg->resp_devid_char4;
+                dbc_api.icd_response.resp_devid_char5 = msg->resp_devid_char5;
+                dbc_api.icd_response.resp_devid_frame = msg->resp_devid_frame;
+                dbc_api.icd_response.resp_evtmeascount = msg->resp_evtmeascount;
+                dbc_api.icd_response.resp_evtmeastype = msg->resp_evtmeastype;
+                dbc_api.icd_response.resp_evtsyscount = msg->resp_evtsyscount;
+                dbc_api.icd_response.resp_evtsystype = msg->resp_evtsystype;
+                dbc_api.icd_response.resp_fwmajor = msg->resp_fwmajor;
+                dbc_api.icd_response.resp_fwminor = msg->resp_fwminor;
+                dbc_api.icd_response.resp_fwrelease = msg->resp_fwrelease;
+                dbc_api.icd_response.resp_hwver_char1 = msg->resp_hwver_char1;
+                dbc_api.icd_response.resp_hwver_char2 = msg->resp_hwver_char2;
+                dbc_api.icd_response.resp_hwver_char3 = msg->resp_hwver_char3;
+                dbc_api.icd_response.resp_hwver_char4 = msg->resp_hwver_char4;
+                dbc_api.icd_response.resp_hwver_char5 = msg->resp_hwver_char5;
+                dbc_api.icd_response.resp_hwver_char6 = msg->resp_hwver_char6;
+                dbc_api.icd_response.resp_hwver_frame = msg->resp_hwver_frame;
+                dbc_api.icd_response.resp_lifetime = msg->resp_lifetime;
+                dbc_api.icd_response.resp_ms_adcinterrupt = msg->resp_ms_adcinterrupt;
+                dbc_api.icd_response.resp_ms_calibrationdata = msg->resp_ms_calibrationdata;
+                dbc_api.icd_response.resp_ms_ocsactive = msg->resp_ms_ocsactive;
+                dbc_api.icd_response.resp_ms_opencircuiti = msg->resp_ms_opencircuiti;
+                dbc_api.icd_response.resp_ms_opencircuittchip = msg->resp_ms_opencircuittchip;
+                dbc_api.icd_response.resp_ms_opencircuittext = msg->resp_ms_opencircuittext;
+                dbc_api.icd_response.resp_ms_opencircuitu = msg->resp_ms_opencircuitu;
+                dbc_api.icd_response.resp_ms_overflowadcch1 = msg->resp_ms_overflowadcch1;
+                dbc_api.icd_response.resp_ms_overflowadcch2 = msg->resp_ms_overflowadcch2;
+                dbc_api.icd_response.resp_ms_overflowadcch3 = msg->resp_ms_overflowadcch3;
+                dbc_api.icd_response.resp_muxid = msg->resp_muxid;
+                dbc_api.icd_response.resp_oclimitneg = msg->resp_oclimitneg;
+                dbc_api.icd_response.resp_oclimitpos = msg->resp_oclimitpos;
+                dbc_api.icd_response.resp_opinvertcurrent = msg->resp_opinvertcurrent;
+                dbc_api.icd_response.resp_opmode = msg->resp_opmode;
+                dbc_api.icd_response.resp_opoutputrate = msg->resp_opoutputrate;
+                dbc_api.icd_response.resp_pw1 = msg->resp_pw1;
+                dbc_api.icd_response.resp_pw2 = msg->resp_pw2;
+                dbc_api.icd_response.resp_pw3 = msg->resp_pw3;
+                dbc_api.icd_response.resp_pw4 = msg->resp_pw4;
+                dbc_api.icd_response.resp_pw5 = msg->resp_pw5;
+                dbc_api.icd_response.resp_pw6 = msg->resp_pw6;
+                dbc_api.icd_response.resp_resetoption = msg->resp_resetoption;
+                dbc_api.icd_response.resp_rev_digit1 = msg->resp_rev_digit1;
+                dbc_api.icd_response.resp_rev_digit2 = msg->resp_rev_digit2;
+                dbc_api.icd_response.resp_rev_digit3 = msg->resp_rev_digit3;
+                dbc_api.icd_response.resp_rev_digit4 = msg->resp_rev_digit4;
+                dbc_api.icd_response.resp_serialnumber = msg->resp_serialnumber;
+                dbc_api.icd_response.resp_sleepahthreshold = msg->resp_sleepahthreshold;
+                dbc_api.icd_response.resp_sleepithreshold = msg->resp_sleepithreshold;
+                dbc_api.icd_response.resp_sleeptimer = msg->resp_sleeptimer;
+                dbc_api.icd_response.resp_ss_caldatacrc = msg->resp_ss_caldatacrc;
+                dbc_api.icd_response.resp_ss_canrx = msg->resp_ss_canrx;
+                dbc_api.icd_response.resp_ss_cantx = msg->resp_ss_cantx;
+                dbc_api.icd_response.resp_ss_clockmonreset = msg->resp_ss_clockmonreset;
+                dbc_api.icd_response.resp_ss_codecrc = msg->resp_ss_codecrc;
+                dbc_api.icd_response.resp_ss_configuration = msg->resp_ss_configuration;
+                dbc_api.icd_response.resp_ss_copwdreset = msg->resp_ss_copwdreset;
+                dbc_api.icd_response.resp_ss_eepromrw = msg->resp_ss_eepromrw;
+                dbc_api.icd_response.resp_ss_extpinreset = msg->resp_ss_extpinreset;
+                dbc_api.icd_response.resp_ss_lowvoltagereset = msg->resp_ss_lowvoltagereset;
+                dbc_api.icd_response.resp_ss_overtemp = msg->resp_ss_overtemp;
+                dbc_api.icd_response.resp_ss_powerfailure = msg->resp_ss_powerfailure;
+                dbc_api.icd_response.resp_ss_poweronreset = msg->resp_ss_poweronreset;
+                dbc_api.icd_response.resp_ss_systemclock = msg->resp_ss_systemclock;
+                dbc_api.icd_response.resp_ss_systeminit = msg->resp_ss_systeminit;
+                dbc_api.icd_response.resp_ss_undertemp = msg->resp_ss_undertemp;
+                dbc_api.icd_response.resp_tchip = msg->resp_tchip;
+                dbc_api.icd_response.resp_text = msg->resp_text;
+                dbc_api.icd_response.resp_uptime = msg->resp_uptime;
+                dbc_api.icd_response.resp_wakeahthreshold = msg->resp_wakeahthreshold;
+                dbc_api.icd_response.resp_wakeithreshold = msg->resp_wakeithreshold;
+                dbc_api.icd_response.resp_waketimer = msg->resp_waketimer;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::IcdResult>(
+        "/data/icd_result", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IcdResult> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.icd_result.icd_current = msg->icd_current;
+                dbc_api.icd_result.icd_msgcounter = msg->icd_msgcounter;
+                dbc_api.icd_result.icd_status_measerror = msg->icd_status_measerror;
+                dbc_api.icd_result.icd_status_ocs = msg->icd_status_ocs;
+                dbc_api.icd_result.icd_status_syserror = msg->icd_status_syserror;
+                dbc_api.icd_result.icd_ubat = msg->icd_ubat;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1AcDcCurrent>(
+        "/pwt/inv1_ac_dc_current", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1AcDcCurrent> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv1_ac_dc_current.inv1_actual_accurrent = msg->inv1_actual_accurrent;
+                dbc_api.inv1_ac_dc_current.inv1_actual_dccurrent = msg->inv1_actual_dccurrent;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1ErpmDutyVoltage>(
+        "/pwt/inv1_erpm_duty_voltage", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1ErpmDutyVoltage> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv1_erpm_duty_voltage.inv1_actual_duty = msg->inv1_actual_duty;
+                dbc_api.inv1_erpm_duty_voltage.inv1_actual_erpm = msg->inv1_actual_erpm;
+                dbc_api.inv1_erpm_duty_voltage.inv1_actual_inputvoltage = msg->inv1_actual_inputvoltage;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Foc>(
+        "/pwt/inv1_foc", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Foc> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv1_foc.inv1_actual_foc_id = msg->inv1_actual_foc_id;
+                dbc_api.inv1_foc.inv1_actual_foc_iq = msg->inv1_actual_foc_iq;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Minmaxaccurrent>(
+        "/pwt/inv1_minmaxaccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Minmaxaccurrent> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv1_minmaxaccurrent.inv1_availablemaxaccurrent = msg->inv1_availablemaxaccurrent;
+                dbc_api.inv1_minmaxaccurrent.inv1_availableminaccurrent = msg->inv1_availableminaccurrent;
+                dbc_api.inv1_minmaxaccurrent.inv1_maxaccurrent = msg->inv1_maxaccurrent;
+                dbc_api.inv1_minmaxaccurrent.inv1_minaccurrent = msg->inv1_minaccurrent;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Minmaxdccurrent>(
+        "/pwt/inv1_minmaxdccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Minmaxdccurrent> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv1_minmaxdccurrent.inv1_availablemaxdccurrent = msg->inv1_availablemaxdccurrent;
+                dbc_api.inv1_minmaxdccurrent.inv1_availablemindccurrent = msg->inv1_availablemindccurrent;
+                dbc_api.inv1_minmaxdccurrent.inv1_maxdccurrent = msg->inv1_maxdccurrent;
+                dbc_api.inv1_minmaxdccurrent.inv1_mindccurrent = msg->inv1_mindccurrent;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Misc>(
+        "/pwt/inv1_misc", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Misc> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv1_misc.inv1_actual_brake = msg->inv1_actual_brake;
+                dbc_api.inv1_misc.inv1_actual_throttle = msg->inv1_actual_throttle;
+                dbc_api.inv1_misc.inv1_can_map_version = msg->inv1_can_map_version;
+                dbc_api.inv1_misc.inv1_capacitor_temp_limit = msg->inv1_capacitor_temp_limit;
+                dbc_api.inv1_misc.inv1_dc_current_limit = msg->inv1_dc_current_limit;
+                dbc_api.inv1_misc.inv1_digital_input_1 = msg->inv1_digital_input_1;
+                dbc_api.inv1_misc.inv1_digital_input_2 = msg->inv1_digital_input_2;
+                dbc_api.inv1_misc.inv1_digital_input_3 = msg->inv1_digital_input_3;
+                dbc_api.inv1_misc.inv1_digital_input_4 = msg->inv1_digital_input_4;
+                dbc_api.inv1_misc.inv1_digital_output_1 = msg->inv1_digital_output_1;
+                dbc_api.inv1_misc.inv1_digital_output_2 = msg->inv1_digital_output_2;
+                dbc_api.inv1_misc.inv1_digital_output_3 = msg->inv1_digital_output_3;
+                dbc_api.inv1_misc.inv1_digital_output_4 = msg->inv1_digital_output_4;
+                dbc_api.inv1_misc.inv1_drive_enable = msg->inv1_drive_enable;
+                dbc_api.inv1_misc.inv1_drive_enable_limit = msg->inv1_drive_enable_limit;
+                dbc_api.inv1_misc.inv1_igbt_accel_limit = msg->inv1_igbt_accel_limit;
+                dbc_api.inv1_misc.inv1_igbt_temp_limit = msg->inv1_igbt_temp_limit;
+                dbc_api.inv1_misc.inv1_input_voltage_limit = msg->inv1_input_voltage_limit;
+                dbc_api.inv1_misc.inv1_motor_accel_limit = msg->inv1_motor_accel_limit;
+                dbc_api.inv1_misc.inv1_motor_temp_limit = msg->inv1_motor_temp_limit;
+                dbc_api.inv1_misc.inv1_power_limit = msg->inv1_power_limit;
+                dbc_api.inv1_misc.inv1_rpm_max_limit = msg->inv1_rpm_max_limit;
+                dbc_api.inv1_misc.inv1_rpm_min_limit = msg->inv1_rpm_min_limit;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setaccurrent>(
+        "/pwt/inv1_setaccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setaccurrent> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv1_setaccurrent.inv1_cmd_targetaccurrent = msg->inv1_cmd_targetaccurrent;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setbrakecurrent>(
+        "/pwt/inv1_setbrakecurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setbrakecurrent> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv1_setbrakecurrent.inv1_cmd_targetbrakecurrent = msg->inv1_cmd_targetbrakecurrent;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setdigoutput>(
+        "/pwt/inv1_setdigoutput", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setdigoutput> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv1_setdigoutput.inv1_cmd_setdigoutput1 = msg->inv1_cmd_setdigoutput1;
+                dbc_api.inv1_setdigoutput.inv1_cmd_setdigoutput2 = msg->inv1_cmd_setdigoutput2;
+                dbc_api.inv1_setdigoutput.inv1_cmd_setdigoutput3 = msg->inv1_cmd_setdigoutput3;
+                dbc_api.inv1_setdigoutput.inv1_cmd_setdigoutput4 = msg->inv1_cmd_setdigoutput4;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setdriveenable>(
+        "/pwt/inv1_setdriveenable", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setdriveenable> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv1_setdriveenable.inv1_cmd_driveenable = msg->inv1_cmd_driveenable;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Seterpm>(
+        "/pwt/inv1_seterpm", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Seterpm> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv1_seterpm.inv1_cmd_targetspeed = msg->inv1_cmd_targetspeed;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setmaxacbrakecurrent>(
+        "/pwt/inv1_setmaxacbrakecurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setmaxacbrakecurrent> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv1_setmaxacbrakecurrent.inv1_cmd_maxacbrakecurrent = msg->inv1_cmd_maxacbrakecurrent;
+            }
+        }));
     subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setmaxaccurrent>(
         "/pwt/inv1_setmaxaccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setmaxaccurrent> msg) {
             if (msg) {
@@ -80,423 +444,6 @@ void init_dbc_api_subscribers_chunk_1(std::shared_ptr<rclcpp::Node> node, std::v
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.inv1_setrelcurrent.inv1_cmd_targetrelativecurrent = msg->inv1_cmd_targetrelativecurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Targetiq>(
-        "/pwt/inv1_targetiq", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Targetiq> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv1_targetiq.inv1_controlmode = msg->inv1_controlmode;
-                dbc_api.inv1_targetiq.inv1_ismotorstill = msg->inv1_ismotorstill;
-                dbc_api.inv1_targetiq.inv1_motorposition = msg->inv1_motorposition;
-                dbc_api.inv1_targetiq.inv1_targetiq = msg->inv1_targetiq;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Temperatures>(
-        "/pwt/inv1_temperatures", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Temperatures> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv1_temperatures.inv1_actual_faultcode = msg->inv1_actual_faultcode;
-                dbc_api.inv1_temperatures.inv1_actual_tempcontroller = msg->inv1_actual_tempcontroller;
-                dbc_api.inv1_temperatures.inv1_actual_tempmotor = msg->inv1_actual_tempmotor;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2AcDcCurrent>(
-        "/pwt/inv2_ac_dc_current", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2AcDcCurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_ac_dc_current.inv2_actual_accurrent = msg->inv2_actual_accurrent;
-                dbc_api.inv2_ac_dc_current.inv2_actual_dccurrent = msg->inv2_actual_dccurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2ErpmDutyVoltage>(
-        "/pwt/inv2_erpm_duty_voltage", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2ErpmDutyVoltage> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_erpm_duty_voltage.inv2_actual_duty = msg->inv2_actual_duty;
-                dbc_api.inv2_erpm_duty_voltage.inv2_actual_erpm = msg->inv2_actual_erpm;
-                dbc_api.inv2_erpm_duty_voltage.inv2_actual_inputvoltage = msg->inv2_actual_inputvoltage;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Foc>(
-        "/pwt/inv2_foc", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Foc> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_foc.inv2_actual_foc_id = msg->inv2_actual_foc_id;
-                dbc_api.inv2_foc.inv2_actual_foc_iq = msg->inv2_actual_foc_iq;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Minmaxaccurrent>(
-        "/pwt/inv2_minmaxaccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Minmaxaccurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_minmaxaccurrent.inv2_availablemaxaccurrent = msg->inv2_availablemaxaccurrent;
-                dbc_api.inv2_minmaxaccurrent.inv2_availableminaccurrent = msg->inv2_availableminaccurrent;
-                dbc_api.inv2_minmaxaccurrent.inv2_maxaccurrent = msg->inv2_maxaccurrent;
-                dbc_api.inv2_minmaxaccurrent.inv2_minaccurrent = msg->inv2_minaccurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Minmaxdccurrent>(
-        "/pwt/inv2_minmaxdccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Minmaxdccurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_minmaxdccurrent.inv2_availablemaxdccurrent = msg->inv2_availablemaxdccurrent;
-                dbc_api.inv2_minmaxdccurrent.inv2_availablemindccurrent = msg->inv2_availablemindccurrent;
-                dbc_api.inv2_minmaxdccurrent.inv2_maxdccurrent = msg->inv2_maxdccurrent;
-                dbc_api.inv2_minmaxdccurrent.inv2_mindccurrent = msg->inv2_mindccurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Misc>(
-        "/pwt/inv2_misc", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Misc> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_misc.inv2_actual_brake = msg->inv2_actual_brake;
-                dbc_api.inv2_misc.inv2_actual_throttle = msg->inv2_actual_throttle;
-                dbc_api.inv2_misc.inv2_can_map_version = msg->inv2_can_map_version;
-                dbc_api.inv2_misc.inv2_capacitor_temp_limit = msg->inv2_capacitor_temp_limit;
-                dbc_api.inv2_misc.inv2_dc_current_limit = msg->inv2_dc_current_limit;
-                dbc_api.inv2_misc.inv2_digital_input_1 = msg->inv2_digital_input_1;
-                dbc_api.inv2_misc.inv2_digital_input_2 = msg->inv2_digital_input_2;
-                dbc_api.inv2_misc.inv2_digital_input_3 = msg->inv2_digital_input_3;
-                dbc_api.inv2_misc.inv2_digital_input_4 = msg->inv2_digital_input_4;
-                dbc_api.inv2_misc.inv2_digital_output_1 = msg->inv2_digital_output_1;
-                dbc_api.inv2_misc.inv2_digital_output_2 = msg->inv2_digital_output_2;
-                dbc_api.inv2_misc.inv2_digital_output_3 = msg->inv2_digital_output_3;
-                dbc_api.inv2_misc.inv2_digital_output_4 = msg->inv2_digital_output_4;
-                dbc_api.inv2_misc.inv2_drive_enable = msg->inv2_drive_enable;
-                dbc_api.inv2_misc.inv2_drive_enable_limit = msg->inv2_drive_enable_limit;
-                dbc_api.inv2_misc.inv2_igbt_accel_limit = msg->inv2_igbt_accel_limit;
-                dbc_api.inv2_misc.inv2_igbt_temp_limit = msg->inv2_igbt_temp_limit;
-                dbc_api.inv2_misc.inv2_input_voltage_limit = msg->inv2_input_voltage_limit;
-                dbc_api.inv2_misc.inv2_motor_accel_limit = msg->inv2_motor_accel_limit;
-                dbc_api.inv2_misc.inv2_motor_temp_limit = msg->inv2_motor_temp_limit;
-                dbc_api.inv2_misc.inv2_power_limit = msg->inv2_power_limit;
-                dbc_api.inv2_misc.inv2_rpm_max_limit = msg->inv2_rpm_max_limit;
-                dbc_api.inv2_misc.inv2_rpm_min_limit = msg->inv2_rpm_min_limit;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Setaccurrent>(
-        "/pwt/inv2_setaccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Setaccurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_setaccurrent.inv2_cmd_targetaccurrent = msg->inv2_cmd_targetaccurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Setbrakecurrent>(
-        "/pwt/inv2_setbrakecurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Setbrakecurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_setbrakecurrent.inv2_cmd_targetbrakecurrent = msg->inv2_cmd_targetbrakecurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Setdigoutput>(
-        "/pwt/inv2_setdigoutput", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Setdigoutput> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_setdigoutput.inv2_cmd_setdigoutput1 = msg->inv2_cmd_setdigoutput1;
-                dbc_api.inv2_setdigoutput.inv2_cmd_setdigoutput2 = msg->inv2_cmd_setdigoutput2;
-                dbc_api.inv2_setdigoutput.inv2_cmd_setdigoutput3 = msg->inv2_cmd_setdigoutput3;
-                dbc_api.inv2_setdigoutput.inv2_cmd_setdigoutput4 = msg->inv2_cmd_setdigoutput4;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Setdriveenable>(
-        "/pwt/inv2_setdriveenable", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Setdriveenable> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_setdriveenable.inv2_cmd_driveenable = msg->inv2_cmd_driveenable;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Seterpm>(
-        "/pwt/inv2_seterpm", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Seterpm> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_seterpm.inv2_cmd_targetspeed = msg->inv2_cmd_targetspeed;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Setmaxacbrakecurrent>(
-        "/pwt/inv2_setmaxacbrakecurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Setmaxacbrakecurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_setmaxacbrakecurrent.inv2_cmd_maxacbrakecurrent = msg->inv2_cmd_maxacbrakecurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Setmaxaccurrent>(
-        "/pwt/inv2_setmaxaccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Setmaxaccurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_setmaxaccurrent.inv2_cmd_maxaccurrent = msg->inv2_cmd_maxaccurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Setmaxdcbrakecurrent>(
-        "/pwt/inv2_setmaxdcbrakecurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Setmaxdcbrakecurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_setmaxdcbrakecurrent.inv2_cmd_maxdcbrakecurrent = msg->inv2_cmd_maxdcbrakecurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Setmaxdccurrent>(
-        "/pwt/inv2_setmaxdccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Setmaxdccurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_setmaxdccurrent.inv2_cmd_maxdccurrent = msg->inv2_cmd_maxdccurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Setposition>(
-        "/pwt/inv2_setposition", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Setposition> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_setposition.inv2_cmd_targetposition = msg->inv2_cmd_targetposition;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Setrelbrakecurrent>(
-        "/pwt/inv2_setrelbrakecurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Setrelbrakecurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_setrelbrakecurrent.inv2_cmd_tgtrelbrakecurrent = msg->inv2_cmd_tgtrelbrakecurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Setrelcurrent>(
-        "/pwt/inv2_setrelcurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Setrelcurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_setrelcurrent.inv2_cmd_targetrelativecurrent = msg->inv2_cmd_targetrelativecurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Targetiq>(
-        "/pwt/inv2_targetiq", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Targetiq> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_targetiq.inv2_controlmode = msg->inv2_controlmode;
-                dbc_api.inv2_targetiq.inv2_ismotorstill = msg->inv2_ismotorstill;
-                dbc_api.inv2_targetiq.inv2_motorposition = msg->inv2_motorposition;
-                dbc_api.inv2_targetiq.inv2_targetiq = msg->inv2_targetiq;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Temperatures>(
-        "/pwt/inv2_temperatures", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Temperatures> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_temperatures.inv2_actual_faultcode = msg->inv2_actual_faultcode;
-                dbc_api.inv2_temperatures.inv2_actual_tempcontroller = msg->inv2_actual_tempcontroller;
-                dbc_api.inv2_temperatures.inv2_actual_tempmotor = msg->inv2_actual_tempmotor;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::IvtMsgCmd>(
-        "/pwt/ivt_msg_cmd", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgCmd> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.ivt_msg_cmd.ivt_id_cmd = msg->ivt_id_cmd;
-                dbc_api.ivt_msg_cmd.val_10_set_can_id_sn_i = msg->val_10_set_can_id_sn_i;
-                dbc_api.ivt_msg_cmd.val_10_set_can_id_val_i = msg->val_10_set_can_id_val_i;
-                dbc_api.ivt_msg_cmd.val_11_set_can_id_sn_u1 = msg->val_11_set_can_id_sn_u1;
-                dbc_api.ivt_msg_cmd.val_11_set_can_id_val_u1 = msg->val_11_set_can_id_val_u1;
-                dbc_api.ivt_msg_cmd.val_12_set_can_id_sn_u2 = msg->val_12_set_can_id_sn_u2;
-                dbc_api.ivt_msg_cmd.val_12_set_can_id_val_u2 = msg->val_12_set_can_id_val_u2;
-                dbc_api.ivt_msg_cmd.val_13_set_can_id_sn_u3 = msg->val_13_set_can_id_sn_u3;
-                dbc_api.ivt_msg_cmd.val_13_set_can_id_val_u3 = msg->val_13_set_can_id_val_u3;
-                dbc_api.ivt_msg_cmd.val_14_set_can_id_sn_t = msg->val_14_set_can_id_sn_t;
-                dbc_api.ivt_msg_cmd.val_14_set_can_id_val_t = msg->val_14_set_can_id_val_t;
-                dbc_api.ivt_msg_cmd.val_15_set_can_id_sn_w = msg->val_15_set_can_id_sn_w;
-                dbc_api.ivt_msg_cmd.val_15_set_can_id_val_w = msg->val_15_set_can_id_val_w;
-                dbc_api.ivt_msg_cmd.val_16_set_can_id_sn_as = msg->val_16_set_can_id_sn_as;
-                dbc_api.ivt_msg_cmd.val_16_set_can_id_val_as = msg->val_16_set_can_id_val_as;
-                dbc_api.ivt_msg_cmd.val_17_set_can_id_sn_wh = msg->val_17_set_can_id_sn_wh;
-                dbc_api.ivt_msg_cmd.val_17_set_can_id_val_wh = msg->val_17_set_can_id_val_wh;
-                dbc_api.ivt_msg_cmd.val_1d_set_can_id_sn_command = msg->val_1d_set_can_id_sn_command;
-                dbc_api.ivt_msg_cmd.val_1d_set_can_id_val_command = msg->val_1d_set_can_id_val_command;
-                dbc_api.ivt_msg_cmd.val_1f_set_can_id_sn_response = msg->val_1f_set_can_id_sn_response;
-                dbc_api.ivt_msg_cmd.val_1f_set_can_id_val_response = msg->val_1f_set_can_id_val_response;
-                dbc_api.ivt_msg_cmd.val_20_conf_cycletime_i = msg->val_20_conf_cycletime_i;
-                dbc_api.ivt_msg_cmd.val_20_conf_endianess_i = msg->val_20_conf_endianess_i;
-                dbc_api.ivt_msg_cmd.val_20_conf_sign_i = msg->val_20_conf_sign_i;
-                dbc_api.ivt_msg_cmd.val_20_conf_triggermode_i = msg->val_20_conf_triggermode_i;
-                dbc_api.ivt_msg_cmd.val_21_conf_cycletime_u1 = msg->val_21_conf_cycletime_u1;
-                dbc_api.ivt_msg_cmd.val_21_conf_endianess_u1 = msg->val_21_conf_endianess_u1;
-                dbc_api.ivt_msg_cmd.val_21_conf_sign_u1 = msg->val_21_conf_sign_u1;
-                dbc_api.ivt_msg_cmd.val_21_conf_triggermode_u1 = msg->val_21_conf_triggermode_u1;
-                dbc_api.ivt_msg_cmd.val_22_conf_cycletime_u2 = msg->val_22_conf_cycletime_u2;
-                dbc_api.ivt_msg_cmd.val_22_conf_endianess_u2 = msg->val_22_conf_endianess_u2;
-                dbc_api.ivt_msg_cmd.val_22_conf_sign_u2 = msg->val_22_conf_sign_u2;
-                dbc_api.ivt_msg_cmd.val_22_conf_triggermode_u2 = msg->val_22_conf_triggermode_u2;
-                dbc_api.ivt_msg_cmd.val_23_conf_cycletime_u3 = msg->val_23_conf_cycletime_u3;
-                dbc_api.ivt_msg_cmd.val_23_conf_endianess_u3 = msg->val_23_conf_endianess_u3;
-                dbc_api.ivt_msg_cmd.val_23_conf_sign_u3 = msg->val_23_conf_sign_u3;
-                dbc_api.ivt_msg_cmd.val_23_conf_triggermode_u3 = msg->val_23_conf_triggermode_u3;
-                dbc_api.ivt_msg_cmd.val_24_conf_cycletime_t = msg->val_24_conf_cycletime_t;
-                dbc_api.ivt_msg_cmd.val_24_conf_endianess_t = msg->val_24_conf_endianess_t;
-                dbc_api.ivt_msg_cmd.val_24_conf_sign_t = msg->val_24_conf_sign_t;
-                dbc_api.ivt_msg_cmd.val_24_conf_triggermode_t = msg->val_24_conf_triggermode_t;
-                dbc_api.ivt_msg_cmd.val_25_conf_cycletime_w = msg->val_25_conf_cycletime_w;
-                dbc_api.ivt_msg_cmd.val_25_conf_endianess_w = msg->val_25_conf_endianess_w;
-                dbc_api.ivt_msg_cmd.val_25_conf_sign_w = msg->val_25_conf_sign_w;
-                dbc_api.ivt_msg_cmd.val_25_conf_triggermode_w = msg->val_25_conf_triggermode_w;
-                dbc_api.ivt_msg_cmd.val_26_conf_cycletime_as = msg->val_26_conf_cycletime_as;
-                dbc_api.ivt_msg_cmd.val_26_conf_endianess_as = msg->val_26_conf_endianess_as;
-                dbc_api.ivt_msg_cmd.val_26_conf_sign_as = msg->val_26_conf_sign_as;
-                dbc_api.ivt_msg_cmd.val_26_conf_triggermode_as = msg->val_26_conf_triggermode_as;
-                dbc_api.ivt_msg_cmd.val_27_conf_cycletime_wh = msg->val_27_conf_cycletime_wh;
-                dbc_api.ivt_msg_cmd.val_27_conf_endianess_wh = msg->val_27_conf_endianess_wh;
-                dbc_api.ivt_msg_cmd.val_27_conf_sign_wh = msg->val_27_conf_sign_wh;
-                dbc_api.ivt_msg_cmd.val_27_conf_triggermode_wh = msg->val_27_conf_triggermode_wh;
-                dbc_api.ivt_msg_cmd.val_30_reset_device_sn = msg->val_30_reset_device_sn;
-                dbc_api.ivt_msg_cmd.val_30_reset_item = msg->val_30_reset_item;
-                dbc_api.ivt_msg_cmd.val_31_00_trigger_i = msg->val_31_00_trigger_i;
-                dbc_api.ivt_msg_cmd.val_31_01_trigger_u1 = msg->val_31_01_trigger_u1;
-                dbc_api.ivt_msg_cmd.val_31_02_trigger_u2 = msg->val_31_02_trigger_u2;
-                dbc_api.ivt_msg_cmd.val_31_03_trigger_u3 = msg->val_31_03_trigger_u3;
-                dbc_api.ivt_msg_cmd.val_31_04_trigger_t = msg->val_31_04_trigger_t;
-                dbc_api.ivt_msg_cmd.val_31_05_trigger_w = msg->val_31_05_trigger_w;
-                dbc_api.ivt_msg_cmd.val_31_06_trigger_as = msg->val_31_06_trigger_as;
-                dbc_api.ivt_msg_cmd.val_31_07_trigger_wh = msg->val_31_07_trigger_wh;
-                dbc_api.ivt_msg_cmd.val_31_trigger_spare = msg->val_31_trigger_spare;
-                dbc_api.ivt_msg_cmd.val_32_store_dummy = msg->val_32_store_dummy;
-                dbc_api.ivt_msg_cmd.val_33_oc_test_time = msg->val_33_oc_test_time;
-                dbc_api.ivt_msg_cmd.val_34_actual_mode = msg->val_34_actual_mode;
-                dbc_api.ivt_msg_cmd.val_34_code_level = msg->val_34_code_level;
-                dbc_api.ivt_msg_cmd.val_34_startup_mode = msg->val_34_startup_mode;
-                dbc_api.ivt_msg_cmd.val_35_oc_pos_reset_threshold = msg->val_35_oc_pos_reset_threshold;
-                dbc_api.ivt_msg_cmd.val_35_oc_pos_set_threshold = msg->val_35_oc_pos_set_threshold;
-                dbc_api.ivt_msg_cmd.val_36_oc_neg_reset_threshold = msg->val_36_oc_neg_reset_threshold;
-                dbc_api.ivt_msg_cmd.val_36_oc_neg_set_threshold = msg->val_36_oc_neg_set_threshold;
-                dbc_api.ivt_msg_cmd.val_3a_restart_to_bitrate = msg->val_3a_restart_to_bitrate;
-                dbc_api.ivt_msg_cmd.val_3d_restart_default_dummy = msg->val_3d_restart_default_dummy;
-                dbc_api.ivt_msg_cmd.val_3f_restart_dummy = msg->val_3f_restart_dummy;
-                dbc_api.ivt_msg_cmd.val_40_get_measerror_item = msg->val_40_get_measerror_item;
-                dbc_api.ivt_msg_cmd.val_41_get_systemerror_item = msg->val_41_get_systemerror_item;
-                dbc_api.ivt_msg_cmd.val_42_get_alllogdata_item = msg->val_42_get_alllogdata_item;
-                dbc_api.ivt_msg_cmd.val_43_get_logdata_item = msg->val_43_get_logdata_item;
-                dbc_api.ivt_msg_cmd.val_50_get_can_id_sn_i = msg->val_50_get_can_id_sn_i;
-                dbc_api.ivt_msg_cmd.val_51_get_can_id_sn_u1 = msg->val_51_get_can_id_sn_u1;
-                dbc_api.ivt_msg_cmd.val_52_get_can_id_sn_u2 = msg->val_52_get_can_id_sn_u2;
-                dbc_api.ivt_msg_cmd.val_53_get_can_id_sn_u3 = msg->val_53_get_can_id_sn_u3;
-                dbc_api.ivt_msg_cmd.val_54_get_can_id_sn_t = msg->val_54_get_can_id_sn_t;
-                dbc_api.ivt_msg_cmd.val_55_get_can_id_sn_w = msg->val_55_get_can_id_sn_w;
-                dbc_api.ivt_msg_cmd.val_56_get_can_id_sn_as = msg->val_56_get_can_id_sn_as;
-                dbc_api.ivt_msg_cmd.val_57_get_can_id_sn_wh = msg->val_57_get_can_id_sn_wh;
-                dbc_api.ivt_msg_cmd.val_5d_get_can_id_sn_command = msg->val_5d_get_can_id_sn_command;
-                dbc_api.ivt_msg_cmd.val_5f_get_can_id_sn_response = msg->val_5f_get_can_id_sn_response;
-                dbc_api.ivt_msg_cmd.val_60_get_result_dummy_i = msg->val_60_get_result_dummy_i;
-                dbc_api.ivt_msg_cmd.val_61_get_result_dummy_u1 = msg->val_61_get_result_dummy_u1;
-                dbc_api.ivt_msg_cmd.val_62_get_result_dummy_u2 = msg->val_62_get_result_dummy_u2;
-                dbc_api.ivt_msg_cmd.val_63_get_result_dummy_u3 = msg->val_63_get_result_dummy_u3;
-                dbc_api.ivt_msg_cmd.val_64_get_result_dummy_t = msg->val_64_get_result_dummy_t;
-                dbc_api.ivt_msg_cmd.val_65_get_result_dummy_w = msg->val_65_get_result_dummy_w;
-                dbc_api.ivt_msg_cmd.val_66_get_result_dummy_as = msg->val_66_get_result_dummy_as;
-                dbc_api.ivt_msg_cmd.val_67_get_result_dummy_wh = msg->val_67_get_result_dummy_wh;
-                dbc_api.ivt_msg_cmd.val_73_get_oc_test_dummy = msg->val_73_get_oc_test_dummy;
-                dbc_api.ivt_msg_cmd.val_74_get_mode_dummy = msg->val_74_get_mode_dummy;
-                dbc_api.ivt_msg_cmd.val_75_get_oc_pos_dummy = msg->val_75_get_oc_pos_dummy;
-                dbc_api.ivt_msg_cmd.val_76_get_oc_neg_dummy = msg->val_76_get_oc_neg_dummy;
-                dbc_api.ivt_msg_cmd.val_79_get_device_id_dummy = msg->val_79_get_device_id_dummy;
-                dbc_api.ivt_msg_cmd.val_7a_get_sw_version_dummy = msg->val_7a_get_sw_version_dummy;
-                dbc_api.ivt_msg_cmd.val_7b_get_serien_nr_dummy = msg->val_7b_get_serien_nr_dummy;
-                dbc_api.ivt_msg_cmd.val_7c_get_art_nr_dummy = msg->val_7c_get_art_nr_dummy;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::IvtMsgResponse>(
-        "/pwt/ivt_msg_response", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IvtMsgResponse> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.ivt_msg_response.a0_resp_cycletime_i = msg->a0_resp_cycletime_i;
-                dbc_api.ivt_msg_response.a0_resp_endianess_i = msg->a0_resp_endianess_i;
-                dbc_api.ivt_msg_response.a0_resp_sign_i = msg->a0_resp_sign_i;
-                dbc_api.ivt_msg_response.a0_resp_triggermode_i = msg->a0_resp_triggermode_i;
-                dbc_api.ivt_msg_response.a1_resp_cycletime_u1 = msg->a1_resp_cycletime_u1;
-                dbc_api.ivt_msg_response.a1_resp_endianess_u1 = msg->a1_resp_endianess_u1;
-                dbc_api.ivt_msg_response.a1_resp_sign_u1 = msg->a1_resp_sign_u1;
-                dbc_api.ivt_msg_response.a1_resp_triggermode_u1 = msg->a1_resp_triggermode_u1;
-                dbc_api.ivt_msg_response.a2_resp_cycletime_u2 = msg->a2_resp_cycletime_u2;
-                dbc_api.ivt_msg_response.a2_resp_endianess_u2 = msg->a2_resp_endianess_u2;
-                dbc_api.ivt_msg_response.a2_resp_sign_u2 = msg->a2_resp_sign_u2;
-                dbc_api.ivt_msg_response.a2_resp_triggermode_u2 = msg->a2_resp_triggermode_u2;
-                dbc_api.ivt_msg_response.a3_resp_cycletime_u3 = msg->a3_resp_cycletime_u3;
-                dbc_api.ivt_msg_response.a3_resp_endianess_u3 = msg->a3_resp_endianess_u3;
-                dbc_api.ivt_msg_response.a3_resp_sign_u3 = msg->a3_resp_sign_u3;
-                dbc_api.ivt_msg_response.a3_resp_triggermode_u3 = msg->a3_resp_triggermode_u3;
-                dbc_api.ivt_msg_response.a4_resp_cycletime_t = msg->a4_resp_cycletime_t;
-                dbc_api.ivt_msg_response.a4_resp_endianess_t = msg->a4_resp_endianess_t;
-                dbc_api.ivt_msg_response.a4_resp_sign_t = msg->a4_resp_sign_t;
-                dbc_api.ivt_msg_response.a4_resp_triggermode_t = msg->a4_resp_triggermode_t;
-                dbc_api.ivt_msg_response.a5_resp_cycletime_w = msg->a5_resp_cycletime_w;
-                dbc_api.ivt_msg_response.a5_resp_endianess_w = msg->a5_resp_endianess_w;
-                dbc_api.ivt_msg_response.a5_resp_sign_w = msg->a5_resp_sign_w;
-                dbc_api.ivt_msg_response.a5_resp_triggermode_w = msg->a5_resp_triggermode_w;
-                dbc_api.ivt_msg_response.a6_resp_cycletime_as = msg->a6_resp_cycletime_as;
-                dbc_api.ivt_msg_response.a6_resp_endianess_as = msg->a6_resp_endianess_as;
-                dbc_api.ivt_msg_response.a6_resp_sign_as = msg->a6_resp_sign_as;
-                dbc_api.ivt_msg_response.a6_resp_triggermode_as = msg->a6_resp_triggermode_as;
-                dbc_api.ivt_msg_response.a7_resp_cycletime_wh = msg->a7_resp_cycletime_wh;
-                dbc_api.ivt_msg_response.a7_resp_endianess_wh = msg->a7_resp_endianess_wh;
-                dbc_api.ivt_msg_response.a7_resp_sign_wh = msg->a7_resp_sign_wh;
-                dbc_api.ivt_msg_response.a7_resp_triggermode_wh = msg->a7_resp_triggermode_wh;
-                dbc_api.ivt_msg_response.b0_resp_reset_device_sn = msg->b0_resp_reset_device_sn;
-                dbc_api.ivt_msg_response.b0_resp_reset_item = msg->b0_resp_reset_item;
-                dbc_api.ivt_msg_response.b1_00_trigger_i = msg->b1_00_trigger_i;
-                dbc_api.ivt_msg_response.b1_01_trigger_u1 = msg->b1_01_trigger_u1;
-                dbc_api.ivt_msg_response.b1_02_trigger_u2 = msg->b1_02_trigger_u2;
-                dbc_api.ivt_msg_response.b1_03_trigger_u3 = msg->b1_03_trigger_u3;
-                dbc_api.ivt_msg_response.b1_04_trigger_t = msg->b1_04_trigger_t;
-                dbc_api.ivt_msg_response.b1_05_trigger_w = msg->b1_05_trigger_w;
-                dbc_api.ivt_msg_response.b1_06_trigger_as = msg->b1_06_trigger_as;
-                dbc_api.ivt_msg_response.b1_07_trigger_wh = msg->b1_07_trigger_wh;
-                dbc_api.ivt_msg_response.b1_trigger_spare = msg->b1_trigger_spare;
-                dbc_api.ivt_msg_response.b2_resp_store_device_sn = msg->b2_resp_store_device_sn;
-                dbc_api.ivt_msg_response.b2_resp_store_dummy = msg->b2_resp_store_dummy;
-                dbc_api.ivt_msg_response.b3_resp_oc_test_time = msg->b3_resp_oc_test_time;
-                dbc_api.ivt_msg_response.b4_resp_actual_mode = msg->b4_resp_actual_mode;
-                dbc_api.ivt_msg_response.b4_resp_code_level = msg->b4_resp_code_level;
-                dbc_api.ivt_msg_response.b4_resp_startup_mode = msg->b4_resp_startup_mode;
-                dbc_api.ivt_msg_response.b5_resp_oc_pos_reset_threshold = msg->b5_resp_oc_pos_reset_threshold;
-                dbc_api.ivt_msg_response.b5_resp_oc_pos_set_threshold = msg->b5_resp_oc_pos_set_threshold;
-                dbc_api.ivt_msg_response.b6_resp_oc_neg_reset_threshold = msg->b6_resp_oc_neg_reset_threshold;
-                dbc_api.ivt_msg_response.b6_resp_oc_neg_set_threshold = msg->b6_resp_oc_neg_set_threshold;
-                dbc_api.ivt_msg_response.b9_resp_device_com = msg->b9_resp_device_com;
-                dbc_api.ivt_msg_response.b9_resp_device_current = msg->b9_resp_device_current;
-                dbc_api.ivt_msg_response.b9_resp_device_toi = msg->b9_resp_device_toi;
-                dbc_api.ivt_msg_response.b9_resp_device_type = msg->b9_resp_device_type;
-                dbc_api.ivt_msg_response.b9_resp_device_v_supply = msg->b9_resp_device_v_supply;
-                dbc_api.ivt_msg_response.b9_resp_device_voltage_chan = msg->b9_resp_device_voltage_chan;
-                dbc_api.ivt_msg_response.ba_resp_sw_ver_day = msg->ba_resp_sw_ver_day;
-                dbc_api.ivt_msg_response.ba_resp_sw_ver_internal = msg->ba_resp_sw_ver_internal;
-                dbc_api.ivt_msg_response.ba_resp_sw_ver_major_hw = msg->ba_resp_sw_ver_major_hw;
-                dbc_api.ivt_msg_response.ba_resp_sw_ver_minor = msg->ba_resp_sw_ver_minor;
-                dbc_api.ivt_msg_response.ba_resp_sw_ver_month = msg->ba_resp_sw_ver_month;
-                dbc_api.ivt_msg_response.ba_resp_sw_ver_revision = msg->ba_resp_sw_ver_revision;
-                dbc_api.ivt_msg_response.ba_resp_sw_ver_vear = msg->ba_resp_sw_ver_vear;
-                dbc_api.ivt_msg_response.bb_resp_serien_nr = msg->bb_resp_serien_nr;
-                dbc_api.ivt_msg_response.bc_resp_art_n = msg->bc_resp_art_n;
-                dbc_api.ivt_msg_response.bf_restart_alive_cmd_id = msg->bf_restart_alive_cmd_id;
-                dbc_api.ivt_msg_response.bf_restart_alive_sn = msg->bf_restart_alive_sn;
-                dbc_api.ivt_msg_response.ff_wrong_command = msg->ff_wrong_command;
-                dbc_api.ivt_msg_response.ivt_id_response = msg->ivt_id_response;
-                dbc_api.ivt_msg_response.val_80_resp_measerror_count_mask = msg->val_80_resp_measerror_count_mask;
-                dbc_api.ivt_msg_response.val_80_resp_measerror_item = msg->val_80_resp_measerror_item;
-                dbc_api.ivt_msg_response.val_81_resp_systemerror_count_mask = msg->val_81_resp_systemerror_count_mask;
-                dbc_api.ivt_msg_response.val_81_resp_systemerror_item = msg->val_81_resp_systemerror_item;
-                dbc_api.ivt_msg_response.val_82_resp_alllogdata_counter = msg->val_82_resp_alllogdata_counter;
-                dbc_api.ivt_msg_response.val_82_resp_alllogdata_item = msg->val_82_resp_alllogdata_item;
-                dbc_api.ivt_msg_response.val_83_resp_logdata_counter = msg->val_83_resp_logdata_counter;
-                dbc_api.ivt_msg_response.val_83_resp_logdata_item = msg->val_83_resp_logdata_item;
-                dbc_api.ivt_msg_response.val_90_resp_can_id_sn_i = msg->val_90_resp_can_id_sn_i;
-                dbc_api.ivt_msg_response.val_90_resp_can_id_val_i = msg->val_90_resp_can_id_val_i;
-                dbc_api.ivt_msg_response.val_91_resp_can_id_sn_u1 = msg->val_91_resp_can_id_sn_u1;
-                dbc_api.ivt_msg_response.val_91_resp_can_id_val_u1 = msg->val_91_resp_can_id_val_u1;
-                dbc_api.ivt_msg_response.val_92_resp_can_id_sn_u2 = msg->val_92_resp_can_id_sn_u2;
-                dbc_api.ivt_msg_response.val_92_resp_can_id_val_u2 = msg->val_92_resp_can_id_val_u2;
-                dbc_api.ivt_msg_response.val_93_resp_can_id_sn_u3 = msg->val_93_resp_can_id_sn_u3;
-                dbc_api.ivt_msg_response.val_93_resp_can_id_val_u3 = msg->val_93_resp_can_id_val_u3;
-                dbc_api.ivt_msg_response.val_94_resp_can_id_sn_t = msg->val_94_resp_can_id_sn_t;
-                dbc_api.ivt_msg_response.val_94_resp_can_id_val_t = msg->val_94_resp_can_id_val_t;
-                dbc_api.ivt_msg_response.val_95_resp_can_id_sn_w = msg->val_95_resp_can_id_sn_w;
-                dbc_api.ivt_msg_response.val_95_resp_can_id_val_w = msg->val_95_resp_can_id_val_w;
-                dbc_api.ivt_msg_response.val_96_resp_can_id_sn_as = msg->val_96_resp_can_id_sn_as;
-                dbc_api.ivt_msg_response.val_96_resp_can_id_val_as = msg->val_96_resp_can_id_val_as;
-                dbc_api.ivt_msg_response.val_97_resp_can_id_sn_wh = msg->val_97_resp_can_id_sn_wh;
-                dbc_api.ivt_msg_response.val_97_resp_can_id_val_wh = msg->val_97_resp_can_id_val_wh;
-                dbc_api.ivt_msg_response.val_9d_resp_can_id_sn_command = msg->val_9d_resp_can_id_sn_command;
-                dbc_api.ivt_msg_response.val_9d_resp_can_id_val_command = msg->val_9d_resp_can_id_val_command;
-                dbc_api.ivt_msg_response.val_9f_resp_can_id_sn_response = msg->val_9f_resp_can_id_sn_response;
-                dbc_api.ivt_msg_response.val_9f_resp_can_id_val_response = msg->val_9f_resp_can_id_val_response;
             }
         }));
 }

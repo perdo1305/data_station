@@ -11,31 +11,31 @@ extern std::mutex dbc_api_mutex;
 #include <lart_msgs/msg/apps_adc_raw.hpp>
 #include <lart_msgs/msg/aqt1.hpp>
 #include <lart_msgs/msg/aqt2.hpp>
+#include <lart_msgs/msg/aqt2_temperatures1.hpp>
+#include <lart_msgs/msg/aqt2_temperatures10.hpp>
+#include <lart_msgs/msg/aqt2_temperatures11.hpp>
+#include <lart_msgs/msg/aqt2_temperatures12.hpp>
+#include <lart_msgs/msg/aqt2_temperatures13.hpp>
+#include <lart_msgs/msg/aqt2_temperatures14.hpp>
+#include <lart_msgs/msg/aqt2_temperatures15.hpp>
+#include <lart_msgs/msg/aqt2_temperatures16.hpp>
+#include <lart_msgs/msg/aqt2_temperatures17.hpp>
+#include <lart_msgs/msg/aqt2_temperatures18.hpp>
+#include <lart_msgs/msg/aqt2_temperatures19.hpp>
+#include <lart_msgs/msg/aqt2_temperatures2.hpp>
+#include <lart_msgs/msg/aqt2_temperatures20.hpp>
+#include <lart_msgs/msg/aqt2_temperatures21.hpp>
+#include <lart_msgs/msg/aqt2_temperatures22.hpp>
+#include <lart_msgs/msg/aqt2_temperatures23.hpp>
+#include <lart_msgs/msg/aqt2_temperatures24.hpp>
+#include <lart_msgs/msg/aqt2_temperatures3.hpp>
+#include <lart_msgs/msg/aqt2_temperatures4.hpp>
+#include <lart_msgs/msg/aqt2_temperatures5.hpp>
+#include <lart_msgs/msg/aqt2_temperatures6.hpp>
+#include <lart_msgs/msg/aqt2_temperatures7.hpp>
+#include <lart_msgs/msg/aqt2_temperatures8.hpp>
+#include <lart_msgs/msg/aqt2_temperatures9.hpp>
 #include <lart_msgs/msg/aqt4.hpp>
-#include <lart_msgs/msg/aqt7.hpp>
-#include <lart_msgs/msg/aqt8.hpp>
-#include <lart_msgs/msg/asf_signals.hpp>
-#include <lart_msgs/msg/cubemars_feedback.hpp>
-#include <lart_msgs/msg/cubemars_position_loop.hpp>
-#include <lart_msgs/msg/dashboard.hpp>
-#include <lart_msgs/msg/dv_dynamics1.hpp>
-#include <lart_msgs/msg/dv_dynamics2.hpp>
-#include <lart_msgs/msg/dv_status.hpp>
-#include <lart_msgs/msg/icd_request.hpp>
-#include <lart_msgs/msg/icd_response.hpp>
-#include <lart_msgs/msg/icd_result.hpp>
-#include <lart_msgs/msg/inv1_ac_dc_current.hpp>
-#include <lart_msgs/msg/inv1_erpm_duty_voltage.hpp>
-#include <lart_msgs/msg/inv1_foc.hpp>
-#include <lart_msgs/msg/inv1_minmaxaccurrent.hpp>
-#include <lart_msgs/msg/inv1_minmaxdccurrent.hpp>
-#include <lart_msgs/msg/inv1_misc.hpp>
-#include <lart_msgs/msg/inv1_setaccurrent.hpp>
-#include <lart_msgs/msg/inv1_setbrakecurrent.hpp>
-#include <lart_msgs/msg/inv1_setdigoutput.hpp>
-#include <lart_msgs/msg/inv1_setdriveenable.hpp>
-#include <lart_msgs/msg/inv1_seterpm.hpp>
-#include <lart_msgs/msg/inv1_setmaxacbrakecurrent.hpp>
 
 void init_dbc_api_subscribers_chunk_0(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs) {
     auto sensor_qos = rclcpp::QoS(10).best_effort();
@@ -98,6 +98,342 @@ void init_dbc_api_subscribers_chunk_0(std::shared_ptr<rclcpp::Node> node, std::v
                 dbc_api.aqt2.front_right_wheel_rpm = msg->front_right_wheel_rpm;
             }
         }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures1>(
+        "/data/aqt2_temperatures_1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures1> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_1.temperature_001 = msg->temperature_001;
+                dbc_api.aqt2_temperatures_1.temperature_002 = msg->temperature_002;
+                dbc_api.aqt2_temperatures_1.temperature_003 = msg->temperature_003;
+                dbc_api.aqt2_temperatures_1.temperature_004 = msg->temperature_004;
+                dbc_api.aqt2_temperatures_1.temperature_005 = msg->temperature_005;
+                dbc_api.aqt2_temperatures_1.temperature_006 = msg->temperature_006;
+                dbc_api.aqt2_temperatures_1.temperature_007 = msg->temperature_007;
+                dbc_api.aqt2_temperatures_1.temperature_008 = msg->temperature_008;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures10>(
+        "/data/aqt2_temperatures_10", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures10> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_10.temperature_073 = msg->temperature_073;
+                dbc_api.aqt2_temperatures_10.temperature_074 = msg->temperature_074;
+                dbc_api.aqt2_temperatures_10.temperature_075 = msg->temperature_075;
+                dbc_api.aqt2_temperatures_10.temperature_076 = msg->temperature_076;
+                dbc_api.aqt2_temperatures_10.temperature_077 = msg->temperature_077;
+                dbc_api.aqt2_temperatures_10.temperature_078 = msg->temperature_078;
+                dbc_api.aqt2_temperatures_10.temperature_079 = msg->temperature_079;
+                dbc_api.aqt2_temperatures_10.temperature_080 = msg->temperature_080;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures11>(
+        "/data/aqt2_temperatures_11", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures11> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_11.temperature_081 = msg->temperature_081;
+                dbc_api.aqt2_temperatures_11.temperature_082 = msg->temperature_082;
+                dbc_api.aqt2_temperatures_11.temperature_083 = msg->temperature_083;
+                dbc_api.aqt2_temperatures_11.temperature_084 = msg->temperature_084;
+                dbc_api.aqt2_temperatures_11.temperature_085 = msg->temperature_085;
+                dbc_api.aqt2_temperatures_11.temperature_086 = msg->temperature_086;
+                dbc_api.aqt2_temperatures_11.temperature_087 = msg->temperature_087;
+                dbc_api.aqt2_temperatures_11.temperature_088 = msg->temperature_088;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures12>(
+        "/data/aqt2_temperatures_12", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures12> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_12.temperature_089 = msg->temperature_089;
+                dbc_api.aqt2_temperatures_12.temperature_090 = msg->temperature_090;
+                dbc_api.aqt2_temperatures_12.temperature_091 = msg->temperature_091;
+                dbc_api.aqt2_temperatures_12.temperature_092 = msg->temperature_092;
+                dbc_api.aqt2_temperatures_12.temperature_093 = msg->temperature_093;
+                dbc_api.aqt2_temperatures_12.temperature_094 = msg->temperature_094;
+                dbc_api.aqt2_temperatures_12.temperature_095 = msg->temperature_095;
+                dbc_api.aqt2_temperatures_12.temperature_096 = msg->temperature_096;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures13>(
+        "/data/aqt2_temperatures_13", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures13> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_13.temperature_097 = msg->temperature_097;
+                dbc_api.aqt2_temperatures_13.temperature_098 = msg->temperature_098;
+                dbc_api.aqt2_temperatures_13.temperature_099 = msg->temperature_099;
+                dbc_api.aqt2_temperatures_13.temperature_100 = msg->temperature_100;
+                dbc_api.aqt2_temperatures_13.temperature_101 = msg->temperature_101;
+                dbc_api.aqt2_temperatures_13.temperature_102 = msg->temperature_102;
+                dbc_api.aqt2_temperatures_13.temperature_103 = msg->temperature_103;
+                dbc_api.aqt2_temperatures_13.temperature_104 = msg->temperature_104;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures14>(
+        "/data/aqt2_temperatures_14", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures14> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_14.temperature_105 = msg->temperature_105;
+                dbc_api.aqt2_temperatures_14.temperature_106 = msg->temperature_106;
+                dbc_api.aqt2_temperatures_14.temperature_107 = msg->temperature_107;
+                dbc_api.aqt2_temperatures_14.temperature_108 = msg->temperature_108;
+                dbc_api.aqt2_temperatures_14.temperature_109 = msg->temperature_109;
+                dbc_api.aqt2_temperatures_14.temperature_110 = msg->temperature_110;
+                dbc_api.aqt2_temperatures_14.temperature_111 = msg->temperature_111;
+                dbc_api.aqt2_temperatures_14.temperature_112 = msg->temperature_112;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures15>(
+        "/data/aqt2_temperatures_15", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures15> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_15.temperature_113 = msg->temperature_113;
+                dbc_api.aqt2_temperatures_15.temperature_114 = msg->temperature_114;
+                dbc_api.aqt2_temperatures_15.temperature_115 = msg->temperature_115;
+                dbc_api.aqt2_temperatures_15.temperature_116 = msg->temperature_116;
+                dbc_api.aqt2_temperatures_15.temperature_117 = msg->temperature_117;
+                dbc_api.aqt2_temperatures_15.temperature_118 = msg->temperature_118;
+                dbc_api.aqt2_temperatures_15.temperature_119 = msg->temperature_119;
+                dbc_api.aqt2_temperatures_15.temperature_120 = msg->temperature_120;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures16>(
+        "/data/aqt2_temperatures_16", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures16> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_16.temperature_121 = msg->temperature_121;
+                dbc_api.aqt2_temperatures_16.temperature_122 = msg->temperature_122;
+                dbc_api.aqt2_temperatures_16.temperature_123 = msg->temperature_123;
+                dbc_api.aqt2_temperatures_16.temperature_124 = msg->temperature_124;
+                dbc_api.aqt2_temperatures_16.temperature_125 = msg->temperature_125;
+                dbc_api.aqt2_temperatures_16.temperature_126 = msg->temperature_126;
+                dbc_api.aqt2_temperatures_16.temperature_127 = msg->temperature_127;
+                dbc_api.aqt2_temperatures_16.temperature_128 = msg->temperature_128;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures17>(
+        "/data/aqt2_temperatures_17", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures17> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_17.temperature_129 = msg->temperature_129;
+                dbc_api.aqt2_temperatures_17.temperature_130 = msg->temperature_130;
+                dbc_api.aqt2_temperatures_17.temperature_131 = msg->temperature_131;
+                dbc_api.aqt2_temperatures_17.temperature_132 = msg->temperature_132;
+                dbc_api.aqt2_temperatures_17.temperature_133 = msg->temperature_133;
+                dbc_api.aqt2_temperatures_17.temperature_134 = msg->temperature_134;
+                dbc_api.aqt2_temperatures_17.temperature_135 = msg->temperature_135;
+                dbc_api.aqt2_temperatures_17.temperature_136 = msg->temperature_136;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures18>(
+        "/data/aqt2_temperatures_18", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures18> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_18.temperature_137 = msg->temperature_137;
+                dbc_api.aqt2_temperatures_18.temperature_138 = msg->temperature_138;
+                dbc_api.aqt2_temperatures_18.temperature_139 = msg->temperature_139;
+                dbc_api.aqt2_temperatures_18.temperature_140 = msg->temperature_140;
+                dbc_api.aqt2_temperatures_18.temperature_141 = msg->temperature_141;
+                dbc_api.aqt2_temperatures_18.temperature_142 = msg->temperature_142;
+                dbc_api.aqt2_temperatures_18.temperature_143 = msg->temperature_143;
+                dbc_api.aqt2_temperatures_18.temperature_144 = msg->temperature_144;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures19>(
+        "/data/aqt2_temperatures_19", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures19> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_19.temperature_145 = msg->temperature_145;
+                dbc_api.aqt2_temperatures_19.temperature_146 = msg->temperature_146;
+                dbc_api.aqt2_temperatures_19.temperature_147 = msg->temperature_147;
+                dbc_api.aqt2_temperatures_19.temperature_148 = msg->temperature_148;
+                dbc_api.aqt2_temperatures_19.temperature_149 = msg->temperature_149;
+                dbc_api.aqt2_temperatures_19.temperature_150 = msg->temperature_150;
+                dbc_api.aqt2_temperatures_19.temperature_151 = msg->temperature_151;
+                dbc_api.aqt2_temperatures_19.temperature_152 = msg->temperature_152;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures2>(
+        "/data/aqt2_temperatures_2", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures2> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_2.temperature_009 = msg->temperature_009;
+                dbc_api.aqt2_temperatures_2.temperature_010 = msg->temperature_010;
+                dbc_api.aqt2_temperatures_2.temperature_011 = msg->temperature_011;
+                dbc_api.aqt2_temperatures_2.temperature_012 = msg->temperature_012;
+                dbc_api.aqt2_temperatures_2.temperature_013 = msg->temperature_013;
+                dbc_api.aqt2_temperatures_2.temperature_014 = msg->temperature_014;
+                dbc_api.aqt2_temperatures_2.temperature_015 = msg->temperature_015;
+                dbc_api.aqt2_temperatures_2.temperature_016 = msg->temperature_016;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures20>(
+        "/data/aqt2_temperatures_20", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures20> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_20.temperature_153 = msg->temperature_153;
+                dbc_api.aqt2_temperatures_20.temperature_154 = msg->temperature_154;
+                dbc_api.aqt2_temperatures_20.temperature_155 = msg->temperature_155;
+                dbc_api.aqt2_temperatures_20.temperature_156 = msg->temperature_156;
+                dbc_api.aqt2_temperatures_20.temperature_157 = msg->temperature_157;
+                dbc_api.aqt2_temperatures_20.temperature_158 = msg->temperature_158;
+                dbc_api.aqt2_temperatures_20.temperature_159 = msg->temperature_159;
+                dbc_api.aqt2_temperatures_20.temperature_160 = msg->temperature_160;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures21>(
+        "/data/aqt2_temperatures_21", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures21> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_21.temperature_161 = msg->temperature_161;
+                dbc_api.aqt2_temperatures_21.temperature_162 = msg->temperature_162;
+                dbc_api.aqt2_temperatures_21.temperature_163 = msg->temperature_163;
+                dbc_api.aqt2_temperatures_21.temperature_164 = msg->temperature_164;
+                dbc_api.aqt2_temperatures_21.temperature_165 = msg->temperature_165;
+                dbc_api.aqt2_temperatures_21.temperature_166 = msg->temperature_166;
+                dbc_api.aqt2_temperatures_21.temperature_167 = msg->temperature_167;
+                dbc_api.aqt2_temperatures_21.temperature_168 = msg->temperature_168;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures22>(
+        "/data/aqt2_temperatures_22", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures22> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_22.temperature_169 = msg->temperature_169;
+                dbc_api.aqt2_temperatures_22.temperature_170 = msg->temperature_170;
+                dbc_api.aqt2_temperatures_22.temperature_171 = msg->temperature_171;
+                dbc_api.aqt2_temperatures_22.temperature_172 = msg->temperature_172;
+                dbc_api.aqt2_temperatures_22.temperature_173 = msg->temperature_173;
+                dbc_api.aqt2_temperatures_22.temperature_174 = msg->temperature_174;
+                dbc_api.aqt2_temperatures_22.temperature_175 = msg->temperature_175;
+                dbc_api.aqt2_temperatures_22.temperature_176 = msg->temperature_176;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures23>(
+        "/data/aqt2_temperatures_23", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures23> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_23.temperature_177 = msg->temperature_177;
+                dbc_api.aqt2_temperatures_23.temperature_178 = msg->temperature_178;
+                dbc_api.aqt2_temperatures_23.temperature_179 = msg->temperature_179;
+                dbc_api.aqt2_temperatures_23.temperature_180 = msg->temperature_180;
+                dbc_api.aqt2_temperatures_23.temperature_181 = msg->temperature_181;
+                dbc_api.aqt2_temperatures_23.temperature_182 = msg->temperature_182;
+                dbc_api.aqt2_temperatures_23.temperature_183 = msg->temperature_183;
+                dbc_api.aqt2_temperatures_23.temperature_184 = msg->temperature_184;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures24>(
+        "/data/aqt2_temperatures_24", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures24> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_24.temperature_185 = msg->temperature_185;
+                dbc_api.aqt2_temperatures_24.temperature_186 = msg->temperature_186;
+                dbc_api.aqt2_temperatures_24.temperature_187 = msg->temperature_187;
+                dbc_api.aqt2_temperatures_24.temperature_188 = msg->temperature_188;
+                dbc_api.aqt2_temperatures_24.temperature_189 = msg->temperature_189;
+                dbc_api.aqt2_temperatures_24.temperature_190 = msg->temperature_190;
+                dbc_api.aqt2_temperatures_24.temperature_191 = msg->temperature_191;
+                dbc_api.aqt2_temperatures_24.temperature_192 = msg->temperature_192;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures3>(
+        "/data/aqt2_temperatures_3", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures3> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_3.temperature_017 = msg->temperature_017;
+                dbc_api.aqt2_temperatures_3.temperature_018 = msg->temperature_018;
+                dbc_api.aqt2_temperatures_3.temperature_019 = msg->temperature_019;
+                dbc_api.aqt2_temperatures_3.temperature_020 = msg->temperature_020;
+                dbc_api.aqt2_temperatures_3.temperature_021 = msg->temperature_021;
+                dbc_api.aqt2_temperatures_3.temperature_022 = msg->temperature_022;
+                dbc_api.aqt2_temperatures_3.temperature_023 = msg->temperature_023;
+                dbc_api.aqt2_temperatures_3.temperature_024 = msg->temperature_024;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures4>(
+        "/data/aqt2_temperatures_4", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures4> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_4.temperature_025 = msg->temperature_025;
+                dbc_api.aqt2_temperatures_4.temperature_026 = msg->temperature_026;
+                dbc_api.aqt2_temperatures_4.temperature_027 = msg->temperature_027;
+                dbc_api.aqt2_temperatures_4.temperature_028 = msg->temperature_028;
+                dbc_api.aqt2_temperatures_4.temperature_029 = msg->temperature_029;
+                dbc_api.aqt2_temperatures_4.temperature_030 = msg->temperature_030;
+                dbc_api.aqt2_temperatures_4.temperature_031 = msg->temperature_031;
+                dbc_api.aqt2_temperatures_4.temperature_032 = msg->temperature_032;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures5>(
+        "/data/aqt2_temperatures_5", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures5> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_5.temperature_033 = msg->temperature_033;
+                dbc_api.aqt2_temperatures_5.temperature_034 = msg->temperature_034;
+                dbc_api.aqt2_temperatures_5.temperature_035 = msg->temperature_035;
+                dbc_api.aqt2_temperatures_5.temperature_036 = msg->temperature_036;
+                dbc_api.aqt2_temperatures_5.temperature_037 = msg->temperature_037;
+                dbc_api.aqt2_temperatures_5.temperature_038 = msg->temperature_038;
+                dbc_api.aqt2_temperatures_5.temperature_039 = msg->temperature_039;
+                dbc_api.aqt2_temperatures_5.temperature_040 = msg->temperature_040;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures6>(
+        "/data/aqt2_temperatures_6", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures6> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_6.temperature_041 = msg->temperature_041;
+                dbc_api.aqt2_temperatures_6.temperature_042 = msg->temperature_042;
+                dbc_api.aqt2_temperatures_6.temperature_043 = msg->temperature_043;
+                dbc_api.aqt2_temperatures_6.temperature_044 = msg->temperature_044;
+                dbc_api.aqt2_temperatures_6.temperature_045 = msg->temperature_045;
+                dbc_api.aqt2_temperatures_6.temperature_046 = msg->temperature_046;
+                dbc_api.aqt2_temperatures_6.temperature_047 = msg->temperature_047;
+                dbc_api.aqt2_temperatures_6.temperature_048 = msg->temperature_048;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures7>(
+        "/data/aqt2_temperatures_7", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures7> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_7.temperature_049 = msg->temperature_049;
+                dbc_api.aqt2_temperatures_7.temperature_050 = msg->temperature_050;
+                dbc_api.aqt2_temperatures_7.temperature_051 = msg->temperature_051;
+                dbc_api.aqt2_temperatures_7.temperature_052 = msg->temperature_052;
+                dbc_api.aqt2_temperatures_7.temperature_053 = msg->temperature_053;
+                dbc_api.aqt2_temperatures_7.temperature_054 = msg->temperature_054;
+                dbc_api.aqt2_temperatures_7.temperature_055 = msg->temperature_055;
+                dbc_api.aqt2_temperatures_7.temperature_056 = msg->temperature_056;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures8>(
+        "/data/aqt2_temperatures_8", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures8> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_8.temperature_057 = msg->temperature_057;
+                dbc_api.aqt2_temperatures_8.temperature_058 = msg->temperature_058;
+                dbc_api.aqt2_temperatures_8.temperature_059 = msg->temperature_059;
+                dbc_api.aqt2_temperatures_8.temperature_060 = msg->temperature_060;
+                dbc_api.aqt2_temperatures_8.temperature_061 = msg->temperature_061;
+                dbc_api.aqt2_temperatures_8.temperature_062 = msg->temperature_062;
+                dbc_api.aqt2_temperatures_8.temperature_063 = msg->temperature_063;
+                dbc_api.aqt2_temperatures_8.temperature_064 = msg->temperature_064;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt2Temperatures9>(
+        "/data/aqt2_temperatures_9", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt2Temperatures9> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.aqt2_temperatures_9.temperature_065 = msg->temperature_065;
+                dbc_api.aqt2_temperatures_9.temperature_066 = msg->temperature_066;
+                dbc_api.aqt2_temperatures_9.temperature_067 = msg->temperature_067;
+                dbc_api.aqt2_temperatures_9.temperature_068 = msg->temperature_068;
+                dbc_api.aqt2_temperatures_9.temperature_069 = msg->temperature_069;
+                dbc_api.aqt2_temperatures_9.temperature_070 = msg->temperature_070;
+                dbc_api.aqt2_temperatures_9.temperature_071 = msg->temperature_071;
+                dbc_api.aqt2_temperatures_9.temperature_072 = msg->temperature_072;
+            }
+        }));
     subs.push_back(node->create_subscription<lart_msgs::msg::Aqt4>(
         "/can/aqt4", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt4> msg) {
             if (msg) {
@@ -107,370 +443,6 @@ void init_dbc_api_subscribers_chunk_0(std::shared_ptr<rclcpp::Node> node, std::v
                 dbc_api.aqt4.st_angle = msg->st_angle;
                 dbc_api.aqt4.susp_l = msg->susp_l;
                 dbc_api.aqt4.susp_r = msg->susp_r;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt7>(
-        "/can/aqt7", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt7> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt7.ntc_1 = msg->ntc_1;
-                dbc_api.aqt7.susp_l = msg->susp_l;
-                dbc_api.aqt7.susp_r = msg->susp_r;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt7>(
-        "/data/aqt7", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt7> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt7.ntc_1 = msg->ntc_1;
-                dbc_api.aqt7.susp_l = msg->susp_l;
-                dbc_api.aqt7.susp_r = msg->susp_r;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt8>(
-        "/data/aqt8", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt8> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt8.ntc1 = msg->ntc1;
-                dbc_api.aqt8.ntc2 = msg->ntc2;
-                dbc_api.aqt8.ntc3 = msg->ntc3;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::AsfSignals>(
-        "/can/asf_signals", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::AsfSignals> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.asf_signals.brake_pressure_front = msg->brake_pressure_front;
-                dbc_api.asf_signals.brake_pressure_rear = msg->brake_pressure_rear;
-                dbc_api.asf_signals.ebs_pressure_tank_front = msg->ebs_pressure_tank_front;
-                dbc_api.asf_signals.ebs_pressure_tank_rear = msg->ebs_pressure_tank_rear;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::CubemarsFeedback>(
-        "/can/cubemars_feedback", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::CubemarsFeedback> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.cubemars_feedback.current = msg->current;
-                dbc_api.cubemars_feedback.driver_temp = msg->driver_temp;
-                dbc_api.cubemars_feedback.error_code = msg->error_code;
-                dbc_api.cubemars_feedback.position = msg->position;
-                dbc_api.cubemars_feedback.speed_rpm = msg->speed_rpm;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::CubemarsPositionLoop>(
-        "/can/cubemars_position_loop", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::CubemarsPositionLoop> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.cubemars_position_loop.position = msg->position;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Dashboard>(
-        "/pwt/dashboard", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Dashboard> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.dashboard.ignition_switch_raw = msg->ignition_switch_raw;
-                dbc_api.dashboard.r2d_button_raw = msg->r2d_button_raw;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::DvDynamics1>(
-        "/can/dv_dynamics_1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::DvDynamics1> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.dv_dynamics_1.brake_hydr_actual = msg->brake_hydr_actual;
-                dbc_api.dv_dynamics_1.brake_hydr_target = msg->brake_hydr_target;
-                dbc_api.dv_dynamics_1.motor_moment_actual = msg->motor_moment_actual;
-                dbc_api.dv_dynamics_1.motor_moment_target = msg->motor_moment_target;
-                dbc_api.dv_dynamics_1.speed_actual = msg->speed_actual;
-                dbc_api.dv_dynamics_1.speed_target = msg->speed_target;
-                dbc_api.dv_dynamics_1.steering_angle_actual = msg->steering_angle_actual;
-                dbc_api.dv_dynamics_1.steering_angle_target = msg->steering_angle_target;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::DvDynamics2>(
-        "/can/dv_dynamics_2", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::DvDynamics2> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.dv_dynamics_2.acceleration_lateral = msg->acceleration_lateral;
-                dbc_api.dv_dynamics_2.acceleration_longitudinal = msg->acceleration_longitudinal;
-                dbc_api.dv_dynamics_2.yaw_rate = msg->yaw_rate;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::DvStatus>(
-        "/can/dv_status", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::DvStatus> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.dv_status.ami_state = msg->ami_state;
-                dbc_api.dv_status.as_status = msg->as_status;
-                dbc_api.dv_status.asb_ebs_state = msg->asb_ebs_state;
-                dbc_api.dv_status.asb_redundancy_state = msg->asb_redundancy_state;
-                dbc_api.dv_status.cones_count_actual = msg->cones_count_actual;
-                dbc_api.dv_status.cones_count_all = msg->cones_count_all;
-                dbc_api.dv_status.lap_counter = msg->lap_counter;
-                dbc_api.dv_status.steering_state = msg->steering_state;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::IcdRequest>(
-        "/data/icd_request", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IcdRequest> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.icd_request.req_accessmode = msg->req_accessmode;
-                dbc_api.icd_request.req_accesspw1 = msg->req_accesspw1;
-                dbc_api.icd_request.req_accesspw2 = msg->req_accesspw2;
-                dbc_api.icd_request.req_accesspw3 = msg->req_accesspw3;
-                dbc_api.icd_request.req_accesspw4 = msg->req_accesspw4;
-                dbc_api.icd_request.req_accesspw5 = msg->req_accesspw5;
-                dbc_api.icd_request.req_accesspw6 = msg->req_accesspw6;
-                dbc_api.icd_request.req_averaging = msg->req_averaging;
-                dbc_api.icd_request.req_canbaudrate = msg->req_canbaudrate;
-                dbc_api.icd_request.req_canidreq_id = msg->req_canidreq_id;
-                dbc_api.icd_request.req_canidreq_sn = msg->req_canidreq_sn;
-                dbc_api.icd_request.req_canidres_id = msg->req_canidres_id;
-                dbc_api.icd_request.req_canidres_sn = msg->req_canidres_sn;
-                dbc_api.icd_request.req_canidresp_id = msg->req_canidresp_id;
-                dbc_api.icd_request.req_canidresp_sn = msg->req_canidresp_sn;
-                dbc_api.icd_request.req_canmode = msg->req_canmode;
-                dbc_api.icd_request.req_muxid = msg->req_muxid;
-                dbc_api.icd_request.req_newpw1 = msg->req_newpw1;
-                dbc_api.icd_request.req_newpw2 = msg->req_newpw2;
-                dbc_api.icd_request.req_newpw3 = msg->req_newpw3;
-                dbc_api.icd_request.req_newpw4 = msg->req_newpw4;
-                dbc_api.icd_request.req_newpw5 = msg->req_newpw5;
-                dbc_api.icd_request.req_newpw6 = msg->req_newpw6;
-                dbc_api.icd_request.req_oclimitneg = msg->req_oclimitneg;
-                dbc_api.icd_request.req_oclimitpos = msg->req_oclimitpos;
-                dbc_api.icd_request.req_opinvertcurrent = msg->req_opinvertcurrent;
-                dbc_api.icd_request.req_opmode = msg->req_opmode;
-                dbc_api.icd_request.req_opoutputrate = msg->req_opoutputrate;
-                dbc_api.icd_request.req_resetoption = msg->req_resetoption;
-                dbc_api.icd_request.req_sleepahthreshold = msg->req_sleepahthreshold;
-                dbc_api.icd_request.req_sleepithreshold = msg->req_sleepithreshold;
-                dbc_api.icd_request.req_sleeptimer = msg->req_sleeptimer;
-                dbc_api.icd_request.req_wakeahthreshold = msg->req_wakeahthreshold;
-                dbc_api.icd_request.req_wakeithreshold = msg->req_wakeithreshold;
-                dbc_api.icd_request.req_waketimer = msg->req_waketimer;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::IcdResponse>(
-        "/data/icd_response", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IcdResponse> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.icd_response.resp_accessmode = msg->resp_accessmode;
-                dbc_api.icd_response.resp_ahcounter = msg->resp_ahcounter;
-                dbc_api.icd_response.resp_articlenumber = msg->resp_articlenumber;
-                dbc_api.icd_response.resp_averaging = msg->resp_averaging;
-                dbc_api.icd_response.resp_canbaudrate = msg->resp_canbaudrate;
-                dbc_api.icd_response.resp_canidreq_id = msg->resp_canidreq_id;
-                dbc_api.icd_response.resp_canidreq_sn = msg->resp_canidreq_sn;
-                dbc_api.icd_response.resp_canidres_id = msg->resp_canidres_id;
-                dbc_api.icd_response.resp_canidres_sn = msg->resp_canidres_sn;
-                dbc_api.icd_response.resp_canidresp_id = msg->resp_canidresp_id;
-                dbc_api.icd_response.resp_canidresp_sn = msg->resp_canidresp_sn;
-                dbc_api.icd_response.resp_canmode = msg->resp_canmode;
-                dbc_api.icd_response.resp_devid_char1 = msg->resp_devid_char1;
-                dbc_api.icd_response.resp_devid_char2 = msg->resp_devid_char2;
-                dbc_api.icd_response.resp_devid_char3 = msg->resp_devid_char3;
-                dbc_api.icd_response.resp_devid_char4 = msg->resp_devid_char4;
-                dbc_api.icd_response.resp_devid_char5 = msg->resp_devid_char5;
-                dbc_api.icd_response.resp_devid_frame = msg->resp_devid_frame;
-                dbc_api.icd_response.resp_evtmeascount = msg->resp_evtmeascount;
-                dbc_api.icd_response.resp_evtmeastype = msg->resp_evtmeastype;
-                dbc_api.icd_response.resp_evtsyscount = msg->resp_evtsyscount;
-                dbc_api.icd_response.resp_evtsystype = msg->resp_evtsystype;
-                dbc_api.icd_response.resp_fwmajor = msg->resp_fwmajor;
-                dbc_api.icd_response.resp_fwminor = msg->resp_fwminor;
-                dbc_api.icd_response.resp_fwrelease = msg->resp_fwrelease;
-                dbc_api.icd_response.resp_hwver_char1 = msg->resp_hwver_char1;
-                dbc_api.icd_response.resp_hwver_char2 = msg->resp_hwver_char2;
-                dbc_api.icd_response.resp_hwver_char3 = msg->resp_hwver_char3;
-                dbc_api.icd_response.resp_hwver_char4 = msg->resp_hwver_char4;
-                dbc_api.icd_response.resp_hwver_char5 = msg->resp_hwver_char5;
-                dbc_api.icd_response.resp_hwver_char6 = msg->resp_hwver_char6;
-                dbc_api.icd_response.resp_hwver_frame = msg->resp_hwver_frame;
-                dbc_api.icd_response.resp_lifetime = msg->resp_lifetime;
-                dbc_api.icd_response.resp_ms_adcinterrupt = msg->resp_ms_adcinterrupt;
-                dbc_api.icd_response.resp_ms_calibrationdata = msg->resp_ms_calibrationdata;
-                dbc_api.icd_response.resp_ms_ocsactive = msg->resp_ms_ocsactive;
-                dbc_api.icd_response.resp_ms_opencircuiti = msg->resp_ms_opencircuiti;
-                dbc_api.icd_response.resp_ms_opencircuittchip = msg->resp_ms_opencircuittchip;
-                dbc_api.icd_response.resp_ms_opencircuittext = msg->resp_ms_opencircuittext;
-                dbc_api.icd_response.resp_ms_opencircuitu = msg->resp_ms_opencircuitu;
-                dbc_api.icd_response.resp_ms_overflowadcch1 = msg->resp_ms_overflowadcch1;
-                dbc_api.icd_response.resp_ms_overflowadcch2 = msg->resp_ms_overflowadcch2;
-                dbc_api.icd_response.resp_ms_overflowadcch3 = msg->resp_ms_overflowadcch3;
-                dbc_api.icd_response.resp_muxid = msg->resp_muxid;
-                dbc_api.icd_response.resp_oclimitneg = msg->resp_oclimitneg;
-                dbc_api.icd_response.resp_oclimitpos = msg->resp_oclimitpos;
-                dbc_api.icd_response.resp_opinvertcurrent = msg->resp_opinvertcurrent;
-                dbc_api.icd_response.resp_opmode = msg->resp_opmode;
-                dbc_api.icd_response.resp_opoutputrate = msg->resp_opoutputrate;
-                dbc_api.icd_response.resp_pw1 = msg->resp_pw1;
-                dbc_api.icd_response.resp_pw2 = msg->resp_pw2;
-                dbc_api.icd_response.resp_pw3 = msg->resp_pw3;
-                dbc_api.icd_response.resp_pw4 = msg->resp_pw4;
-                dbc_api.icd_response.resp_pw5 = msg->resp_pw5;
-                dbc_api.icd_response.resp_pw6 = msg->resp_pw6;
-                dbc_api.icd_response.resp_resetoption = msg->resp_resetoption;
-                dbc_api.icd_response.resp_rev_digit1 = msg->resp_rev_digit1;
-                dbc_api.icd_response.resp_rev_digit2 = msg->resp_rev_digit2;
-                dbc_api.icd_response.resp_rev_digit3 = msg->resp_rev_digit3;
-                dbc_api.icd_response.resp_rev_digit4 = msg->resp_rev_digit4;
-                dbc_api.icd_response.resp_serialnumber = msg->resp_serialnumber;
-                dbc_api.icd_response.resp_sleepahthreshold = msg->resp_sleepahthreshold;
-                dbc_api.icd_response.resp_sleepithreshold = msg->resp_sleepithreshold;
-                dbc_api.icd_response.resp_sleeptimer = msg->resp_sleeptimer;
-                dbc_api.icd_response.resp_ss_caldatacrc = msg->resp_ss_caldatacrc;
-                dbc_api.icd_response.resp_ss_canrx = msg->resp_ss_canrx;
-                dbc_api.icd_response.resp_ss_cantx = msg->resp_ss_cantx;
-                dbc_api.icd_response.resp_ss_clockmonreset = msg->resp_ss_clockmonreset;
-                dbc_api.icd_response.resp_ss_codecrc = msg->resp_ss_codecrc;
-                dbc_api.icd_response.resp_ss_configuration = msg->resp_ss_configuration;
-                dbc_api.icd_response.resp_ss_copwdreset = msg->resp_ss_copwdreset;
-                dbc_api.icd_response.resp_ss_eepromrw = msg->resp_ss_eepromrw;
-                dbc_api.icd_response.resp_ss_extpinreset = msg->resp_ss_extpinreset;
-                dbc_api.icd_response.resp_ss_lowvoltagereset = msg->resp_ss_lowvoltagereset;
-                dbc_api.icd_response.resp_ss_overtemp = msg->resp_ss_overtemp;
-                dbc_api.icd_response.resp_ss_powerfailure = msg->resp_ss_powerfailure;
-                dbc_api.icd_response.resp_ss_poweronreset = msg->resp_ss_poweronreset;
-                dbc_api.icd_response.resp_ss_systemclock = msg->resp_ss_systemclock;
-                dbc_api.icd_response.resp_ss_systeminit = msg->resp_ss_systeminit;
-                dbc_api.icd_response.resp_ss_undertemp = msg->resp_ss_undertemp;
-                dbc_api.icd_response.resp_tchip = msg->resp_tchip;
-                dbc_api.icd_response.resp_text = msg->resp_text;
-                dbc_api.icd_response.resp_uptime = msg->resp_uptime;
-                dbc_api.icd_response.resp_wakeahthreshold = msg->resp_wakeahthreshold;
-                dbc_api.icd_response.resp_wakeithreshold = msg->resp_wakeithreshold;
-                dbc_api.icd_response.resp_waketimer = msg->resp_waketimer;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::IcdResult>(
-        "/data/icd_result", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::IcdResult> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.icd_result.icd_current = msg->icd_current;
-                dbc_api.icd_result.icd_msgcounter = msg->icd_msgcounter;
-                dbc_api.icd_result.icd_status_measerror = msg->icd_status_measerror;
-                dbc_api.icd_result.icd_status_ocs = msg->icd_status_ocs;
-                dbc_api.icd_result.icd_status_syserror = msg->icd_status_syserror;
-                dbc_api.icd_result.icd_ubat = msg->icd_ubat;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1AcDcCurrent>(
-        "/pwt/inv1_ac_dc_current", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1AcDcCurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv1_ac_dc_current.inv1_actual_accurrent = msg->inv1_actual_accurrent;
-                dbc_api.inv1_ac_dc_current.inv1_actual_dccurrent = msg->inv1_actual_dccurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1ErpmDutyVoltage>(
-        "/pwt/inv1_erpm_duty_voltage", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1ErpmDutyVoltage> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv1_erpm_duty_voltage.inv1_actual_duty = msg->inv1_actual_duty;
-                dbc_api.inv1_erpm_duty_voltage.inv1_actual_erpm = msg->inv1_actual_erpm;
-                dbc_api.inv1_erpm_duty_voltage.inv1_actual_inputvoltage = msg->inv1_actual_inputvoltage;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Foc>(
-        "/pwt/inv1_foc", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Foc> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv1_foc.inv1_actual_foc_id = msg->inv1_actual_foc_id;
-                dbc_api.inv1_foc.inv1_actual_foc_iq = msg->inv1_actual_foc_iq;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Minmaxaccurrent>(
-        "/pwt/inv1_minmaxaccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Minmaxaccurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv1_minmaxaccurrent.inv1_availablemaxaccurrent = msg->inv1_availablemaxaccurrent;
-                dbc_api.inv1_minmaxaccurrent.inv1_availableminaccurrent = msg->inv1_availableminaccurrent;
-                dbc_api.inv1_minmaxaccurrent.inv1_maxaccurrent = msg->inv1_maxaccurrent;
-                dbc_api.inv1_minmaxaccurrent.inv1_minaccurrent = msg->inv1_minaccurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Minmaxdccurrent>(
-        "/pwt/inv1_minmaxdccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Minmaxdccurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv1_minmaxdccurrent.inv1_availablemaxdccurrent = msg->inv1_availablemaxdccurrent;
-                dbc_api.inv1_minmaxdccurrent.inv1_availablemindccurrent = msg->inv1_availablemindccurrent;
-                dbc_api.inv1_minmaxdccurrent.inv1_maxdccurrent = msg->inv1_maxdccurrent;
-                dbc_api.inv1_minmaxdccurrent.inv1_mindccurrent = msg->inv1_mindccurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Misc>(
-        "/pwt/inv1_misc", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Misc> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv1_misc.inv1_actual_brake = msg->inv1_actual_brake;
-                dbc_api.inv1_misc.inv1_actual_throttle = msg->inv1_actual_throttle;
-                dbc_api.inv1_misc.inv1_can_map_version = msg->inv1_can_map_version;
-                dbc_api.inv1_misc.inv1_capacitor_temp_limit = msg->inv1_capacitor_temp_limit;
-                dbc_api.inv1_misc.inv1_dc_current_limit = msg->inv1_dc_current_limit;
-                dbc_api.inv1_misc.inv1_digital_input_1 = msg->inv1_digital_input_1;
-                dbc_api.inv1_misc.inv1_digital_input_2 = msg->inv1_digital_input_2;
-                dbc_api.inv1_misc.inv1_digital_input_3 = msg->inv1_digital_input_3;
-                dbc_api.inv1_misc.inv1_digital_input_4 = msg->inv1_digital_input_4;
-                dbc_api.inv1_misc.inv1_digital_output_1 = msg->inv1_digital_output_1;
-                dbc_api.inv1_misc.inv1_digital_output_2 = msg->inv1_digital_output_2;
-                dbc_api.inv1_misc.inv1_digital_output_3 = msg->inv1_digital_output_3;
-                dbc_api.inv1_misc.inv1_digital_output_4 = msg->inv1_digital_output_4;
-                dbc_api.inv1_misc.inv1_drive_enable = msg->inv1_drive_enable;
-                dbc_api.inv1_misc.inv1_drive_enable_limit = msg->inv1_drive_enable_limit;
-                dbc_api.inv1_misc.inv1_igbt_accel_limit = msg->inv1_igbt_accel_limit;
-                dbc_api.inv1_misc.inv1_igbt_temp_limit = msg->inv1_igbt_temp_limit;
-                dbc_api.inv1_misc.inv1_input_voltage_limit = msg->inv1_input_voltage_limit;
-                dbc_api.inv1_misc.inv1_motor_accel_limit = msg->inv1_motor_accel_limit;
-                dbc_api.inv1_misc.inv1_motor_temp_limit = msg->inv1_motor_temp_limit;
-                dbc_api.inv1_misc.inv1_power_limit = msg->inv1_power_limit;
-                dbc_api.inv1_misc.inv1_rpm_max_limit = msg->inv1_rpm_max_limit;
-                dbc_api.inv1_misc.inv1_rpm_min_limit = msg->inv1_rpm_min_limit;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setaccurrent>(
-        "/pwt/inv1_setaccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setaccurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv1_setaccurrent.inv1_cmd_targetaccurrent = msg->inv1_cmd_targetaccurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setbrakecurrent>(
-        "/pwt/inv1_setbrakecurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setbrakecurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv1_setbrakecurrent.inv1_cmd_targetbrakecurrent = msg->inv1_cmd_targetbrakecurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setdigoutput>(
-        "/pwt/inv1_setdigoutput", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setdigoutput> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv1_setdigoutput.inv1_cmd_setdigoutput1 = msg->inv1_cmd_setdigoutput1;
-                dbc_api.inv1_setdigoutput.inv1_cmd_setdigoutput2 = msg->inv1_cmd_setdigoutput2;
-                dbc_api.inv1_setdigoutput.inv1_cmd_setdigoutput3 = msg->inv1_cmd_setdigoutput3;
-                dbc_api.inv1_setdigoutput.inv1_cmd_setdigoutput4 = msg->inv1_cmd_setdigoutput4;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setdriveenable>(
-        "/pwt/inv1_setdriveenable", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setdriveenable> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv1_setdriveenable.inv1_cmd_driveenable = msg->inv1_cmd_driveenable;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Seterpm>(
-        "/pwt/inv1_seterpm", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Seterpm> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv1_seterpm.inv1_cmd_targetspeed = msg->inv1_cmd_targetspeed;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setmaxacbrakecurrent>(
-        "/pwt/inv1_setmaxacbrakecurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setmaxacbrakecurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv1_setmaxacbrakecurrent.inv1_cmd_maxacbrakecurrent = msg->inv1_cmd_maxacbrakecurrent;
             }
         }));
 }

@@ -18,80 +18,80 @@ void CanBridgeImpl::init_publishers_chunk_0(rclcpp::Node* node) {
     if (database_ == "data_t26") {
         pub_aqt2 = node->create_publisher<lart_msgs::msg::Aqt2>(database_ == "data_t26" ? "/data/aqt2" : database_ == "powertrain_t26" ? "/pwt/aqt2" : "/can/aqt2", sensor_qos);
     }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_1 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures1>(database_ == "data_t26" ? "/data/aqt2_temperatures_1" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_1" : "/can/aqt2_temperatures_1", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_10 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures10>(database_ == "data_t26" ? "/data/aqt2_temperatures_10" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_10" : "/can/aqt2_temperatures_10", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_11 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures11>(database_ == "data_t26" ? "/data/aqt2_temperatures_11" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_11" : "/can/aqt2_temperatures_11", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_12 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures12>(database_ == "data_t26" ? "/data/aqt2_temperatures_12" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_12" : "/can/aqt2_temperatures_12", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_13 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures13>(database_ == "data_t26" ? "/data/aqt2_temperatures_13" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_13" : "/can/aqt2_temperatures_13", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_14 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures14>(database_ == "data_t26" ? "/data/aqt2_temperatures_14" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_14" : "/can/aqt2_temperatures_14", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_15 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures15>(database_ == "data_t26" ? "/data/aqt2_temperatures_15" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_15" : "/can/aqt2_temperatures_15", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_16 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures16>(database_ == "data_t26" ? "/data/aqt2_temperatures_16" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_16" : "/can/aqt2_temperatures_16", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_17 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures17>(database_ == "data_t26" ? "/data/aqt2_temperatures_17" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_17" : "/can/aqt2_temperatures_17", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_18 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures18>(database_ == "data_t26" ? "/data/aqt2_temperatures_18" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_18" : "/can/aqt2_temperatures_18", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_19 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures19>(database_ == "data_t26" ? "/data/aqt2_temperatures_19" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_19" : "/can/aqt2_temperatures_19", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_2 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures2>(database_ == "data_t26" ? "/data/aqt2_temperatures_2" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_2" : "/can/aqt2_temperatures_2", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_20 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures20>(database_ == "data_t26" ? "/data/aqt2_temperatures_20" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_20" : "/can/aqt2_temperatures_20", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_21 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures21>(database_ == "data_t26" ? "/data/aqt2_temperatures_21" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_21" : "/can/aqt2_temperatures_21", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_22 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures22>(database_ == "data_t26" ? "/data/aqt2_temperatures_22" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_22" : "/can/aqt2_temperatures_22", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_23 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures23>(database_ == "data_t26" ? "/data/aqt2_temperatures_23" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_23" : "/can/aqt2_temperatures_23", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_24 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures24>(database_ == "data_t26" ? "/data/aqt2_temperatures_24" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_24" : "/can/aqt2_temperatures_24", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_3 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures3>(database_ == "data_t26" ? "/data/aqt2_temperatures_3" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_3" : "/can/aqt2_temperatures_3", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_4 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures4>(database_ == "data_t26" ? "/data/aqt2_temperatures_4" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_4" : "/can/aqt2_temperatures_4", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_5 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures5>(database_ == "data_t26" ? "/data/aqt2_temperatures_5" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_5" : "/can/aqt2_temperatures_5", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_6 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures6>(database_ == "data_t26" ? "/data/aqt2_temperatures_6" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_6" : "/can/aqt2_temperatures_6", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_7 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures7>(database_ == "data_t26" ? "/data/aqt2_temperatures_7" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_7" : "/can/aqt2_temperatures_7", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_8 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures8>(database_ == "data_t26" ? "/data/aqt2_temperatures_8" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_8" : "/can/aqt2_temperatures_8", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_aqt2_temperatures_9 = node->create_publisher<lart_msgs::msg::Aqt2Temperatures9>(database_ == "data_t26" ? "/data/aqt2_temperatures_9" : database_ == "powertrain_t26" ? "/pwt/aqt2_temperatures_9" : "/can/aqt2_temperatures_9", sensor_qos);
+    }
     if (database_ == "autonomous_t26") {
         pub_aqt4 = node->create_publisher<lart_msgs::msg::Aqt4>(database_ == "data_t26" ? "/data/aqt4" : database_ == "powertrain_t26" ? "/pwt/aqt4" : "/can/aqt4", sensor_qos);
-    }
-    if (database_ == "data_t26") {
-        pub_aqt7 = node->create_publisher<lart_msgs::msg::Aqt7>(database_ == "data_t26" ? "/data/aqt7" : database_ == "powertrain_t26" ? "/pwt/aqt7" : "/can/aqt7", sensor_qos);
-    }
-    if (database_ == "data_t26") {
-        pub_aqt8 = node->create_publisher<lart_msgs::msg::Aqt8>(database_ == "data_t26" ? "/data/aqt8" : database_ == "powertrain_t26" ? "/pwt/aqt8" : "/can/aqt8", sensor_qos);
-    }
-    if (database_ == "autonomous_t26") {
-        pub_asf_signals = node->create_publisher<lart_msgs::msg::AsfSignals>(database_ == "data_t26" ? "/data/asf_signals" : database_ == "powertrain_t26" ? "/pwt/asf_signals" : "/can/asf_signals", sensor_qos);
-    }
-    if (database_ == "autonomous_t26") {
-        pub_cubemars_feedback = node->create_publisher<lart_msgs::msg::CubemarsFeedback>(database_ == "data_t26" ? "/data/cubemars_feedback" : database_ == "powertrain_t26" ? "/pwt/cubemars_feedback" : "/can/cubemars_feedback", sensor_qos);
-    }
-    if (database_ == "autonomous_t26") {
-        pub_cubemars_position_loop = node->create_publisher<lart_msgs::msg::CubemarsPositionLoop>(database_ == "data_t26" ? "/data/cubemars_position_loop" : database_ == "powertrain_t26" ? "/pwt/cubemars_position_loop" : "/can/cubemars_position_loop", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_dashboard = node->create_publisher<lart_msgs::msg::Dashboard>(database_ == "data_t26" ? "/data/dashboard" : database_ == "powertrain_t26" ? "/pwt/dashboard" : "/can/dashboard", sensor_qos);
-    }
-    if (database_ == "autonomous_t26") {
-        pub_dv_dynamics_1 = node->create_publisher<lart_msgs::msg::DvDynamics1>(database_ == "data_t26" ? "/data/dv_dynamics_1" : database_ == "powertrain_t26" ? "/pwt/dv_dynamics_1" : "/can/dv_dynamics_1", sensor_qos);
-    }
-    if (database_ == "autonomous_t26") {
-        pub_dv_dynamics_2 = node->create_publisher<lart_msgs::msg::DvDynamics2>(database_ == "data_t26" ? "/data/dv_dynamics_2" : database_ == "powertrain_t26" ? "/pwt/dv_dynamics_2" : "/can/dv_dynamics_2", sensor_qos);
-    }
-    if (database_ == "autonomous_t26") {
-        pub_dv_status = node->create_publisher<lart_msgs::msg::DvStatus>(database_ == "data_t26" ? "/data/dv_status" : database_ == "powertrain_t26" ? "/pwt/dv_status" : "/can/dv_status", sensor_qos);
-    }
-    if (database_ == "data_t26") {
-        pub_icd_request = node->create_publisher<lart_msgs::msg::IcdRequest>(database_ == "data_t26" ? "/data/icd_request" : database_ == "powertrain_t26" ? "/pwt/icd_request" : "/can/icd_request", sensor_qos);
-    }
-    if (database_ == "data_t26") {
-        pub_icd_response = node->create_publisher<lart_msgs::msg::IcdResponse>(database_ == "data_t26" ? "/data/icd_response" : database_ == "powertrain_t26" ? "/pwt/icd_response" : "/can/icd_response", sensor_qos);
-    }
-    if (database_ == "data_t26") {
-        pub_icd_result = node->create_publisher<lart_msgs::msg::IcdResult>(database_ == "data_t26" ? "/data/icd_result" : database_ == "powertrain_t26" ? "/pwt/icd_result" : "/can/icd_result", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_inv1_ac_dc_current = node->create_publisher<lart_msgs::msg::Inv1AcDcCurrent>(database_ == "data_t26" ? "/data/inv1_ac_dc_current" : database_ == "powertrain_t26" ? "/pwt/inv1_ac_dc_current" : "/can/inv1_ac_dc_current", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_inv1_erpm_duty_voltage = node->create_publisher<lart_msgs::msg::Inv1ErpmDutyVoltage>(database_ == "data_t26" ? "/data/inv1_erpm_duty_voltage" : database_ == "powertrain_t26" ? "/pwt/inv1_erpm_duty_voltage" : "/can/inv1_erpm_duty_voltage", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_inv1_foc = node->create_publisher<lart_msgs::msg::Inv1Foc>(database_ == "data_t26" ? "/data/inv1_foc" : database_ == "powertrain_t26" ? "/pwt/inv1_foc" : "/can/inv1_foc", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_inv1_minmaxaccurrent = node->create_publisher<lart_msgs::msg::Inv1Minmaxaccurrent>(database_ == "data_t26" ? "/data/inv1_minmaxaccurrent" : database_ == "powertrain_t26" ? "/pwt/inv1_minmaxaccurrent" : "/can/inv1_minmaxaccurrent", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_inv1_minmaxdccurrent = node->create_publisher<lart_msgs::msg::Inv1Minmaxdccurrent>(database_ == "data_t26" ? "/data/inv1_minmaxdccurrent" : database_ == "powertrain_t26" ? "/pwt/inv1_minmaxdccurrent" : "/can/inv1_minmaxdccurrent", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_inv1_misc = node->create_publisher<lart_msgs::msg::Inv1Misc>(database_ == "data_t26" ? "/data/inv1_misc" : database_ == "powertrain_t26" ? "/pwt/inv1_misc" : "/can/inv1_misc", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_inv1_setaccurrent = node->create_publisher<lart_msgs::msg::Inv1Setaccurrent>(database_ == "data_t26" ? "/data/inv1_setaccurrent" : database_ == "powertrain_t26" ? "/pwt/inv1_setaccurrent" : "/can/inv1_setaccurrent", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_inv1_setbrakecurrent = node->create_publisher<lart_msgs::msg::Inv1Setbrakecurrent>(database_ == "data_t26" ? "/data/inv1_setbrakecurrent" : database_ == "powertrain_t26" ? "/pwt/inv1_setbrakecurrent" : "/can/inv1_setbrakecurrent", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_inv1_setdigoutput = node->create_publisher<lart_msgs::msg::Inv1Setdigoutput>(database_ == "data_t26" ? "/data/inv1_setdigoutput" : database_ == "powertrain_t26" ? "/pwt/inv1_setdigoutput" : "/can/inv1_setdigoutput", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_inv1_setdriveenable = node->create_publisher<lart_msgs::msg::Inv1Setdriveenable>(database_ == "data_t26" ? "/data/inv1_setdriveenable" : database_ == "powertrain_t26" ? "/pwt/inv1_setdriveenable" : "/can/inv1_setdriveenable", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_inv1_seterpm = node->create_publisher<lart_msgs::msg::Inv1Seterpm>(database_ == "data_t26" ? "/data/inv1_seterpm" : database_ == "powertrain_t26" ? "/pwt/inv1_seterpm" : "/can/inv1_seterpm", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_inv1_setmaxacbrakecurrent = node->create_publisher<lart_msgs::msg::Inv1Setmaxacbrakecurrent>(database_ == "data_t26" ? "/data/inv1_setmaxacbrakecurrent" : database_ == "powertrain_t26" ? "/pwt/inv1_setmaxacbrakecurrent" : "/can/inv1_setmaxacbrakecurrent", sensor_qos);
     }
 }
 

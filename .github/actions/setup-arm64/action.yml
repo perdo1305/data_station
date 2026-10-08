@@ -1,0 +1,43 @@
+name: Set up ARM64 ROS2 build
+description: Install the shared Jazzy toolchain and compute a compatible build-cache prefix.
+outputs:
+  cache-prefix:
+    description: Cache namespace including installed package versions.
+    value: ${{ steps.toolchain.outputs.prefix }}
+runs:
+  using: composite
+  steps:
+  - name: Add ROS2 apt repository
+    shell: bash
+    run: |
+      sudo apt-get update
+      sudo apt-get install -y curl gnupg lsb-release
+      sudo curl -fsSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+      sudo apt-get update
+      mkdir -p "$HOME/.cache/lart-apt/archives/partial"
+  - name: Cache apt archives
+    uses: actions/cache@v4
+    with:
+      path: ~/.cache/lart-apt/archives
+      key: apt-arm64-jazzy-v3-${{ hashFiles('.github/actions/setup-arm64/action.yml') }}
+  - name: Install ROS2 and build tooling
+    shell: bash
+    run: |
+      sudo apt-get -o Dir::Cache::archives="$HOME/.cache/lart-apt/archives" \
+        -o APT::Keep-Downloaded-Packages=true install -y \
+        ros-jazzy-ros-base \
+        ros-jazzy-rclcpp \
+        ros-jazzy-rclpy \
+        ros-jazzy-std-msgs \
+        ros-jazzy-rosidl-default-generators \
+        ros-jazzy-rosidl-default-runtime \
+        python3-colcon-common-extensions \
+        build-essential cmake ccache pkg-config libsdl2-dev
+      sudo chown -R "$(id -u):$(id -g)" "$HOME/.cache/lart-apt/archives"
+  - name: Compute toolchain cache prefix
+    id: toolchain
+    shell: bash
+    run: |
+      toolchain=$(dpkg-query -W -f='${binary:Package}=${Version}\n' | sort | sha256sum | cut -d ' ' -f1)
+      echo "prefix=arm64-jazzy-v3-${toolchain}" >> "$GITHUB_OUTPUT"
