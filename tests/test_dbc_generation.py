@@ -1,10 +1,33 @@
 """Regeneration must preserve hand-written ROS interfaces and match DBC fields."""
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
 
 import cantools
+
+
+def test_dashboard_message_headers_have_registered_interfaces():
+    """Catch a stale lart_msgs submodule when dashboard messages change."""
+    root = Path(__file__).resolve().parents[1]
+    package = root / "src/lart_msgs"
+    cmake = (package / "CMakeLists.txt").read_text()
+    registered_headers = set()
+    for relative_path in re.findall(r'"((?:dbc_msgs|msg)/[^"\n]+\.msg)"', cmake):
+        interface = package / relative_path
+        assert interface.is_file(), f"Registered interface is missing: {relative_path}"
+        name = re.sub(r'(.)([A-Z][a-z]+)', r'\1_\2', interface.stem)
+        registered_headers.add(re.sub(r'([a-z0-9])([A-Z])', r'\1_\2', name).lower())
+
+    ui = root / "LART_Car_Dashboard_v1/src/ui"
+    consumers = [ui / "generated/can_bridge_impl.hpp", *ui.glob("dbc_api_sub_*.cpp")]
+    required_headers = set()
+    for consumer in consumers:
+        required_headers.update(re.findall(r'<lart_msgs/msg/([^>]+)\.hpp>', consumer.read_text()))
+    assert required_headers, "No dashboard message includes found"
+    missing = required_headers - registered_headers
+    assert not missing, f"Dashboard headers have no registered ROS interface: {sorted(missing)}"
 
 
 def test_committed_aqt7_interface_matches_data_dbc():
