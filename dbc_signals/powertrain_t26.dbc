@@ -973,7 +973,19 @@ BO_ 129 Start_Charging: 1 HOST
  SG_ Charging_Request : 0|1@1+ (1,0) [0|0] "ON/OFF" Vector__XXX
 
 BO_ 1872 VCU_states: 8 VCU
- SG_ vcu_state : 7|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ vcu_state : 0|4@1+ (1,0) [0|15] "" Vector__XXX
+ SG_ throttle_status : 4|3@1+ (1,0) [0|7] "" Vector__XXX
+ SG_ tc_state : 7|3@1+ (1,0) [0|7] "" Vector__XXX
+ SG_ tv_state : 10|3@1+ (1,0) [0|7] "" Vector__XXX
+ SG_ front_wheel_speed_ok : 13|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ steering_angle_ok : 14|1@1+ (1,0) [0|1] "" Vector__XXX
+ SG_ front_left_speed : 15|8@1+ (0.5,0) [0|127.5] "km/h" Vector__XXX
+ SG_ front_right_speed : 23|8@1+ (0.5,0) [0|127.5] "km/h" Vector__XXX
+ SG_ tc_factor_rear_left : 31|7@1+ (1,0) [0|100] "%" Vector__XXX
+ SG_ tc_factor_rear_right : 38|7@1+ (1,0) [0|100] "%" Vector__XXX
+ SG_ tv_shift : 45|7@1- (1,0) [-64|63] "%" Vector__XXX
+ SG_ road_wheel_angle : 52|8@1- (0.25,0) [-32|31.75] "deg" Vector__XXX
+ SG_ vcu_states_counter : 60|4@1+ (1,0) [0|15] "" Vector__XXX
 
 BO_ 1028 INV1_ERPM_DUTY_VOLTAGE: 8 DTI_INV1
  SG_ INV1_Actual_ERPM : 7|32@0- (1,0) [-120000|120000] "ERPM"  DTI_commands
@@ -1418,6 +1430,17 @@ CM_ SG_ 229 INV2_CMD_SetDigOutput3 "Digital output 3: 0=OFF, 1=ON";
 CM_ SG_ 229 INV2_CMD_SetDigOutput4 "Digital output 4: 0=OFF, 1=ON";
 CM_ BO_ 357 "Node ID: 5 — Configure max DC brake current";
 CM_ SG_ 357 INV2_CMD_MaxDcBrakeCurrent "Max DC brake current. Min depends on inverter config";
+CM_ BO_ 1872 "VCU state + traction control / torque vectoring debug, every 10 ms";
+CM_ SG_ 1872 throttle_status "throttle_control.h throttle_status_t (what the throttle pipeline is doing)";
+CM_ SG_ 1872 tc_state "Traction control: off and why, or which rear wheel is being cut";
+CM_ SG_ 1872 tv_state "Torque vectoring: off and why, or which way the torque is moved";
+CM_ SG_ 1872 front_wheel_speed_ok "1 = AQT2 front wheel speed frame newer than SENSOR_TIMEOUT_MS";
+CM_ SG_ 1872 steering_angle_ok "1 = AQT4 steering angle frame newer than SENSOR_TIMEOUT_MS";
+CM_ SG_ 1872 tc_factor_rear_left "Share of the drive request the rear left motor gets after traction control (100 = no cut)";
+CM_ SG_ 1872 tc_factor_rear_right "Share of the drive request the rear right motor gets after traction control (100 = no cut)";
+CM_ SG_ 1872 tv_shift "Torque vectoring shift: > 0 right wheel x (1 + shift), left x (1 - shift)";
+CM_ SG_ 1872 road_wheel_angle "Front road wheel angle from the steering angle, > 0 = left";
+CM_ SG_ 1872 vcu_states_counter "+1 every frame, a jump = frames lost";
 BA_DEF_  "BusType" STRING ;
 BA_DEF_DEF_  "BusType" "CAN";
 VAL_ 131 Precharge_Request 0 "open/de-energize" 1 "close/energize contactors" ;
@@ -1449,6 +1472,11 @@ VAL_ 1795 fault2_index_type 0 "SLAVE" 1 "CELL" 2 "CHANNEL" 3 "CONTACTORS" 4 "SLA
 VAL_ 130 Balancing_Request 0 "BALANCING OFF" 1 "BALANCING ON" ;
 VAL_ 220 programming_request 1 "JumpToBootloader" ;
 VAL_ 129 Charging_Request 0 "CHARGING OFF" 1 "CHARGING ON" ;
-VAL_ 1872 vcu_state 0 "STATE_INIT," 1 "STATE_SHUTDOWN" 2 "STATE_STANDBY" 3 "STATE_PRECHARGE" 4 "STATE_WAITING_FOR_R2D_MANUAL" 5 "STATE_WAITING_FOR_R2D_AUTO" 6 "STATE_READY_MANUAL" 7 "STATE_READY_AUTONOMOUS" 8 "STATE_AS_EMERGENCY" ;
+VAL_ 1872 vcu_state 0 "STATE_INIT" 1 "STATE_SHUTDOWN" 2 "STATE_STANDBY" 3 "STATE_PRECHARGE" 4 "STATE_WAITING_FOR_R2D_MANUAL" 5 "STATE_WAITING_FOR_R2D_AUTO" 6 "STATE_READY_MANUAL" 7 "STATE_READY_AUTONOMOUS" 8 "STATE_AS_EMERGENCY" ;
+VAL_ 1872 throttle_status 0 "COAST" 1 "DRIVE" 2 "REGEN" 3 "REGEN_OFF_DC_VOLTAGE" 4 "APPS_ERROR" 5 "INVERTER_FAULT" 6 "BSPD_CUT" ;
+VAL_ 1872 tc_state 0 "DISABLED" 1 "NO_FRONT_WHEEL_SPEED" 2 "NO_DRIVE" 3 "BELOW_MIN_SPEED" 4 "GRIP" 5 "CUT_REAR_LEFT" 6 "CUT_REAR_RIGHT" 7 "CUT_BOTH" ;
+VAL_ 1872 tv_state 0 "DISABLED" 1 "NO_FRONT_WHEEL_SPEED" 2 "NO_STEERING_ANGLE" 3 "BELOW_MIN_SPEED" 4 "STRAIGHT" 5 "MORE_TORQUE_RIGHT" 6 "MORE_TORQUE_LEFT" 7 "AT_MAX_SHIFT" ;
+VAL_ 1872 front_wheel_speed_ok 0 "MISSING" 1 "OK" ;
+VAL_ 1872 steering_angle_ok 0 "MISSING" 1 "OK" ;
 VAL_ 1801 SDC_State 0 "There is no SDC on the AMS" 1 "We have SDC on the AMS" ;
 
