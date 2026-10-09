@@ -19,35 +19,74 @@ project's installed `cantools` dependency.
 The Python bridge and simulator read DBCs at runtime. The C++ bridge and dashboard
 use committed generated sources: changing a DBC alone does not update them.
 
-## Validate before writing generated files
-
-```bash
-python3 - <<'PY'
-from pathlib import Path
-import cantools
-for name in ('data_t26', 'powertrain_t26', 'autonomous_t26'):
-    cantools.database.load_file(Path('dbc_signals') / f'{name}.dbc')
-    print(f'{name}: valid')
-PY
-```
-
-Resolve overlapping signals and invalid frame lengths with the firmware owner.
-Do not bypass strict validation or guess the wire layout. Validate each database
-separately; shared IDs between different buses are expected.
-
 ## Regenerate and review
 
-Generate C files for each changed DBC (example: data):
+Initialize the submodules, then run the complete chain from the repository root:
 
 ```bash
-python3 -m cantools generate_c_source --encoding utf-8 \
-  -o LART_Car_Dashboard_v1/src/ui/generated dbc_signals/data_t26.dbc
-python3 LART_Car_Dashboard_v1/src/ui/generate_dbc_api.py
-python3 LART_Car_Dashboard_v1/src/ui/generated/generate_can_bridge.py
+git submodule update --init --recursive
+python3 -m venv /tmp/dbc-venv
+/tmp/dbc-venv/bin/pip install -r scripts/requirements-dbc.txt
+/tmp/dbc-venv/bin/python scripts/regenerate_dbcs.py
 
 git diff --stat
 git -C src/lart_msgs diff
 ```
+
+This validates all three databases before replacing inputs, then regenerates all
+C decoders, ROS messages/CMake entries, the dashboard API/subscribers and CAN
+bridge. It detects UTF-8 or legacy CP1252 input and removes generated timestamps
+so unchanged inputs produce unchanged outputs. Do not bypass strict validation
+or guess the wire layout; shared IDs between different buses are expected.
+
+To import a specific upstream revision, use a clean Git checkout:
+
+```bash
+git clone https://github.com/FSLART/T26_DBC.git /tmp/t26-dbc
+git -C /tmp/t26-dbc checkout <commit-sha>
+/tmp/dbc-venv/bin/python scripts/regenerate_dbcs.py --source-dir /tmp/t26-dbc
+```
+
+`dbc_signals/source.json` records the exact upstream commit, SHA-256 of each
+input and pinned cantools version. Local edits clear the recorded commit when
+input hashes change. Never attribute edited DBC files to an upstream revision.
+
+## Scheduled automation
+
+The new **Regenerate T26 DBC outputs** workflow (`regenerate-dbcs.yml`) checks upstream `main` every 30
+minutes. Manual dispatch accepts a branch, tag or exact commit through `dbc_ref`.
+It checks out the three DBCs together and regenerates against current
+`lart_msgs/main`. When nothing changes, it skips tests, builds and publication.
+When changes exist, decoder/API tests and the full ARM64 ROS workspace/dashboard
+build must pass before either update is published.
+
+Configure a GitHub App installed on **FSLART/data_station** and
+**FSLART/lart_msgs**, with **Contents: read/write** and
+**Pull requests: read/write** permissions. In data_station repository Actions
+settings, set variable `DBC_SYNC_APP_ID` and secret
+`DBC_SYNC_APP_PRIVATE_KEY`. The ordinary repository token cannot publish the
+separate interface repository; the App token also allows generated PRs to
+trigger validation. Without this configuration publication fails; it never
+falls back to pushing partial updates to master.
+
+Updates use stable `automation/dbc-regeneration` branches. The workflow opens
+or refreshes the interface PR first, then pins its published commit in a linked
+data_station PR. Merge the interface PR first, then the dashboard PR. Neither
+PR is automatically merged. Avoid squash/rebase merging the interface PR unless
+you also update the dashboard submodule pointer to the resulting merged commit.
+Review application consumers when fields or semantics change; generation does
+not rewrite hand-maintained screens, simulator overrides or Foxglove layouts.
+
+The separate **Validate DBC ARM64 build** workflow (`validate-dbc-arm64.yml`)
+runs regeneration, tests and the ARM64 build on dashboard PRs, master pushes,
+and pushes to `automate-dbc-regeneration`. It also supports manual dispatch,
+uses no App credentials and publishes no releases.
+
+The existing `fetch-dbcs.yml`, `build-arm64.yml` and shared ARM64 setup action
+are preserved exactly. The original DBC sync still updates inputs on master
+independently; the new workflow proposes the complete generated update through
+linked PRs. Existing build/release behavior continues through its original
+workflow. These schedules run only after the new workflow reaches master.
 
 The API generator updates `dbc_api.h`, `dbc_api.cpp`, `dbc_api_sub_*.cpp`,
 `src/lart_msgs/dbc_msgs/*.msg` and the generated CMake interface entries.
@@ -72,7 +111,7 @@ submodule files.
 Run these build commands in Bash (`setup.bash` is Bash-specific):
 
 ```bash
-python3 -m pytest -q tests/test_dbc_generation.py tests/test_dbc_api_abi.py tests/test_dbc_decoding.py
+/tmp/dbc-venv/bin/python -m pytest -q tests/test_regenerate_dbcs.py tests/test_dbc_generation.py tests/test_dbc_api_abi.py tests/test_dbc_decoding.py tests/test_dbc_sync_workflow.py
 source /opt/ros/jazzy/setup.bash
 colcon build --packages-select lart_msgs --parallel-workers 2
 source install/setup.bash
@@ -102,8 +141,7 @@ frame that shares CAN ID `0x750`.
 
 The autonomous DBC removes the old AQT2/AQT3 wheel-speed frames and makes AQT4
 `SUSP_L`/`SUSP_R` signed. Regenerate the data and autonomous C decoders, then
-the API and bridge. The powertrain decoder is already current. Use UTF-8 when
-generating C sources to preserve the source DBC's comments and units.
+the API and bridge. The powertrain decoder is already current. Use the complete regeneration command to preserve the encoding of each input.
 
 The generator has been repaired to preserve existing ROS package configuration,
 field types, headers, constants and dashboard helpers during future updates.

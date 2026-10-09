@@ -394,6 +394,8 @@ int main(int argc, char **argv) {
         assert(eez_flow_get_current_screen() == SCREEN_ID_DRIVER_GAUGE);
         assert(lv_screen_active() == objects.driver_gauge);
         dbc_api.inv1_erpm_duty_voltage.inv1_actual_erpm = 18000.0f;
+        dbc_api.aqt2.front_left_wheel_rpm = 1000.0f;
+        dbc_api.aqt2.front_right_wheel_rpm = 1200.0f;
         dbc_api.inv1_temperatures.inv1_actual_tempmotor = 67.0f;
         dbc_api.inv1_temperatures.inv1_actual_tempcontroller = 42.0f;
         dbc_api.master_msc_id_3.overall_maximum_temperature = 35.0f;
@@ -406,6 +408,18 @@ int main(int argc, char **argv) {
         assert(eez_flow_get_current_screen() == SCREEN_ID_DRIVER_GAUGE);
         assert(lv_screen_active() == objects.driver_gauge);
         assert(std::strcmp(lv_label_get_text(objects.gauge_speed), "23") == 0);
+        assert(std::abs(ui_get_speed() - 23.118980f) < 0.01f);
+        dbc_api.inv1_erpm_duty_voltage.inv1_actual_erpm = 0.0f;
+        ui_tick();
+        assert(std::abs(ui_get_speed() - 23.118980f) < 0.01f);
+        dbc_api.aqt2.front_left_wheel_rpm = 0.0f;
+        dbc_api.aqt2.front_right_wheel_rpm = 0.0f;
+        ui_tick();
+        assert(ui_get_speed() == 0.0f);
+        dbc_api.inv1_erpm_duty_voltage.inv1_actual_erpm = 18000.0f;
+        dbc_api.aqt2.front_left_wheel_rpm = 1000.0f;
+        dbc_api.aqt2.front_right_wheel_rpm = 1200.0f;
+        ui_tick();
         assert(std::strcmp(lv_label_get_text(objects.gauge_motor_temp), "67") == 0);
         assert(std::strcmp(lv_label_get_text(objects.gauge_inv_temp), "42") == 0);
         assert(std::strcmp(lv_label_get_text(objects.gauge_bat_temp), "35") == 0);
@@ -645,9 +659,13 @@ int main(int argc, char **argv) {
         assert(lv_bar_get_value(objects.gauge_apps_bar) == 0);
         assert(lv_bar_get_value(objects.gauge_brake_bar) == 0);
         dbc_api.inv1_erpm_duty_voltage.inv1_actual_erpm = -8000.0f;
+        dbc_api.aqt2.front_left_wheel_rpm = -100.0f;
+        dbc_api.aqt2.front_right_wheel_rpm = -100.0f;
         ui_tick();
         assert(std::strcmp(lv_label_get_text(objects.gauge_speed), "0") == 0);
         dbc_api.inv1_erpm_duty_voltage.inv1_actual_erpm = 80000.0f;
+        dbc_api.aqt2.front_left_wheel_rpm = 4900.0f;
+        dbc_api.aqt2.front_right_wheel_rpm = 5000.0f;
         ui_tick();
         assert(std::strcmp(lv_label_get_text(objects.gauge_speed), "104") == 0);
         const auto *line = reinterpret_cast<const lv_line_t *>(objects.gauge_needle);
@@ -655,6 +673,8 @@ int main(int argc, char **argv) {
         assert(std::fabs(full_scale.x - (236.0f + 190.0f / std::sqrt(2.0f))) < 1.0f);
         assert(std::fabs(full_scale.y - full_scale.x) < 1.0f);
         dbc_api.inv1_erpm_duty_voltage.inv1_actual_erpm = 96000.0f;
+        dbc_api.aqt2.front_left_wheel_rpm = 5900.0f;
+        dbc_api.aqt2.front_right_wheel_rpm = 6000.0f;
         ui_tick();
         assert(std::strcmp(lv_label_get_text(objects.gauge_speed), "125") == 0);
         assert(line->point_array[1].x == full_scale.x);
@@ -821,6 +841,8 @@ int main(int argc, char **argv) {
         dbc_api.vcu_ign_r2d.r2d_manual = 1.0f;
         dbc_api.dv_dynamics_1.speed_actual = 55.4f;
         dbc_api.inv1_erpm_duty_voltage.inv1_actual_erpm = 1000.0f;
+        dbc_api.aqt2.front_left_wheel_rpm = 500.0f;
+        dbc_api.aqt2.front_right_wheel_rpm = 1500.0f;
         dbc_api.inv1_temperatures.inv1_actual_tempcontroller = 38.2f;
         dbc_api.inv1_temperatures.inv1_actual_tempmotor = 62.1f;
         dbc_api.slam_stats_can.lap_counter = 3.0f;
@@ -845,7 +867,18 @@ int main(int argc, char **argv) {
         assert(std::strcmp(val_ready.getString(), "READY") == 0);
 
         auto val_speed = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_SPEED);
-        assert(std::abs(val_speed.getFloat() - 20.802334f) < 0.01f);
+        assert(std::abs(val_speed.getFloat() - 21.017255f) < 0.01f);
+
+        // Motor eRPM must not affect the speed derived from the front wheels.
+        dbc_api.inv1_erpm_duty_voltage.inv1_actual_erpm = 96000.0f;
+        ui_update_telemetry_vars(nullptr);
+        assert(std::abs(ui_get_speed() - 21.017255f) < 0.01f);
+        dbc_api.aqt2.front_left_wheel_rpm = 0.0f;
+        dbc_api.aqt2.front_right_wheel_rpm = 0.0f;
+        ui_update_telemetry_vars(nullptr);
+        assert(ui_get_speed() == 0.0f);
+        dbc_api.aqt2.front_left_wheel_rpm = 500.0f;
+        dbc_api.aqt2.front_right_wheel_rpm = 1500.0f;
 
         auto val_temp_inv = eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_TEMP_INV);
         assert(std::abs(val_temp_inv.getFloat() - 38.2f) < 0.01f);
@@ -881,7 +914,7 @@ int main(int argc, char **argv) {
         assert(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_SOC).getInt() == 80);
         assert(std::abs(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_LV).getFloat() - 25.0f) < 0.01f);
         assert(std::strcmp(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_READY).getString(), "READY") == 0);
-        assert(std::abs(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_SPEED).getFloat() - 41.604668f) < 0.01f);
+        assert(std::abs(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_SPEED).getFloat() - 21.017255f) < 0.01f);
         assert(std::abs(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_TEMP_INV).getFloat() - 30.0f) < 0.01f);
         assert(std::abs(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_TEMP_MOTOR).getFloat() - 40.0f) < 0.01f);
         assert(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_LAP_COUNT).getInt() == 5);

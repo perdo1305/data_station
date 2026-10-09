@@ -1,0 +1,4 @@
+# Match the current C generator and keep scheduled regeneration reproducible.
+cantools==42.0.3
+pytest==8.3.5
+PyYAML==6.0.2

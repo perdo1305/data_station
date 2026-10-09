@@ -39,7 +39,13 @@ def main():
     databases = []
     for cfg in db_configs:
         dbc_path = os.path.join(dbc_dir, cfg["file"])
-        db = cantools.database.load_file(dbc_path)
+        try:
+            with open(dbc_path, encoding="utf-8") as f:
+                f.read()
+            encoding = "utf-8"
+        except UnicodeDecodeError:
+            encoding = "cp1252"
+        db = cantools.database.load_file(dbc_path, encoding=encoding)
         databases.append({"db_name": cfg["name"], "db": db})
     
     # 2. Collect all messages that have signals

@@ -1,0 +1,164 @@
+name: Regenerate T26 DBC outputs
+
+on:
+  workflow_dispatch:
+    inputs:
+      dbc_ref:
+        description: T26_DBC branch, tag, or commit to regenerate
+        default: main
+        type: string
+  schedule:
+    - cron: "*/30 * * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dbc-regeneration
+  cancel-in-progress: false
+
+jobs:
+  sync-dbc:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Checkout destination repository
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          submodules: recursive
+
+      - name: Checkout DBC source
+        uses: actions/checkout@v4
+        with:
+          repository: FSLART/T26_DBC
+          ref: ${{ inputs.dbc_ref || 'main' }}
+          path: build/dbc-source
+
+      - name: Use current interface baseline
+        id: baseline
+        run: |
+          git -C src/lart_msgs fetch origin main
+          git -C src/lart_msgs checkout --detach origin/main
+          echo "sha=$(git -C src/lart_msgs rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Regenerate DBC outputs
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-venv
+          python3 -m venv "$RUNNER_TEMP/dbc-venv"
+          "$RUNNER_TEMP/dbc-venv/bin/pip" install -r scripts/requirements-dbc.txt
+          "$RUNNER_TEMP/dbc-venv/bin/python" scripts/regenerate_dbcs.py --source-dir build/dbc-source
+
+      - name: Check generated changes
+        id: changes
+        run: |
+          if [ -n "$(git status --porcelain --untracked-files=all -- dbc_signals LART_Car_Dashboard_v1/src/ui src/lart_msgs)" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Test DBC outputs
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          "$RUNNER_TEMP/dbc-venv/bin/python" -m pytest -q tests/test_regenerate_dbcs.py tests/test_dbc_generation.py tests/test_dbc_api_abi.py tests/test_dbc_decoding.py tests/test_dbc_sync_workflow.py
+
+      - name: Set up ROS2 build
+        if: steps.changes.outputs.changed == 'true'
+        uses: ./.github/actions/setup-arm64
+
+      - name: Build ROS2 workspace
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          colcon build --parallel-workers $(nproc)
+
+      - name: Build dashboard UI
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          source install/setup.bash
+          cmake -S LART_Car_Dashboard_v1/src/ui -B LART_Car_Dashboard_v1/build/ui-build -DCMAKE_BUILD_TYPE=Release
+          cmake --build LART_Car_Dashboard_v1/build/ui-build --parallel $(nproc)
+
+      - name: Create cross-repository token
+        if: steps.changes.outputs.changed == 'true'
+        uses: actions/create-github-app-token@v2
+        id: app
+        with:
+          app-id: ${{ vars.DBC_SYNC_APP_ID }}
+          private-key: ${{ secrets.DBC_SYNC_APP_PRIVATE_KEY }}
+          owner: FSLART
+          repositories: |
+            data_station
+            lart_msgs
+
+      # create-pull-request needs an ordinary checkout, not a submodule gitdir.
+      - name: Checkout interface publication repository
+        if: steps.changes.outputs.changed == 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: FSLART/lart_msgs
+          ref: ${{ steps.baseline.outputs.sha }}
+          path: build/interface-publish
+          token: ${{ steps.app.outputs.token }}
+
+      - name: Copy tested interfaces
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          rsync -a --delete src/lart_msgs/dbc_msgs/ build/interface-publish/dbc_msgs/
+          cp src/lart_msgs/CMakeLists.txt build/interface-publish/CMakeLists.txt
+
+      - name: Publish interface PR
+        if: steps.changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        id: interfaces
+        with:
+          token: ${{ steps.app.outputs.token }}
+          path: build/interface-publish
+          base: main
+          branch: automation/dbc-regeneration
+          add-paths: |
+            dbc_msgs
+            CMakeLists.txt
+          commit-message: 'chore: regenerate T26 DBC interfaces'
+          title: 'Regenerate T26 DBC interfaces'
+          body: |
+            Generated from the pinned T26_DBC revision recorded in the linked data_station update's dbc_signals/source.json.
+            The regenerated interfaces, ROS workspace and dashboard passed compilation before publication.
+            Merge this interface update before merging the data_station update that pins this commit.
+
+      - name: Pin published interfaces
+        if: steps.changes.outputs.changed == 'true' && steps.interfaces.outputs.pull-request-head-sha != ''
+        env:
+          INTERFACE_SHA: ${{ steps.interfaces.outputs.pull-request-head-sha }}
+        run: |
+          git -C src/lart_msgs fetch origin "$INTERFACE_SHA"
+          git -C src/lart_msgs restore --staged --worktree -- dbc_msgs CMakeLists.txt
+          git -C src/lart_msgs clean -fd -- dbc_msgs
+          git -C src/lart_msgs checkout --detach "$INTERFACE_SHA"
+          test "$(git -C src/lart_msgs rev-parse HEAD)" = "$INTERFACE_SHA"
+
+      - name: Publish dashboard PR
+        if: steps.changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ steps.app.outputs.token }}
+          base: master
+          branch: automation/dbc-regeneration
+          add-paths: |
+            dbc_signals
+            LART_Car_Dashboard_v1/src/ui/dbc_api*
+            LART_Car_Dashboard_v1/src/ui/generated/*.c
+            LART_Car_Dashboard_v1/src/ui/generated/*.h
+            LART_Car_Dashboard_v1/src/ui/generated/can_bridge_impl*
+            src/lart_msgs
+          commit-message: 'chore: regenerate complete T26 DBC outputs'
+          title: 'Regenerate complete T26 DBC outputs'
+          body: |
+            Updates the three DBC inputs, C decoders, ROS interfaces, API subscribers and CAN bridge from one source checkout.
+            The exact source commit, file hashes and cantools version are recorded in dbc_signals/source.json.
+            Validation, decoder/API tests, ROS workspace and dashboard compilation passed before publication.
+
+            Interface PR (merge first if present): ${{ steps.interfaces.outputs.pull-request-url }}
+            This update pins its published interface commit. Review consumers when fields or semantics change.
