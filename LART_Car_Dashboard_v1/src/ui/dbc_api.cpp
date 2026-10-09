@@ -207,15 +207,14 @@ extern "C" void ui_update_telemetry_vars(const void *t_ptr) {
                      dbc_api.vcu_states.vcu_state == 7.0f);
     eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_READY, eez::StringValue(is_ready ? "READY" : "NOT READY"));
 
-    // 6. SPEED (km/h): average mechanical front-wheel RPM; no motor reduction.
-    // Assumes 49 mm + 6.75 mm is the rolling radius, not a sensor ring radius.
-    constexpr float rolling_radius_m = 0.05575f;
+    // 6. SPEED (km/h): motor RPM = INV1 ERPM * 4, with a 14.73:1 reduction.
+    constexpr float tire_radius_m = 0.2032f;
+    constexpr float gear_ratio = 14.73f;
     constexpr float pi = 3.14159265358979323846f;
-    constexpr float rpm_to_kph = 2.0f * pi * rolling_radius_m * 60.0f / 1000.0f;
-    const float wheel_rpm = (dbc_api.aqt2.front_left_wheel_rpm +
-                             dbc_api.aqt2.front_right_wheel_rpm) * 0.5f;
-    const float speed_kph = wheel_rpm * rpm_to_kph;
-    const float speed_val = speed_kph >= 0.0f ? speed_kph : 0.0f;
+    const float motor_rpm = dbc_api.inv1_erpm_duty_voltage.inv1_actual_erpm / 4.0f;
+    const float wheel_rpm = motor_rpm / gear_ratio;
+    const float speed_kph = wheel_rpm * (2.0f * pi * tire_radius_m) * 60.0f / 1000.0f;
+    float speed_val = speed_kph >= 0.0f ? speed_kph : 0.0f;
     eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_SPEED, eez::FloatValue(speed_val));
 
     // 7. TEMP_INV (Inverter Temp, Celsius)
