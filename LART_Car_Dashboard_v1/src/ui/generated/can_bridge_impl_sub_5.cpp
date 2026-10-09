@@ -401,6 +401,18 @@ bool CanBridgeImpl::handle_frame_chunk_5(uint32_t can_id, const uint8_t* data, s
                     struct powertrain_t26_vcu_states_t decoded = {};
                     if (powertrain_t26_vcu_states_unpack(&decoded, data, dlc) == 0) {
                         out.vcu_state = powertrain_t26_vcu_states_vcu_state_decode(decoded.vcu_state);
+                        out.throttle_status = powertrain_t26_vcu_states_throttle_status_decode(decoded.throttle_status);
+                        out.tc_state = powertrain_t26_vcu_states_tc_state_decode(decoded.tc_state);
+                        out.tv_state = powertrain_t26_vcu_states_tv_state_decode(decoded.tv_state);
+                        out.front_wheel_speed_ok = powertrain_t26_vcu_states_front_wheel_speed_ok_decode(decoded.front_wheel_speed_ok);
+                        out.steering_angle_ok = powertrain_t26_vcu_states_steering_angle_ok_decode(decoded.steering_angle_ok);
+                        out.front_left_speed = powertrain_t26_vcu_states_front_left_speed_decode(decoded.front_left_speed);
+                        out.front_right_speed = powertrain_t26_vcu_states_front_right_speed_decode(decoded.front_right_speed);
+                        out.tc_factor_rear_left = powertrain_t26_vcu_states_tc_factor_rear_left_decode(decoded.tc_factor_rear_left);
+                        out.tc_factor_rear_right = powertrain_t26_vcu_states_tc_factor_rear_right_decode(decoded.tc_factor_rear_right);
+                        out.tv_shift = powertrain_t26_vcu_states_tv_shift_decode(decoded.tv_shift);
+                        out.road_wheel_angle = powertrain_t26_vcu_states_road_wheel_angle_decode(decoded.road_wheel_angle);
+                        out.vcu_states_counter = powertrain_t26_vcu_states_vcu_states_counter_decode(decoded.vcu_states_counter);
                         decoded_any = true;
                     }
                 }

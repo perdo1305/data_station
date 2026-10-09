@@ -1,0 +1,10 @@
+{
+  "cantools": "42.0.3",
+  "commit": null,
+  "repository": "FSLART/T26_DBC",
+  "sha256": {
+    "autonomous_t26.dbc": "2f38ab9b3daa67793096689ed51e084e54e9a8d1862c0dae470c058f80660c8d",
+    "data_t26.dbc": "b295b42f4c79aba8cb1f4a014dc5c3cb62cce146688fb8332d2894ccbe4ebc7d",
+    "powertrain_t26.dbc": "bf03204c2b9e71de82c3218263586e7194454bcdbf757a63d2dd72652d449267"
+  }
+}

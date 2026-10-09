@@ -1572,7 +1572,19 @@ typedef struct {
         float rpm_target;
     } vcu_rpm_target;
     struct {
+        float front_left_speed;
+        float front_right_speed;
+        float front_wheel_speed_ok;
+        float road_wheel_angle;
+        float steering_angle_ok;
+        float tc_factor_rear_left;
+        float tc_factor_rear_right;
+        float tc_state;
+        float throttle_status;
+        float tv_shift;
+        float tv_state;
         float vcu_state;
+        float vcu_states_counter;
     } vcu_states;
     struct {
         float torque_target;

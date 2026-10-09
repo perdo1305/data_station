@@ -24,6 +24,15 @@ class Aqt4(ctypes.Structure):
                 ("emergency", ctypes.c_uint8)]
 
 
+class VcuStates(ctypes.Structure):
+    _fields_ = [(name, ctypes.c_uint8) for name in (
+        "vcu_state", "throttle_status", "tc_state", "tv_state",
+        "front_wheel_speed_ok", "steering_angle_ok", "front_left_speed",
+        "front_right_speed", "tc_factor_rear_left", "tc_factor_rear_right",
+    )] + [("tv_shift", ctypes.c_int8), ("road_wheel_angle", ctypes.c_int8),
+         ("vcu_states_counter", ctypes.c_uint8)]
+
+
 @pytest.fixture(scope="module")
 def decoders(tmp_path_factory):
     generated = (Path(__file__).resolve().parents[1]
@@ -32,6 +41,7 @@ def decoders(tmp_path_factory):
     subprocess.run([
         "cc", "-std=c99", "-shared", "-fPIC", "-Wall", "-Wextra", "-Werror",
         str(generated / "data_t26.c"), str(generated / "autonomous_t26.c"),
+        str(generated / "powertrain_t26.c"),
         "-o", str(library),
     ], check=True)
     return ctypes.CDLL(str(library))
@@ -93,3 +103,25 @@ def test_autonomous_aqt4_decodes_signed_suspension(decoders):
     assert result == 0
     assert physical(decoders, "autonomous_t26_aqt4", message) == pytest.approx(
         [12.3, -100.0, -0.1, 1.0, 0.0])
+
+
+@pytest.mark.parametrize(("payload", "expected"), [
+    # Packed status flags, byte-crossing speeds/factors, signed shift and angle.
+    ("96 fa bd 64 15 f9 bd 9a",
+     [6, 1, 5, 6, 1, 1, 61.5, 100.5, 42, 100, -17, -21.25, 9]),
+    ("ff df 7f 00 00 19 08 f8",
+     [15, 7, 7, 7, 0, 1, 127.5, 0, 0, 100, -64, -32, 15]),
+    ("00 20 80 7f 32 e0 f7 07",
+     [0, 0, 0, 0, 1, 0, 0, 127.5, 100, 0, 63, 31.75, 0]),
+])
+def test_powertrain_vcu_states_decodes_packed_debug_signals(decoders, payload, expected):
+    result, message = unpack(decoders, "powertrain_t26_vcu_states", VcuStates,
+                             bytes.fromhex(payload))
+    assert result == 0
+    assert physical(decoders, "powertrain_t26_vcu_states", message) == pytest.approx(expected)
+
+
+def test_powertrain_vcu_states_rejects_truncated_frame(decoders):
+    result, _ = unpack(decoders, "powertrain_t26_vcu_states", VcuStates,
+                       bytes.fromhex("96 fa bd 64 15 f9 bd"))
+    assert result == -22

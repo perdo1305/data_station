@@ -145,3 +145,16 @@ the API and bridge. The powertrain decoder is already current. Use the complete 
 
 The generator has been repaired to preserve existing ROS package configuration,
 field types, headers, constants and dashboard helpers during future updates.
+
+## Powertrain DBC update (9 October 2026)
+
+`VCU_states` at CAN ID `0x750` now packs `vcu_state` into the low four bits
+instead of the whole first byte. The eight-byte frame also carries throttle,
+traction-control and torque-vectoring states, sensor-validity flags, front wheel
+speeds, rear traction-control factors, signed torque shift and road wheel angle,
+and a four-bit frame counter. Wheel speeds use 0.5 km/h per bit and road wheel
+angle uses 0.25 degrees per bit.
+
+The regenerated powertrain decoder, `VcuStates.msg`, dashboard API and bridge
+expose these fields on `/pwt/vcu_states`. Rebuild and restart its publishers and
+subscribers together. Existing ready-state values 6 and 7 remain unchanged.
