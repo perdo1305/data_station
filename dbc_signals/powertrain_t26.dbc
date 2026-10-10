@@ -960,6 +960,13 @@ BO_ 96 DashBoard: 1 Acquisition_Board4
  SG_ ignition_switch_raw : 0|1@1+ (1,0) [0|0] "" Vector__XXX
  SG_ r2d_button_raw : 1|1@1+ (1,0) [0|0] "" Vector__XXX
 
+BO_ 112 AQT4: 7 Acquisition_Board4
+ SG_ ST_ANGLE : 0|16@1- (0.1,0) [0|0] "º"  VCU
+ SG_ SUSP_L : 16|16@1- (0.1,0) [0|0] "mm" Vector__XXX
+ SG_ SUSP_R : 32|16@1- (0.1,0) [0|0] "mm" Vector__XXX
+ SG_ INERTIA : 48|1@1+ (1,0) [0|0] "" Vector__XXX
+ SG_ EMERGENCY : 49|1@1+ (1,0) [0|0] "" Vector__XXX
+
 BO_ 1797 Master_SOC_Accumulator: 8 AMS
  SG_ SOC_Integer : 0|8@1+ (1,0) [0|0] "" Vector__XXX
  SG_ SOC_Float : 8|16@1+ (0.01,0.01) [0|0] "" Vector__XXX
@@ -1276,6 +1283,17 @@ CM_ SG_ 1798 bal_bitmask_slave_id "identifier do slave da bitmaks with the balan
 ";
 CM_ SG_ 1798 bal_bitmask "bitmaks of active balancing cells in the slave identifier
 ";
+CM_ BO_ 1872 "VCU state + traction control / torque vectoring debug, every 10 ms";
+CM_ SG_ 1872 throttle_status "throttle_control.h throttle_status_t (what the throttle pipeline is doing)";
+CM_ SG_ 1872 tc_state "Traction control: off and why, or which rear wheel is being cut";
+CM_ SG_ 1872 tv_state "Torque vectoring: off and why, or which way the torque is moved";
+CM_ SG_ 1872 front_wheel_speed_ok "1 = AQT2 front wheel speed frame newer than SENSOR_TIMEOUT_MS";
+CM_ SG_ 1872 steering_angle_ok "1 = AQT4 steering angle frame newer than SENSOR_TIMEOUT_MS";
+CM_ SG_ 1872 tc_factor_rear_left "Share of the drive request the rear left motor gets after traction control (100 = no cut)";
+CM_ SG_ 1872 tc_factor_rear_right "Share of the drive request the rear right motor gets after traction control (100 = no cut)";
+CM_ SG_ 1872 tv_shift "Torque vectoring shift: > 0 right wheel x (1 + shift), left x (1 - shift)";
+CM_ SG_ 1872 road_wheel_angle "Front road wheel angle from the steering angle, > 0 = left";
+CM_ SG_ 1872 vcu_states_counter "+1 every frame, a jump = frames lost";
 CM_ BO_ 1028 "Node ID: 4 — ERPM, duty cycle, and DC input voltage";
 CM_ SG_ 1028 INV1_Actual_ERPM "Electrical RPM. ERPM = Motor_RPM * pole_pairs";
 CM_ SG_ 1028 INV1_Actual_Duty "Controller duty cycle. Positive=motoring, negative=regen";
@@ -1430,17 +1448,6 @@ CM_ SG_ 229 INV2_CMD_SetDigOutput3 "Digital output 3: 0=OFF, 1=ON";
 CM_ SG_ 229 INV2_CMD_SetDigOutput4 "Digital output 4: 0=OFF, 1=ON";
 CM_ BO_ 357 "Node ID: 5 — Configure max DC brake current";
 CM_ SG_ 357 INV2_CMD_MaxDcBrakeCurrent "Max DC brake current. Min depends on inverter config";
-CM_ BO_ 1872 "VCU state + traction control / torque vectoring debug, every 10 ms";
-CM_ SG_ 1872 throttle_status "throttle_control.h throttle_status_t (what the throttle pipeline is doing)";
-CM_ SG_ 1872 tc_state "Traction control: off and why, or which rear wheel is being cut";
-CM_ SG_ 1872 tv_state "Torque vectoring: off and why, or which way the torque is moved";
-CM_ SG_ 1872 front_wheel_speed_ok "1 = AQT2 front wheel speed frame newer than SENSOR_TIMEOUT_MS";
-CM_ SG_ 1872 steering_angle_ok "1 = AQT4 steering angle frame newer than SENSOR_TIMEOUT_MS";
-CM_ SG_ 1872 tc_factor_rear_left "Share of the drive request the rear left motor gets after traction control (100 = no cut)";
-CM_ SG_ 1872 tc_factor_rear_right "Share of the drive request the rear right motor gets after traction control (100 = no cut)";
-CM_ SG_ 1872 tv_shift "Torque vectoring shift: > 0 right wheel x (1 + shift), left x (1 - shift)";
-CM_ SG_ 1872 road_wheel_angle "Front road wheel angle from the steering angle, > 0 = left";
-CM_ SG_ 1872 vcu_states_counter "+1 every frame, a jump = frames lost";
 BA_DEF_  "BusType" STRING ;
 BA_DEF_DEF_  "BusType" "CAN";
 VAL_ 131 Precharge_Request 0 "open/de-energize" 1 "close/energize contactors" ;

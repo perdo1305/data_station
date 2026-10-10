@@ -53,7 +53,7 @@ BO_ 3221225472 VECTOR__INDEPENDENT_SIG_MSG: 0 Vector__XXX
  SG_ TIRE_TEMP : 0|16@1- (0.1,0) [0|0] "ºC"  Data_Station
  SG_ BRAKE_TEMP : 16|16@1- (0.1,0) [0|0] "ºC"  Data_Station
 
-BO_ 1824 AQT2: 4 Acquisition_Board2
+BO_ 48 AQT2: 4 Acquisition_Board2
  SG_ FRONT_LEFT_WHEEL_RPM : 0|16@1+ (1,0) [0|0] "RPM"  Data_Station
  SG_ FRONT_RIGHT_WHEEL_RPM : 16|16@1+ (1,0) [0|0] "RPM"  Data_Station
 
@@ -468,6 +468,7 @@ BO_ 1872 Master_MSC_ID_3: 8 BMS
 
 CM_ BU_ ICD "Isabellenhuette ISAscale ICD shunt current sensor (datasheet v1.3)";
 CM_ BU_ Data_Station "RPi 5 CAN Shield";
+CM_ BO_ 48 "AQT2 Repeater";
 CM_ BO_ 1921 "16x12 thermal matrix, block 1/24. Row-major: 16 columns x 12 rows, zero-based row 0, columns 0..7. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.";
 CM_ BO_ 1922 "16x12 thermal matrix, block 2/24. Row-major: 16 columns x 12 rows, zero-based row 0, columns 8..15. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.";
 CM_ BO_ 1923 "16x12 thermal matrix, block 3/24. Row-major: 16 columns x 12 rows, zero-based row 1, columns 0..7. T_degC = raw + 30. Send all blocks from one frozen acquisition in ascending order; no acquisition counter in payload.";
