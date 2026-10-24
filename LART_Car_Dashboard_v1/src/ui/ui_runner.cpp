@@ -434,8 +434,9 @@ int main(int argc, char **argv) {
         init_lvgl();
         dbc_api.master_precharge_id_1.precharge_state = -1.0f;
         ui_init();
-        assert(eez_flow_get_current_screen() == SCREEN_ID_DRIVER_GAUGE);
-        assert(lv_screen_active() == objects.driver_gauge);
+        assert(eez_flow_get_current_screen() == SCREEN_ID_DRIVER_VIEW);
+        assert(lv_screen_active() == objects.driver_view);
+        ui_set_screen(SCREEN_ID_DRIVER_GAUGE - 1); // applied by the next ui_tick()
         dbc_api.inv1_erpm_duty_voltage.inv1_actual_erpm = 18000.0f;
         dbc_api.inv1_temperatures.inv1_actual_tempmotor = 67.0f;
         dbc_api.inv1_temperatures.inv1_actual_tempcontroller = 42.0f;
@@ -931,8 +932,8 @@ int main(int argc, char **argv) {
         assert(std::strcmp(eez::flow::getGlobalVariable(FLOW_GLOBAL_VARIABLE_MISSION).getString(), "ACCEL") == 0);
 
         // Test 5: Test emergency screen transition on as_state = 4
-        // The gauge is the startup screen.
-        assert(eez_flow_get_current_screen() == SCREEN_ID_DRIVER_GAUGE);
+        // The driver view is the startup screen.
+        assert(eez_flow_get_current_screen() == SCREEN_ID_DRIVER_VIEW);
 
         dbc_api.acu.as_state = 4.0f;
         ui_tick(); // Tick once to detect the state change and queue the screen change
