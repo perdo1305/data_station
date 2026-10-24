@@ -101,8 +101,9 @@ dashboard_ui:
 bag_recorder:
   ros__parameters:
     trigger_topic: /pwt/start_precharge
+    as_state_topic: /can/jetson  # lart_msgs/Jetson; also records while as_state == 2 (READY)
     # Records all discoverable ROS topics, including hidden topics and /can/frames,
     # except topics under /zed/.
-    bag_dir: "~/bags"            # session folders precharge_YYYYMMDD_HHMMSS
+    bag_dir: "~/bags"            # session folders precharge_/autonomous_YYYY-MM-DDTHH-MM-SS
     stop_grace_s: 30.0           # keep recording this long after request=0
     split_duration_s: 0          # 0 = single continuous file per session (no splitting)

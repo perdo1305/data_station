@@ -1,13 +1,13 @@
-"""Precharge-triggered rosbag2 recorder.
+"""Precharge- and autonomous-triggered rosbag2 recorder.
 
-Watches the precharge request signal and records all discoverable ROS topics,
+Watches the precharge request signal and the Jetson AS state, and records all discoverable ROS topics,
 including hidden topics and raw CAN frames (/can/frames), into timestamped
 rosbag2 sessions. Topics under /zed/ are excluded. Topic discovery stays
 enabled during recording:
 
-  precharge_request >= 0.5       → start recording (new session folder)
-  precharge_request < 0.5        → keep recording for stop_grace_s, then finalize
-  request back to 1 within grace → same session continues
+  precharge_request >= 0.5 or as_state == 2 (READY) → start recording (new session folder)
+  both inactive                  → keep recording for stop_grace_s, then finalize
+  either back within grace       → same session continues
 
 Each session records into a single continuous mcap file (no splitting)
 unless split_duration_s is set > 0. Splitting is avoided by default: a
@@ -22,7 +22,7 @@ metadata.yaml (left behind by an unclean shutdown of a previous run) is
 repaired in place via `ros2 bag reindex` so it stays readable.
 
 Config (rpi_config.yaml → bag_recorder):
-  trigger_topic, bag_dir, stop_grace_s, split_duration_s
+  trigger_topic, as_state_topic, bag_dir, stop_grace_s, split_duration_s
 """
 
 import signal
@@ -35,8 +35,10 @@ from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy
 
-from lart_msgs.msg import StartPrecharge
+from lart_msgs.msg import Jetson, StartPrecharge
 from lart_bringup.trigger_state import State, TriggerStateMachine
+
+AS_STATE_READY = 2  # autonomous_t26.dbc VAL_ AS_STATE 2 "READY"
 
 _BEST_EFFORT = QoSProfile(
     reliability=QoSReliabilityPolicy.BEST_EFFORT,
@@ -50,16 +52,20 @@ class BagRecorderNode(Node):
         super().__init__('bag_recorder')
 
         self.declare_parameter('trigger_topic', '/pwt/start_precharge')
+        self.declare_parameter('as_state_topic', '/can/jetson')
         self.declare_parameter('bag_dir', '~/bags')
         self.declare_parameter('stop_grace_s', 30.0)
         self.declare_parameter('split_duration_s', 0)
 
         self._trigger_topic = self.get_parameter('trigger_topic').value
+        self._as_state_topic = self.get_parameter('as_state_topic').value
         self._bag_dir = Path(self.get_parameter('bag_dir').value).expanduser()
         self._stop_grace_s = float(self.get_parameter('stop_grace_s').value)
         self._split_s = int(self.get_parameter('split_duration_s').value)
 
         self._proc: subprocess.Popen | None = None
+        self._precharge_active = False
+        self._as_active = False
         self._grace_timer = None
 
         self._repair_incomplete_bags()
@@ -74,11 +80,15 @@ class BagRecorderNode(Node):
         self.create_subscription(
             StartPrecharge, self._trigger_topic, self._on_trigger, _BEST_EFFORT
         )
+        self.create_subscription(
+            Jetson, self._as_state_topic, self._on_as_state, _BEST_EFFORT
+        )
         self.create_timer(2.0, self._check_recorder_alive)
 
         split_desc = f'{self._split_s}s' if self._split_s > 0 else 'off (single file)'
         self.get_logger().info(
-            f'bag_recorder ready — trigger={self._trigger_topic}, '
+            f'bag_recorder ready — trigger={self._trigger_topic} or '
+            f'{self._as_state_topic} as_state=={AS_STATE_READY}, '
             f'topics=all (including hidden, excluding /zed/*), out={self._bag_dir}, '
             f'grace={self._stop_grace_s:.0f}s, split={split_desc}'
         )
@@ -110,10 +120,11 @@ class BagRecorderNode(Node):
 
     def _start_recording(self) -> bool:
         stamp = datetime.now().strftime('%Y-%m-%dT%H-%M-%S')
-        out = self._bag_dir / f'precharge_{stamp}'
+        prefix = 'autonomous' if self._as_active else 'precharge'
+        out = self._bag_dir / f'{prefix}_{stamp}'
         n = 1
         while out.exists():
-            out = self._bag_dir / f'precharge_{stamp}_{n}'
+            out = self._bag_dir / f'{prefix}_{stamp}_{n}'
             n += 1
         cmd = [
             'ros2', 'bag', 'record',
@@ -153,7 +164,7 @@ class BagRecorderNode(Node):
             self._stop_grace_s, self._on_grace_expired
         )
         self.get_logger().info(
-            f'Precharge off — finalizing in {self._stop_grace_s:.0f}s '
+            f'Precharge and AS READY off — finalizing in {self._stop_grace_s:.0f}s '
             f'unless it returns.'
         )
 
@@ -166,7 +177,12 @@ class BagRecorderNode(Node):
     # ── event sources ──────────────────────────────────────────────────────
 
     def _on_trigger(self, msg: StartPrecharge) -> None:
-        self._sm.on_trigger(msg.precharge_request >= 0.5)
+        self._precharge_active = msg.precharge_request >= 0.5
+        self._sm.on_trigger(self._precharge_active or self._as_active)
+
+    def _on_as_state(self, msg: Jetson) -> None:
+        self._as_active = msg.as_state == AS_STATE_READY
+        self._sm.on_trigger(self._precharge_active or self._as_active)
 
     def _on_grace_expired(self) -> None:
         self._cancel_grace_timer()  # rclpy timers repeat — make it one-shot
