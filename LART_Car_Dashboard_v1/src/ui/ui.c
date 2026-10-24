@@ -517,7 +517,7 @@ ActionExecFunc actions[] = {
 
 void ui_init() {
     eez_flow_init(assets, sizeof(assets), (lv_obj_t **)&objects, sizeof(objects), images, sizeof(images), actions);
-    eez_flow_set_screen(SCREEN_ID_DRIVER_GAUGE, LV_SCR_LOAD_ANIM_NONE, 0, 0);
+    eez_flow_set_screen(SCREEN_ID_DRIVER_VIEW, LV_SCR_LOAD_ANIM_NONE, 0, 0);
     
     if (ros2subscriber_init() != 0) {
         ui_set_speed(0.0f);

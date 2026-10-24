@@ -434,7 +434,7 @@ sudo apt install docker-buildx
 
 ## Driver Gauge screen
 
-The gauge is the default screen when the dashboard starts.
+The original driver view is the default screen when the dashboard starts.
 
 Use `/dashboard/set_screen` to open the LART gauge layout and switch
 screens (0 = original driver, 1 = autonomous, 2 = gauge). Select it through ROS 2:
