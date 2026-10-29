@@ -33,7 +33,8 @@ constexpr int kUiWidth = 800;
 constexpr int kUiHeight = 480;
 constexpr int kBufferLines = 40;
 constexpr int kFrameDelayMs = 5;
-constexpr unsigned int kOkButtonLine = 26; // right steering button, rpi_config.yaml button_a
+// Left steering button (rpi_config.yaml button_b). The wheel switches to 3.3 V, so pressed = HIGH.
+constexpr unsigned int kScreenButtonLine = 27;
 
 SDL_Window *g_window = nullptr;
 SDL_Renderer *g_renderer = nullptr;
@@ -386,7 +387,7 @@ void check_expired_notifications() {
     }
 }
 
-// Right steering button: step through the three production screens.
+// Left steering button: step through the three production screens.
 // Debug screens fall back to Driver View. ui_set_screen() queues the change
 // for the next ui_tick(), so this stays on the LVGL thread.
 void cycle_production_screen() {
@@ -996,8 +997,8 @@ int main(int argc, char **argv) {
     ui_set_speed(initial_speed);
     ros2subscriber_init();
 
-    SteeringButton ok_button;
-    ok_button.open(kOkButtonLine); // on failure the button is simply ignored
+    SteeringButton screen_button;
+    screen_button.open(kScreenButtonLine, true); // on failure the button is simply ignored
 
     uint32_t last_tick_ms = SDL_GetTicks();
 
@@ -1017,7 +1018,7 @@ int main(int argc, char **argv) {
 
         ros2subscriber_spin_some();
         lv_tick_inc(elapsed_ms);
-        if (ok_button.poll_pressed()) {
+        if (screen_button.poll_pressed()) {
             cycle_production_screen();
         }
         ui_tick();

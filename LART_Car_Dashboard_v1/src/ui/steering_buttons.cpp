@@ -36,7 +36,7 @@ SteeringButton::~SteeringButton() {
     }
 }
 
-bool SteeringButton::open(unsigned int line_offset) {
+bool SteeringButton::open(unsigned int line_offset, bool active_high) {
     const char *chip_path = find_chip();
     if (!chip_path) {
         std::fprintf(stderr, "[steering] no gpiochip device, GPIO%u disabled\n", line_offset);
@@ -53,7 +53,8 @@ bool SteeringButton::open(unsigned int line_offset) {
     std::strncpy(req.consumer, "lart_ui", sizeof(req.consumer) - 1);
     req.num_lines = 1;
     req.offsets[0] = line_offset;
-    req.config.flags = GPIO_V2_LINE_FLAG_INPUT | GPIO_V2_LINE_FLAG_BIAS_PULL_UP;
+    req.config.flags = GPIO_V2_LINE_FLAG_INPUT |
+        (active_high ? GPIO_V2_LINE_FLAG_BIAS_PULL_DOWN : GPIO_V2_LINE_FLAG_BIAS_PULL_UP);
     const int ret = ioctl(chip, GPIO_V2_GET_LINE_IOCTL, &req);
     close(chip);
     if (ret < 0) {
@@ -62,23 +63,24 @@ bool SteeringButton::open(unsigned int line_offset) {
     }
 
     fd_ = req.fd;
-    bool level = true;
-    if (read_level(level)) {
-        stable_ = candidate_ = level;
+    active_high_ = active_high;
+    bool pressed = false;
+    if (read_pressed(pressed)) {
+        stable_ = candidate_ = pressed;
     }
     candidate_since_ms_ = now_ms();
     return true;
 }
 
 bool SteeringButton::poll_pressed() {
-    bool level = true;
-    if (fd_ < 0 || !read_level(level)) {
+    bool pressed = false;
+    if (fd_ < 0 || !read_pressed(pressed)) {
         return false;
     }
 
     const long long now = now_ms();
-    if (level != candidate_) {
-        candidate_ = level;
+    if (pressed != candidate_) {
+        candidate_ = pressed;
         candidate_since_ms_ = now;
         return false;
     }
@@ -87,15 +89,16 @@ bool SteeringButton::poll_pressed() {
     }
 
     stable_ = candidate_;
-    return !stable_; // pull-up + switch to GND: LOW = pressed
+    return stable_;
 }
 
-bool SteeringButton::read_level(bool &level) const {
+bool SteeringButton::read_pressed(bool &pressed) const {
     gpio_v2_line_values values{};
     values.mask = 1;
     if (ioctl(fd_, GPIO_V2_LINE_GET_VALUES_IOCTL, &values) < 0) {
         return false;
     }
-    level = (values.bits & 1u) != 0;
+    const bool high = (values.bits & 1u) != 0;
+    pressed = high == active_high_;
     return true;
 }
