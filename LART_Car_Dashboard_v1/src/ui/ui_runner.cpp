@@ -4,6 +4,7 @@
 #include "ros2subscriber.h"
 #include "dbc_api.h"
 #include "fonts.h"
+#include "steering_buttons.h"
 #include <cmath>
 #include <cstring>
 #include <cassert>
@@ -32,6 +33,7 @@ constexpr int kUiWidth = 800;
 constexpr int kUiHeight = 480;
 constexpr int kBufferLines = 40;
 constexpr int kFrameDelayMs = 5;
+constexpr unsigned int kOkButtonLine = 26; // right steering button, rpi_config.yaml button_a
 
 SDL_Window *g_window = nullptr;
 SDL_Renderer *g_renderer = nullptr;
@@ -382,6 +384,24 @@ void check_expired_notifications() {
     if (changed) {
         reposition_notifications();
     }
+}
+
+// Right steering button: step through the three production screens.
+// Debug screens fall back to Driver View. ui_set_screen() queues the change
+// for the next ui_tick(), so this stays on the LVGL thread.
+void cycle_production_screen() {
+    constexpr int kScreens[] = {SCREEN_ID_DRIVER_VIEW, SCREEN_ID_AUTONOMOUS, SCREEN_ID_DRIVER_GAUGE};
+    constexpr int kCount = static_cast<int>(sizeof(kScreens) / sizeof(kScreens[0]));
+
+    const int current = eez_flow_get_current_screen();
+    int next = kScreens[0];
+    for (int i = 0; i < kCount; ++i) {
+        if (kScreens[i] == current) {
+            next = kScreens[(i + 1) % kCount];
+            break;
+        }
+    }
+    ui_set_screen(next - 1); // ui_set_screen takes the 0-based ID
 }
 
 }  // namespace
@@ -976,6 +996,9 @@ int main(int argc, char **argv) {
     ui_set_speed(initial_speed);
     ros2subscriber_init();
 
+    SteeringButton ok_button;
+    ok_button.open(kOkButtonLine); // on failure the button is simply ignored
+
     uint32_t last_tick_ms = SDL_GetTicks();
 
     while (g_running) {
@@ -994,6 +1017,9 @@ int main(int argc, char **argv) {
 
         ros2subscriber_spin_some();
         lv_tick_inc(elapsed_ms);
+        if (ok_button.poll_pressed()) {
+            cycle_production_screen();
+        }
         ui_tick();
 
         if (kErrorNotificationsEnabled) {

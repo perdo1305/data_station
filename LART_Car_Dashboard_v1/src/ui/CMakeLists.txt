@@ -112,6 +112,7 @@ if(SDL2_FOUND AND LVGL_SOURCES)
         images/ui_image_lart_logo.c
         images/ui_image_lart_logo_principal.c
         ui_runner.cpp
+        steering_buttons.cpp
     )
 
     add_executable(ui_runner ${UI_SOURCES})
