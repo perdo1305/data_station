@@ -14,67 +14,73 @@ concurrency:
 jobs:
   build-arm64:
     runs-on: ubuntu-24.04-arm
+    env:
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_MAXSIZE: 1G
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - name: Add ROS2 apt repository
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y curl gnupg lsb-release
-          sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-          sudo apt-get update
+      - name: Set up ARM64 toolchain
+        id: setup
+        uses: ./.github/actions/setup-arm64
 
-      - name: Cache apt archives
-        uses: actions/cache@v4
-        with:
-          path: /var/cache/apt/archives
-          key: apt-arm64-jazzy-${{ hashFiles('.github/workflows/build-arm64.yml') }}
-
-      - name: Install ROS2 and build tooling
-        run: |
-          sudo apt-get install -y \
-            ros-jazzy-ros-base \
-            ros-jazzy-rclcpp \
-            ros-jazzy-rclpy \
-            ros-jazzy-std-msgs \
-            ros-jazzy-rosidl-default-generators \
-            ros-jazzy-rosidl-default-runtime \
-            python3-colcon-common-extensions \
-            build-essential \
-            cmake \
-            pkg-config \
-            libsdl2-dev
-          sudo chown -R "$(id -u):$(id -g)" /var/cache/apt/archives
-
-      - name: Cache colcon build
+      # Slowest colcon package; only changes with the submodule or toolchain.
+      - name: Cache lart_msgs
+        id: msgs-cache
         uses: actions/cache@v4
         with:
           path: |
-            build
-            install
-            log
-          key: colcon-arm64-${{ hashFiles('src/**/CMakeLists.txt', 'src/**/package.xml', 'src/**/*.cpp', 'src/**/*.hpp', 'src/**/*.h', 'src/**/*.py') }}
+            build/lart_msgs
+            install/lart_msgs
+          key: msgs-${{ steps.setup.outputs.cache-prefix }}-${{ hashFiles('src/lart_msgs/**') }}
+
+      # Objects only: every run still builds and links the full tree from them.
+      - name: Cache compiler output
+        uses: actions/cache@v4
+        with:
+          path: .ccache
+          key: ccache-${{ steps.setup.outputs.cache-prefix }}-${{ github.sha }}
           restore-keys: |
-            colcon-arm64-
+            ccache-${{ steps.setup.outputs.cache-prefix }}-
 
       - name: Build ROS2 workspace
+        env:
+          MSGS_CACHE_HIT: ${{ steps.msgs-cache.outputs.cache-hit }}
         run: |
           source /opt/ros/jazzy/setup.bash
-          colcon build --parallel-workers $(nproc)
+          skip=()
+          if [[ "$MSGS_CACHE_HIT" == true && -f install/lart_msgs/share/lart_msgs/package.bash ]]; then
+            echo "Reusing cached lart_msgs."
+            source install/lart_msgs/share/lart_msgs/package.bash
+            skip=(--packages-skip lart_msgs)
+          else
+            rm -rf build/lart_msgs install/lart_msgs
+          fi
+          ccache --zero-stats
+          colcon build --parallel-workers "$(nproc)" "${skip[@]}" \
+            --cmake-args -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
 
       - name: Build dashboard UI
         run: |
           source /opt/ros/jazzy/setup.bash
           source install/setup.bash
-          cmake -S LART_Car_Dashboard_v1/src/ui -B LART_Car_Dashboard_v1/build/ui-build -DCMAKE_BUILD_TYPE=Release
-          cmake --build LART_Car_Dashboard_v1/build/ui-build --parallel $(nproc)
+          cmake -S LART_Car_Dashboard_v1/src/ui -B LART_Car_Dashboard_v1/build/ui-build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+          cmake --build LART_Car_Dashboard_v1/build/ui-build --parallel "$(nproc)"
+          ccache --show-stats
 
       - name: Package artifact
-        run: tar czf lart-dashboard-arm64.tar.gz install LART_Car_Dashboard_v1/build/ui-build
+        run: |
+          bash scripts/check_arm64_bundle.sh .
+          tar czf lart-dashboard-arm64.tar.gz install LART_Car_Dashboard_v1/build/ui-build
+          mkdir -p "$RUNNER_TEMP/bundle-check"
+          tar xzf lart-dashboard-arm64.tar.gz -C "$RUNNER_TEMP/bundle-check"
+          bash scripts/check_arm64_bundle.sh "$RUNNER_TEMP/bundle-check"
 
       - name: Get short commit SHA
         id: version

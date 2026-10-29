@@ -100,6 +100,13 @@ built by GitHub Actions (`.github/workflows/build-arm64.yml`) on every push to
 `arm64-<full-commit-sha>`, while `latest-arm64` continues to point to the most
 recent build. The Pi pulls the latest release instead of compiling locally:
 
+CI caches the `lart_msgs` install (keyed by the submodule content and toolchain)
+and compiler output through ccache, but always builds and packages the complete
+`install/` and `ui-build/` trees. `scripts/check_arm64_bundle.sh` verifies the
+bundle before it is published, and `pull_arm64_build.sh` runs the same check on
+a staging copy before replacing the Pi's current build, so an incomplete
+download leaves the old build in place.
+
 **One-time prerequisite** (run once on a fresh/reimaged Pi):
 ```bash
 sudo apt install libsdl2-2.0-0
