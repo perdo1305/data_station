@@ -87,12 +87,12 @@ exit 1
 """
 
 
-def run_pull(tmp_path, skip=()):
+def run_pull(tmp_path, skip=(), fake_bins=None, fresh=False):
     ws = tmp_path / "ws"
     (ws / "scripts").mkdir(parents=True)
     shutil.copy(PULL, ws / "scripts")
     shutil.copy(CHECK, ws / "scripts")
-    for old in (ws / "install", ws / UI_BUILD):
+    for old in () if fresh else (ws / "install", ws / UI_BUILD):
         old.mkdir(parents=True)
         (old / "OLD").write_text("")
 
@@ -105,8 +105,9 @@ def run_pull(tmp_path, skip=()):
 
     bin_dir = tmp_path / "bin"
     bin_dir.mkdir()
-    (bin_dir / "curl").write_text(FAKE_CURL)
-    (bin_dir / "curl").chmod(0o755)
+    for name, body in {"curl": FAKE_CURL, **(fake_bins or {})}.items():
+        (bin_dir / name).write_text(body)
+        (bin_dir / name).chmod(0o755)
     env = {**os.environ, "PATH": f"{bin_dir}:{os.environ['PATH']}",
            "FAKE_TARBALL": str(tarball)}
     result = subprocess.run(["bash", str(ws / "scripts/pull_arm64_build.sh")],
@@ -132,4 +133,29 @@ def test_pull_keeps_old_build_when_bundle_incomplete(tmp_path):
     assert (ws / "install/OLD").exists()
     assert (ws / UI_BUILD / "OLD").exists()
     assert "missing: install/lart_msgs" in result.stderr
+    assert not list(ws.glob(".arm64-pull.*"))
+
+
+# Fails only when moving the new dashboard tree in, after install/ already moved.
+FAKE_MV = """#!/usr/bin/env bash
+case "$*" in *stage/LART_Car_Dashboard_v1*) exit 1;; esac
+exec /usr/bin/mv "$@"
+"""
+
+
+def test_pull_restores_old_build_when_swap_fails(tmp_path):
+    ws, result = run_pull(tmp_path, fake_bins={"mv": FAKE_MV})
+    assert result.returncode == 1
+    assert "restored the previous build" in result.stderr
+    assert (ws / "install/OLD").exists()
+    assert (ws / UI_BUILD / "OLD").exists()
+    assert not (ws / "install/lart_msgs").exists()
+    assert not list(ws.glob(".arm64-pull.*"))
+
+
+def test_first_pull_without_previous_build_succeeds(tmp_path):
+    ws, result = run_pull(tmp_path, fresh=True)
+    assert result.returncode == 0, result.stderr
+    assert (ws / "install/lart_msgs/share/lart_msgs/package.xml").exists()
+    assert os.access(ws / UI_BUILD / "ui_runner", os.X_OK)
     assert not list(ws.glob(".arm64-pull.*"))

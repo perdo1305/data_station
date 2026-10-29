@@ -52,7 +52,7 @@ class Arm64WorkflowTests(unittest.TestCase):
 
     def test_build_caches_lart_msgs_by_submodule_content(self):
         step = self.build_steps()["Cache lart_msgs"]
-        self.assertIn("install/lart_msgs", step["with"]["path"].split())
+        self.assertEqual(step["with"]["path"].split(), ["install/lart_msgs"])
         self.assertIn("hashFiles('src/lart_msgs/**')", step["with"]["key"])
         self.assertIn("steps.setup.outputs.cache-prefix", step["with"]["key"])
 
@@ -61,6 +61,9 @@ class Arm64WorkflowTests(unittest.TestCase):
         self.assertEqual(
             steps["Cache compiler output"]["with"]["path"].strip(), ".ccache"
         )
+        keys = steps["Cache compiler output"]["with"]["restore-keys"].splitlines()
+        self.assertIn("ccache-${{ steps.setup.outputs.cache-prefix }}-", keys)
+        self.assertIn("ccache-", keys)
         for name in ("Build ROS2 workspace", "Build dashboard UI"):
             self.assertIn("-DCMAKE_CXX_COMPILER_LAUNCHER=ccache", steps[name]["run"])
 

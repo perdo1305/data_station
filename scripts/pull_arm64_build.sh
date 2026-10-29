@@ -24,9 +24,17 @@ if ! bash "$WS_DIR/scripts/check_arm64_bundle.sh" "$TMP/stage"; then
 fi
 
 echo "Replacing old build output..."
-rm -rf "$WS_DIR/install" "$WS_DIR/$UI_BUILD"
-mkdir -p "$(dirname "$WS_DIR/$UI_BUILD")"
-mv "$TMP/stage/install" "$WS_DIR/install"
-mv "$TMP/stage/$UI_BUILD" "$WS_DIR/$UI_BUILD"
+mkdir -p "$TMP/old" "$(dirname "$WS_DIR/$UI_BUILD")"
+# Keep the old trees in $TMP until the new ones are in place; the EXIT trap deletes them.
+if ! { { [ ! -e "$WS_DIR/install" ] || mv "$WS_DIR/install" "$TMP/old/install"; } &&
+       { [ ! -e "$WS_DIR/$UI_BUILD" ] || mv "$WS_DIR/$UI_BUILD" "$TMP/old/ui-build"; } &&
+       mv "$TMP/stage/install" "$WS_DIR/install" &&
+       mv "$TMP/stage/$UI_BUILD" "$WS_DIR/$UI_BUILD"; }; then
+    rm -rf "$WS_DIR/install" "$WS_DIR/$UI_BUILD"
+    [ ! -e "$TMP/old/install" ] || mv "$TMP/old/install" "$WS_DIR/install"
+    [ ! -e "$TMP/old/ui-build" ] || mv "$TMP/old/ui-build" "$WS_DIR/$UI_BUILD"
+    echo "Swap failed; restored the previous build." >&2
+    exit 1
+fi
 
 echo "Done. Run: source $WS_DIR/install/setup.bash"

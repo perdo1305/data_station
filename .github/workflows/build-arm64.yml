@@ -33,7 +33,6 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            build/lart_msgs
             install/lart_msgs
           key: msgs-${{ steps.setup.outputs.cache-prefix }}-${{ hashFiles('src/lart_msgs/**') }}
 
@@ -45,6 +44,7 @@ jobs:
           key: ccache-${{ steps.setup.outputs.cache-prefix }}-${{ github.sha }}
           restore-keys: |
             ccache-${{ steps.setup.outputs.cache-prefix }}-
+            ccache-
 
       - name: Build ROS2 workspace
         env:
@@ -57,7 +57,7 @@ jobs:
             source install/lart_msgs/share/lart_msgs/package.bash
             skip=(--packages-skip lart_msgs)
           else
-            rm -rf build/lart_msgs install/lart_msgs
+            rm -rf install/lart_msgs
           fi
           ccache --zero-stats
           colcon build --parallel-workers "$(nproc)" "${skip[@]}" \
