@@ -136,11 +136,16 @@ def test_pull_keeps_old_build_when_bundle_incomplete(tmp_path):
     assert not list(ws.glob(".arm64-pull.*"))
 
 
-# Fails only when moving the new dashboard tree in, after install/ already moved.
-FAKE_MV = """#!/usr/bin/env bash
-case "$*" in *stage/LART_Car_Dashboard_v1*) exit 1;; esac
-exec /usr/bin/mv "$@"
+def fake_mv(condition):
+    """A mv that fails when the shell `condition` on "$1" holds, else runs the real mv."""
+    return f"""#!/usr/bin/env bash
+if {condition}; then exit 1; fi
+exec {shutil.which("mv")} "$@"
 """
+
+
+# Fails only when moving the new dashboard tree in, after install/ already moved.
+FAKE_MV = fake_mv('case "$*" in *stage/LART_Car_Dashboard_v1*) true;; *) false;; esac')
 
 
 def test_pull_restores_old_build_when_swap_fails(tmp_path):
@@ -159,3 +164,31 @@ def test_first_pull_without_previous_build_succeeds(tmp_path):
     assert (ws / "install/lart_msgs/share/lart_msgs/package.xml").exists()
     assert os.access(ws / UI_BUILD / "ui_runner", os.X_OK)
     assert not list(ws.glob(".arm64-pull.*"))
+
+
+def test_pull_keeps_old_install_when_moving_it_aside_fails(tmp_path):
+    ws, result = run_pull(
+        tmp_path, fake_bins={"mv": fake_mv('[[ "$1" == */ws/install ]]')}
+    )
+    assert result.returncode == 1
+    assert (ws / "install/OLD").exists()
+    assert (ws / UI_BUILD / "OLD").exists()
+
+
+def test_pull_keeps_old_ui_build_when_moving_it_aside_fails(tmp_path):
+    ws, result = run_pull(
+        tmp_path, fake_bins={"mv": fake_mv(f'[[ "$1" == */ws/{UI_BUILD} ]]')}
+    )
+    assert result.returncode == 1
+    assert (ws / "install/OLD").exists()
+    assert (ws / UI_BUILD / "OLD").exists()
+    assert not (ws / "install/lart_msgs").exists()
+
+
+def test_pull_keeps_staging_when_restore_fails(tmp_path):
+    fake = fake_mv('[[ "$1" == *stage/LART_Car_Dashboard_v1* || "$1" == */old/ui-build ]]')
+    ws, result = run_pull(tmp_path, fake_bins={"mv": fake})
+    assert result.returncode == 1
+    [tmp] = ws.glob(".arm64-pull.*")
+    assert (tmp / "old/ui-build/OLD").exists()
+    assert str(tmp / "old") in result.stderr

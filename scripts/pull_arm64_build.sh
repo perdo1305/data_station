@@ -23,6 +23,11 @@ if ! bash "$WS_DIR/scripts/check_arm64_bundle.sh" "$TMP/stage"; then
     exit 1
 fi
 
+# Put $TMP/old/$1 back at $2, replacing the partial new tree there; no-op if it was never moved aside.
+restore() {
+    [ ! -e "$TMP/old/$1" ] || { rm -rf "$2" && mv "$TMP/old/$1" "$2"; }
+}
+
 echo "Replacing old build output..."
 mkdir -p "$TMP/old" "$(dirname "$WS_DIR/$UI_BUILD")"
 # Keep the old trees in $TMP until the new ones are in place; the EXIT trap deletes them.
@@ -30,10 +35,23 @@ if ! { { [ ! -e "$WS_DIR/install" ] || mv "$WS_DIR/install" "$TMP/old/install"; 
        { [ ! -e "$WS_DIR/$UI_BUILD" ] || mv "$WS_DIR/$UI_BUILD" "$TMP/old/ui-build"; } &&
        mv "$TMP/stage/install" "$WS_DIR/install" &&
        mv "$TMP/stage/$UI_BUILD" "$WS_DIR/$UI_BUILD"; }; then
-    rm -rf "$WS_DIR/install" "$WS_DIR/$UI_BUILD"
-    [ ! -e "$TMP/old/install" ] || mv "$TMP/old/install" "$WS_DIR/install"
-    [ ! -e "$TMP/old/ui-build" ] || mv "$TMP/old/ui-build" "$WS_DIR/$UI_BUILD"
-    echo "Swap failed; restored the previous build." >&2
+    # Keep $TMP (and the old trees in it) on disk until every restore has succeeded.
+    trap - EXIT
+    had_old="$(ls -A "$TMP/old")"
+    failed=0
+    # Only a tree whose old copy was moved aside is touched; what is left at its path is a partial new tree.
+    restore install "$WS_DIR/install" || failed=1
+    restore ui-build "$WS_DIR/$UI_BUILD" || failed=1
+    if [ "$failed" = 1 ]; then
+        echo "Swap failed and restore failed; the previous build was kept in $TMP/old." >&2
+        exit 1
+    fi
+    rm -rf "$TMP"
+    if [ -n "$had_old" ]; then
+        echo "Swap failed; restored the previous build." >&2
+    else
+        echo "Swap failed; no previous build to restore." >&2
+    fi
     exit 1
 fi
 
