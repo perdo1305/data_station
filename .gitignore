@@ -37,3 +37,4 @@ deploy/.env
 /build.github-backup/
 /install.github-backup/
 /log.github-backup/
+.arm64-pull.*/
