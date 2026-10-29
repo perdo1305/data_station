@@ -28,6 +28,9 @@
 #include <std_msgs/msg/float32.hpp>
 #include <std_msgs/msg/int32.hpp>
 #include <std_msgs/msg/string.hpp>
+#if LART_HAVE_LART_MSGS
+#include <lart_msgs/msg/acu.hpp>
+#endif
 
 extern std::mutex dbc_api_mutex;
 
@@ -35,10 +38,10 @@ namespace {
 constexpr const char *DEFAULT_SPEED_TOPIC = "/can/dv_dynamics_1/speed_actual";
 constexpr const char *DEFAULT_HV_TOPIC = "/can/vcu_hv/hv";
 constexpr const char *DEFAULT_SET_SCREEN_TOPIC = "/dashboard/set_screen";
-// The ACU still publishes mission_select on its own legacy per-signal topic
-// (not folded into the aggregated "/can/acu" message), so it's picked
-// up here directly and written into dbc_api.acu.mission_select.
-constexpr const char *DEFAULT_MISSION_SELECT_TOPIC = "/can/acu/mission_select";
+// The ACU publishes the selected mission on "/acu" (lart_msgs/Acu) over DDS.
+// "/can/acu" (decoded from CAN) does not carry a valid mission_select, so the
+// "/acu" value overrides it; see ros2subscriber_spin_some().
+constexpr const char *DEFAULT_ACU_MISSION_TOPIC = "/acu";
 
 std::atomic<int> g_is_initialized(0);
 std::atomic<int> g_has_speed(0);
@@ -47,6 +50,8 @@ std::atomic<int> g_has_hv(0);
 std::atomic<float> g_latest_hv(0.0f);
 std::atomic<int> g_screen_change_requested(0);
 std::atomic<int> g_requested_screen_id(0);
+std::atomic<int> g_has_acu_mission(0);
+std::atomic<int> g_acu_mission(0);
 
 std::mutex g_telemetry_mutex;
 TelemetryData g_telemetry;
@@ -163,17 +168,16 @@ LART_WEAK int ros2subscriber_init(void) {
     init_dbc_api_subscribers(g_node, g_subs);
 #endif
 
-    // Mission_select is still published on its own legacy per-signal topic
-    // rather than as part of the aggregated "/can/acu" message.
-    const char *mission_select_topic = env_or_default("LART_ROS2_MISSION_SELECT_TOPIC", DEFAULT_MISSION_SELECT_TOPIC);
-    auto mission_select_callback = [](const std_msgs::msg::Float32::SharedPtr msg) {
-        if (msg) {
-            std::lock_guard<std::mutex> lock(dbc_api_mutex);
-            dbc_api.acu.mission_select = msg->data;
-        }
-    };
-    g_sub_mission_select = g_node->create_subscription<std_msgs::msg::Float32>(
-        mission_select_topic, sensor_qos, mission_select_callback);
+#if LART_HAVE_LART_MSGS
+    const char *acu_mission_topic = env_or_default("LART_ROS2_ACU_MISSION_TOPIC", DEFAULT_ACU_MISSION_TOPIC);
+    g_sub_mission_select = g_node->create_subscription<lart_msgs::msg::Acu>(
+        acu_mission_topic, sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Acu> msg) {
+            if (msg) {
+                g_acu_mission.store(msg->mission_select);
+                g_has_acu_mission.store(1);
+            }
+        });
+#endif
 
     g_is_initialized.store(1);
     g_has_speed.store(0);
@@ -190,6 +194,13 @@ LART_WEAK int ros2subscriber_spin_some(void) {
     try {
         g_exec->spin_some();
     } catch (...) {
+    }
+
+    // Applied after every spin so "/acu" wins over the mission_select the
+    // generated "/can/acu" subscriber may have just written.
+    if (g_has_acu_mission.load()) {
+        std::lock_guard<std::mutex> lock(dbc_api_mutex);
+        dbc_api.acu.mission_select = static_cast<float>(g_acu_mission.load());
     }
     return 0;
 }
