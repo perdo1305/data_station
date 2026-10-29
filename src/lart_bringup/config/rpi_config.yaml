@@ -57,7 +57,9 @@ input_handler:
   ros__parameters:
     # Pull-ups are on, wire every switch/encoder common to GND. Do NOT use GPIO 8-11, 13, 16-22:
     # the SPI0/SPI1 + MCP2515 CAN overlays in config.txt own them.
-    # ui_runner (autostart) reads GPIO26 itself to change screens (kOkButtonLine in ui_runner.cpp),
+    # The current steering wheel switches its buttons and encoders to 3.3 V, not GND (pressed = HIGH),
+    # so the pull-up/active-low handling in this node does not see presses on it.
+    # ui_runner (autostart) reads GPIO27 itself to change screens (kScreenButtonLine in ui_runner.cpp),
     # so this node and ui_runner cannot run at the same time: the second one to start finds the line busy.
     button_a: 26                 # OK   (right steering button) — was on GPIO17 (SPI1 CS, busy): move wire to GPIO26
     button_b: 27                 # NEXT (left steering button)
