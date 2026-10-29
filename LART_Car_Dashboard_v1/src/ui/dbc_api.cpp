@@ -21,6 +21,7 @@ extern void init_dbc_api_subscribers_chunk_3(std::shared_ptr<rclcpp::Node> node,
 extern void init_dbc_api_subscribers_chunk_4(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs);
 extern void init_dbc_api_subscribers_chunk_5(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs);
 extern void init_dbc_api_subscribers_chunk_6(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs);
+extern void init_dbc_api_subscribers_chunk_7(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs);
 
 void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs) {
     init_dbc_api_subscribers_chunk_0(node, subs);
@@ -30,6 +31,7 @@ void init_dbc_api_subscribers(std::shared_ptr<rclcpp::Node> node, std::vector<rc
     init_dbc_api_subscribers_chunk_4(node, subs);
     init_dbc_api_subscribers_chunk_5(node, subs);
     init_dbc_api_subscribers_chunk_6(node, subs);
+    init_dbc_api_subscribers_chunk_7(node, subs);
 }
 #endif
 #endif
@@ -171,8 +173,8 @@ extern "C" void ui_update_telemetry_vars(const void *t_ptr) {
     if (brake_val > 100) brake_val = 100;
     eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_BRAKE_PEDAL_PRESSURE, eez::IntegerValue(brake_val));
 
-    // 2. ACCELL PEDAL PRESSURE (0 to 100) — driven by AQT1 throttle percentage
-    int acc_val = static_cast<int>(dbc_api.aqt1.throtle_percentage);
+    // 2. ACCELL PEDAL PRESSURE (0 to 100) — driven by data-bus AQT1 throttle percentage
+    int acc_val = static_cast<int>(dbc_api.data_aqt1.throtle_percentage);
     if (acc_val < 0) acc_val = 0;
     if (acc_val > 100) acc_val = 100;
     eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_ACCELL_PEDAL_PRESSURE, eez::IntegerValue(acc_val));

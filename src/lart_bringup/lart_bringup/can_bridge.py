@@ -24,7 +24,7 @@ from rclpy.node import Node
 from rclpy.qos import QoSProfile, QoSReliabilityPolicy, QoSHistoryPolicy
 from std_msgs.msg import Float32
 
-from .topic_names import dbc_topic_prefix
+from .topic_names import dbc_topic_prefix, lart_msg_type_names
 
 _BEST_EFFORT = QoSProfile(
     reliability=QoSReliabilityPolicy.BEST_EFFORT,
@@ -168,11 +168,11 @@ class CanBridgeNode(Node):
                 continue
 
             msg_slug = _ros_name(msg.name)
-            msg_class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
-            try:
-                msg_class = getattr(msg_module, msg_class_name)
-            except AttributeError:
-                self.get_logger().error(f"Message class {msg_class_name} not found in lart_msgs.msg!")
+            class_names = lart_msg_type_names(topic_prefix, msg_slug)
+            msg_class = next((getattr(msg_module, name) for name in class_names
+                              if hasattr(msg_module, name)), None)
+            if msg_class is None:
+                self.get_logger().error(f"Message class {class_names[-1]} not found in lart_msgs.msg!")
                 continue
 
             topic = f'{topic_prefix}/{msg_slug}'

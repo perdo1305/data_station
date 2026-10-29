@@ -3,7 +3,7 @@
 
 void CanBridgeImpl::init_publishers_chunk_1(rclcpp::Node* node) {
     auto sensor_qos = rclcpp::QoS(10).best_effort();
-    if (database_ == "data_t26") {
+    if (database_ == "autonomous_t26") {
         pub_aqt7 = node->create_publisher<lart_msgs::msg::Aqt7>(database_ == "data_t26" ? "/data/aqt7" : database_ == "powertrain_t26" ? "/pwt/aqt7" : "/can/aqt7", sensor_qos);
     }
     if (database_ == "data_t26") {
@@ -20,6 +20,12 @@ void CanBridgeImpl::init_publishers_chunk_1(rclcpp::Node* node) {
     }
     if (database_ == "powertrain_t26") {
         pub_dashboard = node->create_publisher<lart_msgs::msg::Dashboard>(database_ == "data_t26" ? "/data/dashboard" : database_ == "powertrain_t26" ? "/pwt/dashboard" : "/can/dashboard", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_data_aqt1 = node->create_publisher<lart_msgs::msg::DataAqt1>(database_ == "data_t26" ? "/data/aqt1" : database_ == "powertrain_t26" ? "/pwt/aqt1" : "/can/aqt1", sensor_qos);
+    }
+    if (database_ == "data_t26") {
+        pub_data_aqt7 = node->create_publisher<lart_msgs::msg::DataAqt7>(database_ == "data_t26" ? "/data/aqt7" : database_ == "powertrain_t26" ? "/pwt/aqt7" : "/can/aqt7", sensor_qos);
     }
     if (database_ == "autonomous_t26") {
         pub_dv_dynamics_1 = node->create_publisher<lart_msgs::msg::DvDynamics1>(database_ == "data_t26" ? "/data/dv_dynamics_1" : database_ == "powertrain_t26" ? "/pwt/dv_dynamics_1" : "/can/dv_dynamics_1", sensor_qos);
@@ -86,12 +92,6 @@ void CanBridgeImpl::init_publishers_chunk_1(rclcpp::Node* node) {
     }
     if (database_ == "powertrain_t26") {
         pub_inv1_minmaxdccurrent = node->create_publisher<lart_msgs::msg::Inv1Minmaxdccurrent>(database_ == "data_t26" ? "/data/inv1_minmaxdccurrent" : database_ == "powertrain_t26" ? "/pwt/inv1_minmaxdccurrent" : "/can/inv1_minmaxdccurrent", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_inv1_misc = node->create_publisher<lart_msgs::msg::Inv1Misc>(database_ == "data_t26" ? "/data/inv1_misc" : database_ == "powertrain_t26" ? "/pwt/inv1_misc" : "/can/inv1_misc", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_inv1_setaccurrent = node->create_publisher<lart_msgs::msg::Inv1Setaccurrent>(database_ == "data_t26" ? "/data/inv1_setaccurrent" : database_ == "powertrain_t26" ? "/pwt/inv1_setaccurrent" : "/can/inv1_setaccurrent", sensor_qos);
     }
 }
 

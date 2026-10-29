@@ -7,7 +7,7 @@ import cantools.subparsers.generate_c_source as gen
 _UNSAFE = re.compile(r'[^a-zA-Z0-9_]')
 
 # Autonomous-only signals are not exposed by the data-station messages or UI.
-_EXCLUDED_SIGNALS = {("AQT2", "WHEEL_SPD"), ("AQT3", "WHEEL_SPD"), ("AQT7", "REAR_BRK_PRESS")}
+_EXCLUDED_SIGNALS = {("AQT2", "WHEEL_SPD"), ("AQT3", "WHEEL_SPD")}
 
 
 def _ros_name(raw: str) -> str:
@@ -16,6 +16,29 @@ def _ros_name(raw: str) -> str:
     if slug and slug[0].isdigit():
         slug = 'val_' + slug
     return slug
+
+def _type_slugs(databases):
+    """Map (db_name, DBC message name) to its lart_msgs type slug.
+
+    Same rule as generate_dbc_api.py: same-named messages whose signals differ across
+    buses keep the plain name on autonomous_t26 and get a bus prefix elsewhere
+    (data_t26 AQT1 -> DataAqt1).
+    """
+    variants = {}
+    for db_info in databases:
+        for msg in db_info["db"].messages:
+            variants.setdefault(_ros_name(msg.name), set()).add(frozenset(
+                _ros_name(sig.name) for sig in msg.signals
+                if (msg.name, sig.name) not in _EXCLUDED_SIGNALS))
+    slugs = {}
+    for db_info in databases:
+        db_name = db_info["db_name"]
+        for msg in db_info["db"].messages:
+            slug = _ros_name(msg.name)
+            if len(variants[slug]) > 1 and db_name != "autonomous_t26":
+                slug = f"{db_name.split('_')[0]}_{slug}"
+            slugs[(db_name, msg.name)] = slug
+    return slugs
 
 def _to_c_name(raw: str) -> str:
     """Convert a name to the snake-case C name used by cantools generate_c_source."""
@@ -49,6 +72,7 @@ def main():
         databases.append({"db_name": cfg["name"], "db": db})
     
     # 2. Collect all messages that have signals
+    type_slugs = _type_slugs(databases)
     messages_to_decode = []
     for db_info in databases:
         db_name = db_info["db_name"]
@@ -60,7 +84,8 @@ def main():
                 "msg": msg,
                 "frame_id": msg.frame_id,
                 "msg_name": msg.name,
-                "msg_slug": _ros_name(msg.name),
+                "msg_slug": type_slugs[(db_name, msg.name)],
+                "topic_slug": _ros_name(msg.name),
                 "msg_c_name": _to_c_name(msg.name)
             })
             
@@ -104,8 +129,10 @@ def main():
     # Add publisher declarations and message includes
     unique_msg_slugs = sorted(list(set(m_info["msg_slug"] for m_info in messages_to_decode)))
     slug_databases = {}
+    slug_topics = {}
     for m_info in messages_to_decode:
         slug_databases.setdefault(m_info["msg_slug"], set()).add(m_info["db_name"])
+        slug_topics[m_info["msg_slug"]] = m_info["topic_slug"]
     
     # Generate correct ROS2-style header filenames
     def _ros_header_name(slug: str) -> str:
@@ -205,12 +232,13 @@ def main():
             class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
             databases = sorted(slug_databases[msg_slug])
             condition = " || ".join(f'database_ == "{name}"' for name in databases)
+            topic_slug = slug_topics[msg_slug]
             sub_lines.append(f"    if ({condition}) {{")
             sub_lines.append(
                 f'        pub_{msg_slug} = node->create_publisher<lart_msgs::msg::{class_name}>('
-                f'database_ == "data_t26" ? "/data/{msg_slug}" : '
-                f'database_ == "powertrain_t26" ? "/pwt/{msg_slug}" : '
-                f'"/can/{msg_slug}", sensor_qos);'
+                f'database_ == "data_t26" ? "/data/{topic_slug}" : '
+                f'database_ == "powertrain_t26" ? "/pwt/{topic_slug}" : '
+                f'"/can/{topic_slug}", sensor_qos);'
             )
             sub_lines.append("    }")
         sub_lines.append("}")

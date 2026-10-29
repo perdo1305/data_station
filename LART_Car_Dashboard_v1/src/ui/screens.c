@@ -1799,9 +1799,9 @@ void tick_screen_debug_3() {
 
     // Row 9
     set_cell(table, 9, 0, "Susp R:", 0xFFFFFF);
-    set_cell_fmt(table, 9, 1, 0xFFFFFF, "%5.1f mm", dbc_api.aqt7.susp_r);
+    set_cell_fmt(table, 9, 1, 0xFFFFFF, "%5.1f mm", dbc_api.data_aqt7.susp_r);
     set_cell(table, 9, 2, "Susp L:", 0xFFFFFF);
-    set_cell_fmt(table, 9, 3, 0xFFFFFF, "%5.1f mm", dbc_api.aqt7.susp_l);
+    set_cell_fmt(table, 9, 3, 0xFFFFFF, "%5.1f mm", dbc_api.data_aqt7.susp_l);
 
     // Row 10
     set_cell(table, 10, 0, "IGN:", 0xFFFFFF);

@@ -12,7 +12,7 @@
 #include <cmath>
 
 #include "generated/can_bridge_impl.hpp"
-#include <lart_msgs/msg/aqt1.hpp>
+#include <lart_msgs/msg/data_aqt1.hpp>
 #include <lart_msgs/msg/aqt2.hpp>
 
 int main(int argc, char **argv) {
@@ -64,10 +64,10 @@ int main(int argc, char **argv) {
 
     float received_throttle = -1.0f;
     bool received_aqt1 = false;
-    auto aqt1_sub = node->create_subscription<lart_msgs::msg::Aqt1>(
+    auto aqt1_sub = node->create_subscription<lart_msgs::msg::DataAqt1>(
         "/data/aqt1",
         rclcpp::QoS(10).best_effort(),
-        [&](const lart_msgs::msg::Aqt1::SharedPtr msg) {
+        [&](const lart_msgs::msg::DataAqt1::SharedPtr msg) {
             received_throttle = msg->throtle_percentage;
             received_aqt1 = true;
         }

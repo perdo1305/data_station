@@ -463,7 +463,7 @@ int main(int argc, char **argv) {
         dbc_api.master_msc_id_3.overall_maximum_temperature = 35.0f;
         dbc_api.pdm_lv.lv_voltage_mv = 25.2f;
         dbc_api.master_soc_accumulator.soc_float = 78.0f;
-        dbc_api.aqt1.throtle_percentage = 65.0f;
+        dbc_api.data_aqt1.throtle_percentage = 65.0f;
         dbc_api.asf_signals.brake_pressure_front = 12.0f;
         dbc_api.asf_signals.brake_pressure_rear = 35.0f;
         ui_tick();
@@ -694,12 +694,12 @@ int main(int argc, char **argv) {
         dbc_api.pdm_lv.lv_voltage_mv = 25.2f;
         ui_tick();
         assert(lv_obj_has_flag(lv_obj_get_parent(objects.gauge_warning_message), LV_OBJ_FLAG_HIDDEN));
-        dbc_api.aqt1.throtle_percentage = 150.0f;
+        dbc_api.data_aqt1.throtle_percentage = 150.0f;
         dbc_api.vcu_hv.brake_pressure_front = 145.0f;
         ui_tick();
         assert(lv_bar_get_value(objects.gauge_apps_bar) == 100);
         assert(lv_bar_get_value(objects.gauge_brake_bar) == 100);
-        dbc_api.aqt1.throtle_percentage = -5.0f;
+        dbc_api.data_aqt1.throtle_percentage = -5.0f;
         dbc_api.asf_signals.brake_pressure_front = -5.0f;
         dbc_api.asf_signals.brake_pressure_rear = -5.0f;
         dbc_api.vcu_hv.brake_pressure_front = -5.0f;
@@ -879,7 +879,7 @@ int main(int argc, char **argv) {
         // Test 3: Setting dbc_api directly and calling with NULL
         dbc_api.asf_signals.brake_pressure_front = 45.2f;
         dbc_api.asf_signals.brake_pressure_rear = 10.0f;
-        dbc_api.aqt1.throtle_percentage = 73.0f;
+        dbc_api.data_aqt1.throtle_percentage = 73.0f;
         dbc_api.master_soc_accumulator.soc_float = 92.5f;
         dbc_api.ivt_msg_result_u3.ivt_result_u3 = 24300.0f;
         dbc_api.vcu_ign_r2d.r2d_manual = 1.0f;

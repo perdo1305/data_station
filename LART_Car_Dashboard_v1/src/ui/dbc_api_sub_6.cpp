@@ -6,6 +6,8 @@
 #include <mutex>
 #include <vector>
 extern std::mutex dbc_api_mutex;
+#include <lart_msgs/msg/slave10_msc_id2.hpp>
+#include <lart_msgs/msg/slave10_temperature_id1.hpp>
 #include <lart_msgs/msg/slave10_temperature_id2.hpp>
 #include <lart_msgs/msg/slave10_voltage_id1.hpp>
 #include <lart_msgs/msg/slave10_voltage_id2.hpp>
@@ -34,12 +36,30 @@ extern std::mutex dbc_api_mutex;
 #include <lart_msgs/msg/vcu_inv2_temperatures.hpp>
 #include <lart_msgs/msg/vcu_rpm.hpp>
 #include <lart_msgs/msg/vcu_rpm_target.hpp>
-#include <lart_msgs/msg/vcu_states.hpp>
-#include <lart_msgs/msg/vcu_torque_target.hpp>
 
 void init_dbc_api_subscribers_chunk_6(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs) {
     auto sensor_qos = rclcpp::QoS(10).best_effort();
 
+    subs.push_back(node->create_subscription<lart_msgs::msg::Slave10MscId2>(
+        "/pwt/slave_10_msc_id_2", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave10MscId2> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.slave_10_msc_id_2.module_ic_temperature = msg->module_ic_temperature;
+                dbc_api.slave_10_msc_id_2.module_ic_voltage = msg->module_ic_voltage;
+                dbc_api.slave_10_msc_id_2.module_open_wire = msg->module_open_wire;
+                dbc_api.slave_10_msc_id_2.module_voltage_delta = msg->module_voltage_delta;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Slave10TemperatureId1>(
+        "/pwt/slave_10_temperature_id_1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave10TemperatureId1> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.slave_10_temperature_id_1.temperature_value_1 = msg->temperature_value_1;
+                dbc_api.slave_10_temperature_id_1.temperature_value_2 = msg->temperature_value_2;
+                dbc_api.slave_10_temperature_id_1.temperature_value_3 = msg->temperature_value_3;
+                dbc_api.slave_10_temperature_id_1.temperature_value_4 = msg->temperature_value_4;
+            }
+        }));
     subs.push_back(node->create_subscription<lart_msgs::msg::Slave10TemperatureId2>(
         "/pwt/slave_10_temperature_id_2", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave10TemperatureId2> msg) {
             if (msg) {
@@ -302,32 +322,6 @@ void init_dbc_api_subscribers_chunk_6(std::shared_ptr<rclcpp::Node> node, std::v
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.vcu_rpm_target.rpm_target = msg->rpm_target;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::VcuStates>(
-        "/pwt/vcu_states", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::VcuStates> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.vcu_states.front_left_speed = msg->front_left_speed;
-                dbc_api.vcu_states.front_right_speed = msg->front_right_speed;
-                dbc_api.vcu_states.front_wheel_speed_ok = msg->front_wheel_speed_ok;
-                dbc_api.vcu_states.road_wheel_angle = msg->road_wheel_angle;
-                dbc_api.vcu_states.steering_angle_ok = msg->steering_angle_ok;
-                dbc_api.vcu_states.tc_factor_rear_left = msg->tc_factor_rear_left;
-                dbc_api.vcu_states.tc_factor_rear_right = msg->tc_factor_rear_right;
-                dbc_api.vcu_states.tc_state = msg->tc_state;
-                dbc_api.vcu_states.throttle_status = msg->throttle_status;
-                dbc_api.vcu_states.tv_shift = msg->tv_shift;
-                dbc_api.vcu_states.tv_state = msg->tv_state;
-                dbc_api.vcu_states.vcu_state = msg->vcu_state;
-                dbc_api.vcu_states.vcu_states_counter = msg->vcu_states_counter;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::VcuTorqueTarget>(
-        "/can/vcu_torque_target", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::VcuTorqueTarget> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.vcu_torque_target.torque_target = msg->torque_target;
             }
         }));
 }

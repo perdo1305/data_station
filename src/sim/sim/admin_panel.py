@@ -199,7 +199,7 @@ class Backend:
     def discover(self):
         import can
         import cantools
-        from lart_bringup.topic_names import dbc_topic_prefix
+        from lart_bringup.topic_names import dbc_topic_prefix, lart_msg_type_names
         from rosidl_runtime_py.utilities import get_message
         names = simulator_names(self.node.get_node_names_and_namespaces())
         fields = ['dbc_path', 'can_interface', 'enabled', 'publish_hz', 'signal_controls', 'message_intervals_ms']
@@ -231,10 +231,18 @@ class Backend:
                        'values': {}, 'topics': {}, 'validator': ControlConfig(db.messages),
                        'messages_by_id': {(m.frame_id, m.is_extended_frame): m for m in db.messages}}
             for message in db.messages:
-                topic = dbc_topic_prefix(str(path)) + '/' + ros_name(message.name)
-                type_name = ''.join(w.capitalize() for w in ros_name(message.name).split('_'))
+                topic_prefix = dbc_topic_prefix(str(path))
+                topic = topic_prefix + '/' + ros_name(message.name)
                 try:
-                    msg_type = get_message('lart_msgs/msg/' + type_name)
+                    msg_type = None
+                    for type_name in lart_msg_type_names(topic_prefix, ros_name(message.name)):
+                        try:
+                            msg_type = get_message('lart_msgs/msg/' + type_name)
+                            break
+                        except (ImportError, AttributeError, ModuleNotFoundError):
+                            continue
+                    if msg_type is None:
+                        raise AttributeError(message.name)
                     profile['topics'][message.name] = (topic, msg_type)
                     if topic not in self.subscriptions:
                         self.subscriptions[topic] = self.node.create_subscription(

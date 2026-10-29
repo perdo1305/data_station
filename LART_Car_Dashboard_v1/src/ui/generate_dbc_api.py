@@ -6,7 +6,7 @@ import cantools
 _UNSAFE = re.compile(r'[^a-zA-Z0-9_]')
 
 # Autonomous-only signals are not exposed by the data-station messages or UI.
-_EXCLUDED_SIGNALS = {("AQT2", "WHEEL_SPD"), ("AQT3", "WHEEL_SPD"), ("AQT7", "REAR_BRK_PRESS")}
+_EXCLUDED_SIGNALS = {("AQT2", "WHEEL_SPD"), ("AQT3", "WHEEL_SPD")}
 
 
 def _ros_name(raw: str) -> str:
@@ -15,6 +15,30 @@ def _ros_name(raw: str) -> str:
     if slug and slug[0].isdigit():
         slug = 'val_' + slug
     return slug
+
+def _type_slugs(sources):
+    """Map (db_name, DBC message name) to its lart_msgs type slug.
+
+    Same-named messages on different buses share one type when their signals match.
+    When they differ, autonomous_t26 keeps the plain name (the ACU/Jetson own those
+    types) and every other bus gets its bus prefix, e.g. data_t26 AQT1 -> DataAqt1.
+    Keep in sync with generated/generate_can_bridge.py.
+    """
+    variants = {}
+    for db_name, database in sources:
+        for msg in database.messages:
+            variants.setdefault(_ros_name(msg.name), set()).add(frozenset(
+                _ros_name(sig.name) for sig in msg.signals
+                if (msg.name, sig.name) not in _EXCLUDED_SIGNALS))
+    slugs = {}
+    for db_name, database in sources:
+        for msg in database.messages:
+            slug = _ros_name(msg.name)
+            if len(variants[slug]) > 1 and db_name != "autonomous_t26":
+                slug = f"{db_name.split('_')[0]}_{slug}"
+            slugs[(db_name, msg.name)] = slug
+    return slugs
+
 
 def _ros_header_name(class_name: str) -> str:
     s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', class_name)
@@ -31,7 +55,7 @@ def main():
     # `ros2 topic list`.
     dbc_filenames = ["data_t26.dbc", "powertrain_t26.dbc", "autonomous_t26.dbc"]
 
-    db = cantools.database.Database()
+    sources = []
     message_databases = {}
     dbc_files = [os.path.join(dbc_dir, fn) for fn in dbc_filenames]
     for df in dbc_files:
@@ -42,20 +66,22 @@ def main():
         except UnicodeDecodeError:
             encoding = "cp1252"
         source_db = cantools.database.load_file(df, encoding=encoding)
-        db_name = os.path.splitext(os.path.basename(df))[0]
-        for msg in source_db.messages:
-            message_databases.setdefault(_ros_name(msg.name), set()).add(db_name)
-        db.add_dbc_file(df, encoding=encoding)
-        
-    # Group signals by sanitized message name slug to deduplicate messages
+        sources.append((os.path.splitext(os.path.basename(df))[0], source_db))
+    type_slugs = _type_slugs(sources)
+    # Type slug -> {db_name: topic segment}; prefixed types still publish on /data/<message>.
+    for (db_name, msg_name), msg_slug in type_slugs.items():
+        message_databases.setdefault(msg_slug, {})[db_name] = _ros_name(msg_name)
+    all_messages = [(db_name, msg) for db_name, source_db in sources for msg in source_db.messages]
+
+    # Group signals by type slug to deduplicate messages
     message_signals = {}
     signal_types = {}
-    for msg in db.messages:
+    for db_name, msg in all_messages:
         included_signals = [sig for sig in msg.signals
                             if (msg.name, sig.name) not in _EXCLUDED_SIGNALS]
         if not included_signals:
             continue
-        msg_slug = _ros_name(msg.name)
+        msg_slug = type_slugs[(db_name, msg.name)]
         if msg_slug not in message_signals:
             message_signals[msg_slug] = set()
         for sig in included_signals:
@@ -119,10 +145,10 @@ def main():
             
     # Identify error signals for checking
     error_signals = []
-    for msg in db.messages:
+    for db_name, msg in all_messages:
         if not msg.signals:
             continue
-        msg_slug = _ros_name(msg.name)
+        msg_slug = type_slugs[(db_name, msg.name)]
         for sig in msg.signals:
             if (msg.name, sig.name) in _EXCLUDED_SIGNALS:
                 continue
@@ -226,8 +252,8 @@ def main():
         for msg_slug in sorted(chunk_slugs):
             class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
             msg_class = f"lart_msgs::msg::{class_name}"
-            for db_name in sorted(message_databases[msg_slug]):
-                topic = f"{topic_prefixes[db_name]}/{msg_slug}"
+            for db_name, topic_slug in sorted(message_databases[msg_slug].items()):
+                topic = f"{topic_prefixes[db_name]}/{topic_slug}"
                 sub_lines.extend([
                     f"    subs.push_back(node->create_subscription<{msg_class}>(",
                     f"        \"{topic}\", sensor_qos, [](const std::shared_ptr<{msg_class}> msg) {{",
@@ -425,8 +451,8 @@ def main():
         "    if (brake_val > 100) brake_val = 100;",
         "    eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_BRAKE_PEDAL_PRESSURE, eez::IntegerValue(brake_val));",
         "",
-        "    // 2. ACCELL PEDAL PRESSURE (0 to 100) — driven by AQT1 throttle percentage",
-        "    int acc_val = static_cast<int>(dbc_api.aqt1.throtle_percentage);",
+        "    // 2. ACCELL PEDAL PRESSURE (0 to 100) — driven by data-bus AQT1 throttle percentage",
+        "    int acc_val = static_cast<int>(dbc_api.data_aqt1.throtle_percentage);",
         "    if (acc_val < 0) acc_val = 0;",
         "    if (acc_val > 100) acc_val = 100;",
         "    eez::flow::setGlobalVariable(FLOW_GLOBAL_VARIABLE_ACCELL_PEDAL_PRESSURE, eez::IntegerValue(acc_val));",

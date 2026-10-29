@@ -4,6 +4,12 @@
 void CanBridgeImpl::init_publishers_chunk_6(rclcpp::Node* node) {
     auto sensor_qos = rclcpp::QoS(10).best_effort();
     if (database_ == "powertrain_t26") {
+        pub_slave_10_msc_id_2 = node->create_publisher<lart_msgs::msg::Slave10MscId2>(database_ == "data_t26" ? "/data/slave_10_msc_id_2" : database_ == "powertrain_t26" ? "/pwt/slave_10_msc_id_2" : "/can/slave_10_msc_id_2", sensor_qos);
+    }
+    if (database_ == "powertrain_t26") {
+        pub_slave_10_temperature_id_1 = node->create_publisher<lart_msgs::msg::Slave10TemperatureId1>(database_ == "data_t26" ? "/data/slave_10_temperature_id_1" : database_ == "powertrain_t26" ? "/pwt/slave_10_temperature_id_1" : "/can/slave_10_temperature_id_1", sensor_qos);
+    }
+    if (database_ == "powertrain_t26") {
         pub_slave_10_temperature_id_2 = node->create_publisher<lart_msgs::msg::Slave10TemperatureId2>(database_ == "data_t26" ? "/data/slave_10_temperature_id_2" : database_ == "powertrain_t26" ? "/pwt/slave_10_temperature_id_2" : "/can/slave_10_temperature_id_2", sensor_qos);
     }
     if (database_ == "powertrain_t26") {
@@ -86,12 +92,6 @@ void CanBridgeImpl::init_publishers_chunk_6(rclcpp::Node* node) {
     }
     if (database_ == "autonomous_t26") {
         pub_vcu_rpm_target = node->create_publisher<lart_msgs::msg::VcuRpmTarget>(database_ == "data_t26" ? "/data/vcu_rpm_target" : database_ == "powertrain_t26" ? "/pwt/vcu_rpm_target" : "/can/vcu_rpm_target", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_vcu_states = node->create_publisher<lart_msgs::msg::VcuStates>(database_ == "data_t26" ? "/data/vcu_states" : database_ == "powertrain_t26" ? "/pwt/vcu_states" : "/can/vcu_states", sensor_qos);
-    }
-    if (database_ == "autonomous_t26") {
-        pub_vcu_torque_target = node->create_publisher<lart_msgs::msg::VcuTorqueTarget>(database_ == "data_t26" ? "/data/vcu_torque_target" : database_ == "powertrain_t26" ? "/pwt/vcu_torque_target" : "/can/vcu_torque_target", sensor_qos);
     }
 }
 

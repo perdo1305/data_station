@@ -14,6 +14,8 @@ from rclpy.node import Node
 from rclpy.qos import QoSHistoryPolicy, QoSProfile, QoSReliabilityPolicy
 from std_msgs.msg import Float32
 
+from .topic_names import lart_msg_type_names
+
 
 def _nan() -> float:
     return float('nan')
@@ -109,11 +111,11 @@ class SpeedBridge(Node):
                     msg_slug = parts[1]
                     sig_slug = parts[2]
                     aggregate_topic = '/' + '/'.join(parts[:2])
-                    msg_class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
+                    msg_class_names = lart_msg_type_names('/' + parts[0], msg_slug)
                     try:
                         import importlib
                         module = importlib.import_module('lart_msgs.msg')
-                        msg_class = getattr(module, msg_class_name)
+                        msg_class = getattr(module, next((n for n in msg_class_names if hasattr(module, n)), msg_class_names[-1]))
                         
                         def _on_r2d_cb(msg, *, signal_attr=sig_slug):
                             self._r2d_ready = bool(getattr(msg, signal_attr) > 0.5)
@@ -143,11 +145,11 @@ class SpeedBridge(Node):
                 msg_slug = parts[1]
                 sig_slug = parts[2]
                 aggregate_topic = '/' + '/'.join(parts[:2])
-                msg_class_name = ''.join(word.capitalize() for word in msg_slug.split('_') if word)
+                msg_class_names = lart_msg_type_names('/' + parts[0], msg_slug)
                 try:
                     import importlib
                     module = importlib.import_module('lart_msgs.msg')
-                    msg_class = getattr(module, msg_class_name)
+                    msg_class = getattr(module, next((n for n in msg_class_names if hasattr(module, n)), msg_class_names[-1]))
                     
                     def _cb(msg, *, field=key, factor=scale, signal_attr=sig_slug):
                         value = float(getattr(msg, signal_attr)) * factor

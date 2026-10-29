@@ -33,3 +33,11 @@ def test_single_dbc_simulation_keeps_legacy_vcan0_route(tmp_path):
     assert dbc_sim_routes(str(tmp_path), dbc.name) == [
         ("powertrain", str(dbc), "vcan0", "/pwt"),
     ]
+
+
+def test_bus_specific_message_types_fall_back_to_shared_type():
+    from lart_bringup.topic_names import lart_msg_type_names
+
+    assert lart_msg_type_names("/data", "aqt1") == ["DataAqt1", "Aqt1"]
+    assert lart_msg_type_names("/pwt", "aqt4") == ["PowertrainAqt4", "Aqt4"]
+    assert lart_msg_type_names("/can", "aqt1") == ["Aqt1"]

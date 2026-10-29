@@ -4,6 +4,12 @@
 void CanBridgeImpl::init_publishers_chunk_5(rclcpp::Node* node) {
     auto sensor_qos = rclcpp::QoS(10).best_effort();
     if (database_ == "powertrain_t26") {
+        pub_slave_05_voltage_id_3 = node->create_publisher<lart_msgs::msg::Slave05VoltageId3>(database_ == "data_t26" ? "/data/slave_05_voltage_id_3" : database_ == "powertrain_t26" ? "/pwt/slave_05_voltage_id_3" : "/can/slave_05_voltage_id_3", sensor_qos);
+    }
+    if (database_ == "powertrain_t26") {
+        pub_slave_06_msc_id_1 = node->create_publisher<lart_msgs::msg::Slave06MscId1>(database_ == "data_t26" ? "/data/slave_06_msc_id_1" : database_ == "powertrain_t26" ? "/pwt/slave_06_msc_id_1" : "/can/slave_06_msc_id_1", sensor_qos);
+    }
+    if (database_ == "powertrain_t26") {
         pub_slave_06_msc_id_2 = node->create_publisher<lart_msgs::msg::Slave06MscId2>(database_ == "data_t26" ? "/data/slave_06_msc_id_2" : database_ == "powertrain_t26" ? "/pwt/slave_06_msc_id_2" : "/can/slave_06_msc_id_2", sensor_qos);
     }
     if (database_ == "powertrain_t26") {
@@ -86,12 +92,6 @@ void CanBridgeImpl::init_publishers_chunk_5(rclcpp::Node* node) {
     }
     if (database_ == "powertrain_t26") {
         pub_slave_10_msc_id_1 = node->create_publisher<lart_msgs::msg::Slave10MscId1>(database_ == "data_t26" ? "/data/slave_10_msc_id_1" : database_ == "powertrain_t26" ? "/pwt/slave_10_msc_id_1" : "/can/slave_10_msc_id_1", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_slave_10_msc_id_2 = node->create_publisher<lart_msgs::msg::Slave10MscId2>(database_ == "data_t26" ? "/data/slave_10_msc_id_2" : database_ == "powertrain_t26" ? "/pwt/slave_10_msc_id_2" : "/can/slave_10_msc_id_2", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_slave_10_temperature_id_1 = node->create_publisher<lart_msgs::msg::Slave10TemperatureId1>(database_ == "data_t26" ? "/data/slave_10_temperature_id_1" : database_ == "powertrain_t26" ? "/pwt/slave_10_temperature_id_1" : "/can/slave_10_temperature_id_1", sensor_qos);
     }
 }
 
@@ -421,7 +421,7 @@ bool CanBridgeImpl::handle_frame_chunk_5(uint32_t can_id, const uint8_t* data, s
         }
         case 1792u: {
             {
-                lart_msgs::msg::Aqt1 out;
+                lart_msgs::msg::DataAqt1 out;
                 bool decoded_any = false;
                 if (database_ == "data_t26") {
                     struct data_t26_aqt1_t decoded = {};
@@ -431,7 +431,7 @@ bool CanBridgeImpl::handle_frame_chunk_5(uint32_t can_id, const uint8_t* data, s
                     }
                 }
                 if (decoded_any) {
-                    pub_aqt1->publish(out);
+                    pub_data_aqt1->publish(out);
                 }
             }
             return true;
@@ -666,7 +666,7 @@ bool CanBridgeImpl::handle_frame_chunk_5(uint32_t can_id, const uint8_t* data, s
         }
         case 1904u: {
             {
-                lart_msgs::msg::Aqt7 out;
+                lart_msgs::msg::DataAqt7 out;
                 bool decoded_any = false;
                 if (database_ == "data_t26") {
                     struct data_t26_aqt7_t decoded = {};
@@ -674,6 +674,20 @@ bool CanBridgeImpl::handle_frame_chunk_5(uint32_t can_id, const uint8_t* data, s
                         out.susp_l = data_t26_aqt7_susp_l_decode(decoded.susp_l);
                         out.susp_r = data_t26_aqt7_susp_r_decode(decoded.susp_r);
                         out.ntc_1 = data_t26_aqt7_ntc_1_decode(decoded.ntc_1);
+                        decoded_any = true;
+                    }
+                }
+                if (decoded_any) {
+                    pub_data_aqt7->publish(out);
+                }
+            }
+            {
+                lart_msgs::msg::Aqt7 out;
+                bool decoded_any = false;
+                if (database_ == "autonomous_t26") {
+                    struct autonomous_t26_aqt7_t decoded = {};
+                    if (autonomous_t26_aqt7_unpack(&decoded, data, dlc) == 0) {
+                        out.rear_brk_press = autonomous_t26_aqt7_rear_brk_press_decode(decoded.rear_brk_press);
                         decoded_any = true;
                     }
                 }

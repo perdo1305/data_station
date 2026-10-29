@@ -30,7 +30,6 @@ typedef struct {
         float bots;
         float frt_brk_press;
         float res;
-        float throtle_percentage;
     } aqt1;
     struct {
         float front_left_wheel_rpm;
@@ -284,9 +283,7 @@ typedef struct {
         float susp_r;
     } aqt4;
     struct {
-        float ntc_1;
-        float susp_l;
-        float susp_r;
+        float rear_brk_press;
     } aqt7;
     struct {
         float ntc1;
@@ -313,6 +310,14 @@ typedef struct {
         float ignition_switch_raw;
         float r2d_button_raw;
     } dashboard;
+    struct {
+        float throtle_percentage;
+    } data_aqt1;
+    struct {
+        float ntc_1;
+        float susp_l;
+        float susp_r;
+    } data_aqt7;
     struct {
         float brake_hydr_actual;
         float brake_hydr_target;

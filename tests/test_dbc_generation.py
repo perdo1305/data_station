@@ -6,6 +6,7 @@ import subprocess
 import sys
 
 import cantools
+import pytest
 
 
 def test_dashboard_message_headers_have_registered_interfaces():
@@ -30,14 +31,21 @@ def test_dashboard_message_headers_have_registered_interfaces():
     assert not missing, f"Dashboard headers have no registered ROS interface: {sorted(missing)}"
 
 
-def test_committed_aqt7_interface_matches_data_dbc():
+@pytest.mark.parametrize("dbc, message_name, interface_name", [
+    # AQT1/AQT7 differ between buses: data gets its own type, autonomous keeps the plain one.
+    ("data_t26", "AQT1", "DataAqt1"),
+    ("data_t26", "AQT7", "DataAqt7"),
+    ("autonomous_t26", "AQT1", "Aqt1"),
+    ("autonomous_t26", "AQT7", "Aqt7"),
+])
+def test_committed_aqt_interfaces_match_their_bus(dbc, message_name, interface_name):
     root = Path(__file__).resolve().parents[1]
-    message = cantools.database.load_file(root / "dbc_signals/data_t26.dbc").get_message_by_name("AQT7")
-    interface = root / "src/lart_msgs/dbc_msgs/Aqt7.msg"
+    message = cantools.database.load_file(
+        root / f"dbc_signals/{dbc}.dbc", encoding="cp1252").get_message_by_name(message_name)
+    interface = root / f"src/lart_msgs/dbc_msgs/{interface_name}.msg"
     fields = {parts[1] for line in interface.read_text().splitlines()
-              if len(parts := line.split()) >= 2}
-    missing = {signal.name.lower() for signal in message.signals} - fields
-    assert not missing, f"Aqt7.msg is missing DBC fields: {sorted(missing)}"
+              if len(parts := line.split()) >= 2 and parts[1] != "header"}
+    assert fields == {signal.name.lower() for signal in message.signals}
 
 
 def test_api_generation_preserves_ros_package(tmp_path):

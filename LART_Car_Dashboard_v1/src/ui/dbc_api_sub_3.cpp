@@ -6,6 +6,8 @@
 #include <mutex>
 #include <vector>
 extern std::mutex dbc_api_mutex;
+#include <lart_msgs/msg/inv2_setposition.hpp>
+#include <lart_msgs/msg/inv2_setrelbrakecurrent.hpp>
 #include <lart_msgs/msg/inv2_setrelcurrent.hpp>
 #include <lart_msgs/msg/inv2_targetiq.hpp>
 #include <lart_msgs/msg/inv2_temperatures.hpp>
@@ -34,12 +36,24 @@ extern std::mutex dbc_api_mutex;
 #include <lart_msgs/msg/slave01_msc_id2.hpp>
 #include <lart_msgs/msg/slave01_temperature_id1.hpp>
 #include <lart_msgs/msg/slave01_temperature_id2.hpp>
-#include <lart_msgs/msg/slave01_voltage_id1.hpp>
-#include <lart_msgs/msg/slave01_voltage_id2.hpp>
 
 void init_dbc_api_subscribers_chunk_3(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs) {
     auto sensor_qos = rclcpp::QoS(10).best_effort();
 
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Setposition>(
+        "/pwt/inv2_setposition", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Setposition> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv2_setposition.inv2_cmd_targetposition = msg->inv2_cmd_targetposition;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Setrelbrakecurrent>(
+        "/pwt/inv2_setrelbrakecurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Setrelbrakecurrent> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv2_setrelbrakecurrent.inv2_cmd_tgtrelbrakecurrent = msg->inv2_cmd_tgtrelbrakecurrent;
+            }
+        }));
     subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Setrelcurrent>(
         "/pwt/inv2_setrelcurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Setrelcurrent> msg) {
             if (msg) {
@@ -547,26 +561,6 @@ void init_dbc_api_subscribers_chunk_3(std::shared_ptr<rclcpp::Node> node, std::v
                 dbc_api.slave_01_temperature_id_2.temperature_maximum = msg->temperature_maximum;
                 dbc_api.slave_01_temperature_id_2.temperature_value_5 = msg->temperature_value_5;
                 dbc_api.slave_01_temperature_id_2.temperature_value_6 = msg->temperature_value_6;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Slave01VoltageId1>(
-        "/pwt/slave_01_voltage_id_1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave01VoltageId1> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.slave_01_voltage_id_1.cell_voltage_1 = msg->cell_voltage_1;
-                dbc_api.slave_01_voltage_id_1.cell_voltage_2 = msg->cell_voltage_2;
-                dbc_api.slave_01_voltage_id_1.cell_voltage_3 = msg->cell_voltage_3;
-                dbc_api.slave_01_voltage_id_1.cell_voltage_4 = msg->cell_voltage_4;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Slave01VoltageId2>(
-        "/pwt/slave_01_voltage_id_2", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Slave01VoltageId2> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.slave_01_voltage_id_2.cell_voltage_5 = msg->cell_voltage_5;
-                dbc_api.slave_01_voltage_id_2.cell_voltage_6 = msg->cell_voltage_6;
-                dbc_api.slave_01_voltage_id_2.cell_voltage_7 = msg->cell_voltage_7;
-                dbc_api.slave_01_voltage_id_2.cell_voltage_8 = msg->cell_voltage_8;
             }
         }));
 }

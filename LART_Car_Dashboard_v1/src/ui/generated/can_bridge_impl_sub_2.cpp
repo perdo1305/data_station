@@ -4,6 +4,12 @@
 void CanBridgeImpl::init_publishers_chunk_2(rclcpp::Node* node) {
     auto sensor_qos = rclcpp::QoS(10).best_effort();
     if (database_ == "powertrain_t26") {
+        pub_inv1_misc = node->create_publisher<lart_msgs::msg::Inv1Misc>(database_ == "data_t26" ? "/data/inv1_misc" : database_ == "powertrain_t26" ? "/pwt/inv1_misc" : "/can/inv1_misc", sensor_qos);
+    }
+    if (database_ == "powertrain_t26") {
+        pub_inv1_setaccurrent = node->create_publisher<lart_msgs::msg::Inv1Setaccurrent>(database_ == "data_t26" ? "/data/inv1_setaccurrent" : database_ == "powertrain_t26" ? "/pwt/inv1_setaccurrent" : "/can/inv1_setaccurrent", sensor_qos);
+    }
+    if (database_ == "powertrain_t26") {
         pub_inv1_setbrakecurrent = node->create_publisher<lart_msgs::msg::Inv1Setbrakecurrent>(database_ == "data_t26" ? "/data/inv1_setbrakecurrent" : database_ == "powertrain_t26" ? "/pwt/inv1_setbrakecurrent" : "/can/inv1_setbrakecurrent", sensor_qos);
     }
     if (database_ == "powertrain_t26") {
@@ -86,12 +92,6 @@ void CanBridgeImpl::init_publishers_chunk_2(rclcpp::Node* node) {
     }
     if (database_ == "powertrain_t26") {
         pub_inv2_setmaxdccurrent = node->create_publisher<lart_msgs::msg::Inv2Setmaxdccurrent>(database_ == "data_t26" ? "/data/inv2_setmaxdccurrent" : database_ == "powertrain_t26" ? "/pwt/inv2_setmaxdccurrent" : "/can/inv2_setmaxdccurrent", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_inv2_setposition = node->create_publisher<lart_msgs::msg::Inv2Setposition>(database_ == "data_t26" ? "/data/inv2_setposition" : database_ == "powertrain_t26" ? "/pwt/inv2_setposition" : "/can/inv2_setposition", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_inv2_setrelbrakecurrent = node->create_publisher<lart_msgs::msg::Inv2Setrelbrakecurrent>(database_ == "data_t26" ? "/data/inv2_setrelbrakecurrent" : database_ == "powertrain_t26" ? "/pwt/inv2_setrelbrakecurrent" : "/can/inv2_setrelbrakecurrent", sensor_qos);
     }
 }
 

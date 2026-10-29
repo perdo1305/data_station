@@ -4,6 +4,12 @@
 void CanBridgeImpl::init_publishers_chunk_3(rclcpp::Node* node) {
     auto sensor_qos = rclcpp::QoS(10).best_effort();
     if (database_ == "powertrain_t26") {
+        pub_inv2_setposition = node->create_publisher<lart_msgs::msg::Inv2Setposition>(database_ == "data_t26" ? "/data/inv2_setposition" : database_ == "powertrain_t26" ? "/pwt/inv2_setposition" : "/can/inv2_setposition", sensor_qos);
+    }
+    if (database_ == "powertrain_t26") {
+        pub_inv2_setrelbrakecurrent = node->create_publisher<lart_msgs::msg::Inv2Setrelbrakecurrent>(database_ == "data_t26" ? "/data/inv2_setrelbrakecurrent" : database_ == "powertrain_t26" ? "/pwt/inv2_setrelbrakecurrent" : "/can/inv2_setrelbrakecurrent", sensor_qos);
+    }
+    if (database_ == "powertrain_t26") {
         pub_inv2_setrelcurrent = node->create_publisher<lart_msgs::msg::Inv2Setrelcurrent>(database_ == "data_t26" ? "/data/inv2_setrelcurrent" : database_ == "powertrain_t26" ? "/pwt/inv2_setrelcurrent" : "/can/inv2_setrelcurrent", sensor_qos);
     }
     if (database_ == "powertrain_t26") {
@@ -86,12 +92,6 @@ void CanBridgeImpl::init_publishers_chunk_3(rclcpp::Node* node) {
     }
     if (database_ == "powertrain_t26") {
         pub_slave_01_temperature_id_2 = node->create_publisher<lart_msgs::msg::Slave01TemperatureId2>(database_ == "data_t26" ? "/data/slave_01_temperature_id_2" : database_ == "powertrain_t26" ? "/pwt/slave_01_temperature_id_2" : "/can/slave_01_temperature_id_2", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_slave_01_voltage_id_1 = node->create_publisher<lart_msgs::msg::Slave01VoltageId1>(database_ == "data_t26" ? "/data/slave_01_voltage_id_1" : database_ == "powertrain_t26" ? "/pwt/slave_01_voltage_id_1" : "/can/slave_01_voltage_id_1", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_slave_01_voltage_id_2 = node->create_publisher<lart_msgs::msg::Slave01VoltageId2>(database_ == "data_t26" ? "/data/slave_01_voltage_id_2" : database_ == "powertrain_t26" ? "/pwt/slave_01_voltage_id_2" : "/can/slave_01_voltage_id_2", sensor_qos);
     }
 }
 

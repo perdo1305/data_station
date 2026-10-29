@@ -4,6 +4,12 @@
 void CanBridgeImpl::init_publishers_chunk_4(rclcpp::Node* node) {
     auto sensor_qos = rclcpp::QoS(10).best_effort();
     if (database_ == "powertrain_t26") {
+        pub_slave_01_voltage_id_1 = node->create_publisher<lart_msgs::msg::Slave01VoltageId1>(database_ == "data_t26" ? "/data/slave_01_voltage_id_1" : database_ == "powertrain_t26" ? "/pwt/slave_01_voltage_id_1" : "/can/slave_01_voltage_id_1", sensor_qos);
+    }
+    if (database_ == "powertrain_t26") {
+        pub_slave_01_voltage_id_2 = node->create_publisher<lart_msgs::msg::Slave01VoltageId2>(database_ == "data_t26" ? "/data/slave_01_voltage_id_2" : database_ == "powertrain_t26" ? "/pwt/slave_01_voltage_id_2" : "/can/slave_01_voltage_id_2", sensor_qos);
+    }
+    if (database_ == "powertrain_t26") {
         pub_slave_01_voltage_id_3 = node->create_publisher<lart_msgs::msg::Slave01VoltageId3>(database_ == "data_t26" ? "/data/slave_01_voltage_id_3" : database_ == "powertrain_t26" ? "/pwt/slave_01_voltage_id_3" : "/can/slave_01_voltage_id_3", sensor_qos);
     }
     if (database_ == "powertrain_t26") {
@@ -86,12 +92,6 @@ void CanBridgeImpl::init_publishers_chunk_4(rclcpp::Node* node) {
     }
     if (database_ == "powertrain_t26") {
         pub_slave_05_voltage_id_2 = node->create_publisher<lart_msgs::msg::Slave05VoltageId2>(database_ == "data_t26" ? "/data/slave_05_voltage_id_2" : database_ == "powertrain_t26" ? "/pwt/slave_05_voltage_id_2" : "/can/slave_05_voltage_id_2", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_slave_05_voltage_id_3 = node->create_publisher<lart_msgs::msg::Slave05VoltageId3>(database_ == "data_t26" ? "/data/slave_05_voltage_id_3" : database_ == "powertrain_t26" ? "/pwt/slave_05_voltage_id_3" : "/can/slave_05_voltage_id_3", sensor_qos);
-    }
-    if (database_ == "powertrain_t26") {
-        pub_slave_06_msc_id_1 = node->create_publisher<lart_msgs::msg::Slave06MscId1>(database_ == "data_t26" ? "/data/slave_06_msc_id_1" : database_ == "powertrain_t26" ? "/pwt/slave_06_msc_id_1" : "/can/slave_06_msc_id_1", sensor_qos);
     }
 }
 

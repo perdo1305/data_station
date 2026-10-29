@@ -47,6 +47,8 @@
 #include <lart_msgs/msg/cubemars_feedback.hpp>
 #include <lart_msgs/msg/cubemars_position_loop.hpp>
 #include <lart_msgs/msg/dashboard.hpp>
+#include <lart_msgs/msg/data_aqt1.hpp>
+#include <lart_msgs/msg/data_aqt7.hpp>
 #include <lart_msgs/msg/dv_dynamics1.hpp>
 #include <lart_msgs/msg/dv_dynamics2.hpp>
 #include <lart_msgs/msg/dv_status.hpp>
@@ -276,6 +278,8 @@ private:
     rclcpp::Publisher<lart_msgs::msg::CubemarsFeedback>::SharedPtr pub_cubemars_feedback;
     rclcpp::Publisher<lart_msgs::msg::CubemarsPositionLoop>::SharedPtr pub_cubemars_position_loop;
     rclcpp::Publisher<lart_msgs::msg::Dashboard>::SharedPtr pub_dashboard;
+    rclcpp::Publisher<lart_msgs::msg::DataAqt1>::SharedPtr pub_data_aqt1;
+    rclcpp::Publisher<lart_msgs::msg::DataAqt7>::SharedPtr pub_data_aqt7;
     rclcpp::Publisher<lart_msgs::msg::DvDynamics1>::SharedPtr pub_dv_dynamics_1;
     rclcpp::Publisher<lart_msgs::msg::DvDynamics2>::SharedPtr pub_dv_dynamics_2;
     rclcpp::Publisher<lart_msgs::msg::DvStatus>::SharedPtr pub_dv_status;
@@ -465,6 +469,8 @@ private:
     bool handle_frame_chunk_5(uint32_t can_id, const uint8_t* data, size_t dlc);
     void init_publishers_chunk_6(rclcpp::Node* node);
     bool handle_frame_chunk_6(uint32_t can_id, const uint8_t* data, size_t dlc);
+    void init_publishers_chunk_7(rclcpp::Node* node);
+    bool handle_frame_chunk_7(uint32_t can_id, const uint8_t* data, size_t dlc);
 
 };
 

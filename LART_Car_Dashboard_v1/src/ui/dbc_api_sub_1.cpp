@@ -12,6 +12,8 @@ extern std::mutex dbc_api_mutex;
 #include <lart_msgs/msg/cubemars_feedback.hpp>
 #include <lart_msgs/msg/cubemars_position_loop.hpp>
 #include <lart_msgs/msg/dashboard.hpp>
+#include <lart_msgs/msg/data_aqt1.hpp>
+#include <lart_msgs/msg/data_aqt7.hpp>
 #include <lart_msgs/msg/dv_dynamics1.hpp>
 #include <lart_msgs/msg/dv_dynamics2.hpp>
 #include <lart_msgs/msg/dv_status.hpp>
@@ -34,8 +36,6 @@ extern std::mutex dbc_api_mutex;
 #include <lart_msgs/msg/inv1_foc.hpp>
 #include <lart_msgs/msg/inv1_minmaxaccurrent.hpp>
 #include <lart_msgs/msg/inv1_minmaxdccurrent.hpp>
-#include <lart_msgs/msg/inv1_misc.hpp>
-#include <lart_msgs/msg/inv1_setaccurrent.hpp>
 
 void init_dbc_api_subscribers_chunk_1(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs) {
     auto sensor_qos = rclcpp::QoS(10).best_effort();
@@ -44,18 +44,7 @@ void init_dbc_api_subscribers_chunk_1(std::shared_ptr<rclcpp::Node> node, std::v
         "/can/aqt7", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt7> msg) {
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt7.ntc_1 = msg->ntc_1;
-                dbc_api.aqt7.susp_l = msg->susp_l;
-                dbc_api.aqt7.susp_r = msg->susp_r;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Aqt7>(
-        "/data/aqt7", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Aqt7> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.aqt7.ntc_1 = msg->ntc_1;
-                dbc_api.aqt7.susp_l = msg->susp_l;
-                dbc_api.aqt7.susp_r = msg->susp_r;
+                dbc_api.aqt7.rear_brk_press = msg->rear_brk_press;
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::Aqt8>(
@@ -101,6 +90,22 @@ void init_dbc_api_subscribers_chunk_1(std::shared_ptr<rclcpp::Node> node, std::v
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.dashboard.ignition_switch_raw = msg->ignition_switch_raw;
                 dbc_api.dashboard.r2d_button_raw = msg->r2d_button_raw;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::DataAqt1>(
+        "/data/aqt1", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::DataAqt1> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.data_aqt1.throtle_percentage = msg->throtle_percentage;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::DataAqt7>(
+        "/data/aqt7", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::DataAqt7> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.data_aqt7.ntc_1 = msg->ntc_1;
+                dbc_api.data_aqt7.susp_l = msg->susp_l;
+                dbc_api.data_aqt7.susp_r = msg->susp_r;
             }
         }));
     subs.push_back(node->create_subscription<lart_msgs::msg::DvDynamics1>(
@@ -441,42 +446,6 @@ void init_dbc_api_subscribers_chunk_1(std::shared_ptr<rclcpp::Node> node, std::v
                 dbc_api.inv1_minmaxdccurrent.inv1_availablemindccurrent = msg->inv1_availablemindccurrent;
                 dbc_api.inv1_minmaxdccurrent.inv1_maxdccurrent = msg->inv1_maxdccurrent;
                 dbc_api.inv1_minmaxdccurrent.inv1_mindccurrent = msg->inv1_mindccurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Misc>(
-        "/pwt/inv1_misc", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Misc> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv1_misc.inv1_actual_brake = msg->inv1_actual_brake;
-                dbc_api.inv1_misc.inv1_actual_throttle = msg->inv1_actual_throttle;
-                dbc_api.inv1_misc.inv1_can_map_version = msg->inv1_can_map_version;
-                dbc_api.inv1_misc.inv1_capacitor_temp_limit = msg->inv1_capacitor_temp_limit;
-                dbc_api.inv1_misc.inv1_dc_current_limit = msg->inv1_dc_current_limit;
-                dbc_api.inv1_misc.inv1_digital_input_1 = msg->inv1_digital_input_1;
-                dbc_api.inv1_misc.inv1_digital_input_2 = msg->inv1_digital_input_2;
-                dbc_api.inv1_misc.inv1_digital_input_3 = msg->inv1_digital_input_3;
-                dbc_api.inv1_misc.inv1_digital_input_4 = msg->inv1_digital_input_4;
-                dbc_api.inv1_misc.inv1_digital_output_1 = msg->inv1_digital_output_1;
-                dbc_api.inv1_misc.inv1_digital_output_2 = msg->inv1_digital_output_2;
-                dbc_api.inv1_misc.inv1_digital_output_3 = msg->inv1_digital_output_3;
-                dbc_api.inv1_misc.inv1_digital_output_4 = msg->inv1_digital_output_4;
-                dbc_api.inv1_misc.inv1_drive_enable = msg->inv1_drive_enable;
-                dbc_api.inv1_misc.inv1_drive_enable_limit = msg->inv1_drive_enable_limit;
-                dbc_api.inv1_misc.inv1_igbt_accel_limit = msg->inv1_igbt_accel_limit;
-                dbc_api.inv1_misc.inv1_igbt_temp_limit = msg->inv1_igbt_temp_limit;
-                dbc_api.inv1_misc.inv1_input_voltage_limit = msg->inv1_input_voltage_limit;
-                dbc_api.inv1_misc.inv1_motor_accel_limit = msg->inv1_motor_accel_limit;
-                dbc_api.inv1_misc.inv1_motor_temp_limit = msg->inv1_motor_temp_limit;
-                dbc_api.inv1_misc.inv1_power_limit = msg->inv1_power_limit;
-                dbc_api.inv1_misc.inv1_rpm_max_limit = msg->inv1_rpm_max_limit;
-                dbc_api.inv1_misc.inv1_rpm_min_limit = msg->inv1_rpm_min_limit;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setaccurrent>(
-        "/pwt/inv1_setaccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setaccurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv1_setaccurrent.inv1_cmd_targetaccurrent = msg->inv1_cmd_targetaccurrent;
             }
         }));
 }

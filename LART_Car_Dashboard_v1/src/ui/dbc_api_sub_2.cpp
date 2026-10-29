@@ -6,6 +6,8 @@
 #include <mutex>
 #include <vector>
 extern std::mutex dbc_api_mutex;
+#include <lart_msgs/msg/inv1_misc.hpp>
+#include <lart_msgs/msg/inv1_setaccurrent.hpp>
 #include <lart_msgs/msg/inv1_setbrakecurrent.hpp>
 #include <lart_msgs/msg/inv1_setdigoutput.hpp>
 #include <lart_msgs/msg/inv1_setdriveenable.hpp>
@@ -34,12 +36,46 @@ extern std::mutex dbc_api_mutex;
 #include <lart_msgs/msg/inv2_setmaxaccurrent.hpp>
 #include <lart_msgs/msg/inv2_setmaxdcbrakecurrent.hpp>
 #include <lart_msgs/msg/inv2_setmaxdccurrent.hpp>
-#include <lart_msgs/msg/inv2_setposition.hpp>
-#include <lart_msgs/msg/inv2_setrelbrakecurrent.hpp>
 
 void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::vector<rclcpp::SubscriptionBase::SharedPtr>& subs) {
     auto sensor_qos = rclcpp::QoS(10).best_effort();
 
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Misc>(
+        "/pwt/inv1_misc", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Misc> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv1_misc.inv1_actual_brake = msg->inv1_actual_brake;
+                dbc_api.inv1_misc.inv1_actual_throttle = msg->inv1_actual_throttle;
+                dbc_api.inv1_misc.inv1_can_map_version = msg->inv1_can_map_version;
+                dbc_api.inv1_misc.inv1_capacitor_temp_limit = msg->inv1_capacitor_temp_limit;
+                dbc_api.inv1_misc.inv1_dc_current_limit = msg->inv1_dc_current_limit;
+                dbc_api.inv1_misc.inv1_digital_input_1 = msg->inv1_digital_input_1;
+                dbc_api.inv1_misc.inv1_digital_input_2 = msg->inv1_digital_input_2;
+                dbc_api.inv1_misc.inv1_digital_input_3 = msg->inv1_digital_input_3;
+                dbc_api.inv1_misc.inv1_digital_input_4 = msg->inv1_digital_input_4;
+                dbc_api.inv1_misc.inv1_digital_output_1 = msg->inv1_digital_output_1;
+                dbc_api.inv1_misc.inv1_digital_output_2 = msg->inv1_digital_output_2;
+                dbc_api.inv1_misc.inv1_digital_output_3 = msg->inv1_digital_output_3;
+                dbc_api.inv1_misc.inv1_digital_output_4 = msg->inv1_digital_output_4;
+                dbc_api.inv1_misc.inv1_drive_enable = msg->inv1_drive_enable;
+                dbc_api.inv1_misc.inv1_drive_enable_limit = msg->inv1_drive_enable_limit;
+                dbc_api.inv1_misc.inv1_igbt_accel_limit = msg->inv1_igbt_accel_limit;
+                dbc_api.inv1_misc.inv1_igbt_temp_limit = msg->inv1_igbt_temp_limit;
+                dbc_api.inv1_misc.inv1_input_voltage_limit = msg->inv1_input_voltage_limit;
+                dbc_api.inv1_misc.inv1_motor_accel_limit = msg->inv1_motor_accel_limit;
+                dbc_api.inv1_misc.inv1_motor_temp_limit = msg->inv1_motor_temp_limit;
+                dbc_api.inv1_misc.inv1_power_limit = msg->inv1_power_limit;
+                dbc_api.inv1_misc.inv1_rpm_max_limit = msg->inv1_rpm_max_limit;
+                dbc_api.inv1_misc.inv1_rpm_min_limit = msg->inv1_rpm_min_limit;
+            }
+        }));
+    subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setaccurrent>(
+        "/pwt/inv1_setaccurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setaccurrent> msg) {
+            if (msg) {
+                std::lock_guard<std::mutex> lock(dbc_api_mutex);
+                dbc_api.inv1_setaccurrent.inv1_cmd_targetaccurrent = msg->inv1_cmd_targetaccurrent;
+            }
+        }));
     subs.push_back(node->create_subscription<lart_msgs::msg::Inv1Setbrakecurrent>(
         "/pwt/inv1_setbrakecurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv1Setbrakecurrent> msg) {
             if (msg) {
@@ -277,20 +313,6 @@ void init_dbc_api_subscribers_chunk_2(std::shared_ptr<rclcpp::Node> node, std::v
             if (msg) {
                 std::lock_guard<std::mutex> lock(dbc_api_mutex);
                 dbc_api.inv2_setmaxdccurrent.inv2_cmd_maxdccurrent = msg->inv2_cmd_maxdccurrent;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Setposition>(
-        "/pwt/inv2_setposition", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Setposition> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_setposition.inv2_cmd_targetposition = msg->inv2_cmd_targetposition;
-            }
-        }));
-    subs.push_back(node->create_subscription<lart_msgs::msg::Inv2Setrelbrakecurrent>(
-        "/pwt/inv2_setrelbrakecurrent", sensor_qos, [](const std::shared_ptr<lart_msgs::msg::Inv2Setrelbrakecurrent> msg) {
-            if (msg) {
-                std::lock_guard<std::mutex> lock(dbc_api_mutex);
-                dbc_api.inv2_setrelbrakecurrent.inv2_cmd_tgtrelbrakecurrent = msg->inv2_cmd_tgtrelbrakecurrent;
             }
         }));
 }
