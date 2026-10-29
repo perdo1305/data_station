@@ -115,6 +115,13 @@ pip install -r requirements.txt --break-system-packages
 source install/setup.bash
 ```
 
+CI caches the `lart_msgs` install (keyed by the submodule content and toolchain)
+and compiler output through ccache, but always builds and packages the complete
+`install/` and `ui-build/` trees. `scripts/check_arm64_bundle.sh` verifies the
+bundle before it is published, and `pull_arm64_build.sh` runs the same check on
+a staging copy before replacing the Pi's current build. An incomplete download
+leaves the old build in place, and a failed swap restores it.
+
 To use an older build, open the repository's GitHub Releases page, select the
 `arm64-<full-commit-sha>` release for the desired commit, and download its
 `lart-dashboard-arm64.tar.gz` asset. Fast builds are retained in the same way
