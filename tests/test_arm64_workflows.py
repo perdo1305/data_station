@@ -67,6 +67,16 @@ class Arm64WorkflowTests(unittest.TestCase):
         for name in ("Build ROS2 workspace", "Build dashboard UI"):
             self.assertIn("-DCMAKE_CXX_COMPILER_LAUNCHER=ccache", steps[name]["run"])
 
+    def test_colcon_does_not_also_build_the_dashboard(self):
+        # LART_Car_Dashboard_v1/src/ui has a package.xml; without --base-paths
+        # colcon compiles it a second time next to the "Build dashboard UI" step.
+        for filename in ("build-arm64.yml", "validate-dbc-arm64.yml"):
+            workflow = yaml.load(
+                (WORKFLOWS / filename).read_text(), Loader=yaml.BaseLoader
+            )
+            steps = {s["name"]: s for s in workflow["jobs"]["build-arm64"]["steps"]}
+            self.assertIn("--base-paths src", steps["Build ROS2 workspace"]["run"], filename)
+
     def test_no_cache_restores_whole_install_or_build_tree(self):
         # A restored stale tree is how partial bundles got published before.
         for step in self.build_steps().values():

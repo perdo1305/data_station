@@ -60,7 +60,7 @@ jobs:
             rm -rf install/lart_msgs
           fi
           ccache --zero-stats
-          colcon build --parallel-workers "$(nproc)" "${skip[@]}" \
+          colcon build --base-paths src --parallel-workers "$(nproc)" "${skip[@]}" \
             --cmake-args -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
 
       - name: Build dashboard UI
