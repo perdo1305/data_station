@@ -87,7 +87,7 @@ exit 1
 """
 
 
-def run_pull(tmp_path, skip=(), fake_bins=None, fresh=False):
+def run_pull(tmp_path, skip=(), fake_bins=None, fresh=False, old_extra=()):
     ws = tmp_path / "ws"
     (ws / "scripts").mkdir(parents=True)
     shutil.copy(PULL, ws / "scripts")
@@ -95,6 +95,9 @@ def run_pull(tmp_path, skip=(), fake_bins=None, fresh=False):
     for old in () if fresh else (ws / "install", ws / UI_BUILD):
         old.mkdir(parents=True)
         (old / "OLD").write_text("")
+    for rel in old_extra:
+        (ws / rel).parent.mkdir(parents=True, exist_ok=True)
+        (ws / rel).write_text("")
 
     bundle = tmp_path / "bundle"
     make_bundle(bundle, skip=skip)
@@ -122,6 +125,24 @@ def test_pull_replaces_build_with_complete_bundle(tmp_path):
     assert not (ws / UI_BUILD / "OLD").exists()
     assert (ws / "install/lart_msgs/share/lart_msgs/package.xml").exists()
     assert os.access(ws / UI_BUILD / "ui_runner", os.X_OK)
+    assert not list(ws.glob(".arm64-pull.*"))
+
+
+def test_pull_keeps_folders_the_new_build_lacks(tmp_path):
+    ws, result = run_pull(tmp_path, old_extra=(
+        "install/lart_dashboard_ui/bin/ui_runner",
+        "install/lart_msgs/STALE",
+        f"{UI_BUILD}/old_dir/keep",
+    ))
+    assert result.returncode == 0, result.stderr
+    assert (ws / "install/lart_dashboard_ui/bin/ui_runner").exists()
+    assert (ws / UI_BUILD / "old_dir/keep").exists()
+    # A folder the new build ships is taken whole from the new build.
+    assert not (ws / "install/lart_msgs/STALE").exists()
+    assert (ws / "install/lart_msgs/share/lart_msgs/package.xml").exists()
+    # Loose files are not carried over.
+    assert not (ws / "install/OLD").exists()
+    assert "Kept from previous build: install/lart_dashboard_ui" in result.stdout
     assert not list(ws.glob(".arm64-pull.*"))
 
 

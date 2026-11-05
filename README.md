@@ -120,7 +120,9 @@ and compiler output through ccache, but always builds and packages the complete
 `install/` and `ui-build/` trees. `scripts/check_arm64_bundle.sh` verifies the
 bundle before it is published, and `pull_arm64_build.sh` runs the same check on
 a staging copy before replacing the Pi's current build. An incomplete download
-leaves the old build in place, and a failed swap restores it.
+leaves the old build in place, and a failed swap restores it. Top-level folders
+in `install/` or `ui-build/` that the new build no longer ships (for example
+`install/lart_dashboard_ui`) are kept from the previous build.
 
 To use an older build, open the repository's GitHub Releases page, select the
 `arm64-<full-commit-sha>` release for the desired commit, and download its
