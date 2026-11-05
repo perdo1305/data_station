@@ -24,6 +24,9 @@ public:
     // True once per press, after the button has stayed pressed for the debounce time.
     bool poll_pressed();
 
+    // Debounced level: true while the button is held down.
+    bool is_down() const { return stable_; }
+
 private:
     bool read_pressed(bool &pressed) const;
 

@@ -999,6 +999,9 @@ int main(int argc, char **argv) {
 
     SteeringButton screen_button;
     screen_button.open(kScreenButtonLine, true); // on failure the button is simply ignored
+    constexpr uint32_t kHoldToSwitchMs = 3000;
+    uint32_t hold_start_ms = 0;
+    bool hold_fired = false;
 
     uint32_t last_tick_ms = SDL_GetTicks();
 
@@ -1018,7 +1021,13 @@ int main(int argc, char **argv) {
 
         ros2subscriber_spin_some();
         lv_tick_inc(elapsed_ms);
-        if (screen_button.poll_pressed()) {
+        screen_button.poll_pressed(); // updates the debounced level
+        if (!screen_button.is_down()) {
+            hold_fired = false;
+            hold_start_ms = now_ms;
+        } else if (!hold_fired && now_ms - hold_start_ms >= kHoldToSwitchMs) {
+            // Long hold needed: a flaky contact while driving must not switch screens.
+            hold_fired = true; // once per hold, release to re-arm
             cycle_production_screen();
         }
         ui_tick();
