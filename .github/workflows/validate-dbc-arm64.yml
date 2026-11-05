@@ -49,7 +49,7 @@ jobs:
       - name: Build ROS2 workspace
         run: |
           source /opt/ros/jazzy/setup.bash
-          colcon build --parallel-workers $(nproc)
+          colcon build --base-paths src --parallel-workers $(nproc)
 
       - name: Build dashboard UI
         run: |
