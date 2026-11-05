@@ -55,4 +55,24 @@ if ! { { [ ! -e "$WS_DIR/install" ] || mv "$WS_DIR/install" "$TMP/old/install"; 
     exit 1
 fi
 
+# Folders the new build no longer ships (e.g. install/lart_dashboard_ui) stay from the old build.
+carry_failed=0
+for tree in "install:install" "$UI_BUILD:ui-build"; do
+    for path in "$TMP/old/${tree##*:}"/*/; do
+        [ -d "$path" ] || continue
+        name="$(basename "$path")"
+        dest="$WS_DIR/${tree%%:*}/$name"
+        [ ! -e "$dest" ] || continue
+        if mv "$path" "$dest"; then
+            echo "Kept from previous build: ${tree%%:*}/$name"
+        else
+            carry_failed=1
+        fi
+    done
+done
+if [ "$carry_failed" = 1 ]; then
+    trap - EXIT
+    echo "Could not keep some old folders; they are still in $TMP/old." >&2
+fi
+
 echo "Done. Run: source $WS_DIR/install/setup.bash"
