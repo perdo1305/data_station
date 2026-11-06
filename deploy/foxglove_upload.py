@@ -32,6 +32,7 @@ RPI_CONFIG_PATH = REPO_ROOT / "src" / "lart_bringup" / "config" / "rpi_config.ya
 FOXGLOVE_HOST = "api.foxglove.dev"
 FOXGLOVE_PORT = 443
 UPLOADED_MARKER = ".uploaded"
+FOXGLOVE_DEVICE = "TEK-26"
 
 
 def load_api_key(env_path: Path) -> Optional[str]:
@@ -99,7 +100,9 @@ def upload_session(client: Client, session_dir: Path) -> bool:
 
     try:
         with mcap_path.open("rb") as f:
-            result = client.upload_data(filename=mcap_path.name, data=f, key=session_dir.name)
+            result = client.upload_data(
+                filename=mcap_path.name, data=f, key=session_dir.name, device_name=FOXGLOVE_DEVICE
+            )
     except Exception as exc:  # noqa: BLE001 — one session's upload error must not crash the loop
         print(f"{session_dir.name}: upload error: {exc}", file=sys.stderr)
         return False
