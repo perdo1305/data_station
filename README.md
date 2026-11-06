@@ -148,6 +148,22 @@ source ~/GIT/lart_dashboard_ws/install/setup.bash
 ros2 launch lart_bringup sim.launch.py
 ```
 
+## Export suspension travel from a bag to CSV
+
+`scripts/bag_susp_csv.py` writes one CSV row per `/imu/data` message, timestamped with the IMU clock
+(`imu_time` readable local time, `imu_stamp_s` epoch seconds). Suspension travel comes from `/pwt/aqt4`
+(`front_susp_*`) and `/data/aqt7` (`rear_susp_*`), held from the latest sample at or before each IMU time.
+Rows where no suspension value changed are dropped, so a value holds until the next row. Min/max per
+sensor, with the time it happened, are in the `summary_*` columns on the right.
+
+```bash
+source /opt/ros/jazzy/setup.bash && source install/setup.bash   # zsh: setup.zsh
+python3 scripts/bag_susp_csv.py ~/bags/<session_dir> [out.csv]
+```
+
+Needs the system Python (not a venv) with the workspace sourced, because `lart_msgs` is decoded.
+Tests: `python3 -m pytest -q tests/test_bag_susp_csv.py` (skipped when the sample bag or ROS is missing).
+
 ## Run on the car (real CAN + GPIO + LEDs)
 
 1) Bring CAN interfaces up:

@@ -117,14 +117,14 @@ class FakeClient:
         self._raises = raises
         self.calls = []
 
-    def upload_data(self, *, filename, data, key):
+    def upload_data(self, *, filename, data, key, device_name=None):
         # Read the stream now, like a real HTTP client would while the caller's
         # `with` block still has the file open, and keep a reusable copy so
         # assertions made after upload_session's `with` block has closed the
         # file can still inspect what was sent.
         content = data.read() if hasattr(data, "read") else data
         self.calls.append(
-            {"filename": filename, "data": io.BytesIO(content), "key": key}
+            {"filename": filename, "data": io.BytesIO(content), "key": key, "device_name": device_name}
         )
         if self._raises:
             raise self._raises
@@ -142,6 +142,7 @@ def test_upload_session_success_writes_marker(tmp_path):
     call = client.calls[0]
     assert call["filename"] == "precharge_1_0.mcap"
     assert call["key"] == "precharge_1"
+    assert call["device_name"] == "TEK-26"
     assert call["data"].read() == b"data"
 
 
@@ -217,8 +218,8 @@ class SelectiveFailClient(FakeClient):
         super().__init__()
         self._fail_key = fail_key
 
-    def upload_data(self, *, filename, data, key):
-        self.calls.append({"filename": filename, "data": data, "key": key})
+    def upload_data(self, *, filename, data, key, device_name=None):
+        self.calls.append({"filename": filename, "data": data, "key": key, "device_name": device_name})
         if key == self._fail_key:
             raise RuntimeError("boom")
         return self._result
