@@ -72,7 +72,9 @@ def read(bag):
     steer = ([], [])  # (bag log time s, steering angle) from the front board
     susp = {}  # column -> ([bag log time s], [value]); aqt headers are zero, so log time is the clock
     for reader in readers(bag):
-        types = {t.name: get_message(t.type) for t in reader.get_all_topics_and_types()}
+        # only the topics we read: other topics in the bag may use message packages the Pi does not have
+        types = {t.name: get_message(t.type) for t in reader.get_all_topics_and_types()
+                 if t.name == IMU_TOPIC or t.name in SUSP_TOPICS}
         while reader.has_next():
             name, data, log_ns = reader.read_next()
             if name == IMU_TOPIC:
