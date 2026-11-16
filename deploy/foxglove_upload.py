@@ -33,6 +33,11 @@ FOXGLOVE_HOST = "api.foxglove.dev"
 FOXGLOVE_PORT = 443
 UPLOADED_MARKER = ".uploaded"
 FOXGLOVE_DEVICE = "TEK-26"
+FOXGLOVE_DEVICE_AUTONOMOUS = "TEK-26-autonomous"  # bag_recorder names autonomous runs autonomous_*
+
+
+def device_for(session_name: str) -> str:
+    return FOXGLOVE_DEVICE_AUTONOMOUS if session_name.startswith("autonomous_") else FOXGLOVE_DEVICE
 
 
 def load_api_key(env_path: Path) -> Optional[str]:
@@ -101,7 +106,7 @@ def upload_session(client: Client, session_dir: Path) -> bool:
     try:
         with mcap_path.open("rb") as f:
             result = client.upload_data(
-                filename=mcap_path.name, data=f, key=session_dir.name, device_name=FOXGLOVE_DEVICE
+                filename=mcap_path.name, data=f, key=session_dir.name, device_name=device_for(session_dir.name)
             )
     except Exception as exc:  # noqa: BLE001 — one session's upload error must not crash the loop
         print(f"{session_dir.name}: upload error: {exc}", file=sys.stderr)

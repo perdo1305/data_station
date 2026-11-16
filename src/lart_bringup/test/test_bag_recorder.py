@@ -67,3 +67,44 @@ def test_autonomous_session_folder_prefix(tmp_path):
     command = popen.call_args.args[0]
     out = Path(command[command.index('-o') + 1])
     assert out.name.startswith('autonomous_')
+
+
+def _session(tmp_path, name, ready_seen):
+    out = tmp_path / name
+    out.mkdir()
+    return SimpleNamespace(_out=out, _ready_seen=ready_seen, get_logger=Mock())
+
+
+def test_precharge_session_that_saw_ready_becomes_autonomous(tmp_path):
+    recorder = _session(tmp_path, 'precharge_2026-10-31T18-16-47', ready_seen=True)
+    BagRecorderNode._finish_session(recorder)
+    assert (tmp_path / 'autonomous_2026-10-31T18-16-47').is_dir()
+    assert not (tmp_path / 'precharge_2026-10-31T18-16-47').exists()
+    assert recorder._out is None
+
+
+def test_precharge_session_without_ready_keeps_its_name(tmp_path):
+    recorder = _session(tmp_path, 'precharge_x', ready_seen=False)
+    BagRecorderNode._finish_session(recorder)
+    assert (tmp_path / 'precharge_x').is_dir()
+
+
+def test_rename_does_not_overwrite_an_existing_folder(tmp_path):
+    (tmp_path / 'autonomous_x').mkdir()
+    recorder = _session(tmp_path, 'precharge_x', ready_seen=True)
+    BagRecorderNode._finish_session(recorder)
+    assert (tmp_path / 'autonomous_x_1').is_dir() and (tmp_path / 'autonomous_x').is_dir()
+
+
+def test_ready_during_session_is_remembered_and_start_resets_it(tmp_path):
+    recorder = _trigger_recorder()
+    recorder._ready_seen = False
+    BagRecorderNode._on_as_state(recorder, SimpleNamespace(as_state=2))
+    assert recorder._ready_seen
+    BagRecorderNode._on_as_state(recorder, SimpleNamespace(as_state=1))
+    assert recorder._ready_seen  # stays set after READY ends
+    recorder._bag_dir, recorder._split_s, recorder._as_active = tmp_path / 'b', 0, False
+    recorder.get_logger = Mock()
+    with patch('lart_bringup.bag_recorder.subprocess.Popen'):
+        assert BagRecorderNode._start_recording(recorder)
+    assert not recorder._ready_seen  # a new precharge session starts clean

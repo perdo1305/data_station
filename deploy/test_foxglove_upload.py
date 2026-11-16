@@ -146,6 +146,17 @@ def test_upload_session_success_writes_marker(tmp_path):
     assert call["data"].read() == b"data"
 
 
+def test_autonomous_session_goes_to_autonomous_device(tmp_path):
+    session = _make_session(tmp_path, "autonomous_1")
+    (session / "autonomous_1_0.mcap").write_bytes(b"data")
+    client = FakeClient(result={"link": "l", "text": "ok", "code": 200})
+
+    assert fu.upload_session(client, session) is True
+    assert client.calls[0]["device_name"] == "TEK-26-autonomous"
+    assert client.calls[0]["key"] == "autonomous_1"
+    assert fu.device_for("precharge_2026-10-31T18-16-47") == "TEK-26"
+
+
 def test_upload_session_http_failure_no_marker(tmp_path):
     session = _make_session(tmp_path, "precharge_1")
     (session / "precharge_1_0.mcap").write_bytes(b"data")

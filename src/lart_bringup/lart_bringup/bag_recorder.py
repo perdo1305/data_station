@@ -9,6 +9,9 @@ enabled during recording:
   both inactive                  → keep recording for stop_grace_s, then finalize
   either back within grace       → same session continues
 
+A session that started as precharge_* but had AS READY at any point is renamed to
+autonomous_* when it is finalized, so the Foxglove upload can send it to the autonomous device.
+
 Each session records into a single continuous mcap file (no splitting)
 unless split_duration_s is set > 0. Splitting is avoided by default: a
 session killed non-gracefully (power loss, hard kill) only loses its last
@@ -67,6 +70,8 @@ class BagRecorderNode(Node):
         self._precharge_active = False
         self._as_active = False
         self._grace_timer = None
+        self._out: Path | None = None  # folder of the session being recorded
+        self._ready_seen = False  # as_state was READY at any point of this session
 
         self._repair_incomplete_bags()
 
@@ -142,21 +147,40 @@ class BagRecorderNode(Node):
             self.get_logger().error(f'Cannot start bag recorder: {exc}')
             self._proc = None
             return False
+        self._out = out
+        self._ready_seen = self._as_active
         self.get_logger().info(f'Recording started → {out}')
         return True
 
     def _stop_recording(self) -> None:
         proc, self._proc = self._proc, None
-        if proc is None or proc.poll() is not None:
+        if proc is not None and proc.poll() is None:
+            proc.send_signal(signal.SIGINT)
+            try:
+                proc.wait(timeout=10.0)
+                self.get_logger().info('Recording finalized.')
+            except subprocess.TimeoutExpired:
+                self.get_logger().error('Recorder did not exit on SIGINT — killing.')
+                proc.kill()
+                proc.wait()
+        self._finish_session()
+
+    def _finish_session(self) -> None:
+        """A session that started as precharge but saw AS READY meanwhile becomes autonomous_*.
+        Renamed only once the recorder has exited, so metadata.yaml is already written."""
+        out, self._out = self._out, None
+        if out is None or not self._ready_seen or not out.name.startswith('precharge_'):
             return
-        proc.send_signal(signal.SIGINT)
+        base = 'autonomous_' + out.name[len('precharge_'):]
+        new, n = out.with_name(base), 1
+        while new.exists():
+            new = out.with_name(f'{base}_{n}')
+            n += 1
         try:
-            proc.wait(timeout=10.0)
-            self.get_logger().info('Recording finalized.')
-        except subprocess.TimeoutExpired:
-            self.get_logger().error('Recorder did not exit on SIGINT — killing.')
-            proc.kill()
-            proc.wait()
+            out.rename(new)
+            self.get_logger().info(f'AS was READY during this session: {out.name} → {new.name}')
+        except OSError as exc:
+            self.get_logger().error(f'Cannot rename {out.name} to {new.name}: {exc}')
 
     def _arm_grace_timer(self) -> None:
         self._cancel_grace_timer()
@@ -182,6 +206,8 @@ class BagRecorderNode(Node):
 
     def _on_as_state(self, msg: Jetson) -> None:
         self._as_active = msg.as_state == AS_STATE_READY
+        if self._as_active:
+            self._ready_seen = True
         self._sm.on_trigger(self._precharge_active or self._as_active)
 
     def _on_grace_expired(self) -> None:
@@ -197,6 +223,7 @@ class BagRecorderNode(Node):
             )
             self._proc = None
             self._sm.on_recorder_died()
+            self._finish_session()
 
     def destroy_node(self):
         self._sm.shutdown()
